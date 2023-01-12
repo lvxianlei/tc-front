@@ -152,10 +152,11 @@ export default forwardRef(function TryAssembleNew({ record, type }: modalProps, 
                     </Form.Item>
                 </Col>
                 <Col span={7}>
-                    <Form.Item name={'country'} label="国内国外">
+                    <Form.Item name={'country'} label="国内国外" rules={[{ required: true, message: '请选择国内国外' }]}>
                         <Select style={{ width: '100%' }} >
+                            <Select.Option key={0} value="不限">不限</Select.Option>
                             <Select.Option key={1} value="国内">国内</Select.Option>
-                            <Select.Option key={1} value="国外">国外</Select.Option>
+                            <Select.Option key={2} value="国外">国外</Select.Option>
                         </Select>
                     </Form.Item></Col>
 
