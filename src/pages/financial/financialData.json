@@ -728,6 +728,11 @@
             "title": "请款金额",
             "dataIndex": "pleasePayAmount",
             "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type":"textarea"
         }
     ],
     "ApplicationOverview": [
@@ -796,6 +801,10 @@
             "dataIndex": "pleasePayAmount",
             "type": "number",
             "disabled": true
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "ApplicationDetail": [
