@@ -96,7 +96,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     approval: false,
                     receiptDtos: popDataList,
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
-                        return item.id
+                        return item.value
                     }).join(',') || data?.receiptNumbers,
                     fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                     invoiceRelationType: 1, // 新加票据是否关联 写死传1
@@ -127,7 +127,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     approval: true,
                     receiptDtos: popDataList,
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
-                        return item.id
+                        return item.value
                     }).join(',') || data?.receiptNumbers,
                     fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                     invoiceRelationType: 1, // 新加票据是否关联 写死传1
