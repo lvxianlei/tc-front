@@ -253,7 +253,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
-            ids: options.id,
+            ids: options.ids?options.ids:options.id,
             num:'',
             planPurchaseNum: "",
             totalWeight: "",
@@ -509,7 +509,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 setMaterialList([]);
                 setPopDataList([]);
                 setType(0)
-                props?.handleCreate();
+                props?.handleCreate({code:1});
                 
             }}
             maskClosable={false}
