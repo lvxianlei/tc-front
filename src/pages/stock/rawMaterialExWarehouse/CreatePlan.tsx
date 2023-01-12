@@ -78,16 +78,16 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const handleDetailAddModalOk = () => {
-        let flag = false;
-        for (let i = 0; i < materialList.length; i += 1) {
-            if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            message.error("请选择同一下达单下的明细！");
-            return false;
-        }
+        // let flag = false;
+        // for (let i = 0; i < materialList.length; i += 1) {
+        //     if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
+        //         flag = true;
+        //     }
+        // }
+        // if (flag) {
+        //     message.error("请选择同一下达单下的明细！");
+        //     return false;
+        // }
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
         //     for (let p = 0; p < materialList.length; p += 1) {
