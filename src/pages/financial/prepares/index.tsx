@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Space } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import Edit from "./Edit"
@@ -11,7 +11,9 @@ import RequestUtil from '../../../utils/RequestUtil'
 import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
-    onSubmit: (type?: "saveAndApply" | "save") => void
+    onSubmit: () => void
+    onSubmitApproval: () => void
+    onSubmitCancel: () => void
     resetFields: () => void
 }
 
@@ -44,7 +46,7 @@ export default function ApplyPayment() {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/recallApply?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/workflow/cancel/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -53,7 +55,7 @@ export default function ApplyPayment() {
 
     const { run: approvalRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/workflow/start/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -78,14 +80,19 @@ export default function ApplyPayment() {
         setFilterValue(value)
         return value
     }
-    const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
+    const handleModalOk = (isType?: "saveAndApply" | "save" | "cancelSave") => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit(type)
-            message.success("请款申请创建成功...")
+            // await editRef.current?.onSubmit(type)
+            // message.success("请款申请创建成功...")
+            // setVisible(false)
+            isType==='save'&& await editRef.current?.onSubmit()
+            isType==='saveAndApply'&&await editRef.current?.onSubmitApproval()
+            isType==='cancelSave'&&await editRef.current?.onSubmitCancel()
             setVisible(false)
             history.go(0)
             resove(true)
         } catch (error) {
+            console.log(error)
             reject(false)
         }
     })
@@ -148,16 +155,36 @@ export default function ApplyPayment() {
     return <>
         <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
-            footer={[
-                <Button key="close" type="ghost" onClick={async () => {
-                    await editRef.current?.resetFields()
-                    setDetailId("")
-                    setType("new")
-                    setVisible(false)
-                }}>关闭</Button>,
-                <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
-                <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
-            ]}
+            // footer={[
+            //     <Button key="close" type="ghost" onClick={async () => {
+            //         await editRef.current?.resetFields()
+            //         setDetailId("")
+            //         setType("new")
+            //         setVisible(false)
+            //     }}>关闭</Button>,
+            //     <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
+            //     <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
+            // ]}
+            footer={type ==='edit'?<Space>
+                    <Button onClick={async () => {
+                        await editRef.current?.resetFields()
+                        setDetailId("")
+                        setType("new")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')}>撤销审批</Button>
+                </Space>:<Space>
+                    <Button onClick={async () => {
+                        await editRef.current?.resetFields()
+                        setDetailId("")
+                        setType("new")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')}>保存并发起审批</Button>
+                </Space>}
             onCancel={() => {
                 editRef.current?.resetFields()
                 setDetailId("")

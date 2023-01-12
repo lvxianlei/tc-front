@@ -4,7 +4,7 @@ import { DetailTitle, BaseInfo, CommonTable, Attachment, OperationRecord } from 
 import { ApplicationOverview, approvalInfo, paymentInfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, paymentMethodOptions } from "../../../configuration/DictionaryOptions"
 interface OverviewProps {
     id: string
 }
@@ -16,7 +16,7 @@ export default function Overview({ id }: OverviewProps): JSX.Element {
         value: item.id,
         label: item.name
     }))
-    const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({
+    const paymentMethodEnum = paymentMethodOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
