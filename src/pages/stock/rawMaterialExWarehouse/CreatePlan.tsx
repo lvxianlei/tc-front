@@ -398,7 +398,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
-                        id: item?.ids?item.ids:item.id
+                        id: item?.ids?item.ids:item.id,
+                        // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
                 ...baseInfo,
@@ -412,7 +413,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
-                        id: item?.ids?item.ids:item.id
+                        // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
                 ...baseInfo,
@@ -761,7 +762,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={(fields: any[]) => {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
-                            rawStockId: item.id,
+                            rawStockId: item.ids?item.ids:item.id,
                             maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
