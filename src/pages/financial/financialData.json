@@ -1,6 +1,11 @@
 {
     "baseinfo": [
         {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "type": "string"
+        },
+        {
             "title": "票据编号",
             "dataIndex": "billNumber",
             "type": "string"
@@ -15,7 +20,11 @@
             "dataIndex": "invoiceNumber"
         },
         {
-            "title": "关联收货单",
+            "title": "发票来源",
+            "dataIndex": "invoiceSourceName"
+        },
+        {
+            "title": "关联入库单",
             "dataIndex": "receiptNumbers"
         },
         {
@@ -64,6 +73,17 @@
             "disabled": true
         },
         {
+            "title": "发票来源",
+            "dataIndex": "invoiceSource",
+            "type": "string",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择发票来源"
+                }
+            ]
+        },
+        {
             "title": "企业类型",
             "dataIndex": "businessType",
             "type": "string",
@@ -71,17 +91,6 @@
                 {
                     "required": true,
                     "message": "请选择企业类型"
-                }
-            ]
-        },
-        {
-            "title": "发票号",
-            "dataIndex": "invoiceNumber",
-            "maxLength": 20,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入发票号"
                 }
             ]
         },
@@ -97,15 +106,9 @@
             ]
         },
         {
-            "title": "发票类型",
-            "dataIndex": "invoiceType",
-            "type": "string",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择发票类型"
-                }
-            ]
+            "title": "发票号",
+            "dataIndex": "invoiceNumber",
+            "maxLength": 20
         },
         {
             "title": "发票金额",
@@ -122,19 +125,19 @@
             ]
         },
         {
-            "title": "关联收货单",
+            "title": "关联入库单",
             "dataIndex": "receiptVos",
             "type": "popTable",
-            "path": "/tower-storage/receiveStock?receiveStatus=1",
+            "path": "/tower-storage/warehousingEntry/invoice/list",
             "width": 1011,
-            "value": "receiveNumber",
+            "value": "warehousingEntryNumber",
             "selectType": "checkbox",
             "dependencies": true,
             "readOnly": true,
             "search": [
                 {
-                    "title": "月份选择",
-                    "dataIndex": "receiveTime",
+                    "title": "入库日期",
+                    "dataIndex": "entryTime",
                     "type": "date",
                     "width": 200
                 },
@@ -147,13 +150,9 @@
             ],
             "columns": [
                 {
-                    "title": "收货单号",
-                    "dataIndex": "receiveNumber",
+                    "title": "入库单号",
+                    "dataIndex": "warehousingEntryNumber",
                     "type": "string"
-                },
-                {
-                    "title": "联系人",
-                    "dataIndex": "contactsUser"
                 },
                 {
                     "title": "合同编号",
@@ -161,13 +160,9 @@
                 },
                 {
                     "title": "完成时间",
-                    "dataIndex": "receiveTime",
+                    "dataIndex": "updateTime",
                     "type": "date",
                     "format": "YYYY-MM-DD"
-                },
-                {
-                    "title": "创建人",
-                    "dataIndex": "createUserName"
                 },
                 {
                     "title": "重量（吨）合计",
@@ -175,30 +170,89 @@
                 },
                 {
                     "title": "原材料价税合计（元）",
-                    "dataIndex": "price"
+                    "dataIndex": "taxPrice"
                 },
                 {
                     "title": "运费价税合计（元）",
-                    "dataIndex": "transportPriceCount"
+                    "dataIndex": "totalTransportTaxPrice"
                 },
                 {
                     "title": "装卸费价税合计（元）",
-                    "dataIndex": "unloadPriceCount"
+                    "dataIndex": "totalUnloadTaxPrice"
+                },
+                {
+                    "title": "创建人",
+                    "dataIndex": "createUserName"
                 },
                 {
                     "title": "备注",
                     "dataIndex": "remark"
                 }
-            ],
+            ]
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string",
             "rules": [
                 {
                     "required": true,
-                    "message": "请选择关联收货单"
+                    "message": "请选择发票类型"
                 }
             ]
         },
         {
-            "title": "开票单位 ",
+            "title": "经办人",
+            "dataIndex": "operator",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        },
+        {
+            "title": "开票单位",
             "dataIndex": "invoiceUnit",
             "type": "string",
             "maxLength": 50,
@@ -210,8 +264,8 @@
             ]
         },
         {
-            "title": "开票日",
-            "dataIndex": "collectInvoiceDate",
+            "title": "开票日期",
+            "dataIndex": "invoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD",
             "rules": [
@@ -220,6 +274,11 @@
                     "message": "请选择开票日"
                 }
             ]
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description",
+            "type": "textarea"
         }
     ],
     "operation": [
@@ -295,6 +354,11 @@
             "type": "string"
         },
         {
+            "title": "发票来源",
+            "dataIndex": "invoiceSourceName",
+            "type": "string"
+        },
+        {
             "title": "企业类型",
             "dataIndex": "businessType",
             "type": "select",
@@ -314,18 +378,13 @@
             ]
         },
         {
-            "title": "发票号",
-            "dataIndex": "invoiceNumber"
-        },
-        {
             "title": "企业名称",
             "dataIndex": "businessName",
             "type": "string"
         },
         {
-            "title": "发票类型",
-            "dataIndex": "invoiceType",
-            "type": "string"
+            "title": "发票号",
+            "dataIndex": "invoiceNumber"
         },
         {
             "title": "发票金额",
@@ -333,8 +392,18 @@
             "type": "number"
         },
         {
-            "title": "收货单",
+            "title": "关联入库单",
             "dataIndex": "receiptNumbers"
+        },
+        {
+            
+            "title": "发票类型",
+            "dataIndex": "invoiceType",
+            "type": "string"
+        },
+        {
+            "title": "经办人",
+            "dataIndex": "operatorName"
         },
         {
             "title": "开票单位 ",
@@ -346,6 +415,10 @@
             "dataIndex": "collectInvoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
         }
     ],
     "billOperationInfo": [
@@ -466,6 +539,72 @@
             ]
         },
         {
+            "title": "关联入库单",
+            "dataIndex": "receiptNumbers",
+            "type": "popTable",
+            "path": "/tower-storage/warehousingEntry/invoice/list",
+            "width": 1011,
+            "value": "warehousingEntryNumber",
+            "selectType": "checkbox",
+            "dependencies": true,
+            "readOnly": true,
+            "search": [
+                {
+                    "title": "入库日期",
+                    "dataIndex": "entryTime",
+                    "type": "date",
+                    "width": 200
+                },
+                {
+                    "title": "查询",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "合同编号/收货单号/联系人"
+                }
+            ],
+            "columns": [
+                {
+                    "title": "入库单号",
+                    "dataIndex": "warehousingEntryNumber",
+                    "type": "string"
+                },
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "完成时间",
+                    "dataIndex": "updateTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                },
+                {
+                    "title": "重量（吨）合计",
+                    "dataIndex": "weight"
+                },
+                {
+                    "title": "原材料价税合计（元）",
+                    "dataIndex": "taxPrice"
+                },
+                {
+                    "title": "运费价税合计（元）",
+                    "dataIndex": "totalTransportTaxPrice"
+                },
+                {
+                    "title": "装卸费价税合计（元）",
+                    "dataIndex": "totalUnloadTaxPrice"
+                },
+                {
+                    "title": "创建人",
+                    "dataIndex": "createUserName"
+                },
+                {
+                    "title": "备注",
+                    "dataIndex": "remark"
+                }
+            ]
+        },
+        {
             "title": "企业类型",
             "dataIndex": "businessType",
             "type": "select",
@@ -518,6 +657,12 @@
                     "search": true
                 },
                 {
+                    "title": "发票来源",
+                    "dataIndex": "invoiceSource",
+                    "type": "select",
+                    "search": true
+                },
+                {
                     "title": "发票号",
                     "dataIndex": "invoiceNumber",
                     "search": true
@@ -530,7 +675,8 @@
                     "title": "开票日",
                     "dataIndex": "collectInvoiceDate",
                     "type": "date",
-                    "format": "YYYY-MM-DD"
+                    "format": "YYYY-MM-DD",
+                    "search": true
                 },
                 {
                     "title": "发票类型",
@@ -538,23 +684,11 @@
                     "type": "select",
                     "search": true
                 }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择关联票据..."
-                }
             ]
         },
         {
             "title": "开户银行",
-            "dataIndex": "openBank",
-            "disabled": true
-        },
-        {
-            "title": "关联收货单",
-            "dataIndex": "receiptNumbers",
-            "disabled": true
+            "dataIndex": "openBank"
         },
         {
             "title": "付款方式",
@@ -583,8 +717,7 @@
         },
         {
             "title": "银行账号",
-            "dataIndex": "openBankNumber",
-            "disabled": true
+            "dataIndex": "openBankNumber"
         },
         {
             "title": "请款机构",
@@ -607,6 +740,10 @@
             "dataIndex": "businessTypeName"
         },
         {
+            "title": "关联入库单",
+            "dataIndex": "receiptNumbers"
+        },
+        {
             "title": "企业类型",
             "dataIndex": "businessTypeName",
             "type": "string"
@@ -626,8 +763,8 @@
             "disabled": true
         },
         {
-            "title": "关联收货单",
-            "dataIndex": "receiptNumbers",
+            "title": "银行账号",
+            "dataIndex": "openBankNumber",
             "disabled": true
         },
         {
@@ -653,11 +790,6 @@
             "title": "请款机构",
             "dataIndex": "pleasePayOrganizationName",
             "type": "string"
-        },
-        {
-            "title": "银行账号",
-            "dataIndex": "openBankNumber",
-            "disabled": true
         },
         {
             "title": "请款金额",
@@ -732,7 +864,7 @@
             "type": "number"
         },
         {
-            "title": "关联收货单",
+            "title": "关联入库单",
             "dataIndex": "receiptNumbers"
         },
         {
@@ -802,7 +934,7 @@
             "type": "number"
         },
         {
-            "title": "关联收货单",
+            "title": "关联入库单",
             "dataIndex": "receiptNumbers"
         },
         {
@@ -886,6 +1018,132 @@
         {
             "title": "付款金额",
             "dataIndex": "payMoney"
+        }
+    ],
+    "material": [
+        {
+            "title": "入库单号",
+            "dataIndex": "warehousingEntryNumber"
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "entryTime"
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "标准",
+            "dataIndex": "materialStandardName"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length"
+        },
+        {
+            "title": "宽度",
+            "dataIndex": "width"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "理算重量（吨）",
+            "dataIndex": "totalWeight"
+        },
+        {
+            "title": "结算重量（吨）",
+            "dataIndex": "balanceTotalWeight"
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice"
+        },
+        {
+            "title": "不含税单价（元/吨）",
+            "dataIndex": "price"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalPrice"
+        },
+        {
+            "title": "含税运费单价（元）",
+            "dataIndex": "transportTaxPrice"
+        },
+        {
+            "title": "含税运费金额（元）",
+            "dataIndex": "totalTransportTaxPrice"
+        },
+        {
+            "title": "不含税运费单价（元）",
+            "dataIndex": "transportPrice"
+        },
+        {
+            "title": "不含税运费金额（元）",
+            "dataIndex": "totalTransportPrice"
+        },
+        {
+            "title": "含税装卸费单价（元）",
+            "dataIndex": "unloadTaxPrice"
+        },
+        {
+            "title": "含税装卸费金额（元）",
+            "dataIndex": "totalUnloadTaxPrice"
+        },
+        {
+            "title": "不含税装卸费单价（元）",
+            "dataIndex": "unloadPrice"
+        },
+        {
+            "title": "不含税装卸费金额（元）",
+            "dataIndex": "totalUnloadPrice"
+        },
+        {
+            "title": "发票单价（元）",
+            "dataIndex": "invoicePrice"
+        },
+        {
+            "title": "发票金额（元）",
+            "dataIndex": "totalInvoicePrice"
+        },
+        {
+            "title": "调整金额",
+            "dataIndex": "priceDifference"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
         }
     ]
 }
