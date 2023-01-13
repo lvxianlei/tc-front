@@ -37,7 +37,7 @@
             "type": "string"
         },
         {
-            "title": "开票日",
+            "title": "开票日期",
             "dataIndex": "invoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
