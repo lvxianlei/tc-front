@@ -294,15 +294,15 @@ export default function ApplyPayment() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'applyStatus',
+                    name: 'approval',
                     label: '审批状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="0">未发起</Select.Option>
-                        <Select.Option value="1">待审批</Select.Option>
-                        <Select.Option value="2">已拒绝</Select.Option>
-                        <Select.Option value="3">已撤回</Select.Option>
-                        <Select.Option value="4">已通过</Select.Option>
+                        <Select.Option value="0">待发起</Select.Option>
+                        <Select.Option value="1">审批中</Select.Option>
+                        <Select.Option value="2">审批通过</Select.Option>
+                        <Select.Option value="3">审批驳回</Select.Option>
+                        <Select.Option value="4">已撤销</Select.Option>
                     </Select>
                 },
                 {
