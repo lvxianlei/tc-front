@@ -248,18 +248,18 @@ export default function ApplyPayment() {
                             <Button
                                 type="link"
                                 className="btn-operation-link"
-                                disabled={![0, 3].includes(record.applyStatus)}
+                                disabled={![0, 3].includes(record.approval)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" className="btn-operation-link" disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1,'1'].includes(record.approval)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             <Popconfirm
                                 title="确定删除此请款申请吗？"
-                                disabled={![0, 3].includes(record.applyStatus)}
+                                disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 onConfirm={async () => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
@@ -272,7 +272,7 @@ export default function ApplyPayment() {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    disabled={![0, 3].includes(record.applyStatus)}
+                                    disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 >删除</Button>
                             </Popconfirm>
                         </>
