@@ -67,7 +67,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
                     records: result.receiveNumberList?.map((item: any) => ({
                         id: item.id,
-                        receiveNumber: item.receiveNumber
+                        warehousingEntryNumber: item.receiveNumber
                     })) || []
                 } : result?.receiptNumbers
             })
@@ -117,7 +117,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     businessName: baseData.businessId?.split(',')[1],
                     receivingNoteList: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         id: item.id,
-                        receiveNumber: item.receiveNumber
+                        receiveNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
@@ -125,7 +125,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     receiptNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
-                        return item.value
+                        return item.warehousingEntryNumber
                     }).join(',') :data?.receiptNumbers? data?.receiptNumbers:'',
                 })
                 message.success("保存成功...")
@@ -154,7 +154,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     businessName: baseData.businessId?.split(',')[1],
                     receivingNoteList: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         id: item.id,
-                        receiveNumber: item.receiveNumber
+                        receiveNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
@@ -162,7 +162,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     receiptNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
-                        return item.value
+                        return item.warehousingEntryNumber
                     }).join(',') :data?.receiptNumbers? data?.receiptNumbers:'',
                 })
                 message.success("审批发起成功...")
