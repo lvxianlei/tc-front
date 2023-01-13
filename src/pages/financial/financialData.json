@@ -37,7 +37,7 @@
             "type": "string"
         },
         {
-            "title": "开票日",
+            "title": "开票日期",
             "dataIndex": "invoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
@@ -449,7 +449,7 @@
             "dataIndex": "paymentReqTypeName"
         },
         {
-            "title": "关联到货单",
+            "title": "关联入库单",
             "dataIndex": "receiptNumbers"
         },
         {
@@ -471,7 +471,7 @@
         },
         {
             "title": "审批状态",
-            "dataIndex": "applyStatusName"
+            "dataIndex": "approvalName"
         },
         {
             "title": "最新状态变更时间",
