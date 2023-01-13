@@ -46,7 +46,7 @@ export default function ApplyPayment() {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/workflow/cancel/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/workflow/cancel/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -55,7 +55,7 @@ export default function ApplyPayment() {
 
     const { run: approvalRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/workflow/start/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/workflow/start/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -248,7 +248,7 @@ export default function ApplyPayment() {
                             <Button
                                 type="link"
                                 className="btn-operation-link"
-                                disabled={![0, 3].includes(record.approval)}
+                                disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
