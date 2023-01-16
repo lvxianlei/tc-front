@@ -78,16 +78,16 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const handleDetailAddModalOk = () => {
-        let flag = false;
-        for (let i = 0; i < materialList.length; i += 1) {
-            if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            message.error("请选择同一下达单下的明细！");
-            return false;
-        }
+        // let flag = false;
+        // for (let i = 0; i < materialList.length; i += 1) {
+        //     if (materialList[i].issuedNumber!== materialList[0].issuedNumber) {
+        //         flag = true;
+        //     }
+        // }
+        // if (flag) {
+        //     message.error("请选择同一下达单下的明细！");
+        //     return false;
+        // }
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
         //     for (let p = 0; p < materialList.length; p += 1) {
@@ -102,12 +102,12 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(3),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(3)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(3)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(3)
+                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)
             })
         })])
         setDetailVisible(false)
@@ -253,7 +253,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
-            ids: options.id,
+            ids: options.ids?options.ids:options.id,
             num:'',
             planPurchaseNum: "",
             totalWeight: "",
@@ -398,7 +398,8 @@ export default function CreatePlan(props: any): JSX.Element {
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
-                        id: item?.ids?item.ids:item.id
+                        id: item?.ids?item.ids:item.id,
+                        // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
                 ...baseInfo,
@@ -412,7 +413,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
-                        id: item?.ids?item.ids:item.id
+                        // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
                 ...baseInfo,
@@ -509,7 +510,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 setMaterialList([]);
                 setPopDataList([]);
                 setType(0)
-                props?.handleCreate();
+                props?.handleCreate({code:1});
                 
             }}
             maskClosable={false}
@@ -761,7 +762,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={(fields: any[]) => {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
-                            rawStockId: item.id,
+                            rawStockId: item.ids?item.ids:item.id,
                             maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
