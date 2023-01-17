@@ -192,7 +192,7 @@
         },
         {
             "title": "重量（吨）",
-            "dataIndex": "applyWeight"
+            "dataIndex": "totalWeight"
         },
         {
             "title": "库存数量",
