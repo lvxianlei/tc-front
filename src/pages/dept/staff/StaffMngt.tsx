@@ -241,7 +241,15 @@ export default function StaffMngt(): React.ReactNode {
                         }
                     })
                 }}>删除</Button>
-               <Button  type="primary" onClick={importUserToTencentIm}>同步到即时通讯</Button>
+               <Popconfirm
+                 title="确认同步到即时通讯吗?"
+                 onConfirm={importUserToTencentIm}
+                 okText="确认"
+                 cancelText="取消"
+                 >
+                <Button  type="primary" >同步到即时通讯</Button>
+               </Popconfirm>
+
         </Space>}
         refresh={refresh}
         tableProps={{
