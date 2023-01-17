@@ -57,12 +57,12 @@
         },
         {
             "title": "库存数量",
-            "dataIndex": "weight",
+            "dataIndex": "stockNum",
             "width": 120
         },
         {
             "title": "库存重量（吨）",
-            "dataIndex": "totalWeight",
+            "dataIndex": "stockTotalWeight",
             "width": 120
         },
         {
