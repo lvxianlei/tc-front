@@ -270,7 +270,7 @@
             },
             {
                 "title": "数量",
-                "dataIndex": "applyNum"
+                "dataIndex": "num"
             },
             {
                 "title": "重量（吨）",

@@ -537,7 +537,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
-                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => setVisible(true)}>关联下达单</Button>
+                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => {
+                            let flag = false;
+                            for (let i = 0; i < selectedRows.length; i += 1) {
+                                if (!(selectedRows[i].materialPickingDetailId)) {
+                                    flag = true;
+                                }
+                            }
+                            if (flag) {
+                                message.error("领料单数据不可关联下达单！");
+                                return false;
+                            }
+                            setVisible(true)
+                        }}>关联下达单</Button>
                         <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/batchOutStock`,{
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
@@ -577,7 +589,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     rowSelection: {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
-                        getCheckboxProps: (record: any) => record.outStockItemStatus !== 0
+                        getCheckboxProps: (record: any) => record.outStockItemStatus !== 0 
                     }
                 }}
                 columns={[
