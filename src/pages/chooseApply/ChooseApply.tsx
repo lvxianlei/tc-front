@@ -47,9 +47,6 @@ export default function ChooseApply(): JSX.Element {
                                             } if(res.appName === "QMS"){
                                                 herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`;
                                             }
-                                            if (res.appName === "QMS") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`
-                                            }
                                             window.location.href = herf
                                             return
                                         }
