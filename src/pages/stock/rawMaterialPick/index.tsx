@@ -26,7 +26,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         ...(baseColumn as any).map((item: any) => {
             if (item.dataIndex === "totalWeight") {
-                return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.completeOutStock || 0}`}</> })
+                return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.toBePickingTotalWeight || 0}`}</> })
             }
             return item
         }),
@@ -100,8 +100,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.createTime) {
             const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.createTimeStart = `${formatDate[0]} 00:00:00`
-            value.createTimeEnd = `${formatDate[1]} 23:59:59`
+            value.startCreateTime  = `${formatDate[0]} 00:00:00`
+            value.endCreateTime = `${formatDate[1]} 23:59:59`
             delete value.createTime
         }
         if (value.openTime) {
@@ -110,8 +110,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         }
-        if (value.batcherId) {
-            value.applyStaffId = value.batcherId.value
+        if (value.applyStaffId) {
+            value.applyStaffId = value.applyStaffId.value
         }
         setFilterValue({ ...filterValue, ...value })
         // run({...filterValue, ...value})
