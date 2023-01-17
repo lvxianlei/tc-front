@@ -158,7 +158,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
         let data = await RequestUtil.get<IStevedoringCompanyMngt>(`/tower-supply/stevedoreCompany/${id}`);
         data = {
             ...data,
-            openBank: data.openBank + ',' + data.openBankName
+            // openBank: data.openBank + ',' + data.openBankName
         }
         setDetail(data);
         setVisible(true);
@@ -169,10 +169,11 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
         if (form) {
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true);
+                console.log(value)
                 value = {
                     ...value,
-                    openBank: value.openBank.split(',')[0],
-                    openBankName: value.openBank.split(',')[1]
+                    // openBank: value.openBank.split(',')[0],
+                    // openBankName: value.openBank.split(',')[1]
                 }
                 if (title === '新增') {
                     RequestUtil.post<IStevedoringCompanyMngt>(`/tower-supply/stevedoreCompany`, value).then(res => {
@@ -242,20 +243,22 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             <Input placeholder="请输入" maxLength={50} bordered={false} disabled={title === '详情'} />
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label={<span>联系人<span style={{ color: 'red' }}>*</span></span>}>
-                        <Form.Item name="contactMan" rules={[{
-                            "required": true,
-                            "message": "请输入联系人"
-                        }, {
-                            pattern: /^[^\s]*$/,
-                            message: '禁止输入空格',
-                        }]}>
+                    <Descriptions.Item label="联系人">
+                        <Form.Item name="contactMan" 
+                        // rules={[{
+                        //     "required": true,
+                        //     "message": "请输入联系人"
+                        // }, {
+                        //     pattern: /^[^\s]*$/,
+                        //     message: '禁止输入空格',
+                        // }]}
+                        >
                             <Input placeholder="请输入" bordered={false} maxLength={10} disabled={title === '详情'} />
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label={<span>联系电话<span style={{ color: 'red' }}>*</span></span>}>
+                    <Descriptions.Item label="联系电话">
                         <Form.Item name="contactManTel" rules={[{
-                            required: true,
+                            // required: true,
                             validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
                                 if (value) {
                                     checkcustomerPhone(value).then(res => {
@@ -266,7 +269,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                                         }
                                     })
                                 } else {
-                                    callback('请输入手机号')
+                                    callback()
                                 }
                             }
                         }]}>
@@ -282,28 +285,30 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                 <DetailTitle title="账户信息" />
                 <Descriptions title="" bordered size="small" colon={false} column={2} className={styles.description}>
                     <Descriptions.Item label={<span>开户银行<span style={{ color: 'red' }}>*</span></span>}>
-                        <Form.Item name="openBank" rules={[{
+                        <Form.Item name="openBankName" rules={[{
                             "required": true,
                             "message": "请选择开户银行"
                         }]}>
-                            <Select bordered={false} placeholder="请选择" disabled={title === '详情'}>
+                            {/* <Select bordered={false} placeholder="请选择" disabled={title === '详情'}>
                                 {bankTypeOptions && bankTypeOptions.map(({ id, name }, index) => {
                                     return <Select.Option key={index} value={id + ',' + name}>
                                         {name}
                                     </Select.Option>
                                 })}
-                            </Select>
+                            </Select> */}
+                            <Input bordered={false} placeholder="请输入" disabled={title === '详情'} maxLength={50}/>
                         </Form.Item>
                     </Descriptions.Item>
                     <Descriptions.Item label={<span>银行账号<span style={{ color: 'red' }}>*</span></span>}>
                         <Form.Item name="bankAccount" rules={[{
                             "required": true,
                             "message": "请输入银行账号"
-                        }, {
-                            pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
-                            message: "请输入正确格式的银行账号"
-
-                        }]}>
+                        }, 
+                        // {
+                        //     pattern: /^([1-9]{1})(\d{14}|\d{18})$/,
+                        //     message: "请输入正确格式的银行账号"
+                        // }
+                        ]}>
                             <Input placeholder="请输入" maxLength={50} bordered={false} disabled={title === '详情'} />
                         </Form.Item>
                     </Descriptions.Item>

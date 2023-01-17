@@ -1,5 +1,5 @@
-import {IFilter} from "./IFilter";
-import {RouteComponentProps, StaticContext} from "react-router";
+import { IFilter } from "./IFilter";
+import { RouteComponentProps, StaticContext } from "react-router";
 import ThirdPartyUtil from "@utils/ThirdPartyUtil";
 import AuthUtil from "@utils/AuthUtil";
 

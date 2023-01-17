@@ -8,13 +8,11 @@
           "required": true,
           "message": "请输入采购计划编号"
         }
-      ],
-      "width": 240
+      ]
     },
     {
       "title": "购回日期",
       "dataIndex": "repurchaseTime",
-      "width": 240,
       "type": "date",
       "format": "YYYY-MM-DD"
     },
@@ -42,7 +40,16 @@
           }
           
       ]
-  }
+    },
+    {
+      "title": "是否量具",
+      "dataIndex": "isMeasuringTools",
+      "type": "select",
+      "enum": [
+          { "value": 1, "label": "量具" },
+          { "value": 0, "label": "非量具" }
+      ]
+    }
   ],
   "editCargoDetails": [
     {

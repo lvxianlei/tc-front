@@ -48,6 +48,11 @@
             "width": 100
         },
         {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 100
+        },
+        {
             "title": "用友编码",
             "dataIndex": "externalCode",
             "width": 100

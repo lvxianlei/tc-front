@@ -116,8 +116,8 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                             style={{ width: "100%" }}
                             name="num"
                             label="输入数量"><InputNumber
-                                min={1} step={1}
-                                precision={0}
+                                min={0} step={1}
+                                precision={5}
                             /></Form.Item>
                     </Col>
                 </Row>

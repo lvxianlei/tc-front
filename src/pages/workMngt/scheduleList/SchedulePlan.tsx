@@ -22,18 +22,18 @@ export default function SchedulePlan(props: any) {
         try {
             const saveData = await form.validateFields();
             saveData.id = scheduleData.id;
-            saveData.materialLeader = saveData.material?.id
-            saveData.materialLeaderName = saveData.material?.name
-            saveData.boltLeader = saveData.bolt?.id
-            saveData.boltLeaderName = saveData.bolt?.name
-            saveData.weldingLeader = saveData.welding?.id
-            saveData.weldingLeaderName = saveData.welding?.name
-            saveData.loftingLeader = saveData.lofting?.id
-            saveData.loftingLeaderName = saveData.lofting?.name
-            saveData.drawLeader = saveData.draw?.id
-            saveData.drawLeaderName = saveData.draw?.name
-            saveData.smallSampleLeader = saveData.smallSample?.id
-            saveData.smallSampleLeaderName = saveData.smallSample?.name
+            saveData.materialLeader = saveData.material
+            saveData.materialLeaderName = saveData.materialName
+            saveData.boltLeader = saveData.bolt
+            saveData.boltLeaderName = saveData.boltName
+            saveData.weldingLeader = saveData.welding
+            saveData.weldingLeaderName = saveData.weldingName
+            saveData.loftingLeader = saveData.lofting
+            saveData.loftingLeaderName = saveData.loftingName
+            saveData.drawLeader = saveData.draw
+            saveData.drawLeaderName = saveData.drawName
+            saveData.smallSampleLeader = saveData.smallSample
+            saveData.smallSampleLeaderName = saveData.smallSampleName
             await RequestUtil.post('/tower-science/tower-science/assignPlan', saveData).then(async () => {
                 setVisible(false);
                 const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);

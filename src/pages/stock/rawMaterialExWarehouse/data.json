@@ -132,6 +132,11 @@
             "width": 100
         },
         {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 100
+        },
+        {
             "title": "仓库",
             "dataIndex": "warehouseName",
             "width": 120

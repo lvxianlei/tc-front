@@ -7,13 +7,13 @@
             "type": "select",
             "enum": [
                 { "value": 0, "label": "正常出库" },
-                { "value": 2, "label": "余料回库" }
+                { "value": 2, "label": "余料回库" },
+                { "value": 4, "label": "销售出库" }
             ]
         },
         {
             "title": "下达单号",
             "dataIndex": "issuedNumber",
-            "required": true,
             "type": "popTable",
             "width": 1101,
             "readOnly": true,
@@ -212,6 +212,10 @@
         {
             "title": "质保书号",
             "dataIndex": "warrantyNumber"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
         }
     ],
     "addMaterial": {
@@ -283,6 +287,14 @@
                 "dataIndex": "weight"
             },
             {
+                "title": "炉批号",
+                "dataIndex": "furnaceBatchNumber"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "warrantyNumber"
+            },
+            {
                 "title": "所在仓库",
                 "dataIndex": "warehouseName"
             },
@@ -309,14 +321,6 @@
             {
                 "title": "不含税金额（元）",
                 "dataIndex": "totalUnTaxPrice"
-            },
-            {
-                "title": "炉批号",
-                "dataIndex": "furnaceBatchNumber"
-            },
-            {
-                "title": "质保书号",
-                "dataIndex": "warrantyNumber"
             }
         ]
     },
