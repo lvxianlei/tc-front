@@ -1,6 +1,6 @@
 /**
  * @author zyc
- * @copyright © 2021 
+ * @copyright © 2021
  * @description 员工管理
 */
 
@@ -116,6 +116,11 @@ export default function StaffMngt(): React.ReactNode {
             dataIndex: 'email'
         },
         {
+            title: '同步即时通讯状态',
+            width: 150,
+            dataIndex: 'isAsyncTencentName'
+        },
+        {
             title: "状态",
             width: 50,
             dataIndex: 'statusName'
@@ -175,6 +180,15 @@ export default function StaffMngt(): React.ReactNode {
         setSelectedRows(selectedRows)
     }
 
+    const importUserToTencentIm = () => {
+        RequestUtil.post(`/tower-system/employee/importUserToTencentIm`, selectedKeys).then(res => {
+            message.success('同步成功');
+            setSelectedKeys([]);
+            setSelectedRows([]);
+            setRefresh(!refresh);
+        });
+    }
+
     return <Page
         path="/tower-system/employee"
         columns={columns}
@@ -227,6 +241,7 @@ export default function StaffMngt(): React.ReactNode {
                         }
                     })
                 }}>删除</Button>
+               <Button  type="primary" onClick={importUserToTencentIm}>同步到即时通讯</Button>
         </Space>}
         refresh={refresh}
         tableProps={{
