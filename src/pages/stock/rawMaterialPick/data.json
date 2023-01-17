@@ -1,0 +1,81 @@
+{
+    "baseColumn": [
+        {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
+            "title": "领料单号",
+            "dataIndex": "pickingNumber",
+            "width": 100
+        },
+        {
+            "title": "发料状态",
+            "dataIndex": "pickingStatus",
+            "width": 80
+        },
+        {
+            "title": "下达单号",
+            "dataIndex": "issuedNumber",
+            "width": 80
+        },
+        {
+            "title": "工程名称",
+            "dataIndex": "projectName",
+            "width": 80
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 80
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber",
+            "width": 80
+        },
+        {
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 80
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "warehouseName",
+            "width": 100
+        },
+        {
+            "title": "总重量(吨)/出库重量(吨)",
+            "dataIndex": "totalWeight",
+            "width": 180
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 120
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "applyStaffName",
+            "width": 80
+        },
+        {
+            "title": "领料类型",
+            "dataIndex": "pickingTypeName",
+            "width": 80
+        },
+        {
+            "title": "创建人",
+            "dataIndex": "createUserName",
+            "width": 80
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "width": 80
+        }
+    ]
+}
