@@ -899,6 +899,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             rawStockId: item.ids?item.ids:item.id,
+                            materialPickingDetailId: item?.materialPickingId?item.id:'',
                             maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
