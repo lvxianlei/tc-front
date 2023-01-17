@@ -44,9 +44,8 @@ export default function ChooseApply(): JSX.Element {
                                             }
                                             if (res.appName === "CRM") {
                                                 herf = process.env.CRM_BREACK_URL
-                                            }
-                                            if (res.appName === "QMS") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`
+                                            } if(res.appName === "QMS"){
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`;
                                             }
                                             window.location.href = herf
                                             return

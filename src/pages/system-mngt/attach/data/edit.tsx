@@ -90,6 +90,11 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
             }
         await saveRun({
           ...postData,
+
+          projectName: postData.projectName?.value,
+          contractName: postData.contractName?.value,
+          taskNoticeName: postData.taskNoticeName?.value,
+        
           tag: postData.tag?.map((item: any) => item.value).join(','),
 
           typeCode: postData.typeCode?.value,
@@ -167,6 +172,11 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
       await saveRun({
         ...postData,
         versionType: version.versionType,
+
+        projectName: postData.projectName?.value,
+        contractName: postData.contractName?.value,
+        taskNoticeName: postData.taskNoticeName?.value,
+
         tag: postData.tag?.map((item: any) => item.value).join(','),
         typeCode: postData.typeCode?.value,
         typeName: postData.typeCode?.label,
