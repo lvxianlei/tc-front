@@ -1,50 +1,18 @@
 /***
- * 新修改的原材料出库
- * 原文件地址当前目录：OriginalDocument.tsx
- * 时间：2022/01/11
+ * 原材料领料
+ * 时间：2023/01/16
  */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
-import { baseColumn, outStockDetail } from "./data.json";
+import { baseColumn } from "./data.json";
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
-const outStock = [
-    {
-        key: 'index',
-        title: '序号',
-        dataIndex: 'index',
-        fixed: "left",
-        width: 50,
-        render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-    },
-    ...outStockDetail.map((item:any)=>{
-        if (["num"].includes(item.dataIndex)) {
-            return ({
-                ...item,
-                render: (value: number, records: any, key: number) => <span>{value}</span>
-            })
-        }
-        return item
-    }),
-    {
-        title: '操作',
-        dataIndex: 'key',
-        width: 100,
-        fixed: 'right' as FixedType,
-        render: (_: undefined, record: any): React.ReactNode => (
-            <>
-                {record?.outStockType!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}/${record.approval}?weight=${record.totalWeight}`}>所在单据</Link>
-                :<Link to={`/stock/rawMaterialExWarehouse/backDetail/${record.outStockId}/${record.approval}?weight=${record.totalWeight}`}>所在单据</Link>}
-            </>
-        )
-    }
-]
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     const outStockList = [
@@ -70,11 +38,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(record?.outStockType!==2?`/stock/rawMaterialExWarehouse/detail/${record.id}/${record.approval}?weight=${record.totalWeight}`:`/stock/rawMaterialExWarehouse/backDetail/${record.id}/${record.approval}?weight=${record.totalWeight}`)}
+                        onClick={() => history.push(`/stock/pick/detail/${record.id}/${record.approval}?weight=${record.totalWeight}`)}
                     >明细</Button>
                     <Button
                         type="link"
-                        disabled={record.outStockStatus === 1}
                         onClick={
                             () => {
                                 setIsOpenId(true)
@@ -88,7 +55,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link" disabled={record.stockStatus === 2}>删除</Button>
+                        <Button type="link" disabled={record.pickingStatus !== 0 }>删除</Button>
                     </Popconfirm>
 
                 </>
@@ -98,7 +65,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const history = useHistory()
     const [editId, setEditId] = useState<string>();
     const [oprationType, setOperationType] = useState<"create" | "edit">("create")
-    const [pagePath, setPagePath] = useState<string>("/tower-storage/outStock")
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialPicking")
     const [columns, setColumns] = useState<any[]>(outStockList)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [num, setNum] = useState<any>({});
@@ -114,15 +81,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         ...history.location.state as object
     });
     //统计
-    const { loading, data, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue, ...value })
-        setNum(data)
-        resole(data)
-    }))
+    // const { loading, data, run } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+    //     const data = await RequestUtil.get<any>(`/tower-storage/outStock/detail/statistics`, { ...filterValue, ...value })
+    //     setNum(data)
+    //     resole(data)
+    // }))
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/outStock/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/materialPicking/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -147,7 +114,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.applyStaffId = value.batcherId.value
         }
         setFilterValue({ ...filterValue, ...value })
-        run({...filterValue, ...value})
+        // run({...filterValue, ...value})
         return value
     }
 
@@ -157,20 +124,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         setIsOpenId(false);
     }
-    const handleRadioChange = (event: any) => {
-        if (event.target.value === "b") {
-            setPagePath("/tower-storage/outStock/detail")
-            setColumns(outStock)
-            run(filterValue)
-            return
-        }
-        if (event.target.value === "a") {
-            setPagePath("/tower-storage/outStock")
-            setColumns(outStockList)
-            run(filterValue)
-            return
-        }
-    }
+
 
     const handleDelete = async (id: string) => {
         await deleteRun(id)
@@ -178,6 +132,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         history.go(0)
     }
 
+    // 获取所有的仓库
+    const { run: getBatchingStrategy, data: batchingStrategy } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehouse/getWarehouses`);
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    const { loading, data } = useRequest((value: Record<string, any>) => new Promise(async (resole, reject) => {
+        getBatchingStrategy()
+        resole(data)
+    }))
     return (
         <>
             <Page
@@ -193,18 +160,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             setOperationType("create")
                             setEditId("")
                         }}>创建</Button>
-                        <div style={{ width: "2000px" }}>
-                            <Radio.Group defaultValue="a" onChange={handleRadioChange}>
-                                <Radio.Button value="a">出库单列表</Radio.Button>
-                                <Radio.Button value="b">出库明细</Radio.Button>
-                            </Radio.Group>
-                        </div>
-                        <span>
+                        {/* <span>
                             <span >数量合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalNum||0}</span></span>
                             <span >重量合计（吨）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.weightCount||0}</span></span>
                             <span >含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalTaxPrice||0}</span></span>
                             <span >不含税金额合计（元）：<span style={{ marginRight: 12, color: "#FF8C00" }}>{num?.totalUnTaxPrice||0}</span></span>
-                        </span>
+                        </span> */}
                     </>
                 }
                 searchFormItems={[
@@ -214,82 +175,42 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
-                        label: '状态',
+                        name: 'pickingStatus',
+                        label: '发料状态',
                         children: (
                             <Select placeholder="请选择" style={{ width: "140px" }}>
-                                <Select.Option value="0">待完成</Select.Option>
-                                <Select.Option value="1">已完成</Select.Option>
+                                <Select.Option value={0}>未发料</Select.Option>
+                                <Select.Option value={1}>部分发料</Select.Option>
+                                <Select.Option value={2}>已发料</Select.Option>
                             </Select>
                         )
                     },
                     {
-                        name: 'outStockType',
-                        label: '出库类型',
+                        name: 'pickingType',
+                        label: '领料类型',
                         children: (
                             <Select placeholder="请选择" style={{ width: "140px" }}>
-                                <Select.Option value="0">正常出库</Select.Option>
-                                <Select.Option value="1">盘点出库</Select.Option>
-                                <Select.Option value="2">余料回库</Select.Option>
-                                <Select.Option value="4">销售出库</Select.Option>
-                                <Select.Option value="5">外委出库</Select.Option>
-                                <Select.Option value="6">其他出库</Select.Option>
+                                <Select.Option value="0">正常领料</Select.Option>
+                                <Select.Option value="7">二次领料</Select.Option>
+                                <Select.Option value="5">外委领料</Select.Option>
+                                <Select.Option value="4">销售领料</Select.Option>
+                                <Select.Option value="6">其他领料</Select.Option>
                             </Select>
                         )
                     },
                     {
-                        name: 'batcherId',
+                        name: 'applyStaffId',
                         label: '申请人',
                         children: <IntgSelect width={200} />
                     },
                     {
-                        name: 'openTime',
-                        label: '出库时间',
-                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
-                    },
-                    {
-                        name: 'materialName',
-                        label: '品名',
-                        children: <Input placeholder="请输入品名" style={{ width: 150 }} />
-                    },
-                    {
-                        name: 'structureSpec',
-                        label: '规格',
-                        children: <Input placeholder="请输入规格" style={{ width: 150 }} />
-                    },
-                    {
-                        name: 'structureTexture',
-                        label: '材质',
-                        children: <Select style={{ width: "140px" }} defaultValue={""}>
-                            <Select.Option value='' key={'aa'}>全部</Select.Option>
-                            {
-                                materialTextureOptions?.map((item: { id: string, name: string }) => <Select.Option
-                                    value={item.name}
-                                    key={item.id}>{item.name}</Select.Option>)
-                            }
+                        name: 'warehouseId',
+                        label: '领料仓库',
+                        children: <Select placeholder="请选择" style={{ width: "100px" }} showSearch>
+                            {batchingStrategy?.map((item: any,index: number) => {
+                                return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
+                            })}
                         </Select>
-                    },
-                    {
-                        name: 'materialStandard',
-                        label: '标准',
-                        children: <Select style={{ width: "140px" }} defaultValue={""}>
-                            <Select.Option value='' key={'aa'}>全部</Select.Option>
-                            {
-                                materialStandardOptions?.map((item: { id: string, name: string }) => <Select.Option
-                                    value={item.id}
-                                    key={item.id}>{item.name}</Select.Option>)
-                            }
-                        </Select>
-                    },
-                    {
-                        name: 'length',
-                        label: '长度',
-                        children: <InputNumber style={{ width: 150 }} />
-                    },
-                    {
-                        name: 'width',
-                        label: '宽度',
-                        children: <InputNumber style={{ width: 150 }} />
                     },
                     {
                         name: 'approval',
@@ -305,7 +226,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型/备注进行查询" style={{ width: 200 }} />
+                        children: <Input placeholder="请输入领料单号/下达单号/计划号/工程名称/内部合同号/塔型/备注进行查询" style={{ width: 200 }} />
                     }
                 ]}
             />

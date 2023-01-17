@@ -3492,6 +3492,20 @@
       "module": "./pages/stock/rawMaterialAllocation/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_list"
+    },
+    { // 库存管理-原材料领料单
+      "name": "原材料领料单",
+      "path": "/stock/pick",
+      "module": "./pages/stock/rawMaterialPick/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
+    { // 库存管理-原材料领料单-详情
+      "name": "原材料领料单详情",
+      "path": "/stock/pick/detail/:id/:approval",
+      "module": "./pages/stock/rawMaterialPick/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_info"
     }
   ]
 }
