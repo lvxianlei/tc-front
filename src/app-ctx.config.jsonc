@@ -416,6 +416,11 @@
                         "authority": "tc_erp_sw_stock_material_receive"
                     },
                     {
+                        "label": "原材料领料单",
+                        "path": "/stock/pick",
+                        "authority": "tc_erp_sw_stock_material_out"
+                    },
+                    {
                         "label": "原材料入库",
                         "path": "/stock/rawMaterialWarehousing",
                         "authority": "tc_erp_sw_stock_material_in"

@@ -30,13 +30,14 @@ export interface PopTableData {
     type: "PopTable"
     title: string
     path: string
-    columns: { title: string, dataIndex: string, type?: string }[]
-    search?: { title: string, dataIndex: string, type?: string }[]
+    columns: { title: string, dataIndex: string, type?: string, render?:()=>any, format?:(data:any)=>any }[]
+    search?: { title: string, dataIndex: string, type?: string, render?:()=>any, format?:(data:any)=>any }[]
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
     transformData?: (data: any) => any //请求到数据后转换为需要的数据
     getCheckboxProps?: (records: any) => ({ [key: string]: any })
+    
     [key: string]: any
 }
 
@@ -86,6 +87,10 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     params[`start${startTimeName.join("")}`] = formatDate[0] + " 00:00:00"
                     params[`end${startTimeName.join("")}`] = formatDate[1] + " 23:59:59"
                     delete params[columnItem?.dataIndex]
+                } 
+                if(columnItem?.render&&columnItem?.format){
+                    const value:any = params[columnItem?.dataIndex]
+                    params[columnItem?.dataIndex] =  value?columnItem?.format(value):''
                 }
             })
             const paramsOptions = stringify(params)
@@ -149,7 +154,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     label={fItem.title}
                     style={{ height: 32, fontSize: 12 }}
                 >
-                    {fItem.type === "date" ? <DatePicker.RangePicker style={{ height: 32, fontSize: 12 }} format={fItem.format || "YYYY-MM-DD"} /> : <FormItemType type={fItem.type} data={fItem} />}
+                    {fItem.type === "date" ? <DatePicker.RangePicker style={{ height: 32, fontSize: 12 }} format={fItem.format || "YYYY-MM-DD"} /> : fItem.render?fItem.render():<FormItemType type={fItem.type} data={fItem} />}
                 </Form.Item>
                 </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
