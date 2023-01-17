@@ -634,13 +634,13 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
+                        name: 'pickingStatus',
                         label: '状态',
                         children: (
-                            <Select placeholder="请选择状态" style={{ width: "140px" }}>
-                                <Select.Option value="0">待出库</Select.Option>
-                                <Select.Option value="1">缺料中</Select.Option>
-                                <Select.Option value="2">已出库</Select.Option>
+                            <Select placeholder="请选择" style={{ width: "140px" }}>
+                                <Select.Option value={0}>未发料</Select.Option>
+                                <Select.Option value={1}>部分发料</Select.Option>
+                                <Select.Option value={2}>已发料</Select.Option>
                             </Select>
                         )
                     },
