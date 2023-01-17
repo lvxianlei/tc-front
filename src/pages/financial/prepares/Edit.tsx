@@ -115,9 +115,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
-                    receivingNoteList: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
-                        id: item.id,
-                        receiveNumber: item.warehousingEntryNumber
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                        warehousingEntryId: item.id,
+                        warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
@@ -152,9 +152,9 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
-                    receivingNoteList: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
-                        id: item.id,
-                        receiveNumber: item.warehousingEntryNumber
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                        warehousingEntryId: item.id,
+                        warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
