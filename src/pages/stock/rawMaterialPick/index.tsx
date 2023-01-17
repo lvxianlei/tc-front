@@ -26,7 +26,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         },
         ...(baseColumn as any).map((item: any) => {
             if (item.dataIndex === "totalWeight") {
-                return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.completeOutStock || 0}`}</> })
+                return ({ ...item, render: (_value: any, records: any) => <>{`${records.totalWeight || 0}/${records.toBePickingTotalWeight || 0}`}</> })
             }
             return item
         }),

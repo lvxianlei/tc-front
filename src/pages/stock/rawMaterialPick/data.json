@@ -46,7 +46,7 @@
             "width": 100
         },
         {
-            "title": "总重量(吨)/出库重量(吨)",
+            "title": "总重量(吨)/未出库重量(吨)",
             "dataIndex": "totalWeight",
             "width": 180
         },
