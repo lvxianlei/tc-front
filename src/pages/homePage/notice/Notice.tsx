@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Input } from 'antd';
-import { Link } from 'react-router-dom';
-import { Page } from '../../common';
+import { Button, Input, message, Modal } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
+import { SearchTable } from '../../common';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '@utils/RequestUtil';
 
 export default function Notice(): React.ReactNode {
     const history = useHistory()
@@ -54,7 +56,7 @@ export default function Notice(): React.ReactNode {
             width: 150,
             dataIndex: 'title',
             render: (_: string, record: Record<string, any>): React.ReactNode => (
-                <Link to={`/homePage/notice/detail/${ record.id }`}>{_}</Link>
+                <Link to={`/homePage/notice/detail/${record.id}`}>{_}</Link>
             )
         },
         {
@@ -103,21 +105,20 @@ export default function Notice(): React.ReactNode {
         }
     ]
 
-    return <Page
+    return <SearchTable
         path="/tower-system/notice/staff/list"
-        columns={ columns }
-        headTabs={ [] }
-        searchFormItems={ [
+        columns={columns as any[]}
+        searchFormItems={[
             {
                 name: 'msg',
                 label: '模糊查询项',
-                children: <Input maxLength={50} placeholder="请输入标题/内容查询"/>
+                children: <Input maxLength={50} placeholder="请输入标题/内容查询" />
             }
-        ] }
-        filterValue={ filterValue }
-        onFilterSubmit = { (values: Record<string, any>) => {
+        ]}
+        filterValue={filterValue}
+        onFilterSubmit={(values: any) => {
             setFilterValue(values);
             return values;
-        } }
+        }}
     />
 }
