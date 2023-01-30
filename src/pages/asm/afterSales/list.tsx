@@ -12,7 +12,7 @@ export default () => {
         ...history.location.state as object
     });
     const [cyclePlanType, setCyclePlanType] = useState<any[]>([]);
-    const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+    const { } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`)
         setCyclePlanType(data?.records)
         resole(data)
@@ -60,6 +60,11 @@ export default () => {
             title: "售后人员",
             width: 200,
             dataIndex: "afterSaleUser"
+        },
+        {
+            title: "备注",
+            width: 200,
+            dataIndex: "description"
         },
         {
             title: "联系人",
