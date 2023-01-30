@@ -243,7 +243,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             <Input placeholder="请输入" maxLength={50} bordered={false} disabled={title === '详情'} />
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="联系人">
+                    <Descriptions.Item label='联系人'>
                         <Form.Item name="contactMan" 
                         // rules={[{
                         //     "required": true,
@@ -256,7 +256,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                             <Input placeholder="请输入" bordered={false} maxLength={10} disabled={title === '详情'} />
                         </Form.Item>
                     </Descriptions.Item>
-                    <Descriptions.Item label="联系电话">
+                    <Descriptions.Item label='联系电话'>
                         <Form.Item name="contactManTel" rules={[{
                             // required: true,
                             validator: (rule: RuleObject, value: StoreValue, callback: (error?: string) => void) => {
@@ -287,7 +287,7 @@ export default function StevedoringCompanyMngt(): React.ReactNode {
                     <Descriptions.Item label={<span>开户银行<span style={{ color: 'red' }}>*</span></span>}>
                         <Form.Item name="openBankName" rules={[{
                             "required": true,
-                            "message": "请选择开户银行"
+                            "message": "请输入开户银行"
                         }]}>
                             {/* <Select bordered={false} placeholder="请选择" disabled={title === '详情'}>
                                 {bankTypeOptions && bankTypeOptions.map(({ id, name }, index) => {

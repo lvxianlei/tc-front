@@ -6,7 +6,7 @@ import { DetailContent, BaseInfo, DetailTitle, CommonTable, FormItemType } from 
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from "../../../utils/RequestUtil"
 import { taskNoticeEditBaseInfo, taskNoticeEditSpec, salesAssist, productAssist } from "../managementDetailData.json"
-import { materialStandardOptions,implementStandardOptions  } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions,implementStandardOptions } from "../../../configuration/DictionaryOptions"
 export default function SalesPlanEdit() {
     const history = useHistory()
     const materialStandardEnum = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
@@ -287,7 +287,9 @@ export default function SalesPlanEdit() {
             onOk={handleModalOk}
             destroyOnClose>
             <Spin spinning={modalLoading}>
-                <CommonTable columns={productAssist} dataSource={(modalData as any[]) || []}
+                <CommonTable
+                    columns={productAssist}
+                    dataSource={(modalData as any[]) || []}
                     rowSelection={{
                         selectedRowKeys: select,
                         type: "checkbox",
@@ -295,7 +297,8 @@ export default function SalesPlanEdit() {
                             disabled: productDetails.map(item => item.id).includes(records.id)
                         }),
                         onChange: onRowsChange,
-                    }} />
+                    }}
+                />
             </Spin>
         </Modal>
         <Spin spinning={loading}>
@@ -325,17 +328,17 @@ export default function SalesPlanEdit() {
                 })} dataSource={data || {}} edit col={3} />
             <DetailTitle title="特殊要求" />
             <BaseInfo form={cargoDtoForm}
-                      columns={
-                          taskNoticeEditSpec.map(item =>{
-                              if(item.dataIndex === "materialStandard") {
-                                  return { ...item, enum: materialStandardEnum }
-                              }
-                              if(item.dataIndex === "implementStandard") {
-                                  return { ...item, enum: implementStandardEnum }
-                              }
-                              return item
-                          })
-                      }
+                  columns={
+                      taskNoticeEditSpec.map(item =>{
+                          if(item.dataIndex === "materialStandard") {
+                              return { ...item, enum: materialStandardEnum }
+                          }
+                          if(item.dataIndex === "implementStandard") {
+                              return { ...item, enum: implementStandardEnum }
+                          }
+                          return item
+                      })
+                  }
                 dataSource={data || {}} edit col={3} />
             <DetailTitle title="杆塔信息" operation={[<Button key="select" type="primary" disabled={!saleOrderId} onClick={handleSelectClick}>选择杆塔明细</Button>]} />
             <Form form={productDetailsForm} onFieldsChange={handleChange}>

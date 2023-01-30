@@ -279,7 +279,302 @@
         {
             "title": "合同ID",
             "dataIndex": "contractId",
-            "hide":true
+            "hide":true,
+            "hidden":true
+        },
+        {
+            "title": "合同单位",
+            "dataIndex": "contractCompany",
+            "disabled": true
+        },
+        {
+            "title": "项目编号",
+            "dataIndex": "projectCode",
+            "disabled": true
+        },
+        {
+            "title": "合同/工程名称",
+            "dataIndex": "contractName"
+        },
+        {
+            "title": "产品类型",
+            "dataIndex": "productTypeId",
+            "type": "select"
+        },
+        {
+            "title": "电压等级",
+            "dataIndex": "voltage",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "合同签订日期",
+            "dataIndex": "contractSignTime",
+            "disabled": true,
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "开票货币类型",
+            "dataIndex": "currencyType",
+            "type": "select",
+            "enum":[]
+        },
+        {
+            "title": "货币类型名称",
+            "dataIndex": "currencyName",
+            "hidden":true
+        },
+        {
+            "title": "汇率",
+            "dataIndex": "exchangeRate",
+            "type": "number",
+            "max": 100,
+            "min": 0
+        },
+        {
+            "title": "开票合计重量(吨)",
+            "dataIndex": "ticketWeight",
+            "disabled": true,
+            "type": "text"
+        },
+        {
+            "title": "开票合计金额",
+            "dataIndex": "ticketMoney",
+            "disabled": false,
+            "type": "number"
+        },
+        {
+            "title": "人民币金额",
+            "dataIndex": "rmb",
+            "disabled": true,
+            "type": "number"
+        },
+        {
+            "title": "开票日期",
+            "dataIndex": "ticketTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "开票次数",
+            "dataIndex": "ticketCount",
+            "type": "number"
+        },
+        {
+            "title": "最后发货日期",
+            "dataIndex": "contractLastTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "计划号",
+            "dataIndex": "planCode"
+        },
+        {
+            "title": "是否已全开",
+            "dataIndex": "isOpen",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 2,
+                    "label": "发票未开全"
+                },
+                {
+                    "value": 3,
+                    "label": "发票已开全"
+                }
+            ]
+        },
+        {
+            "title": "发票类型",
+            "dataIndex": "ticketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 2,
+                    "label": "增值税专用发票"
+                },
+                {
+                    "value": 1,
+                    "label": "增值税普通发票"
+                }
+            ]
+        },
+        {
+            "title": "开票方式",
+            "dataIndex": "openTicketType",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "按重量开"
+                },
+                {
+                    "value": 2,
+                    "label": "按基数开"
+                }
+            ]
+        },
+        {
+            "title": "开票金额依据",
+            "dataIndex": "ticketBasis",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "理重"
+                },
+                {
+                    "value": 2,
+                    "label": "过磅重量"
+                },
+                {
+                    "value": 3,
+                    "label": "合同约定"
+                },
+                {
+                    "value": 4,
+                    "label": "海关出口报关单"
+                },
+                {
+                    "value": 5,
+                    "label": "计划重量"
+                }
+            ]
+        },
+        {
+            "title": "合同下计划状态",
+            "dataIndex": "contractType",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "理重(吨)",
+            "dataIndex": "reasonWeight",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "计划重量(吨)",
+            "dataIndex": "planWeight",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "过磅重量(吨)",
+            "dataIndex": "weigh",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "业务经理",
+            "dataIndex": "business",
+            "disabled": true
+        },
+        {
+            "title": "是否有验收单",
+            "dataIndex": "isCheck",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 1,
+                    "label": "无"
+                },
+                {
+                    "value": 2,
+                    "label": "有"
+                }
+            ]
+        },
+        {
+            "title": "业务经理承诺回款时间",
+            "dataIndex": "businessBackTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "承诺回款比例",
+            "dataIndex": "backProportion",
+            "type": "number"
+        },
+        {
+            "title": "承诺回款金额",
+            "dataIndex": "backMoney",
+            "type": "number",
+            "disabled": true
+        },
+        {
+            "title": "开票内容与合同内容不符合原因",
+            "dataIndex": "des",
+            "type": "textarea"
+        }
+    ],
+    "baseInfoHeadOverView": [
+        {
+            "title": "申请编号",
+            "dataIndex": "invoicingCode",
+            "disabled": true
+        },
+        {
+            "title": "内部合同编号",
+            "dataIndex": "contractCode",
+            "type": "popTable",
+            "path": "/tower-market/contract",
+            "width": 1011,
+            "value": "contractNumber",
+            "dependencies": true,
+            "columns": [
+                {
+                    "title": "合同编号",
+                    "dataIndex": "contractNumber"
+                },
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName"
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber"
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany"
+                },
+                {
+                    "title": "合同签订单位",
+                    "dataIndex": "signCustomerName"
+                },
+                {
+                    "title": "合同签订日期",
+                    "dataIndex": "signContractTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD"
+                }
+            ],
+            "search": [
+                {
+                    "title": "合同名称",
+                    "dataIndex": "contractName",
+                    "width": 100
+                },
+                {
+                    "title": "内部合同编号",
+                    "dataIndex": "internalNumber",
+                    "width": 100
+                },
+                {
+                    "title": "业主单位",
+                    "dataIndex": "customerCompany",
+                    "width": 100
+                },
+                {
+                    "title": "模糊搜索",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 100,
+                    "placeholder": "合同名称/合同名称编号"
+                }
+            ]
         },
         {
             "title": "合同单位",
@@ -646,7 +941,7 @@
         },
         {
             "title": "生产名称(实际)",
-            "dataIndex": "devName"
+            "dataIndex": "devNameText"
         },
         {
             "title": "规格型号",
@@ -796,7 +1091,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "description",
             "width": 200
         }
     ],
@@ -881,7 +1176,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "remark",
+            "dataIndex": "description",
             "width": 200
         }
     ],
@@ -918,7 +1213,7 @@
         },
         {
             "title": "订单号",
-            "dataIndex": "orderCode"
+            "dataIndex": "saleOrderNumber"
         },
         {
             "title": "销售计划号",
@@ -929,16 +1224,8 @@
             "dataIndex": "planNumber"
         },
         {
-            "title": "基数",
-            "dataIndex": "baseNumber"
-        },
-        {
             "title": "总重量",
             "dataIndex": "totalWeight"
-        },
-        {
-            "title": "已完工数量",
-            "dataIndex": "finishNum"
         }
     ],
     "transferHead": [

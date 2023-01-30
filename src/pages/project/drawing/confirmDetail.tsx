@@ -1,4 +1,4 @@
-import React, {useState, useImperativeHandle, forwardRef, useEffect} from 'react'
+import React, { useState, useImperativeHandle, forwardRef,useEffect } from 'react'
 import { Button, Space, Modal, Form, message } from 'antd'
 import { CommonTable, DetailTitle, BaseInfo, UploadXLSX } from '../../common'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -79,7 +79,18 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
     useImperativeHandle(ref, () => ({
         getDataSource: () => tableDataSource
     }))
+        useEffect(()=>{
+            // 更新总重
+            calcWeightCount()
+        },[tableDataSource])
 
+        const calcWeightCount = ()=>{
+            let count = 0
+            tableDataSource.forEach((item:any)=>{
+                count += item.monomerWeight || 0
+            })
+            setWeightCount(count)
+        }
     const handleLoaded = (data: any) => {
         setTableDataSource([...data.map((item: any, index: number) => ({
             ...item,
@@ -98,18 +109,6 @@ export default forwardRef(function ConfirmDetail({ id, type }: ConfirmDetailProp
 
     const handleDelete = () => {
         setTableDataSource(tableDataSource.filter((item: any) => !selectedKeys.includes(item?.key)))
-    }
-        useEffect(()=>{
-            // 更新总重
-            calcWeightCount()
-        },[tableDataSource])
-
-    const calcWeightCount = ()=>{
-            let count = 0
-            tableDataSource.forEach((item:any)=>{
-                count += item.monomerWeight || 0
-            })
-            setWeightCount(count)
     }
     return <div>
         <DetailTitle title="确认明细" key="detail_title" />

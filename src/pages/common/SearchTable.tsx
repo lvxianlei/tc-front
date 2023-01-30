@@ -1,5 +1,5 @@
 
-import React, { ReactElement, useCallback, useState } from "react"
+import React, { useCallback, useState } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonAliTable, { columnsProps } from "./CommonAliTable"
@@ -32,7 +32,6 @@ interface SearchTableProps {
     exportObject?: { [key: string]: any }, // 导出可能会包含的id等
     exportFileName?: string
     getDataSource?: (dataSource: any[]) => void
-    tableRender?: (dom: ReactElement) => ReactElement
     [key: string]: any
 }
 
@@ -59,7 +58,6 @@ export default function SearchTable({
     modal = false,
     exportPath,
     exportObject = {},
-    tableRender,
     ...props }: SearchTableProps): JSX.Element {
     const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: 1, pageSize })
     const [form] = Form.useForm()
@@ -148,55 +146,29 @@ export default function SearchTable({
             }
             {typeof extraOperation === "function" ? extraOperation(data?.source) : extraOperation}
         </Space>
-        {tableRender ? tableRender(<>
-            <CommonAliTable
-                columns={columns}
-                rowKey={rowKey || ((record: any) => record.id)}
-                size="small"
-                isLoading={loading}
-                dataSource={data?.result?.records || data?.result || []}
-                {...tableProps}
-                {...props}
-            />
-            {
-                pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
-                    <Pagination
-                        className={styles.pagination}
-                        total={data?.result?.total}
-                        pageSize={pagenationParams.pageSize}
-                        current={pagenationParams.current}
-                        showTotal={(total: number) => `共${total}条记录`}
-                        showSizeChanger
-                        onChange={paginationChange}
-                        {...paginationProps}
-                    />
-                </footer>
-            }
-        </>) : <>
-            <CommonAliTable
-                columns={columns}
-                rowKey={rowKey || ((record: any) => record.id)}
-                size="small"
-                isLoading={loading}
-                dataSource={data?.result?.records || data?.result || []}
-                {...tableProps}
-                {...props}
-            />
-            {
-                pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
-                    <Pagination
-                        className={styles.pagination}
-                        total={data?.result?.total}
-                        pageSize={pagenationParams.pageSize}
-                        current={pagenationParams.current}
-                        showTotal={(total: number) => `共${total}条记录`}
-                        showSizeChanger
-                        onChange={paginationChange}
-                        {...paginationProps}
-                    />
-                </footer>
-            }
-        </>}
+        <CommonAliTable
+            columns={columns}
+            rowKey={rowKey || ((record: any) => record.id)}
+            size="small"
+            isLoading={loading}
+            dataSource={data?.result?.records || data?.result || []}
+            {...tableProps}
+            {...props}
+        />
+        {
+            pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
+                <Pagination
+                    className={styles.pagination}
+                    total={data?.result?.total}
+                    pageSize={pagenationParams.pageSize}
+                    current={pagenationParams.current}
+                    showTotal={(total: number) => `共${total}条记录`}
+                    showSizeChanger
+                    onChange={paginationChange}
+                    {...paginationProps}
+                />
+            </footer>
+        }
         {isExport ? <ExportList
             history={history}
             location={location}
