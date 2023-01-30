@@ -149,7 +149,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                 return {
                                     id: res?.id,
                                     name: res?.name,
-                                    signState: res?.signState || 2,
+                                    signState: res?.signState || 1,
                                 }
                             }));
                             setDetailData({ ...detailData, userNames: userNames, staffList: selectRows })
