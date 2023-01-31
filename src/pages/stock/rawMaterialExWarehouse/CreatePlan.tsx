@@ -349,6 +349,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }),
                 ...baseInfo,
                 materialType: 1,
+                issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
@@ -427,6 +428,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }),
                 ...baseInfo,
                 materialType: 1,
+                issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
             type==='submit'&&submitRun({
@@ -441,7 +443,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }),
                 ...baseInfo,
                 materialType: 1,
-                
+                issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
