@@ -11,9 +11,9 @@ import '../StockPublicStyle.less';
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
-    const [tabs, setTabs] = useState<1 | 2>(1)
+    const [tabs, setTabs] = useState<1 | 2>(2)
     const [warehouseId, setWarehouseId] = useState<string | undefined>()
-    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary")
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary/details")
     const [filterValue, setFilterValue] = useState({})
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
