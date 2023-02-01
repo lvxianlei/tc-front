@@ -47,6 +47,11 @@ export default () => {
             dataIndex: "projectName"
         },
         {
+            title: "塔型名称",
+            width: 150,
+            dataIndex: "productCategory"
+        },
+        {
             title: "工程地址",
             width: 150,
             dataIndex: "deliveryAddress"
