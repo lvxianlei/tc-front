@@ -186,7 +186,7 @@
                 "dataIndex": "unit"
             },
             {
-                "title": "含税单价（元/吨）",
+                "title": "含税单价（元）",
                 "dataIndex": "taxPrice"
             },
             {
@@ -198,7 +198,7 @@
                 "dataIndex": "tax"
             },
             {
-                "title": "不含税单价（元/吨）",
+                "title": "不含税单价（元）",
                 "dataIndex": "price"
             },
             {
