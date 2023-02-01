@@ -245,8 +245,12 @@ export default function CreatePlan(props: any): JSX.Element {
     }
     // 移除
     const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.id !== id))
-        setPopDataList(materialList.filter((item: any) => item.id !== id))
+        const value = materialList.filter((item: any) => item.id !== id)
+        form.setFieldsValue({
+            list: value
+        })
+        setMaterialList([...value])
+        setPopDataList([...value])
     }
 
     // 复制
@@ -726,7 +730,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             </>
                         }]}
                     pagination={false}
-                    dataSource={popDataList} />
+                    dataSource={[...popDataList]} />
                 </Form>
             </Spin>
             <Modal width={1100} title={`选择库存`} destroyOnClose
