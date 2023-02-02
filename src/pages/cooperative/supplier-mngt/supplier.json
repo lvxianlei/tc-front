@@ -66,43 +66,19 @@
         {
             "title": "质量保证体系",
             "dataIndex": "qualityAssurance",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择质量保证体系..."
-                }
-            ]
+            "type": "select"
         },
         {
             "title": "联系人",
-            "dataIndex": "contactMan",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入联系人..."
-                }
-            ]
+            "dataIndex": "contactMan"
         },
         {
             "title": "联系电话",
-            "dataIndex": "contactManTel",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入联系电话..."
-                }
-            ]
+            "dataIndex": "contactManTel"
         },
         {
             "title": "主要供货产品",
-            "dataIndex": "supplyProducts",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入主要供货产品..."
-                }
-            ]
+            "dataIndex": "supplyProducts"
         },
         {
             "title": "备注",

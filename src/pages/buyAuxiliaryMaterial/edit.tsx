@@ -368,7 +368,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     if (item.dataIndex === "planPurchaseNum") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
                         })
                     }
                     // if (item.dataIndex === "deptName") {

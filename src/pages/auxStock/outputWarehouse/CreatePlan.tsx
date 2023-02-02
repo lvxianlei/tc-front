@@ -87,7 +87,14 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.pickingUserId) {
             addCollectionForm.setFieldsValue({
-                departmentName: fields.pickingUserId.records[0].deptName
+                departmentName: {
+                    id:fields.pickingUserId.records[0].dept,
+                    records: [{
+                        id:fields.pickingUserId.records[0].dept,
+                        name: fields.pickingUserId.records[0].deptName
+                    }],
+                    value: fields.pickingUserId.records[0].deptName,
+                }
             })
             return;
         }
@@ -109,7 +116,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             }
             if (flag) {
                 message.error("请您填写数量！");
-                return false;
+                throw Error('请您填写数量！')
             }
             await saveRun({
                 outStockDetailDTOList: materialList,
@@ -117,7 +124,9 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 pickingTeamName: baseInfo.dept.value,
                 pickingTeamId: baseInfo.dept.id,
                 pickingTime: baseInfo.pickingTime+' 00:00:00',
-                pickingUserId: baseInfo?.pickingUserId.id
+                pickingUserId: baseInfo?.pickingUserId.id,
+                departmentId: baseInfo?.departmentName?.id,
+                departmentName: baseInfo?.departmentName?.value
             });
             resove(true)
         } catch (error) {
@@ -237,6 +246,15 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                             }))
                         })
                     }
+                    // if (item.dataIndex === "departmentName") {
+                    //     return ({
+                    //         ...item,
+                    //         enum: batchingStrategy?.map((item: any) => ({
+                    //             value: item.id,
+                    //             label: item.name
+                    //         }))
+                    //     })
+                    // }
                     return item
                 })}
                 onChange={performanceBondChange}
