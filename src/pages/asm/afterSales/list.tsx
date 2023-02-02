@@ -171,7 +171,7 @@ export default () => {
             {
                 name: "fuzzyQuery",
                 label: '模糊查询',
-                children: <Input placeholder="工单编号/订单编号/计划号/工程名称" style={{ width: 220 }} />
+                children: <Input placeholder="工单编号/订单编号/计划号/工程名称/塔型名称" style={{ width: 280 }} />
             },
             {
                 name: "afterSaleUser",
