@@ -46,6 +46,11 @@
             "width": 120
         },
         {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 120
+        },
+        {
             "title": "含税单价（元）",
             "dataIndex": "taxPrice",
             "width": 120

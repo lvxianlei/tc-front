@@ -2,7 +2,7 @@
  * 创建出库单
  */
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -59,6 +59,20 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
+    const handleDescriptionChange = async (value: any, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    remark: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    
+}
 
     // 移除
     const handleRemove = (id: string) => {
@@ -107,6 +121,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
+                pickingTeamName: baseInfo.dept.value,
+                pickingTeamId: baseInfo.dept.id,
                 pickingTime: baseInfo.pickingTime+' 00:00:00',
                 pickingUserId: baseInfo?.pickingUserId.id,
                 departmentId: baseInfo?.departmentName?.id,
@@ -145,15 +161,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
             setWarehouseId(result?.warehouseId)
+            // addCollectionForm.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             resole({
                 ...result,
                 pickingUserId: {
                     id: result?.applyStaffId,
                     value: result?.applyStaffName
                 },
-                departmentName: {
-                    id: result?.departmentId,
-                    value: result?.departmentName
+                dept:{
+                    id:result?.pickingTeamId,
+                    value:result?.pickingTeamName
                 },
                 pickingTime: result?.createTime
             })
@@ -214,6 +231,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 form={addCollectionForm}
                 edit
                 dataSource={data || {
+                    type:0,
                     pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
                 }}
                 col={2}
@@ -293,6 +311,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                         <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
                                     </Form.Item>
                                 // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                            }})
+                        }
+                        if (["remark"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: string, records: any, key: number) => {return <Form.Item 
+                                    name={['list', key, 'remark']}>
+                                        <Input defaultValue={value || undefined}   onBlur={(e:any)=> handleDescriptionChange(e.target.value,records.id)} maxLength={50} />
+                                    </Form.Item>
                             }})
                         }
                         return item;
