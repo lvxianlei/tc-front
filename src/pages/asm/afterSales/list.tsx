@@ -12,7 +12,7 @@ export default () => {
         ...history.location.state as object
     });
     const [cyclePlanType, setCyclePlanType] = useState<any[]>([]);
-    const { loading, data, run } = useRequest(() => new Promise(async (resole, reject) => {
+    const { } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?current=1&size=1000`)
         setCyclePlanType(data?.records)
         resole(data)
@@ -60,6 +60,11 @@ export default () => {
             title: "售后人员",
             width: 200,
             dataIndex: "afterSaleUser"
+        },
+        {
+            title: "备注",
+            width: 200,
+            dataIndex: "description"
         },
         {
             title: "联系人",
@@ -161,7 +166,7 @@ export default () => {
             {
                 name: "fuzzyQuery",
                 label: '模糊查询',
-                children: <Input placeholder="请输入工单编号/订单编号/计划号/工程名进行查询" style={{ width: 150 }} />
+                children: <Input placeholder="工单编号/订单编号/计划号/工程名称" style={{ width: 220 }} />
             },
             {
                 name: "afterSaleUser",

@@ -52,6 +52,7 @@
         "iconFont": "icon-zhijianzhongxin2", // iconfont
         "color": "#9D45FF", // iconfont的颜色
         "path": "/qualityInspection/disposition",
+        "corsWeb": true,
         "appName": "QMS"
     },
     {
