@@ -38,7 +38,6 @@ export default function SelectUser({
                 const data = await ref.current?.onSubmit() || [];
                 setVisible(false);
                 props.onSelect(data)
-                ref.current?.resetFields();
             }}
             width='60%'
         >

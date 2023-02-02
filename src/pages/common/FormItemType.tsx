@@ -6,7 +6,9 @@ import RequestUtil from '../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import moment from 'moment'
 import { stringify } from 'query-string';
-export type FormItemTypesType = "text" | "number" | "phone" | "select" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
+import FetchSelect from './FetchSelect'
+import ChooseUser, { ChooseUserData } from './ChooseUser'
+export type FormItemTypesType = "text" | "number" | "phone" | "select" | "fetchSelect" | "date" | "textarea" | "popForm" | "rangePicker" | undefined
 
 interface SelectOption {
     value: string | number
@@ -30,17 +32,22 @@ export interface PopTableData {
     type: "PopTable"
     title: string
     path: string
-    columns: { title: string, dataIndex: string, type?: string, render?:()=>any, format?:(data:any)=>any }[]
-    search?: { title: string, dataIndex: string, type?: string, render?:()=>any, format?:(data:any)=>any }[]
+    columns: { title: string, dataIndex: string, type?: string }[]
+    search?: { title: string, dataIndex: string, type?: string }[]
     dependencies?: boolean
     selectType?: "checkbox" | "radio"
     value?: string
     transformData?: (data: any) => any //请求到数据后转换为需要的数据
     getCheckboxProps?: (records: any) => ({ [key: string]: any })
-    
     [key: string]: any
 }
-
+export interface FetchSelectData {
+    type: 'fetchSelect'
+    path: string
+    title: string
+    transformData?: (data: any) => any[]
+    [key: string]: any
+}
 interface FormItemTypes {
     type?: FormItemTypesType
     readonly?: boolean
@@ -87,10 +94,6 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     params[`start${startTimeName.join("")}`] = formatDate[0] + " 00:00:00"
                     params[`end${startTimeName.join("")}`] = formatDate[1] + " 23:59:59"
                     delete params[columnItem?.dataIndex]
-                } 
-                if(columnItem?.render&&columnItem?.format){
-                    const value:any = params[columnItem?.dataIndex]
-                    params[columnItem?.dataIndex] =  value?columnItem?.format(value):''
                 }
             })
             const paramsOptions = stringify(params)
@@ -154,7 +157,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
                     label={fItem.title}
                     style={{ height: 32, fontSize: 12 }}
                 >
-                    {fItem.type === "date" ? <DatePicker.RangePicker style={{ height: 32, fontSize: 12 }} format={fItem.format || "YYYY-MM-DD"} /> : fItem.render?fItem.render():<FormItemType type={fItem.type} data={fItem} />}
+                    {fItem.type === "date" ? <DatePicker.RangePicker style={{ height: 32, fontSize: 12 }} format={fItem.format || "YYYY-MM-DD"} /> : <FormItemType type={fItem.type} data={fItem} />}
                 </Form.Item>
                 </Col>)}
                 <Col style={{ height: 32 }} span={(searchs.length + 1) / 24}>
@@ -168,6 +171,7 @@ export const PopTableContent: React.FC<{ data: PopTableData, value?: { id: strin
         <CommonTable
             columns={columns}
             rowSelection={{
+                checkStrictly: false,
                 selectedRowKeys: select,
                 type: data.selectType || "radio",
                 onSelect: onSelectChange,
@@ -269,7 +273,11 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
     }
     const componentProps: any = {}
     Object.keys(data).forEach((item: any) => {
-        if (!["title", "dataIndex", "width", "type", "enum", "dependencies", "value", "path", "edit", "search", "columns"].includes(item)) {
+        if (!["title",
+            "dataIndex", "width", "type", "enum",
+            "dependencies", "value", "path",
+            "edit", "search",
+            "columns", "transformData"].includes(item)) {
             componentProps[item] = data[item]
         }
     })
@@ -301,11 +309,11 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             {...componentProps}
         />,
         select: <SelfSelect {...props} data={data as SelectData} />,
-        tree: <TreeSelect 
-            {...props} 
-            treeData={data?.treeData as any} 
+        tree: <TreeSelect
+            {...props}
+            treeData={data?.treeData as any}
             disabled={data.disabled}
-            style={{ width: "100px",  ...props.style }} 
+            style={{ width: "100px", ...props.style }}
             {...componentProps}
         />,
         date: <DatePicker
@@ -340,7 +348,11 @@ const FormItemType: React.FC<FormItemTypes> = ({ type = "text", data, render, ..
             style={{ width: data.width || "100%", height: "100%", ...props.style }}
             {...componentProps}
         />,
-        popTable: <PopTable {...props} data={data as PopTableData} />
+        popTable: <PopTable {...props} data={data as PopTableData} />,
+        fetchSelect: <FetchSelect {...props}
+            value={props.value}
+            data={data as unknown} {...componentProps} />,
+        chooseUser: <ChooseUser {...props} data={data as ChooseUserData} />
     }
     return <>{render ? render(data, props) : ItemTypes[type]}</>
 }
