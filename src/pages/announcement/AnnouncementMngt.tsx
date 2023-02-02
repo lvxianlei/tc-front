@@ -169,15 +169,15 @@ export default function AnnouncementMngt(): React.ReactNode {
                         "enum": [
                             {
                                 "label": "未读",
-                                "value": 0
+                                "value": "0"
                             },
                             {
                                 "label": "已读",
-                                "value": 1
+                                "value": "1"
                             },
                             {
                                 "label": "签收",
-                                "value": 3
+                                "value": "3"
                             }
                         ]
                     },
@@ -195,7 +195,7 @@ export default function AnnouncementMngt(): React.ReactNode {
                     },
                     {
                         "title": "累计时长",
-                        "dataIndex": ""
+                        "dataIndex": "cumulativeTime"
                     }
                 ] as any}
                 modal
