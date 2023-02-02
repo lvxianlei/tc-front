@@ -274,6 +274,7 @@ export default function Index(): React.ReactNode {
                         placeholder="请输入"
                         value={item.shortageNum}
                         onChange={(e) => { inputChange(e, item, index, 'shortage') }}
+                        
                     ></Input>
                 )
             }
@@ -380,7 +381,7 @@ export default function Index(): React.ReactNode {
     const inputChange = (e: any, item: any, index: any, type: string) => {
         let ary = [...OutLibraryListdata]
         if (type == 'OutLibrary') {
-            ary[index].outboundQuantity = e.target.value.replace(/[^0-9]/g, '')
+            ary[index].outboundQuantity = e.target.value.replace(/[^0-9.]/g, '')
             setOutLibraryListdata(ary)
             return
         } else if (type === "remark") {
@@ -389,7 +390,7 @@ export default function Index(): React.ReactNode {
             return
         } else {
             ary = JSON.parse(JSON.stringify(ApplyListdata))
-            ary[index].shortageNum = e.target.value.replace(/[^0-9]/g, '')
+            ary[index].shortageNum = e.target.value.replace(/[^0-9.]/g, '')
             setApplyListdata(ary)
         }
     }

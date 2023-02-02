@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, Select, Button, Form, Modal, Spin, Row, Col, InputNumber, Popconfirm, message } from 'antd';
+import { Space, Input, Select, Button, Form, Modal, Spin, Row, Col, InputNumber, Popconfirm, message, Upload } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory } from 'react-router-dom';
@@ -13,6 +13,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { IMaterial, IMaterialType } from '../material/IMaterial';
 import { RuleObject } from 'rc-field-form/lib/interface';
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function MaterialMngt(): React.ReactNode {
     const columns = [
@@ -207,6 +209,8 @@ export default function MaterialMngt(): React.ReactNode {
     const [form] = Form.useForm();
     const history = useHistory();
     const [code, setCode] = useState('');
+    const [url, setUrl] = useState<string>('');
+    const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const [ruleFront, setRuleFront] = useState('');
     const [filterValue, setFilterValue] = useState({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -238,8 +242,38 @@ export default function MaterialMngt(): React.ReactNode {
             filterValue={filterValue}
             // exportPath={`/tower-system/material`}
             extraOperation={<Space direction="horizontal" size="small">
-                {/* <Button type="primary" ghost>模板下载</Button>
-                <Button type="primary" ghost>导入</Button> */}
+                <Button type="primary" onClick={() => downloadTemplate('/tower-system/material/export', '原材料模板')} ghost>模板下载</Button>
+                <Upload
+                    action={() => {
+                        const baseUrl: string | undefined = process.env.REQUEST_API_PATH_PREFIX;
+                        return baseUrl + '/tower-system/material/import'
+                    }}
+                    accept=".xls,.xlsx"
+                    headers={
+                        {
+                            'Authorization': `Basic ${AuthUtil.getAuthorization()}`,
+                            'Tenant-Id': AuthUtil.getTenantId(),
+                            'Sinzetech-Auth': AuthUtil.getSinzetechAuth()
+                        }
+                    }
+                    showUploadList={false}
+                    onChange={(info) => {
+                        if (info.file.response && !info.file.response?.success) {
+                            message.warning(info.file.response?.msg)
+                        }
+                        if (info.file.response && info.file.response?.success) {
+                            if (info.file.response?.data!==null&&Object.keys(info.file.response?.data).length > 0) {
+                                setUrl(info.file.response?.data);
+                                setUrlVisible(true);
+                            } else {
+                                message.success('导入成功！');
+                                history.go(0);
+                            }
+                        }
+                    }}
+                >
+                    <Button type="primary"  ghost>导入</Button>
+                </Upload>
                 <Button type="primary" onClick={() => { setVisible(true); setTitle('新增'); }} ghost>新增</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
@@ -400,6 +434,18 @@ export default function MaterialMngt(): React.ReactNode {
                     </Form.Item></Col>
                 </Row>
             </Form>
+        </Modal>
+        <Modal
+            visible={urlVisible}
+            onOk={() => {
+                window.open(url);
+                setUrlVisible(false);
+            }}
+            onCancel={() => { setUrlVisible(false); setUrl('') }}
+            title='提示'
+            okText='下载'
+        >
+            当前存在错误数据，请重新下载上传！
         </Modal>
     </Spin>
 }

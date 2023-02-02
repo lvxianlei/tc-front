@@ -515,7 +515,7 @@ export default function Information(): React.ReactNode {
                 columns={outFactoryHead}
                 dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
-            <EditTable haveNewButton={false} form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
+            <EditTable form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
         </Modal>
         <SelectAuditType
             visible={visible}

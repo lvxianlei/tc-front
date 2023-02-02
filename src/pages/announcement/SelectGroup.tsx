@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
-import { Spin, Button, Descriptions, Modal, Form, Input, Table, Switch } from 'antd';
-import { useHistory } from 'react-router-dom';
-import { DetailTitle, BaseInfo, DetailContent, CommonTable } from '../common';
-import RequestUtil from '../../utils/RequestUtil';
+import { Spin, Button, Modal, Form, Input, Switch } from 'antd';
+import { CommonTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import useRequest from '@ahooksjs/use-request';
 import { Page } from '../common';
@@ -15,7 +13,6 @@ interface IPersonal {
 }
 
 export default function SelectGroup({ onSelect, selectedKey = [], ...props }: any): JSX.Element {
-
     const [visible, setVisible] = useState<boolean>(false);
     const [form] = Form.useForm();
     const [filterValue, setFilterValue] = useState<any>({});
@@ -56,12 +53,6 @@ export default function SelectGroup({ onSelect, selectedKey = [], ...props }: an
             dataIndex: 'type',
             width: 120
         },
-        // {
-        //     key: 'clientId',
-        //     title: '应用范围',
-        //     width: 200,
-        //     dataIndex: 'clientId'
-        // },
         {
             key: 'description',
             title: '备注',
@@ -98,7 +89,7 @@ export default function SelectGroup({ onSelect, selectedKey = [], ...props }: an
                 render: (_: undefined, record: Record<string, any>, index: number) => {
                     return <Switch
                         size="small"
-                        checked={selectedRows.find((item: any) => item.employeeId === record.employeeId)?.signState || false}
+                        checked={selectedRows.find((item: any) => item.employeeId === record.employeeId)?.signState}
                         onChange={(checked: boolean) => {
                             const rightData: any[] = [...selectedRows];
                             rightData[index].signState = checked ? 1 : 2
