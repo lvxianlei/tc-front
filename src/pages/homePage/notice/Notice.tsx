@@ -85,7 +85,7 @@ export default function Notice(): React.ReactNode {
             width: 50,
             render: (_: any, records: any) => <>
                 <Button type="link" size="small"
-                    onClick={() => history.push(`/attach/data`, {
+                    onClick={() => history.push(`/homePage/notice/detail/${records.id}`, {
                         type: "notice",
                         id: records.id
                     })}>查看</Button>

@@ -7,7 +7,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import Dispatch from './Dispatch'
 import Tower from './Tower'
-import { AttachmentRef, FileProps } from '../../common/Attachment'
+import { AttachmentRef } from '../../common/Attachment'
 import HandSelect from './HandSelect'
 import moment from 'moment'
 
