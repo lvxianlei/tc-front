@@ -104,7 +104,7 @@
         },
         {
             "title": "领料人",
-            "dataIndex": "pickingUserName",
+            "dataIndex": "applyStaffName",
             "width": 120
         },
         {
