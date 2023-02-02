@@ -67,6 +67,32 @@
             ]
         },
         {
+            "title": "领料班组",
+            "dataIndex": "dept",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "path": "/tower-system/department",
+            "columns": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name"
+                }
+            ],
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "输入部门名称进行查询"
+                }
+                
+            ]
+        },
+        {
             "title": "领料仓库",
             "dataIndex": "warehouseId",
             "type": "select",
@@ -139,6 +165,10 @@
         {
             "title": "区位",
             "dataIndex": "locatorName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
         }
     ],
     "addMaterial": {
@@ -164,7 +194,6 @@
                 "title": "库位",
                 "dataIndex": "locatorId",
                 "type":"tree"
-                
             },
             {
                 "title": "物料编码",
