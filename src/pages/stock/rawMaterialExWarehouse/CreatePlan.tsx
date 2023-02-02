@@ -363,6 +363,15 @@ export default function CreatePlan(props: any): JSX.Element {
             console.log(error);
         }
     }
+    const findLastIndex = (arr:any, callback:any, thisArg:any, num:number)=> {
+        for (let index = num - 1; index >= 0; index--) {
+          const value = arr[index];
+          if (callback.call(thisArg, value, index, arr)) {
+            return index;
+          }
+        }
+        return -1;
+      }
     const handleSaveClick = async (type: string) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
@@ -370,7 +379,6 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您选择出库明细!");
                 return false;
             }
-            console.log(popDataList)
             // 添加对长度以及数量的拦截
             let flag = false;
             let num = false;
@@ -422,19 +430,18 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写数量！");
                 return false;
             }
-            debugger;
             type==='save'&&saveRun({
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
-                        warehouseItemId: item?.locatorId,
+                        warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         id: item?.ids?item.ids:item.id,
-                        reservoirName: item.reservoirName==='0'?popDataList[index-1].reservoirName: item.reservoirName,
-                        reservoirId: item.reservoirName==='0'?popDataList[index-1].reservoirId:item.reservoirId,
-                        locatorName: item.locatorName==='0'?popDataList[index-1].locatorName: item.locatorName,
-                        locatorId: item.locatorName==='0'?popDataList[index-1].locatorId: item.locatorId,
+                        reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
+                        reservoirId: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirId:item.reservoirId,
+                        locatorName: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorName: item.locatorName,
+                        locatorId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
@@ -449,11 +456,11 @@ export default function CreatePlan(props: any): JSX.Element {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
-                        warehouseItemId: item?.locatorId,
-                        reservoirName: item.reservoirName==='0'?popDataList[index-1].reservoirName: item.reservoirName,
-                        reservoirId: item.reservoirName==='0'?popDataList[index-1].reservoirId:item.reservoirId,
-                        locatorName: item.locatorName==='0'?popDataList[index-1].locatorName: item.locatorName,
-                        locatorId: item.locatorName==='0'?popDataList[index-1].locatorId: item.locatorId,
+                        warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
+                        reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
+                        reservoirId: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirId:item.reservoirId,
+                        locatorName: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorName: item.locatorName,
+                        locatorId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
