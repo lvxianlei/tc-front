@@ -104,17 +104,17 @@
         },
         {
             "title": "领料人",
-            "dataIndex": "warehouseName",
+            "dataIndex": "pickingUserName",
             "width": 120
         },
         {
             "title": "领料车间",
-            "dataIndex": "warehouseName",
+            "dataIndex": "departmentName",
             "width": 120
         },
         {
             "title": "领料班组",
-            "dataIndex": "warehouseName",
+            "dataIndex": "pickingTeamName",
             "width": 120
         },
         {
