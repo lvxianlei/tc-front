@@ -99,9 +99,11 @@ export default function CreatePlan(props: any): JSX.Element {
         // }
         getWarehousing(warehouseId,1)
         setMaterialList([...materialList, ...newMaterialList])
-        setPopDataList([...materialList.map((item: any) => {
+        setPopDataList([...materialList.map((item: any,index: number) => {
             return ({
                 ...item,
+                reservoirName: index===0?'':'0',
+                locatorName: index===0?'':'0',
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                         : (Number(item?.proportion || 1) / 1000).toFixed(5),
@@ -219,13 +221,14 @@ export default function CreatePlan(props: any): JSX.Element {
             if (item.id === id) {
                 return ({
                     ...item,
-                    reservoirId: ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    reservoirId: value!=='0'?ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id:'',
                     reservoirName: value,
+                    locatorName:value!=='0'?'':item.locatorName
                 })
             }
             return item
         })
-        getWarehousing(ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id, 2)
+        value!=='0'&&getWarehousing(ReservoirArea.filter((itemOne:any)=>{return itemOne?.name===value})[0].id, 2)
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
@@ -234,7 +237,7 @@ export default function CreatePlan(props: any): JSX.Element {
             if (item.id === id) {
                 return ({
                     ...item,
-                    locatorId: Location.filter((itemOne:any)=>{return itemOne?.name===value})[0].id,
+                    locatorId: value!=='0'?Location.filter((itemOne:any)=>{return itemOne?.name===value})[0].id:'',
                     locatorName: value
                 })
             }
@@ -396,14 +399,19 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写数量！");
                 return false;
             }
+            debugger;
             type==='save'&&saveRun({
-                outStockDetailDTOList: popDataList.map((item:any)=>{
+                outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
                         id: item?.ids?item.ids:item.id,
+                        reservoirName: item.reservoirName==='0'?popDataList[index-1].reservoirName: item.reservoirName,
+                        reservoirId: item.reservoirName==='0'?popDataList[index-1].reservoirId:item.reservoirId,
+                        locatorName: item.locatorName==='0'?popDataList[index-1].locatorName: item.locatorName,
+                        locatorId: item.locatorName==='0'?popDataList[index-1].locatorId: item.locatorId,
                         // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
@@ -413,12 +421,16 @@ export default function CreatePlan(props: any): JSX.Element {
                 pickingUserId: baseInfo?.pickingUserId.id
             });
             type==='submit'&&submitRun({
-                outStockDetailDTOList: popDataList.map((item:any)=>{
+                outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
                         num: 0- item.num,
                         totalWeight:0- item.totalWeight,
                         warehouseItemId: item?.locatorId,
+                        reservoirName: item.reservoirName==='0'?popDataList[index-1].reservoirName: item.reservoirName,
+                        reservoirId: item.reservoirName==='0'?popDataList[index-1].reservoirId:item.reservoirId,
+                        locatorName: item.locatorName==='0'?popDataList[index-1].locatorName: item.locatorName,
+                        locatorId: item.locatorName==='0'?popDataList[index-1].locatorId: item.locatorId,
                         // rawStockId: item?.ids?item.ids:item.rawStockId,
                     }
                 }),
@@ -670,6 +682,11 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 onChange={(val) => { handleReservoirChange(val,records.id) }}
                                                 // disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
+                                                {key!==0 && <Select.Option
+                                                    value={'0'}
+                                                >
+                                                    同上
+                                                </Select.Option>}
                                                 {
                                                     ReservoirArea.map((item, index) => {
                                                         return (
@@ -694,11 +711,19 @@ export default function CreatePlan(props: any): JSX.Element {
                                                 onChange={(val) => { handleLocatorChange(val,records.id) }}
                                                 // disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}
                                             >
+                                                {key!==0 && <Select.Option
+                                                    value={'0'}
+                                                    // key={'0'}
+                                                    disabled={records.reservoirName!=='0'}
+                                                >
+                                                    同上
+                                                </Select.Option>}
                                                 {
                                                     Location.map((item, index) => {
                                                         return (
                                                             <Select.Option
                                                                 value={item.name}
+                                                                // key={index}
                                                             >
                                                                 {item.name}
                                                             </Select.Option>
