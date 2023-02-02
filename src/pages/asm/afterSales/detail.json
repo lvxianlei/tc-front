@@ -2,7 +2,6 @@
     "baseInfoData": [
         {
             "title": "工单编号",
-            "width": 120,
             "dataIndex": "workOrderNumber"
         },
         {
@@ -11,7 +10,6 @@
         },
         {
             "title": "工程状态",
-            "width": 120,
             "dataIndex": "status",
             "type": "select",
             "required": true,
@@ -40,49 +38,44 @@
         },
         {
             "title": "订单编号",
-            "width": 200,
             "dataIndex": "saleOrderNumber"
         },
         {
             "title": "业务经理",
-            "width": 200,
             "dataIndex": "serviceManager"
         },
         {
             "title": "创建人",
-            "width": 120,
             "dataIndex": "createUserName"
         },
         {
             "title": "计划号",
-            "dataIndex": "planNumber",
-            "width": 120
+            "dataIndex": "planNumber"
         },
         {
             "title": "联系人",
-            "dataIndex": "linkman",
-            "width": 120
+            "dataIndex": "linkman"
         },
         {
             "title": "创建时间",
             "dataIndex": "createTime",
             "type": "date",
-            "width": 120,
             "format": "YYYY-MM-DD HH:mm:ss"
         },
         {
             "title": "工程名称",
-            "width": 120,
             "dataIndex": "projectName"
         },
         {
             "title": "联系电话",
-            "width": 120,
             "dataIndex": "phone"
+        },
+        {
+            "title": "备注",
+            "type": "textarea",
+            "dataIndex": "description"
         }
     ],
-
-    
     "pageInfo": [
         {
             "title": "问题分类",
@@ -155,7 +148,7 @@
         {
             "title": "图片",
             "width": 70,
-            "type":"number",
+            "type": "number",
             "dataIndex": "picNumber"
         },
         {
