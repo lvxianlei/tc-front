@@ -33,6 +33,7 @@ export default function Records({ id, type }: EditProps) {
             path="/tower-system/notice/staff/sign"
             columns={signIn as any[]}
             modal
+            filterValue={{ id }}
             searchFormItems={[{
                 name: 'staffName',
                 label: "姓名",

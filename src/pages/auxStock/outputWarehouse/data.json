@@ -78,7 +78,12 @@
             "width": 100
         },
         {
-            "title": "含税单价（元/吨）",
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 100
+        },
+        {
+            "title": "含税单价（元）",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -88,13 +93,28 @@
             "width": 120
         },
         {
-            "title": "不含税单价（元/吨）",
+            "title": "不含税单价（元）",
             "dataIndex": "unTaxPrice",
             "width": 120
         },
         {
             "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
+            "width": 120
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "applyStaffName",
+            "width": 120
+        },
+        {
+            "title": "领料车间",
+            "dataIndex": "departmentName",
+            "width": 120
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeamName",
             "width": 120
         },
         {

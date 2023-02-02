@@ -67,14 +67,54 @@
             ]
         },
         {
-            "title": "领料仓库",
-            "dataIndex": "warehouseId",
-            "type": "select",
-            "rules": [
+            "title": "领料部门",
+            "dataIndex": "departmentName",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/department",
+            "columns": [
                 {
-                    "required": true,
-                    "message": "请选择领料仓库"
+                    "title": "部门",
+                    "dataIndex": "name"
                 }
+            ],
+            "search": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "请输入部门名称"
+                }
+            ]
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "dept",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "path": "/tower-system/department",
+            "columns": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name"
+                }
+            ],
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "输入部门名称进行查询"
+                }
+                
             ]
         },
         {
@@ -90,9 +130,15 @@
             ]
         },
         {
-            "title": "领料部门",
-            "dataIndex": "departmentName",
-            "required": true
+            "title": "领料仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料仓库"
+                }
+            ]
         }
     ],
     "material": [
@@ -117,7 +163,7 @@
             "dataIndex": "unit"
         },
         {
-            "title": "含税单价（元/吨）",
+            "title": "含税单价（元）",
             "dataIndex": "taxPrice"
         },
         {
@@ -125,7 +171,7 @@
             "dataIndex": "totalTaxPrice"
         },
         {
-            "title": "不含税单价（元/吨）",
+            "title": "不含税单价（元）",
             "dataIndex": "unTaxPrice"
         },
         {
@@ -139,6 +185,10 @@
         {
             "title": "区位",
             "dataIndex": "locatorName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
         }
     ],
     "addMaterial": {
@@ -164,7 +214,6 @@
                 "title": "库位",
                 "dataIndex": "locatorId",
                 "type":"tree"
-                
             },
             {
                 "title": "物料编码",
@@ -190,7 +239,7 @@
                 "dataIndex": "unit"
             },
             {
-                "title": "含税单价（元/吨）",
+                "title": "含税单价（元）",
                 "dataIndex": "taxPrice"
             },
             {
@@ -198,7 +247,7 @@
                 "dataIndex": "totalTaxPrice"
             },
             {
-                "title": "不含税单价（元/吨）",
+                "title": "不含税单价（元）",
                 "dataIndex": "unTaxPrice"
             },
             {
