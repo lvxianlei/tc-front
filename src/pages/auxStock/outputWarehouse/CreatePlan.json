@@ -67,6 +67,31 @@
             ]
         },
         {
+            "title": "领料部门",
+            "dataIndex": "departmentName",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/department",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "name"
+                }
+            ],
+            "search": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "请输入部门名称"
+                }
+            ]
+        },
+        {
             "title": "领料班组",
             "dataIndex": "dept",
             "required": true,
@@ -93,17 +118,6 @@
             ]
         },
         {
-            "title": "领料仓库",
-            "dataIndex": "warehouseId",
-            "type": "select",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择领料仓库"
-                }
-            ]
-        },
-        {
             "title": "领料日期",
             "dataIndex": "pickingTime",
             "type": "date",
@@ -116,27 +130,13 @@
             ]
         },
         {
-            "title": "领料部门",
-            "dataIndex": "departmentName",
-            "required": true,
-            "type": "popTable",
-            "width": 1101,
-            "readOnly": true,
-            "dependencies": true,
-            "value": "name",
-            "path": "/tower-system/department",
-            "columns": [
+            "title": "领料仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
                 {
-                    "title": "部门",
-                    "dataIndex": "name"
-                }
-            ],
-            "search": [
-                {
-                    "title": "部门名称",
-                    "dataIndex": "name",
-                    "width": 200,
-                    "placeholder": "请输入部门名称"
+                    "required": true,
+                    "message": "请选择领料仓库"
                 }
             ]
         }
