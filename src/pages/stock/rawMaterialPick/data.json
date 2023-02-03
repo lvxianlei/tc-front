@@ -12,7 +12,7 @@
         },
         {
             "title": "发料状态",
-            "dataIndex": "pickingStatus",
+            "dataIndex": "pickingStatusName",
             "width": 80
         },
         {
