@@ -444,13 +444,13 @@ export default function CreatePlan(props: any): JSX.Element {
 
     return (
         <Modal
-            title={'出库单'}
+            title={'领料单'}
             visible={props.visible}
             onCancel={() => {
                 setMaterialList([]);
                 setPopDataList([]);
                 setType(0)
-                props?.handleCreate();
+                props?.handleCreate({code:1});
                 
             }}
             maskClosable={false}
