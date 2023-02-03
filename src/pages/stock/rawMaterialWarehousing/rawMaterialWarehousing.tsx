@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Radio, Popconfirm, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { IntgSelect, SearchTable as Page } from '../../common';
+import { SupplySelect, SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 import { baseColumn, inStockDetail } from "./RawMaterialWarehousing.json";
 // 引入新增纸质单号
@@ -303,7 +303,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'supplierName',
                         label: '供应商',
-                        children: <IntgSelect width={200} />
+                        children: <SupplySelect width={200} />
                     },
                     {
                         name: 'fuzzyQuery',
