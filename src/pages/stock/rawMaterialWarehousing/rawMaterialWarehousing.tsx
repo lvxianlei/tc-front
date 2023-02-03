@@ -6,7 +6,7 @@
 import React, { useState, useRef } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Radio, Popconfirm, InputNumber } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { SearchTable as Page } from '../../common';
+import { IntgSelect, SearchTable as Page } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
 import { baseColumn, inStockDetail } from "./RawMaterialWarehousing.json";
 // 引入新增纸质单号
@@ -141,6 +141,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.startEntryTime = `${formatDate[0]} 00:00:00`
             value.endEntryTime = `${formatDate[1]} 23:59:59`
             delete value.inTime
+        }
+        if (value.supplierName) {
+            value.supplierName = value.supplierName?.value;
         }
         setFilterValue({ ...value })
         run({...value})
@@ -298,9 +301,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         </Select>
                     },
                     {
+                        name: 'supplierName',
+                        label: '供应商',
+                        children: <IntgSelect width={200} />
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: "模糊查询项",
-                        children: <Input placeholder="请输入入库单号/车牌号/收货单号/供应商/合同编号/联系人/联系电话进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="请输入入库单号/车牌号/收货单号/合同编号/联系人/联系电话进行查询" style={{ width: 300 }} />
                     }
                 ]}
             />
