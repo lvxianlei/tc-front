@@ -540,7 +540,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => {
                             let flag = false;
                             for (let i = 0; i < selectedRows.length; i += 1) {
-                                if (!(selectedRows[i].materialPickingDetailId)) {
+                                if (selectedRows[i].materialPickingDetailId&&selectedRows[i].materialPickingDetailId!==null) {
                                     flag = true;
                                 }
                             }
