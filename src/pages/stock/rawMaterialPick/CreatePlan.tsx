@@ -258,6 +258,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }),
                 ...baseInfo,
                 materialType: 1,
+                issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 applyStaffId: baseInfo?.applyStaffId.id,
                 createUser: AuthUtil.getUserInfo().user_id,
                 createUserName: AuthUtil.getRealName(),
