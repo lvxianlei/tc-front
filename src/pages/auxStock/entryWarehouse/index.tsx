@@ -110,6 +110,29 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     })
 
+    const { data: warehouseData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const [warehouseList, classify] = await Promise.all<any>([
+                RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
+                RequestUtil.get(`/tower-system/materialCategory`, {
+                    materialDataType: 2
+                })
+            ])
+            resole({
+                warehouseList,
+                classify: classify.map((item: any) => ({
+                    value: item.name,
+                    label: item.name,
+                    children: item.children.map((cItem: any) => ({
+                        value: cItem.name,
+                        label: cItem.name
+                    }))
+                }))
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }))
     return (
         <>
             <Page
@@ -228,9 +251,34 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         </Select>
                     },
                     {
+                        name: 'warehouseId',
+                        label: '仓库',
+                        children: <Select
+                            style={{ width: 100 }}
+                            defaultValue={""}
+                        >
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                warehouseData?.warehouseList?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.id}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
+                    },
+                    {
+                        name: 'materialName',
+                        label: '品名',
+                        children: <Input width={100} maxLength={200} placeholder="请输入品名" />
+                    },
+                    {
+                        name: 'structureSpec',
+                        label: '规格',
+                        children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: "模糊查询项",
-                        children: <Input placeholder="请输入收货单号/供应商/合同编号/联系人/联系电话进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="请输入收货单号/物料编码/供应商/合同编号/联系人/联系电话进行查询" style={{ width: 300 }} />
                     }
                 ]}
             />

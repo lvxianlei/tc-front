@@ -6,9 +6,19 @@
             "width": 80
         },
         {
+            "title": "类别",
+            "dataIndex": "materialTypeName",
+            "width": 100
+        },
+        {
             "title": "类型",
             "dataIndex": "materialCategoryName",
             "width": 60
+        },
+        {
+            "title": "大类",
+            "dataIndex": "directMaterialTypeName",
+            "width": 100
         },
         {
             "title": "品名",
@@ -31,7 +41,7 @@
             "width": 50
         },
         {
-            "title": "含税单价(元/吨)",
+            "title": "含税单价(元)",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -41,7 +51,7 @@
             "width": 120
         },
         {
-            "title": "不含税单价(元/吨)",
+            "title": "不含税单价(元)",
             "dataIndex": "price",
             "width": 120
         },
@@ -83,9 +93,19 @@
             "width": 80
         },
         {
+            "title": "类别",
+            "dataIndex": "materialTypeName",
+            "width": 100
+        },
+        {
             "title": "类型",
             "dataIndex": "materialCategoryName",
-            "width": 60
+            "width": 80
+        },
+        {
+            "title": "大类",
+            "dataIndex": "directMaterialTypeName",
+            "width": 100
         },
         {
             "title": "品名",
@@ -108,7 +128,7 @@
             "width": 50
         },
         {
-            "title": "含税单价(元/吨)",
+            "title": "含税单价(元)",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -118,7 +138,7 @@
             "width": 120
         },
         {
-            "title": "不含税单价(元/吨)",
+            "title": "不含税单价(元)",
             "dataIndex": "unTaxPrice",
             "width": 120
         },

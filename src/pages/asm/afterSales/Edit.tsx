@@ -111,6 +111,9 @@ export default function AnnouncementNew(): React.ReactNode {
                         }]}>
                             <Input maxLength={20} />
                         </Form.Item>
+                        <Form.Item name="description" label="备注" initialValue={detailData.description} >
+                            <Input.TextArea maxLength={300} />
+                        </Form.Item>
                     </Col>
                     {/* <Col span={12}>
                         <DetailTitle title="售后人员" key={1} />

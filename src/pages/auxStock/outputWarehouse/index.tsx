@@ -164,7 +164,29 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(false)
         }
     })
-
+    const { data: warehouseData } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const [warehouseList, classify] = await Promise.all<any>([
+                RequestUtil.get(`/tower-storage/warehouse/tree?type=0`),
+                RequestUtil.get(`/tower-system/materialCategory`, {
+                    materialDataType: 2
+                })
+            ])
+            resole({
+                warehouseList,
+                classify: classify.map((item: any) => ({
+                    value: item.name,
+                    label: item.name,
+                    children: item.children.map((cItem: any) => ({
+                        value: cItem.name,
+                        label: cItem.name
+                    }))
+                }))
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }))
     return (
         <>
             <Page
@@ -235,6 +257,21 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'fuzzyQuery',
                         label: "关键字",
                         children: <Input placeholder="领料编号/生产批次" style={{ width: 200 }} />
+                    },
+                    {
+                        name: 'warehouseId',
+                        label: '仓库',
+                        children: <Select
+                            style={{ width: 100 }}
+                            defaultValue={""}
+                        >
+                            <Select.Option value='' key={'aa'}>全部</Select.Option>
+                            {
+                                warehouseData?.warehouseList?.map((item: { id: string, name: string }) => <Select.Option
+                                    value={item.id}
+                                    key={item.id}>{item.name}</Select.Option>)
+                            }
+                        </Select>
                     },
                     {
                         name: 'approval',

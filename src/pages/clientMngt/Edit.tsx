@@ -84,13 +84,7 @@ export default function Edit(): JSX.Element {
                 if (item.dataIndex === "bankAccount") {
                     return ({
                         ...item,
-                        maxLength: 20,
-                        rules: [
-                            {
-                                pattern: new RegExp(/^[0dd2-9]\d*$/, 'g'),
-                                message: "请输入正确的银行账号"
-                            }
-                        ]
+                        maxLength: 20
                     })
                 }
                 return item

@@ -635,8 +635,7 @@
         },
         {
             "title": "*本体重量（kg）",
-            "dataIndex": "bodyWeight",
-            "required": true
+            "dataIndex": "bodyWeight"
         },
         {
             "title": "*单重（kg）",
@@ -780,8 +779,7 @@
         },
         {
             "title": "*本体重量（kg）",
-            "dataIndex": "bodyWeight",
-            "required": true
+            "dataIndex": "bodyWeight"
         },
         {
             "title": "*单重（kg）",

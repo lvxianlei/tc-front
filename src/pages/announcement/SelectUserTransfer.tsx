@@ -138,7 +138,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 const res = new Map();
                                 let newRows = rows.filter((item: IStaff) => !res.has(item.id) && res.set(item.id, 1));
                                 this.setState({
-                                    rightData: newRows
+                                    rightData: newRows.map((item: any) => ({ ...item, signState: item.signState || 1 }))
                                 })
                             }
                         }} size="small" type="primary">确定</Button>
@@ -188,7 +188,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
                                 title: '是否签收',
                                 dataIndex: 'signState',
                                 width: 30,
-                                render: (value: 1 | 2, record: Record<string, any>, index: number) => <Switch
+                                render: (value: 1 | 2, _record: Record<string, any>, index: number) => <Switch
                                     size="small"
                                     checked={value === 1}
                                     onChange={(checked: boolean) => {

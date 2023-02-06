@@ -121,6 +121,9 @@ export default function AnnouncementNew(): React.ReactNode {
                         }]}>
                             <Input maxLength={20} />
                         </Form.Item>
+                        <Form.Item name="description" label="备注" initialValue={detailData.description} >
+                            <Input.TextArea maxLength={300} />
+                        </Form.Item>
                         <Form.Item name="isProblem" label="问题信息" initialValue={isProblem} rules={[{
                             "required": true,
                             "message": "请选择问题信息"

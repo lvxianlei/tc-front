@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
-import { Input, Select, message, Button, Upload, Radio, TreeSelect } from 'antd';
+import { Input, Select, message, Button, Upload, Radio, TreeSelect, DatePicker } from 'antd';
 import RequestUtil from '../../../utils/RequestUtil';
 import { SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
@@ -11,9 +11,9 @@ import '../StockPublicStyle.less';
 
 export default function RawMaterialStock(): React.ReactNode {
     const history = useHistory()
-    const [tabs, setTabs] = useState<1 | 2>(1)
+    const [tabs, setTabs] = useState<1 | 2>(2)
     const [warehouseId, setWarehouseId] = useState<string | undefined>()
-    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary")
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/materialStock/auxiliary/details")
     const [filterValue, setFilterValue] = useState({})
     const { data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -146,6 +146,11 @@ export default function RawMaterialStock(): React.ReactNode {
         }
         filterValue={filterValue}
         onFilterSubmit={(value: any) => {
+            if (value.date) {
+                const formatDate = value.date.format("YYYY-MM-DD")
+                value.balanceTime = `${formatDate} 23:59:59`
+                delete value.date
+            }
             if (value.length) {
                 value.lengthMin = value.length.lengthMin
                 value.lengthMax = value.length.lengthMax
@@ -208,6 +213,11 @@ export default function RawMaterialStock(): React.ReactNode {
                 name: 'structureSpec',
                 label: '规格',
                 children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+            },
+            {
+                name: 'date',
+                label: '结存日期',
+                children: <DatePicker format="YYYY-MM-DD" style={{ width: 220 }} />
             },
             {
                 name: 'fuzzyQuery',
