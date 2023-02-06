@@ -121,8 +121,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
-                pickingTeamName: baseInfo.dept.value,
-                pickingTeamId: baseInfo.dept.id,
+                pickingTeamName: baseInfo?.dept.value,
+                pickingTeamId: baseInfo?.dept.id,
                 pickingTime: baseInfo.pickingTime+' 00:00:00',
                 pickingUserId: baseInfo?.pickingUserId.id,
                 departmentId: baseInfo?.departmentName?.id,
@@ -232,7 +232,11 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 edit
                 dataSource={data || {
                     type:0,
-                    pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
+                    pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                    dept:{
+                        id:'',
+                        value:''
+                    }
                 }}
                 col={2}
                 classStyle={styles.baseInfo}
