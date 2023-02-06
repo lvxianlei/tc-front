@@ -18,7 +18,7 @@ interface TotalWeightParmas extends WeightParams {
 export const totalTaxPrice = (
     price: any = 0,
     weight: any = 0
-) => (price * weight).toFixed(2)
+) => Math.round(((price * weight) + Number.EPSILON) * 100) / 100 
 
 /** 
 *  不含税金额

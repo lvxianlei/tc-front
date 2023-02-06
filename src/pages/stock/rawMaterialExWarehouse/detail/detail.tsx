@@ -6,12 +6,12 @@
 import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
-import { SearchTable as Page, IntgSelect } from '../../../common';
+import { SearchTable as Page, IntgSelect, PopTableContent } from '../../../common';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../../utils/RequestUtil';
 import { materialStandardOptions, materialTextureOptions } from '../../../../configuration/DictionaryOptions';
-import { baseColumn } from "./detail.json";
+import { baseColumn, addIssuedNumber } from "./detail.json";
 
 import '../../StockPublicStyle.less';
 import './detail.less';
@@ -44,6 +44,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [isApplyModal, setIsApplyModal] = useState<boolean>(false);//出库弹框显示
     const [requirement, setRequirement] = useState<number | string>('');//出库-弹框需求量
     const [OutboundId, setOutboundId] = useState<number | string>('');//出库-弹框-需要的列表id
+    const [visible, setVisible] = useState<boolean>(false);//下达单弹框
+    const [popDataList, setPopDataList] = useState<any[]>([{}]);//详情-出库信息列表数据
+    const [materialList, setMaterialList] = useState<any[]>([{}]);//详情-出库信息列表数据
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -510,6 +513,20 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         await message.success("成功删除...")
         history.go(0)
     }
+    const handleAddModalOk = async () => {
+        await RequestUtil.post(`/tower-storage/outStock/relationIssued`, {
+            id: params.id,
+            internalNumber: materialList[0].internalNumber,
+            issuedNumber: materialList[0].issuedNumber,
+            planNumber: materialList[0].planNumber,
+            productCategoryName: materialList[0].productCategoryName,
+            projectName: materialList[0].orderProjectName,
+            outStockDetailIds: selectedKeys
+        })
+        message.success(`关联成功！`)
+        setVisible(false)
+        history.go(0)
+    }
 
     return (
         <>
@@ -520,6 +537,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
+                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => setVisible(true)}>关联下达单</Button>
                         <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/batchOutStock`,{
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
@@ -654,7 +672,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号、质保书号、轧制批号进行查询" style={{ width: 300 }} />
+                        children: <Input placeholder="请输入品名/炉批号/内部合同号/杆塔号/批号/质保书号/轧制批号/备注进行查询" style={{ width: 300 }} />
                     }
                 ]}
             />
@@ -786,6 +804,29 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         />
                     </div>
                 </div>
+            </Modal>
+            {/* 关联下达单 */}
+            <Modal width={1100} title={`选择下达单`} destroyOnClose
+                visible={visible}
+                onOk={handleAddModalOk}
+                onCancel={() => {
+                    setVisible(false);
+                }}
+            >
+                <PopTableContent
+                    data={{
+                        ...addIssuedNumber as any
+                    }}
+                    value={{
+                        id: "",
+                        records: popDataList,
+                        value: ""
+                    }}
+                    onChange={(fields: any[]) => {
+                        setMaterialList(fields.map((item: any) => ({
+                            ...item})) || [])
+                    }}
+                />
             </Modal>
         </>
     )

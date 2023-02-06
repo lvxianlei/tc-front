@@ -2,7 +2,7 @@
  * 创建出库单
  */
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
-import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect } from 'antd';
+import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect, Input } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -59,6 +59,20 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         setMaterialList(list.slice(0));
         setPopDataList(list.slice(0))
     }
+    const handleDescriptionChange = async (value: any, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    remark: value
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    
+}
 
     // 移除
     const handleRemove = (id: string) => {
@@ -73,7 +87,14 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.pickingUserId) {
             addCollectionForm.setFieldsValue({
-                departmentName: fields.pickingUserId.records[0].deptName
+                departmentName: {
+                    id:fields.pickingUserId.records[0].dept,
+                    records: [{
+                        id:fields.pickingUserId.records[0].dept,
+                        name: fields.pickingUserId.records[0].deptName
+                    }],
+                    value: fields.pickingUserId.records[0].deptName,
+                }
             })
             return;
         }
@@ -95,13 +116,17 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             }
             if (flag) {
                 message.error("请您填写数量！");
-                return false;
+                throw Error('请您填写数量！')
             }
             await saveRun({
                 outStockDetailDTOList: materialList,
                 ...baseInfo,
+                pickingTeamName: baseInfo.dept.value,
+                pickingTeamId: baseInfo.dept.id,
                 pickingTime: baseInfo.pickingTime+' 00:00:00',
-                pickingUserId: baseInfo?.pickingUserId.id
+                pickingUserId: baseInfo?.pickingUserId.id,
+                departmentId: baseInfo?.departmentName?.id,
+                departmentName: baseInfo?.departmentName?.value
             });
             resove(true)
         } catch (error) {
@@ -136,11 +161,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             setPopDataList(result?.outStockDetailVOList)
             setMaterialList(result?.outStockDetailVOList)
             setWarehouseId(result?.warehouseId)
+            // addCollectionForm.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             resole({
                 ...result,
                 pickingUserId: {
                     id: result?.applyStaffId,
                     value: result?.applyStaffName
+                },
+                dept:{
+                    id:result?.pickingTeamId,
+                    value:result?.pickingTeamName
                 },
                 pickingTime: result?.createTime
             })
@@ -201,6 +231,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 form={addCollectionForm}
                 edit
                 dataSource={data || {
+                    type:0,
                     pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss")
                 }}
                 col={2}
@@ -215,6 +246,15 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                             }))
                         })
                     }
+                    // if (item.dataIndex === "departmentName") {
+                    //     return ({
+                    //         ...item,
+                    //         enum: batchingStrategy?.map((item: any) => ({
+                    //             value: item.id,
+                    //             label: item.name
+                    //         }))
+                    //     })
+                    // }
                     return item
                 })}
                 onChange={performanceBondChange}
@@ -262,7 +302,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                     initialValue={value||undefined}
                                     rules={[{
                                         validator: async (rule: any, value: any, callback: (error?: string) => void) => {
-                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/auxiliary?current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10&rawStockId=${records?.rawStockId}`);
                                             if(resData.records[0]?.num < value)
                                             return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
                                             else return Promise.resolve('数量可用');
@@ -271,6 +311,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                         <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
                                     </Form.Item>
                                 // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                            }})
+                        }
+                        if (["remark"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: string, records: any, key: number) => {return <Form.Item 
+                                    name={['list', key, 'remark']}>
+                                        <Input defaultValue={value || undefined}   onBlur={(e:any)=> handleDescriptionChange(e.target.value,records.id)} maxLength={50} />
+                                    </Form.Item>
                             }})
                         }
                         return item;

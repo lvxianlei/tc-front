@@ -775,7 +775,7 @@
                     {
                         "label": "试装、免试装申请",
                         "path": "/businessDisposal/isTrialDress",
-                        "authority": "tc_erp_rd_order_adjustment"
+                        "authority": "tc_erp_rd_trial_assemble"
                     },
                     {
                         "label": "取消暂停恢复",
@@ -1213,6 +1213,55 @@
                     }
                 ]
             },
+            {
+                "label": "文档管理",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/attach",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "文档审批类型管理",
+                        "path": "/attach/approval",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "文档分类管理",
+                        "path": "/attach/class",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "文档数据管理",
+                        "path": "/attach/data",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "个人文档列表",
+                        "path": "/attach/user",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                ]
+            },
+            {
+                "label": "通用中心",
+                "icon": "xitongrizhiTY_xitongrizhi",
+                "path": "/commCenter",
+                "appName": "COMM",
+                "authority": "tc_erp_sys_log",
+                "items": [
+                    {
+                        "label": "单位分类",
+                        "path": "/commCenter/unitClass",
+                        "authority": "tc_erp_sys_log_operation"
+                    },
+                    {
+                        "label": "单位管理",
+                        "path": "/commCenter/unitMngt",
+                        "authority": "tc_erp_sys_log_operation"
+                    }
+                   
+                ]
+            },
             // {
             //     "label": "数字门户",
             //     "icon": "xitongrizhiTY_xitongrizhi",
@@ -1616,7 +1665,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "工单管理",
                 "icon": "customer",
                 "path": "/worksheetMngt",
@@ -1635,7 +1684,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "工单设置",
                 "icon": "customer",
                 "path": "/worksheetSetting",

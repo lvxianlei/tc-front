@@ -3409,6 +3409,48 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // 文档审批类型管理
+      "label": "文档审批类型管理",
+      "path": "/attach/approval",
+      "module": "./pages/system-mngt/attach/approval/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 文档分类管理
+      "name": "文档分类管理",
+      "path": "/attach/class",
+      "module": "./pages/system-mngt/attach/class/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 文档数据管理
+      "name": "文档数据管理",
+      "path": "/attach/data",
+      "module": "./pages/system-mngt/attach/data/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 个人文档列表
+      "name": "个人文档列表",
+      "path": "/attach/user",
+      "module": "./pages/system-mngt/attach/user/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 单位分类
+      "name": "单位分类",
+      "path": "/commCenter/unitClass",
+      "module": "./pages/system-mngt/commCenter/unitClass/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
+    { // 单位管理
+      "name": "单位管理",
+      "path": "/commCenter/unitMngt",
+      "module": "./pages/system-mngt/commCenter/unitMngt/index",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // 质量检验流程-原材料送检单
       "name": "原材料送检单",
       "path": "/rawMaterialInspection/inspection",

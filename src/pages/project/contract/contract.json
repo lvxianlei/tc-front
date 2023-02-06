@@ -472,7 +472,6 @@
             "rowKey": "id",
             "dependencies": true,
             "required": true,
-            "search": false,
             "search": [
                 {
                     "title": "内部合同号",
@@ -588,7 +587,6 @@
             "rowKey": "id",
             "dependencies": true,
             "required": true,
-            "search": false,
             "search": [
                 {
                     "title": "内部合同号",

@@ -1,4 +1,4 @@
-import React, {useState, useRef, forwardRef, useImperativeHandle, ChangeEvent} from "react"
+import React, {useState, useRef, forwardRef, useImperativeHandle, ChangeEvent, useEffect} from "react"
 import {Button, Form, message, Spin, Modal,Input, Space, InputNumber} from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable,CommonTable,PopTableContent } from '../common'
 
@@ -249,7 +249,13 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
         console.log(changeFiled)
     }
 
-
+    useEffect(() => {
+        if (visibleP) {
+            form.setFieldsValue({
+                isMeasuringTools:0
+            })
+        }
+    }, [visibleP])
     return <Spin spinning={loading }>
         <Modal
             width={1011}
@@ -362,7 +368,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     if (item.dataIndex === "planPurchaseNum") {
                         return ({
                             ...item,
-                            render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
+                            render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || 1} onChange={(value: number) => amountChange(value, records.id, "planPurchaseNum")} key={key} />
                         })
                     }
                     // if (item.dataIndex === "deptName") {
