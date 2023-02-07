@@ -89,7 +89,7 @@ export default forwardRef(function ({
             className={styles.uploadModal}
         >
             <DetailContent>
-                <Attachment isTable={false} onDoneChange={(attachs: FileProps[]) => {
+                <Attachment maxCount={99} isTable={false} onDoneChange={(attachs: FileProps[]) => {
                     let data = form.getFieldsValue(true).data || [];
                     const newData = attachs.map((res: Record<string, any>) => {
                         const name = res.originalName;
