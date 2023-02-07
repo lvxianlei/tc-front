@@ -57,10 +57,12 @@ export default function Lofting(): React.ReactNode {
         resole(data)
     }), {})
 
-    const { data: count, run: getCount } = useRequest((filter: any, ids: any) => new Promise(async (resole, reject) => {
-        const result: any = await RequestUtil.post(``, {
+    const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/getCount`, {
             ...filter,
-            ...ids
+            segmentIds: ids,
+            productCategory: params?.id,
+            segmentId: params?.productSegmentId,
         });
         resole(result)
     }), {})
@@ -236,16 +238,16 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'statusName',
+            key: 'pieceNumber',
             title: '件号数',
             width: 200,
-            dataIndex: 'statusName',
+            dataIndex: 'pieceNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <>
                     <span>{_}</span>
                     <Form.Item
-                        name={['data', index, "status"]}
-                        initialValue={record?.status}
+                        name={['data', index, "pieceNumber"]}
+                        initialValue={record?.pieceNumber}
                         style={{ display: "none" }}
                     >
                         <Input
@@ -257,16 +259,16 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'statusName',
+            key: 'number',
             title: '件数',
             width: 200,
-            dataIndex: 'statusName',
+            dataIndex: 'number',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <>
                     <span>{_}</span>
                     <Form.Item
-                        name={['data', index, "status"]}
-                        initialValue={record?.status}
+                        name={['data', index, "number"]}
+                        initialValue={record?.number}
                         style={{ display: "none" }}
                     >
                         <Input
@@ -278,16 +280,16 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'statusName',
+            key: 'drawWeight',
             title: '图纸重kg',
             width: 200,
-            dataIndex: 'statusName',
+            dataIndex: 'drawWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <>
                     <span>{_}</span>
                     <Form.Item
-                        name={['data', index, "status"]}
-                        initialValue={record?.status}
+                        name={['data', index, "drawWeight"]}
+                        initialValue={record?.drawWeight}
                         style={{ display: "none" }}
                     >
                         <Input
@@ -299,16 +301,16 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            key: 'statusName',
+            key: 'partTheoryWeight',
             title: '理算重kg',
             width: 200,
-            dataIndex: 'statusName',
+            dataIndex: 'partTheoryWeight',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <>
                     <span>{_}</span>
                     <Form.Item
-                        name={['data', index, "status"]}
-                        initialValue={record?.status}
+                        name={['data', index, "partTheoryWeight"]}
+                        initialValue={record?.partTheoryWeight}
                         style={{ display: "none" }}
                     >
                         <Input
@@ -524,12 +526,12 @@ export default function Lofting(): React.ReactNode {
             <span>塔型：{detailTop?.productCategoryName}</span>
             <span>计划号：{detailTop?.planNumber}</span>
             <span>模式：{detailTop?.patternName}</span>
-            <span>件号总数：{detailTop?.patternName}</span>
-            <span>总件数：{detailTop?.patternName}</span>
-            <span>总重kg：{detailTop?.patternName}</span>
-            <span>所选件号总数：{detailTop?.patternName}</span>
-            <span>所选总件数：{detailTop?.patternName}</span>
-            <span>所选总重kg：{detailTop?.patternName}</span>
+            <span>件号总数：{count?.structureCodeNum}</span>
+            <span>总件数：{count?.structureNum}</span>
+            <span>总重kg：{count?.totalWeight}</span>
+            <span>所选件号总数：{count?.structurePitchNum}</span>
+            <span>所选总件数：{count?.patternName}</span>
+            <span>所选总重kg：{count?.pitchTotalWeight}</span>
         </Space>
         <Form
             form={formRef}

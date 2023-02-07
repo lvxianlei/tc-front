@@ -110,51 +110,62 @@ export default function List(): React.ReactNode {
 
     const detailColumns = [
         {
-            "key": "projectName",
+            "key": "productNumber",
             "title": "杆塔号",
             "width": 80,
-            "dataIndex": "projectName"
+            "dataIndex": "productNumber"
         },
         {
-            "key": "planNumber",
+            "key": "productHeight",
             "title": "呼高",
             "width": 120,
-            "dataIndex": "planNumber"
+            "dataIndex": "productHeight"
         },
         {
-            "key": "productTypeName",
+            "key": "num",
             "title": "基数",
-            "dataIndex": "productTypeName",
+            "dataIndex": "num",
             "width": 80
         },
         {
-            "key": "voltageGradeName",
+            "key": "count",
             "title": "总件数",
-            "dataIndex": "voltageGradeName",
+            "dataIndex": "count",
             "width": 80
         },
         {
-            "key": "productCategoryName",
+            "key": "processedCount",
             "title": "已打包件数",
-            "dataIndex": "productCategoryName",
+            "dataIndex": "processedCount",
             "width": 120
         },
         {
-            "key": "pieceOrSundry",
+            "key": "untreatedCount",
             "title": "未打包件数",
-            "dataIndex": "pieceOrSundry",
+            "dataIndex": "untreatedCount",
             "width": 120
         },
         {
-            "key": "category",
+            "key": "packageStructureCount",
             "title": "包数",
-            "dataIndex": "category",
+            "dataIndex": "packageStructureCount",
             "width": 120
         },
         {
-            "key": "entry",
+            "key": "packageStatus",
             "title": "杆塔打包状态",
-            "dataIndex": "entry",
+            "dataIndex": "packageStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "未完成",
+                    "value": "0"
+                },
+                {
+                    "label": "已完成",
+                    "value": "1"
+                }
+            ],
             "width": 120,
         },
         {
@@ -165,7 +176,7 @@ export default function List(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.id}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.productCategory}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}>
                         <Button type="link">包装清单</Button>
                     </Link>
                 </>
@@ -176,7 +187,7 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-science/salary/getSalary/${id}`);
+            const result = await RequestUtil.get<any>(`/tower-science/product/package/list/${id}`);
             setDetailData(result);
             resole(result)
         } catch (error) {

@@ -1,9 +1,9 @@
 {
     "columns": [
         {
-            "key": "trialAssembleName",
+            "key": "trialNumber",
             "title": "试装/免试装编号",
-            "dataIndex": "trialAssembleName",
+            "dataIndex": "trialNumber",
             "width": 100
         },
         {
@@ -23,12 +23,6 @@
             "title": "最新状态变更时间",
             "dataIndex": "updateStatusTime",
             "width": 100
-        },
-        {
-            "key": "trialNumber",
-            "title": "单号",
-            "dataIndex": "trialNumber",
-            "width": 150
         },
         {
             "key": "planNumber",

@@ -66,10 +66,10 @@ export default function PickList(): React.ReactNode {
             dataIndex: 'steelProductShape'
         },
         {
-            key: 'num',
+            key: 'materialStandardName',
             title: '标准',
             width: 100,
-            dataIndex: 'num'
+            dataIndex: 'materialStandardName'
         },
         {
             key: 'num',

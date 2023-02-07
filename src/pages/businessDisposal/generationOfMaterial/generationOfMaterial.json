@@ -1,9 +1,9 @@
 {
     "columns": [
         {
-            "key": "planNumber",
+            "key": "substituteMaterialNumber",
             "title": "代料编号",
-            "dataIndex": "planNumber",
+            "dataIndex": "substituteMaterialNumber",
             "width": 100
         },
         {
