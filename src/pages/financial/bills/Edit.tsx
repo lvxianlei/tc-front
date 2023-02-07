@@ -367,7 +367,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item,
                     // disabled: !baseForm.getFieldValue("businessType"),
-                    path: `${path}materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
+                    path: `${path}materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&businessType=${baseForm.getFieldValue("businessType")}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
                 })
             }
             if (item.dataIndex === "invoiceAmount") {
@@ -377,7 +377,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item, render: (data: any, props: any) => {
                         return <Form.Item name="businessType" style={{ width: "100%" }}>
-                            <Select disabled={type === 'edit'} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); }}>
+                            <Select disabled={type === 'edit'} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); setPath(`/tower-storage/warehousingEntry/invoice/list?`)}}>
                                 <Select.Option value={1} key="1">供应商</Select.Option>
                                 <Select.Option value={2} key="2">装卸公司</Select.Option>
                                 <Select.Option value={3} key="3">运输公司</Select.Option>
@@ -392,11 +392,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return <Form.Item name="businessId" style={{ width: "100%" }}>
                             <Select disabled={type === 'edit'} onChange={(e: any) => {
                                 console.log(e, "======")
-                                if(baseForm.getFieldValue('businessType')===1){
-                                    setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${e.split(",")[1]}&`)
-                                }else{
-                                    setPath(`/tower-storage/warehousingEntry/invoice/list?`)
-                                }
+                                setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${e.split(",")[1]}&`)
                                 baseForm.setFieldsValue({ invoiceUnit: e.split(",")[1] })
                             }}>
                                 {companyList && companyList.map((item: any) => {
