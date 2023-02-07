@@ -767,11 +767,11 @@
                         "path": "/businessDisposal/patchApplication",
                         "authority": "tc_erp_rd_order_adjustment"
                     },
-                    // {
-                    //     "label": "试装、免试装申请",
-                    //     "path": "/businessDisposal/isTrialDress",
-                    //     "authority": "tc_erp_rd_order_adjustment"
-                    // },
+                    {
+                        "label": "试装、免试装申请",
+                        "path": "/businessDisposal/isTrialDress",
+                        "authority": "tc_erp_rd_trial_assemble"
+                    },
                     {
                         "label": "取消暂停恢复",
                         "path": "/businessDisposal/cancelOrPauseOrrestore",

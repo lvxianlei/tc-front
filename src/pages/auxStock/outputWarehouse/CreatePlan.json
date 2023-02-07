@@ -94,7 +94,6 @@
         {
             "title": "领料班组",
             "dataIndex": "dept",
-            "required": true,
             "type": "popTable",
             "width": 1101,
             "readOnly": true,
