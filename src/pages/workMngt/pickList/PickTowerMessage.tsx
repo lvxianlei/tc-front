@@ -57,6 +57,16 @@ export default function Lofting(): React.ReactNode {
         resole(data)
     }), {})
 
+    const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/getCount`, {
+            ...filter,
+            segmentIds: ids,
+            productCategory: params?.id,
+            segmentId: params?.productSegmentId,
+        });
+        resole(result)
+    }), {})
+
     const { run: getUserList } = useRequest(() => new Promise(async (resole, reject) => {
         const users: any = await RequestUtil.get(`/tower-science/drawProductSegment/leader/${params.id}`)
         setUser(users?.materialLeaders && Array.isArray(users?.materialLeaders) && users?.materialLeaders.length > 0 ? users?.materialLeaders : [])
@@ -228,6 +238,90 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
+            key: 'pieceNumber',
+            title: '件号数',
+            width: 200,
+            dataIndex: 'pieceNumber',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "pieceNumber"]}
+                        initialValue={record?.pieceNumber}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'number',
+            title: '件数',
+            width: 200,
+            dataIndex: 'number',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "number"]}
+                        initialValue={record?.number}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'drawWeight',
+            title: '图纸重kg',
+            width: 200,
+            dataIndex: 'drawWeight',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "drawWeight"]}
+                        initialValue={record?.drawWeight}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
+            key: 'partTheoryWeight',
+            title: '理算重kg',
+            width: 200,
+            dataIndex: 'partTheoryWeight',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <>
+                    <span>{_}</span>
+                    <Form.Item
+                        name={['data', index, "partTheoryWeight"]}
+                        initialValue={record?.partTheoryWeight}
+                        style={{ display: "none" }}
+                    >
+                        <Input
+                            size="small"
+                            onChange={() => rowChange(index)}
+                        />
+                    </Form.Item>
+                </>
+            )
+        },
+        {
             key: 'statusName',
             title: '提料状态',
             width: 200,
@@ -290,6 +384,7 @@ export default function Lofting(): React.ReactNode {
         }
         setFilterValue(value)
 
+        getCount(value, selectedKeys)
         setRefresh(!refresh);
         return value
     }
@@ -300,6 +395,7 @@ export default function Lofting(): React.ReactNode {
     }
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        getCount(filterValue, selectedRowKeys)
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -426,6 +522,17 @@ export default function Lofting(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
+        <Space size="large">
+            <span>塔型：{detailTop?.productCategoryName}</span>
+            <span>计划号：{detailTop?.planNumber}</span>
+            <span>模式：{detailTop?.patternName}</span>
+            <span>件号总数：{count?.structureCodeNum}</span>
+            <span>总件数：{count?.structureNum}</span>
+            <span>总重kg：{count?.totalWeight}</span>
+            <span>所选件号总数：{count?.structurePitchNum}</span>
+            <span>所选总件数：{count?.patternName}</span>
+            <span>所选总重kg：{count?.pitchTotalWeight}</span>
+        </Space>
         <Form
             form={formRef}
             className={styles.descripForm}
@@ -603,9 +710,6 @@ export default function Lofting(): React.ReactNode {
                         }
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
                         <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
-                        <span>塔型：{detailTop?.productCategoryName}</span>
-                        <span>计划号：{detailTop?.planNumber}</span>
-                        <span>模式：{detailTop?.patternName}</span>
                     </Space>
                 }
                 searchFormItems={[]}

@@ -27,6 +27,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     const [isBig, setIsBig] = useState<boolean>(true);
     const [isAuto, setIsAuto] = useState<boolean>(false);
     const [isQuick, setIsQuick] = useState<boolean>(true);
+    const [isAddUp, setIsAddUp] = useState<boolean>(true);
     const [algorithm, setAlgorithm] = useState<number>(); //算法
     const [proportion, setProportion] = useState<number>(); // 比重
 
@@ -62,7 +63,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight.toFixed(4)
+                basicsWeight: weight ? weight.toFixed(4) : 0
             }
             form.setFieldsValue({
                 data: [...values]
@@ -82,7 +83,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight.toFixed(4)
+                basicsWeight: weight ? weight.toFixed(4) : 0
             }
             form.setFieldsValue({
                 data: [...values]
@@ -108,7 +109,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         const data = form.getFieldsValue(true).data;
         data[index] = {
             ...data[index],
-            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4)
+            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4) || 0
         }
         setTableData([...data])
         form.setFieldsValue({ data: [...data] })
@@ -158,7 +159,6 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                     <Input size="small" maxLength={50} onBlur={() => {
                         if (isBig) {
                             const value = form.getFieldsValue(true).data.map((item: any) => {
-                                console.log(item?.code?.toUpperCase())
                                 return {
                                     ...item,
                                     code: item?.code?.toUpperCase()
@@ -258,7 +258,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                         })
                         setTableData([...values])
                         weightCalculation(newStructureSpec, 'structureSpec', index)
-                        }} />
+                    }} />
                 </Form.Item>
             )
         },
@@ -280,7 +280,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                                     Number(getData?.proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight.toFixed(4)
+                                basicsWeight: weight ? weight.toFixed(4) : 0
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -295,7 +295,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                                     Number(proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight.toFixed(4)
+                                basicsWeight: weight ? weight.toFixed(4) : 0
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -322,7 +322,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                                 const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight.toFixed(4)
+                                    basicsWeight: weight ? weight.toFixed(4) : 0
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -335,7 +335,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                                 const weight = Number(proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight.toFixed(4)
+                                    basicsWeight: weight ? weight.toFixed(4) : 0
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -409,12 +409,34 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
-                    <InputNumber size="small" min={0} precision={2} max={9999.99} onChange={(e: any) => calculateTotalWeight(e, index)} disabled={isAuto} />
+                    <InputNumber size="small" min={0} precision={2} max={999999.99} onChange={(e: any) => calculateTotalWeight(e, index)} disabled={isAuto} />
                 </Form.Item>
             )
         },
         {
             title: '小计重量（kg）',
+            dataIndex: 'totalWeight',
+            key: 'totalWeight',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "totalWeight"]}>
+                    <InputNumber size="small" min={0} precision={2} max={9999.99} disabled />
+                </Form.Item>
+            )
+        },
+        {
+            title: '理算单重（kg）',
+            dataIndex: 'basicsWeight',
+            key: 'basicsWeight',
+            width: 120,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={['data', index, "basicsWeight"]} initialValue={_} rules={[{ required: !isAuto, message: '请输入单件重量' }]}>
+                    <InputNumber size="small" min={0} precision={2} max={9999.99} />
+                </Form.Item>
+            )
+        },
+        {
+            title: '理算总重（kg）',
             dataIndex: 'totalWeight',
             key: 'totalWeight',
             width: 120,
@@ -459,7 +481,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         }
     }), { manual: true })
 
-    const onSubmit = () => new Promise((resolve, reject) => {
+    const onSubmitDone = () => new Promise((resolve, reject) => {
         try {
             form.validateFields().then(async () => {
                 const values = form.getFieldsValue(true).data.map((item: any) => {
@@ -480,11 +502,50 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         }
     })
 
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            const valuesData = form.getFieldsValue(true).data?.filter((res: any) => res?.code !== '')
+            form?.setFieldsValue({ data: [...valuesData] })
+            setTableData([...valuesData])
+            await onSubmitDone()
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const num = (text: string) => {
+        var getPart = text.replace(/[^\d.]/g, '');
+        var num = parseInt(getPart);
+        var newVal = (num + 1).toString().padStart(getPart.length, '0');
+        var newstring = text.replace(getPart, newVal);
+        return newstring
+    }
+
     const addRow = () => {
         const values = form.getFieldsValue(true).data || [];
-        values.push({})
-        setTableData([...values])
-        form.setFieldsValue({ data: [...values] })
+        if (isAddUp) {
+            const arr = new Array(5).fill({
+                segmentName: values[values?.length - 1]?.segmentName || '',
+                code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+                materialName: values[values?.length - 1]?.materialName || '',
+                structureTexture: values[values?.length - 1]?.structureTexture || '',
+                structureSpec: values[values?.length - 1]?.structureSpec || ''
+            })
+            num(values[values?.length - 1]?.code || '')
+            const newValues = [
+                ...values,
+                ...arr
+            ]
+            setTableData([...newValues])
+            form.setFieldsValue({ data: [...newValues] })
+        } else {
+            const arr = new Array(5).fill({
+                code: ''
+            })
+            values.push(...arr)
+            setTableData([...values])
+            form.setFieldsValue({ data: [...values] })
+        }
     }
 
     const delRow = (index: number) => {
@@ -503,7 +564,9 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddPick'>
-        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加一行</Button> : null}
+        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加5行</Button> : null}
+        <Checkbox onChange={(e) => { setIsQuick(e.target.checked) }} checked={isQuick}>是否快捷输入</Checkbox>
+        <Checkbox onChange={(e) => { setIsAddUp(e.target.checked) }} checked={isAddUp}>件号自动累加</Checkbox>
         <Checkbox onChange={(e) => {
             setIsBig(e.target.checked)
             if (e.target.checked) {
@@ -531,7 +594,6 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             setTableData([...value])
             form.setFieldsValue({ data: value })
         }} checked={isAuto}>保存时自动计算重量</Checkbox>
-        <Checkbox onChange={(e) => { setIsQuick(e.target.checked) }} checked={isQuick}>是否快捷输入</Checkbox>
         <Divider orientation="left" plain>材质快捷键：{
             structureTextureShortcutKeys?.map(res => {
                 return <span className={styles.key}>{res?.label}({res?.value})</span>

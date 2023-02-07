@@ -613,6 +613,11 @@
                         "authority": "tc_erp_rd_work_weld"
                     },
                     {
+                        "label": "包装列表",
+                        "path": "/workMngt/packingList",
+                        "authority": "tc_erp_rd_work_sample"
+                    },
+                    {
                         "label": "小样图列表",
                         "path": "/workMngt/sampleDrawList",
                         "authority": "tc_erp_rd_work_sample"

@@ -28,6 +28,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
     const [isQuick, setIsQuick] = useState<boolean>(true);
     const [algorithm, setAlgorithm] = useState<number>(); //算法
     const [proportion, setProportion] = useState<number>(); // 比重
+    const [isAddUp, setIsAddUp] = useState<boolean>(true);
 
     /**
      * weightAlgorithm 
@@ -51,7 +52,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight.toFixed(4)
+                basicsWeight: weight ? weight.toFixed(4) : 0
             }
             form.setFieldsValue({
                 data: [...values]
@@ -71,7 +72,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     Number(newData?.proportion) * Number(values[index]?.length || 0) / 1000
             values[index] = {
                 ...values[index],
-                basicsWeight: weight.toFixed(4)
+                basicsWeight: weight ? weight.toFixed(4) : 0
             }
             form.setFieldsValue({
                 data: [...values]
@@ -97,7 +98,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
         const data = form.getFieldsValue(true).data;
         data[index] = {
             ...data[index],
-            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4)
+            totalWeight: (Number(e || 0) * Number(data[index].basicsPartNum || 0)).toFixed(4) || 0
         }
         setTableData([...data])
         form.setFieldsValue({ data: [...data] })
@@ -247,7 +248,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                                     Number(getData?.proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight.toFixed(4)
+                                basicsWeight: weight ? weight.toFixed(4) : 0
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -262,7 +263,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                                     Number(proportion) * Number(e.target?.value || 0) / 1000
                             values[index] = {
                                 ...values[index],
-                                basicsWeight: weight.toFixed(4)
+                                basicsWeight: weight ? weight.toFixed(4) : 0
                             }
                             form.setFieldsValue({
                                 data: [...values]
@@ -293,7 +294,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                                 const weight = Number(getData?.proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight.toFixed(4)
+                                    basicsWeight: weight ? weight.toFixed(4) : 0
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -306,7 +307,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                                 const weight = Number(proportion) * Number(values[index]?.length || 0) / 1000 * Number(e.target?.value || 0) / 1000
                                 values[index] = {
                                     ...values[index],
-                                    basicsWeight: weight.toFixed(4)
+                                    basicsWeight: weight ? weight.toFixed(4) : 0
                                 }
                                 form.setFieldsValue({
                                     data: [...values]
@@ -693,7 +694,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     required: true,
                     message: '请输入单件重量'
                 }]}>
-                    <Input type="number" min={0} size="small" onChange={(e) => calculateTotalWeight(Number(e.target.value), index)} />
+                    <Input type="number" min={0} max={999999.99} size="small" onChange={(e) => calculateTotalWeight(Number(e.target.value), index)} />
                 </Form.Item>
             )
         },
@@ -812,7 +813,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
         }
     }), { manual: true })
 
-    const onSubmit = () => new Promise((resolve, reject) => {
+    const onSubmitDone = () => new Promise((resolve, reject) => {
         try {
             form.validateFields().then(async res => {
                 const values = form.getFieldsValue(true).data || [];
@@ -827,17 +828,55 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                 }))
                 resolve(true);
             })
-
         } catch (error) {
             reject(false)
         }
     })
 
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            const valuesData = form.getFieldsValue(true).data?.filter((res: any) => res?.code !== '')
+            form?.setFieldsValue({ data: [...valuesData] })
+            setTableData([...valuesData])
+            await onSubmitDone()
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const num = (text: string) => {
+        var getPart = text.replace(/[^\d.]/g, '');
+        var num = parseInt(getPart);
+        var newVal = (num + 1).toString().padStart(getPart.length, '0');
+        var newstring = text.replace(getPart, newVal);
+        return newstring
+    }
+
     const addRow = () => {
         const values = form.getFieldsValue(true).data || [];
-        values.push({})
-        form.setFieldsValue({ data: [...values] });
-        setTableData([...values])
+        if (isAddUp) {
+            const arr = new Array(5).fill({
+                segmentName: values[values?.length - 1]?.segmentName || '',
+                code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+                materialName: values[values?.length - 1]?.materialName || '',
+                structureTexture: values[values?.length - 1]?.structureTexture || '',
+                structureSpec: values[values?.length - 1]?.structureSpec || ''
+            })
+            num(values[values?.length - 1]?.code || '')
+            const newValues = [
+                ...values,
+                ...arr
+            ]
+            setTableData([...newValues])
+            form.setFieldsValue({ data: [...newValues] })
+        } else {
+            const arr = new Array(5).fill({
+                code: ''
+            })
+            values.push(...arr)
+            setTableData([...values])
+            form.setFieldsValue({ data: [...values] })
+        }
     }
 
     const delRow = (index: number) => {
@@ -854,8 +893,9 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit, resetFields]);
 
     return <DetailContent key='AddLofting'>
-        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加一行</Button> : null}
+        {type === 'new' ? <Button type="primary" onClick={addRow} style={{ marginRight: '16px' }} ghost>添加5行</Button> : null}
         <Checkbox onChange={(e) => { setIsQuick(e.target.checked) }} checked={isQuick}>是否快捷输入</Checkbox>
+        <Checkbox onChange={(e) => { setIsAddUp(e.target.checked) }} checked={isAddUp}>件号自动累加</Checkbox>
         <Divider orientation="left" plain>材质快捷键：{
             structureTextureShortcutKeys?.map(res => {
                 return <span className={styles.key}>{res?.label}({res?.value})</span>
