@@ -51,16 +51,17 @@ export default function CreatePlan(props: any): JSX.Element {
                 break;
         }
     }
-    const handleAddModalOk = () => {
+    const handleAddModalOk = async () => {
         
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         setMaterialList([...materialList, ...newMaterialList])
+        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,materialList)
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
                 furnaceBatch: item.furnaceBatchNumber,
                 applyNum: item.num,
-                stockNum: item.num,
+                stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                         : (Number(item?.proportion || 1) / 1000).toFixed(5),
@@ -415,8 +416,19 @@ export default function CreatePlan(props: any): JSX.Element {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/materialPicking/${props.id}`, {
                 materialType: 1
             })
-            setPopDataList(result?.materialPickingDetailVOS)
-            setMaterialList(result?.materialPickingDetailVOS)
+            const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,result?.materialPickingDetailVOS)
+            setPopDataList(result?.materialPickingDetailVOS.map((item: any) => {
+                return ({
+                    ...item,
+                    stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                })
+            })||[])
+            setMaterialList(result?.materialPickingDetailVOS.map((item: any) => {
+                return ({
+                    ...item,
+                    stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                })
+            })||[])
             setType(result?.pickingType)
             result?.warehouseId && getWarehousing(result?.warehouseId,1)
             result?.warehouseId && result?.warehouseId!==null && setWarehouseId(result?.warehouseId)
