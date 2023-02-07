@@ -2544,24 +2544,17 @@
     { // 部门管理
       "name": "部门管理",
       "path": "/dept/deptMngt",
-      "module": "./pages/dept/dept/DepartmentMngt",
+      "module": "./pages/dept/dept/index",
       "exact": true,
       "authority": "tc_erp_sys_dept_list"
     },
     { // 部门修改
-      "name": "部门修改",
+      "name": "配置",
       "path": "/dept/deptMngt/setting/:id",
-      "module": "./pages/dept/dept/DepartmentSetting",
+      "module": "./pages/dept/dept/edit",
       "exact": true,
       "authority": "tc_erp_sys_dept_edit"
     },
-    // { // 部门新增
-    //   "name": "部门新增",
-    //   "path": "/dept/deptMngt/new/:id",
-    //   "module": "./pages/dept/dept/DepartmentNew",
-    //   "exact": true,
-    //   "authority": "auth_section"
-    // },
     { // 岗位管理
       "name": "岗位管理",
       "path": "/dept/jobsMngt",
