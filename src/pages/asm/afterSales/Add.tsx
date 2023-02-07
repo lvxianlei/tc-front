@@ -40,6 +40,7 @@ export default function AnnouncementNew(): React.ReactNode {
                 serviceManagerId: detailData?.serviceManagerId,
                 // description:'1',
                 // deliveryAddress:'北京',
+                description: value?.descriptionWrap ? value?.descriptionWrap : '',
                 workIssueDTOS: isProblem === 1 ? [{
                     description: value?.description ? value?.description : '',
                     issueTypeId: value?.type ? value?.type.split(',')[0] : '',
@@ -121,7 +122,7 @@ export default function AnnouncementNew(): React.ReactNode {
                         }]}>
                             <Input maxLength={20} />
                         </Form.Item>
-                        <Form.Item name="description" label="备注" initialValue={detailData.description} >
+                        <Form.Item name="descriptionWrap" label="备注" initialValue={detailData.description} >
                             <Input.TextArea maxLength={300} />
                         </Form.Item>
                         <Form.Item name="isProblem" label="问题信息" initialValue={isProblem} rules={[{
@@ -198,7 +199,6 @@ export default function AnnouncementNew(): React.ReactNode {
                                     "message": "请选择件号"
                                 }]}>
                                     <Select style={{ width: '100%' }} mode='multiple' onChange={(value: any) => {
-                                        console.log(value)
                                         if (value.length > 0) {
                                             const num = value.map((item: string) => item.split(',')[2])
                                             const numberAll = num.reduce((pre: any, cur: any) => {
@@ -208,7 +208,6 @@ export default function AnnouncementNew(): React.ReactNode {
                                                 pieceCodeNum: Number(numberAll)
                                             });
                                         }
-
                                     }}>
                                         {pieceCode && pieceCode.map((item: any) => {
                                             return <Select.Option key={item.id} value={item.id + ',' + item.code + ',' + item.basicsPartNum}>{item.code}</Select.Option>
