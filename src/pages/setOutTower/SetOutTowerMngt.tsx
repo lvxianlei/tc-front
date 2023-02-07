@@ -46,6 +46,12 @@ export default function SetOutTowerMngt(): React.ReactNode {
             dataIndex: 'planNumber'
         },
         {
+            key: 'projectName',
+            title: '工程名称',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
             key: 'saleOrderNumber',
             title: '订单编号',
             width: 100,
