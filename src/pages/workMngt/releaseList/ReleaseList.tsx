@@ -17,7 +17,7 @@ export default function ReleaseList(): React.ReactNode {
         resole(data?.records);
     }), {})
 
-    
+
     const { data: countNum } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`);
         resole(data);
@@ -173,6 +173,12 @@ export default function ReleaseList(): React.ReactNode {
             // render:(text:number)=>{
             //     return text===1?'已下达':text===2?'已取消':'-'
             // }
+        },
+        {
+            key: 'productTypeName',
+            title: '产品类型',
+            width: 100,
+            dataIndex: 'productTypeName'
         },
         {
             key: 'updateStatusTime',
@@ -564,6 +570,18 @@ export default function ReleaseList(): React.ReactNode {
                         name: 'updateStatusTime',
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker />
+                    },
+                    {
+                        name: 'productType',
+                        label: '产品类型',
+                        children: <Select style={{ width: "100px" }} defaultValue={''}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
+                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
                     },
                     {
                         name: 'issuedNumber',
