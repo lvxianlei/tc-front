@@ -85,13 +85,13 @@ export default function List(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 300,
+            width: 100,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <>
                     <Popconfirm
                         title="确认完成打包?"
                         onConfirm={async () => {
-                            await RequestUtil.get(`/tower-science/packageStructure/submit/all/${record?.id}`).then(() => {
+                            await RequestUtil.post(`/tower-science/packageStructure/submit/all/${record?.id}`).then(() => {
                                 message.success('完成打包成功！')
                             }).then(() => {
                                 history.go(0)
@@ -100,7 +100,7 @@ export default function List(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        完成打包
+                        <Button type='link'>完成打包</Button>
                     </Popconfirm>
                 </>
 
@@ -248,7 +248,7 @@ export default function List(): React.ReactNode {
                     {
                         name: 'packageFuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="编号/计划号/合同号/塔型/工程名称" />
+                        children: <Input width={200} placeholder="编号/计划号/合同号/塔型/工程名称" />
                     }
                 ]}
                 filterValue={filterValue}
