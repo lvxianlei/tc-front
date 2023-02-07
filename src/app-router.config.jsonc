@@ -1626,6 +1626,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_bolt_check_detailed"
     },
+    { // 工作管理-包装列表
+      "name": "包装列表",
+      "path": "/workMngt/packingList",
+      "module": "./pages/workMngt/packingList/PackingList",
+      "exact": true,
+      "authority": "tc_erp_rd_work_sample_list"
+    },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",

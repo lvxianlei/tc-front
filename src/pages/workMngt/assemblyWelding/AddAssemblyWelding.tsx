@@ -146,6 +146,43 @@ export default function AddAssemblyWelding(): React.ReactNode {
             width: 80
         },
         {
+            title: '是否主件',
+            dataIndex: 'isMainPart',
+            key: 'isMainPart',
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Radio
+                    key={record.structureId}
+                    checked={weldingDetailedStructureList && weldingDetailedStructureList[index].isMainPart === 1}
+                    onChange={(e) => {
+                        let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
+                        if (e.target.checked) {
+                            setMainPartId(record.code);
+                            newWeldingDetailedStructureList = newWeldingDetailedStructureList.map((item: IComponentList, ind: number) => {
+                                if (index === ind) {
+                                    return {
+                                        ...item,
+                                        isMainPart: 1
+                                    }
+                                } else {
+                                    return {
+                                        ...item,
+                                        isMainPart: 0
+                                    }
+                                }
+                            })
+                        } else {
+                            newWeldingDetailedStructureList[index] = {
+                                ...newWeldingDetailedStructureList[index],
+                                isMainPart: 0
+                            }
+                        }
+                        setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
+                        setSegment(record.segmentId + ',' + record.segmentName)
+                        form.setFieldsValue({ 'segmentGroupNum': record.basicsPartNum });
+                    }}></Radio>
+            )
+        },
+        {
             title: '零件号',
             dataIndex: 'code',
             key: 'code',
@@ -197,43 +234,6 @@ export default function AddAssemblyWelding(): React.ReactNode {
             title: '备注',
             dataIndex: 'description',
             key: 'description'
-        },
-        {
-            title: '是否主件',
-            dataIndex: 'isMainPart',
-            key: 'isMainPart',
-            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Radio
-                    key={record.structureId}
-                    checked={weldingDetailedStructureList && weldingDetailedStructureList[index].isMainPart === 1}
-                    onChange={(e) => {
-                        let newWeldingDetailedStructureList: IComponentList[] = weldingDetailedStructureList || [];
-                        if (e.target.checked) {
-                            setMainPartId(record.code);
-                            newWeldingDetailedStructureList = newWeldingDetailedStructureList.map((item: IComponentList, ind: number) => {
-                                if (index === ind) {
-                                    return {
-                                        ...item,
-                                        isMainPart: 1
-                                    }
-                                } else {
-                                    return {
-                                        ...item,
-                                        isMainPart: 0
-                                    }
-                                }
-                            })
-                        } else {
-                            newWeldingDetailedStructureList[index] = {
-                                ...newWeldingDetailedStructureList[index],
-                                isMainPart: 0
-                            }
-                        }
-                        setWeldingDetailedStructureList([...newWeldingDetailedStructureList])
-                        setSegment(record.segmentId + ',' + record.segmentName)
-                        form.setFieldsValue({ 'segmentGroupNum': record.basicsPartNum });
-                    }}></Radio>
-            )
         },
         {
             title: '电焊长度（mm）',

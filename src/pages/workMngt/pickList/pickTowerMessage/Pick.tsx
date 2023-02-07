@@ -268,18 +268,6 @@ export default function Lofting(): React.ReactNode {
             )
         },
         {
-            title: '大头',
-            dataIndex: 'bigHead',
-            key: 'bigHead',
-            width: 120,
-        },
-        {
-            title: '小头',
-            dataIndex: 'smallHead',
-            key: 'smallHead',
-            width: 120,
-        },
-        {
             title: '单件重量（kg）',
             dataIndex: 'basicsWeight',
             key: 'basicsWeight',
@@ -366,6 +354,18 @@ export default function Lofting(): React.ReactNode {
                     />
                 </Form.Item>
             )
+        },
+        {
+            title: '大头',
+            dataIndex: 'bigHead',
+            key: 'bigHead',
+            width: 120,
+        },
+        {
+            title: '小头',
+            dataIndex: 'smallHead',
+            key: 'smallHead',
+            width: 120,
         }
     ];
 
@@ -392,7 +392,14 @@ export default function Lofting(): React.ReactNode {
                     return {
                         ...col,
                         render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
-                            <p className={checkColor(record, col.dataIndex) === 'red' ? styles.red : ''}>{parseFloat(`${(record.basicsWeight && record.basicsWeight !== -1 ? record.basicsWeight : 0) * (record.basicsPartNum && record.basicsPartNum !== -1 ? record.basicsPartNum : 0)}`).toFixed(2)}</p>
+                            <p>{parseFloat(`${(record.basicsWeight && record.basicsWeight !== -1 ? record.basicsWeight : 0) * (record.basicsPartNum && record.basicsPartNum !== -1 ? record.basicsPartNum : 0)}`).toFixed(2)}</p>
+                        )
+                    }
+                } else if (col.dataIndex === 'basicsWeight') {
+                    return {
+                        ...col,
+                        render: (_: number, record: Record<string, any>, index: number): React.ReactNode => (
+                            <p>{record.basicsWeight && record.basicsWeight !== -1 ? record.basicsWeight : 0}</p>
                         )
                     }
                 } else if (col.dataIndex === 'length') {

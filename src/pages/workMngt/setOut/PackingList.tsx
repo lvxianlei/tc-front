@@ -296,7 +296,9 @@ export default function PackingList(): React.ReactNode {
                 title="确认完成?"
                 onConfirm={() => {
                     setLoading1(true);
-                    RequestUtil.post(`/tower-science/packageStructure/submit?productId=${params.productId}`).then(res => history.goBack()).catch(error => {
+                    RequestUtil.post(`/tower-science/packageStructure/submit`, {
+                        productIdList: [params.productId]
+                    }).then(res => history.goBack()).catch(error => {
                         setLoading1(false);
                     })
                 }}

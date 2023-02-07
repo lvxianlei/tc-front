@@ -147,11 +147,17 @@ export default function Apply(): React.ReactNode {
         try {
             const data: any = await addRef.current?.onSubmit();
             const newPatchs = [...(patchList || []), ...data]
-            let finalData = await delSameObjValue(newPatchs, 'summation', ['structureId'], ['basicsPartNum'])
-            finalData = finalData?.map(res => {
+            // let finalData = await delSameObjValue(newPatchs, 'summation', ['structureId'], ['basicsPartNum'])
+            // finalData = finalData?.map(res => {
+            //     return {
+            //         ...res,
+            //         basicsPartNum: res?.summation
+            //     }
+            // })
+            let finalData = newPatchs?.map((res: any, index: number) => {
                 return {
                     ...res,
-                    basicsPartNum: res?.summation
+                    index: index
                 }
             })
             tableForm?.setFieldsValue({
@@ -373,6 +379,7 @@ export default function Apply(): React.ReactNode {
                                         })
                                         setTowerList([]);
                                         setPatchList([]);
+                                        setNumbers([]);
                                     }}>
                                     {planNums && planNums?.map((item: any, index: number) => {
                                         return <Select.Option key={index} value={item}>{item}</Select.Option>
@@ -438,6 +445,7 @@ export default function Apply(): React.ReactNode {
                             <Form form={tableForm} className={styles.tableForm}>
                                 <CommonTable
                                     haveIndex
+                                    rowKey="index"
                                     columns={[
                                         ...patchColumns.map(res => {
                                             if (res.dataIndex === 'basicsPartNum') {
