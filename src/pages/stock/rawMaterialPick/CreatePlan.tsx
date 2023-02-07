@@ -62,15 +62,13 @@ export default function CreatePlan(props: any): JSX.Element {
                 furnaceBatch: item.furnaceBatchNumber,
                 applyNum: item.num,
                 stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                         : (Number(item?.proportion || 1) / 1000).toFixed(5),
                 totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5),
-                stockTotalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
-                : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
-                    : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)     
+                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
             })
         })])
         setVisible(false)
@@ -421,12 +419,16 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                    stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
+
                 })
             })||[])
             setMaterialList(result?.materialPickingDetailVOS.map((item: any) => {
                 return ({
                     ...item,
                     stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                    stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
+
                 })
             })||[])
             setType(result?.pickingType)
