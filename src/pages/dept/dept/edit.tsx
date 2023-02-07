@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Space, Input, Button, Popconfirm, Modal, Form, message } from 'antd';
-import { BaseInfo, Page } from '../../common';
+import { BaseInfo, DetailContent, Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 export interface IJobs {
     readonly id?: string;
@@ -14,6 +14,7 @@ export interface IJobs {
 }
 
 export default function Edit(): React.ReactNode {
+    const history = useHistory()
     const params = useParams<{ id: string | undefined }>()
     const [refresh, setRefresh] = useState<boolean>(false);
     const [form] = Form.useForm();
@@ -160,15 +161,16 @@ export default function Edit(): React.ReactNode {
                     } : undefined
                 }} />
         </Modal>
-        <Page
-            path="/tower-system/deptStationEmp"
-            columns={columns}
-            filterValue={{ deptId: params?.id }}
-            headTabs={[]}
-            refresh={refresh}
-            extraOperation={<Button type="primary" onClick={() => { setVisible(true); setTitle("新增"); }}>新增</Button>}
-            searchFormItems={[]}
-        />
-
+        <DetailContent operation={[<Button key="goBack" onClick={() => history.go(-1)}>返回</Button>]}>
+            <Page
+                path="/tower-system/deptStationEmp"
+                columns={columns}
+                filterValue={{ deptId: params?.id }}
+                headTabs={[]}
+                refresh={refresh}
+                extraOperation={<Button type="primary" onClick={() => { setVisible(true); setTitle("新增"); }}>新增</Button>}
+                searchFormItems={[]}
+            />
+        </DetailContent>
     </>
 }
