@@ -343,7 +343,7 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                     //     productCategoryId: params.id,
                     // }}
                     showUploadList={false}
-                    onChange={(info:any) => {
+                    onChange={async (info:any) => {
                         console.log(info.file.response)
                         if (info.file.response && !info.file.response?.success) {
                             message.warning(info.file.response?.msg)
@@ -353,16 +353,22 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                                 setVisibleB(true);
                             } else {
                                 message.success('导入成功！');
+                                // setPopDataList(info.file.response?.data?.purchasePlanListDTOS.map((item:any)=>{
+                                //     return{
+                                //         ...item,
+                                //     }
+                                // }))
+                                const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,info.file.response?.data?.purchasePlanListDTOS)
                                 setPopDataList(info.file.response?.data?.purchasePlanListDTOS.map((item:any)=>{
-                                    return{
+                                    return {
                                         ...item,
+                                        stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum,
                                         weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
-                                            : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
-                                                : (Number(item?.proportion || 1) / 1000).toFixed(3),
+                                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) / 1000 / 1000 / 1000).toFixed(3)
+                                            : (Number(item?.proportion || 1) / 1000).toFixed(3),
                                         totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.planPurchaseNum || 1) / 1000 / 1000).toFixed(3)
                                             : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width||1) * (item.planPurchaseNum || 1) / 1000 / 1000 / 1000).toFixed(3)
                                                 : (Number(item?.proportion || 1) * (item.planPurchaseNum || 1) / 1000).toFixed(3)
-                
                                     }
                                 }))
                                 // setMaterialList(info.file.response?.data?.purchasePlanDetailDTOS.map((item:any)=>{
