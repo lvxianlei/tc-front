@@ -649,8 +649,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'reamingNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "reamingNumber"]} initialValue={_} rules={[{
-                    pattern: /^[0-9*,]*$/,
-                    message: '仅可输入数字/,/*',
+                    pattern: /^[0-9*,.]*$/,
+                    message: '仅可输入数字/,/*/.',
                 }]}>
                     <Input size="small" />
                 </Form.Item>
