@@ -31,6 +31,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [numData, setNumData] = useState<any>({});
     const [detail, setDetail] = useState<any>({})
+    const [path, setPath] = useState<any>(`/tower-storage/warehousingEntry/invoice/list?`)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
@@ -366,7 +367,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item,
                     // disabled: !baseForm.getFieldValue("businessType"),
-                    path: `${item.path}?materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
+                    path: `${path}materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
                 })
             }
             if (item.dataIndex === "invoiceAmount") {
@@ -391,6 +392,11 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return <Form.Item name="businessId" style={{ width: "100%" }}>
                             <Select disabled={type === 'edit'} onChange={(e: any) => {
                                 console.log(e, "======")
+                                if(baseForm.getFieldValue('businessType')===1){
+                                    setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${e.split(",")[1]}&`)
+                                }else{
+                                    setPath(`/tower-storage/warehousingEntry/invoice/list?`)
+                                }
                                 baseForm.setFieldsValue({ invoiceUnit: e.split(",")[1] })
                             }}>
                                 {companyList && companyList.map((item: any) => {
