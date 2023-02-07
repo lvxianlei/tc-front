@@ -403,7 +403,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...data,
                 id: props.id
             })
-            message.success("创建成功！");
+            message.success(props.type === "create" ?"创建成功！":"编辑成功！");
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
@@ -578,7 +578,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                         //     }
                                         // }]}
                                         >
-                                            <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.pickingStatus&&records?.pickingStatus!==0} />
+                                            <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.pickingStatus&&records?.pickingStatus!==0} min={0}/>
                                         </Form.Item>
                                     // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 }})
