@@ -281,7 +281,6 @@ export default forwardRef(function ({
                     padding: 10
                 }}
             /> : <Image src={picInfo.url} preview={false} />}
-
         </Modal>
         {isTable && title && <DetailTitle
             // style={{ marginTop: "24px" }}
