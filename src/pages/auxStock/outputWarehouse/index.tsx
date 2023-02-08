@@ -301,6 +301,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     ref={editRef}
                     id={editId}
                     type={oprationType}
+                    visible={visible}
                 />
             </Modal>
         </>
