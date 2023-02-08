@@ -170,11 +170,16 @@ export default function SampleDraw(): React.ReactNode {
 
     return (
         <>
-            <Modal visible={visible} title="预览" footer={false} onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
+            <Modal
+                visible={visible}
+                title="预览" footer={false}
+                onOk={handleModalOk}
+                onCancel={handleModalCancel}
+                width={1011}>
                 {
                     url?.fileSuffix === "dxf" ? <>
                         <iframe
-                            src={`http://dxf-preview.dhwy.cn/#/dxfPreview?url=${encodeURIComponent(url?.downloadUrl)}`}
+                            src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
                             style={{
                                 border: "none",
                                 width: "100%",
