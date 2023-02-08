@@ -738,11 +738,11 @@
     "ApplicationOverview": [
         {
             "title": "请款类别",
-            "dataIndex": "paymentReqTypeName"
+            "dataIndex": "pleasePayTypeName"
         },
         {
             "title": "付款类型",
-            "dataIndex": "businessTypeName"
+            "dataIndex": "paymentReqTypeName"
         },
         {
             "title": "关联入库单",
