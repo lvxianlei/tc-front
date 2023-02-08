@@ -43,11 +43,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 invoiceDate: moment(result.invoiceDate),
                 receiptVos: {
                     value: result?.receiptNumbers,
-                    records: result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
-                        return {
-                            id: item
-                        }
-                    }):[]
+                    id: result?.receiptIds
+                    // records: result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
+                    //     return {
+                    //         id: item
+                    //     }
+                    // }):[]
                 }
             })
             setPopDataList(result?.receiptVos)
@@ -57,8 +58,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
             const totalWeight = result?.receiptVos.reduce((pre: any,cur: { totalWeight: any; })=>{
                 return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
             },0)
-            const taxPrice = result?.receiptVos.reduce((pre: any,cur: { taxPrice: any; })=>{
-                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxPrice!==null?cur.taxPrice:0 )).toFixed(2)
+            const taxPrice = result?.receiptVos.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
             },0)
             const unTaxPrice = result?.receiptVos.reduce((pre: any,cur: { totalPrice: any; })=>{
                 return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
@@ -201,8 +202,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 const totalWeight = list.reduce((pre: any,cur: { totalWeight: any; })=>{
                     return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
                 },0)
-                const taxPrice = list.reduce((pre: any,cur: { taxPrice: any; })=>{
-                    return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxPrice!==null?cur.taxPrice:0 )).toFixed(2)
+                const taxPrice = list.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+                    return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
                 },0)
                 const unTaxPrice = list.reduce((pre: any,cur: { totalPrice: any; })=>{
                     return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
