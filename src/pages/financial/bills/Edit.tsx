@@ -222,7 +222,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.transportTaxPrice,
-                            totalInvoicePrice: item.totalTransportTaxPrice
+                            totalInvoicePrice: item.totalTransportTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }else if(['1192','1194'].includes(allFields.invoiceSource)){
@@ -230,7 +231,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.unloadTaxPrice,
-                            totalInvoicePrice: item.totalUnloadTaxPrice
+                            totalInvoicePrice: item.totalUnloadTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }else {
@@ -238,7 +240,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.taxPrice,
-                            totalInvoicePrice: item.totalTaxPrice
+                            totalInvoicePrice: item.totalTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }
@@ -302,7 +305,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     ...item,
                     balanceTotalWeight: value,
                     totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
-                    priceDifference: 0,
+                    priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalTaxPrice : value * item.invoicePrice-item.totalTaxPrice,
                 })
             }
             return item
@@ -321,11 +324,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
         const isMaterial: boolean = baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))
         const list = popDataList.map((item: any) => {
             if (item.entryStockDetailId === id) {
+                console.log(isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice)
                 return ({
                     ...item,
                     invoicePrice: value,
                     totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
-                    priceDifference: 0, 
+                    priceDifference: isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice,
                 })
             }
             return item
@@ -446,12 +450,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleInvoiceChange(value, records.entryStockDetailId)} key={key} />
                         })
                     }
-                    // if (["totalInvoicePrice"].includes(item.dataIndex)) {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || undefined} onChange={(value: number) => handleTotalInvoiceChange(value, records.entryStockDetailId)} key={key} />
-                    //     })
-                    // }
+                    if (["priceDifference"].includes(item.dataIndex)) {
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => <span>{value!==null&&parseFloat(value).toFixed(2)||0}</span>
+                        })
+                    }
                     return item;
                 })]}
             pagination={false}

@@ -423,7 +423,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="businessType" style={{ width: '100%' }}>
-                                    <Select disabled={pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => businessTypeChange(e)}>
+                                    <Select disabled={type === 'edit'|| pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => businessTypeChange(e)}>
                                         <Select.Option value={1} key="1">供应商</Select.Option>
                                         <Select.Option value={2} key="2">装卸公司</Select.Option>
                                         <Select.Option value={3} key="3">运输公司</Select.Option>
