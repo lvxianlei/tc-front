@@ -273,7 +273,7 @@ export default forwardRef(function ({
             onCancel={handleCancel}
             footer={false}>
             {picInfo.fileSuffix === "dxf" ? <iframe
-                src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.downloadUrl)}`}
+                src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
                 style={{
                     border: "none",
                     width: "100%",
@@ -281,7 +281,6 @@ export default forwardRef(function ({
                     padding: 10
                 }}
             /> : <Image src={picInfo.url} preview={false} />}
-
         </Modal>
         {isTable && title && <DetailTitle
             // style={{ marginTop: "24px" }}
