@@ -65,6 +65,7 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
+                rawStockId: item.rawStockId?item.rawStockId:item.ids?item.ids:item.id,
                 furnaceBatch: item.furnaceBatchNumber,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
@@ -260,7 +261,7 @@ export default function CreatePlan(props: any): JSX.Element {
     const handleCopy = (options: any) => {
         const result = {
             ...options,
-            ids: options.ids?options.ids:options.id,
+            ids: options.rawStockId?options.rawStockId:options.ids?options.ids:options.id,
             num:'',
             planPurchaseNum: "",
             totalWeight: "",
@@ -800,7 +801,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     onChange={(fields: any[]) => {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
-                            rawStockId: item.ids?item.ids:item.id,
+                            rawStockId: item.rawStockId?item.rawStockId:item.ids?item.ids:item.id,
                             maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
