@@ -42,12 +42,12 @@
       ]
     },
     {
-      "title": "是否量具",
+      "title": "辅材类型",
       "dataIndex": "isMeasuringTools",
       "type": "select",
       "enum": [
-          { "value": 1, "label": "量具" },
-          { "value": 0, "label": "非量具" }
+          { "value": 1, "label": "办公用品" },
+          { "value": 0, "label": "辅材" }
       ]
     }
   ],
