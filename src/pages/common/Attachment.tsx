@@ -273,7 +273,7 @@ export default forwardRef(function ({
             onCancel={handleCancel}
             footer={false}>
             {picInfo.fileSuffix === "dxf" ? <iframe
-                src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.downloadUrl)}`}
+                src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
                 style={{
                     border: "none",
                     width: "100%",
