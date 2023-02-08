@@ -97,6 +97,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     operator: baseData?.operator.id,
                     approval: false,
                     receiptDtos: popDataList,
+                    invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
                     }).join(',') || data?.receiptNumbers,
@@ -128,6 +129,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     operator: baseData?.operator.id,
                     approval: true,
                     receiptDtos: popDataList,
+                    invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
                     }).join(',') || data?.receiptNumbers,
