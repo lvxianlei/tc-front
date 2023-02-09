@@ -847,11 +847,11 @@ export default function CreatePlan(props: any): JSX.Element {
                     }}
                     onChange={(fields: any[]) => {
                         addCollectionForm.setFieldsValue({
-                            issuedNumber:fields[0]?.issuedNumber,
-                            projectName:fields[0]?.projectName,
-                            planNumber:fields[0]?.planNumber,
-                            internalNumber:fields[0]?.internalNumber,
-                            productCategoryName:fields[0]?.productCategoryName,
+                            issuedNumber:Array.from(new Set(fields.map((item)=>item.issuedNumber))).join(','),
+                            projectName:Array.from(new Set(fields.map((item)=>item.projectName))).join(','),
+                            planNumber:Array.from(new Set(fields.map((item)=>item.planNumber))).join(','),
+                            internalNumber:Array.from(new Set(fields.map((item)=>item.internalNumber))).join(','),
+                            productCategoryName:Array.from(new Set(fields.map((item)=>item.productCategoryName))).join(','),
                         })
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
