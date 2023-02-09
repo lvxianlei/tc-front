@@ -62,6 +62,26 @@ export default function TemplateList() {
             dataIndex: 'drawLeaderName',
         },
         {
+            title: '放样员',
+            width: 100,
+            dataIndex: 'loftingUserName',
+        },
+        {
+            title: '编程负责人',
+            width: 100,
+            dataIndex: 'programmingLeaderName',
+        },
+        {
+            title: '配段信息',
+            width: 100,
+            dataIndex: 'segmentInformation',
+        },
+        {
+            title: '基数',
+            width: 100,
+            dataIndex: 'productCount',
+        },
+        {
             title: '页数/数量',
             width: 100,
             dataIndex: 'structureNumber',
