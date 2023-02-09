@@ -1,8 +1,8 @@
-import React, {useRef, useState} from "react"
-import {Button, Form, message, Spin, Input, Radio, Modal,Table} from 'antd'
-import {useHistory, useParams} from 'react-router-dom'
-import {DetailContent, DetailTitle, BaseInfo, EditTable,EditableTable, formatData, Attachment, AttachmentRef} from '../../common'
-import {baseInfoHead, invoiceHead, billingHead, saleInvoice, transferHead,revisePlanHead} from "./InvoicingData.json"
+import React, { useRef, useState } from "react"
+import { Button, Form, message, Spin, Input, Radio, Modal, Table } from 'antd'
+import { useHistory, useParams } from 'react-router-dom'
+import { DetailContent, DetailTitle, BaseInfo, EditableTable, formatData, Attachment, AttachmentRef } from '../../common'
+import { baseInfoHead, invoiceHead, billingHead, saleInvoice, transferHead, revisePlanHead } from "./InvoicingData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
 import {
@@ -26,8 +26,6 @@ export default function Edit() {
 
     const [billingForm] = Form.useForm()
     const [saleInvoiceForm] = Form.useForm()
-
-    const [planForm] = Form.useForm()
     const [tab, setTab] = useState<string>("a")
 
     // tab 数据
@@ -37,47 +35,42 @@ export default function Edit() {
     const [planCodeData, setPlanCodeData] = useState<any[]>([])
     const [planSelectedData, setPlanSelectedData] = useState<any[]>([])
 
-
     // 保存销售发票
     const handleRadioChange = async (e: any) => {
-
         if (tab === 'a') {
-            try{
-            const billingData = await billingForm.validateFields();
-            setTab(e.target.value)
-            console.log(billingData)
-            // 保存 开票明细
-            let billingDataList = billingData?.submit?.map((item: any) => {
-                let keys = item?.keys ? item?.keys : (Math.random() * 1000000).toFixed(0)
-                return {
-                    ...item,
-                    keys,
-                    id:item.savedId ? item.savedId : null,
-                }
-            })
-            console.log(billingDataList)
-            if(!billingDataList){
-                billingDataList = []
-            }
-            let saveData = [...billingDataList].map((item:any)=>{
-                if(item.dataSource === "detailCreate"){
+            try {
+                const billingData = await billingForm.validateFields();
+                setTab(e.target.value)
+                // 保存 开票明细
+                let billingDataList = billingData?.submit?.map((item: any) => {
+                    let keys = item?.keys ? item?.keys : (Math.random() * 1000000).toFixed(0)
                     return {
                         ...item,
-                        dataSource:"saved",
-                        id:item.savedId ? item.savedId : null,
+                        keys,
+                        id: item.savedId ? item.savedId : null,
                     }
+                })
+                if (!billingDataList) {
+                    billingDataList = []
                 }
-                return item
-            })
-            setInvoicingDetailDtos(saveData)
+                let saveData = [...billingDataList].map((item: any) => {
+                    if (item.dataSource === "detailCreate") {
+                        return {
+                            ...item,
+                            dataSource: "saved",
+                            id: item.savedId ? item.savedId : null,
+                        }
+                    }
+                    return item
+                })
+                setInvoicingDetailDtos(saveData)
 
-            // 开票明细自增的数据
-            let sourceData = billingDataList.filter((item: any) => item.dataSource === "detailCreate");
+                // 开票明细自增的数据
+                let sourceData = billingDataList.filter((item: any) => item.dataSource === "detailCreate");
 
-            let oldData = [...saleInvoiceDtos].filter((item: any) => {
-                return billingDataList.some((el: any) => el.keys === item.keys ).length !== 0
-            });
-            console.log(oldData)
+                let oldData = [...saleInvoiceDtos].filter((item: any) => {
+                    return billingDataList.some((el: any) => el.keys === item.keys).length !== 0
+                });
 
                 let handlerOldData = oldData?.map((item: any) => ({
                     ...item,
@@ -86,35 +79,34 @@ export default function Edit() {
                     // 货物
                     productName: item.productName
                 }))
-            // 保存销售发票
-            console.log(sourceData)
-            setSaleInvoiceDtos(
-                [
-                    ...handlerOldData,
-                    ...sourceData.map((item:any)=>({...item,dataSource:"saved"})),
-                ]
-            )
-        }catch{
+                // 保存销售发票
+                setSaleInvoiceDtos(
+                    [
+                        ...handlerOldData,
+                        ...sourceData.map((item: any) => ({ ...item, dataSource: "saved" })),
+                    ]
+                )
+            } catch {
                 setTab('a')
             }
+            return
         }
         if (tab === 'c') {
-            try{
+            try {
                 const saleInvoiceData = await saleInvoiceForm.validateFields();
-                console.log(saleInvoiceData)
                 setTab(e.target.value)
                 setSaleInvoiceDtos(saleInvoiceData?.submit)
-            }catch{
+            } catch {
                 setTab('c')
             }
+            return
         }
-
     }
 
-    const {loading, data} = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo?id=${params.id}`)
-            billingForm.setFieldsValue({submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item))})
+            billingForm.setFieldsValue({ submit: result.invoicingDetailVos.map((item: any) => formatData(billingHead, item)) })
             resole({
                 ...result,
                 invoicingInfoVo: {
@@ -131,25 +123,18 @@ export default function Edit() {
         }
     }), {
         manual: params.id === "new",
-    onSuccess:(data)=>{
-        // data?.planCode
-        console.log(data)
-        let invoicingSaleVOS = data?.invoicingSaleVOS || []
-        invoicingSaleVOS = invoicingSaleVOS.map((item:any)=>({...item,savedId:item.id}))
-        setSaleInvoiceDtos(invoicingSaleVOS)
-
-        let invoicingDetailVos = data?.invoicingDetailVos || []
-        invoicingDetailVos = invoicingDetailVos.map((item:any)=>({...item,savedId:item.id}))
-        setInvoicingDetailDtos(invoicingDetailVos)
-        console.log(invoicingSaleVOS,invoicingDetailVos)
-
-        setPlanSelectedData(data?.planCode?.split(','))
-
-
-    }
+        onSuccess: (data) => {
+            let invoicingSaleVOS = data?.invoicingSaleVOS || []
+            invoicingSaleVOS = invoicingSaleVOS.map((item: any) => ({ ...item, savedId: item.id }))
+            setSaleInvoiceDtos(invoicingSaleVOS)
+            let invoicingDetailVos = data?.invoicingDetailVos || []
+            invoicingDetailVos = invoicingDetailVos.map((item: any) => ({ ...item, savedId: item.id }))
+            setInvoicingDetailDtos(invoicingDetailVos)
+            setPlanSelectedData(data?.planCode?.split(','))
+        }
     })
 
-    const {run: logicWeightRun} = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
+    const { run: logicWeightRun } = useRequest<{ [key: string]: any }>((id) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/taskNotice/getLogicWeightByContractId?contractId=
             ${id}`)
@@ -157,7 +142,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), {manual: true,})
+    }), { manual: true, })
 
     const {
         run: getPlanList
@@ -173,8 +158,7 @@ export default function Edit() {
         }
     }), {
         manual: true,
-        onSuccess:(data)=>{
-            console.log(data)
+        onSuccess: (data) => {
             setPlanCodeData(data?.records || [])
         }
     })
@@ -189,7 +173,7 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), {manual: true})
+    }), { manual: true })
 
     const {
         loading: saveLoading,
@@ -201,27 +185,24 @@ export default function Edit() {
         } catch (error) {
             reject(error)
         }
-    }), {manual: true})
+    }), { manual: true })
 
     const handleSave = async (saveType: 1 | 2) => {
-        console.log([...invoicingDetailDtos.map(item=>({...item,id:item.savedId}))])
         try {
             const baseInfoData = await baseInfo.validateFields()
             const invoicData = await invoiceForm.validateFields()
-            const billingData = await billingForm.validateFields()
             const transferData = await transferForm.validateFields()
-
-            if (invoicingDetailDtos?.length === 0 ) {
+            if (invoicingDetailDtos?.length === 0) {
                 message.warning("至少有一条开票明细...")
                 return
             }
             const saveData = {
                 ...baseInfoData,
                 ...transferData,
-                contractId: baseInfoData?.contractCode?.id ? baseInfoData?.contractCode?.id : baseInfoData?.contractId  || data?.contractId,
-                contractCode: baseInfoData?.contractCode?.value ? baseInfoData?.contractCode?.value : baseInfoData?.contractCode  || data?.contractCode,
-                invoicingDetailDtos: [...invoicingDetailDtos.map(item=>({...item,id:item.savedId}))],
-                invoicingSaleDTOS:[...saleInvoiceDtos.map(item=>({...item,id:item.savedId}))],
+                contractId: baseInfoData?.contractCode?.id ? baseInfoData?.contractCode?.id : baseInfoData?.contractId || data?.contractId,
+                contractCode: baseInfoData?.contractCode?.value ? baseInfoData?.contractCode?.value : baseInfoData?.contractCode || data?.contractCode,
+                invoicingDetailDtos: [...invoicingDetailDtos.map(item => ({ ...item, id: item.savedId }))],
+                invoicingSaleDTOS: [...saleInvoiceDtos.map(item => ({ ...item, id: item.savedId }))],
                 fileIds: attchRef.current?.getDataSource().map(item => item.id),
                 saveType,
                 invoicingInfoDto: {
@@ -232,8 +213,7 @@ export default function Edit() {
                     invoicingId: data?.invoicingInfoVo.invoicingId || ""
                 },
             }
-            console.log(saveData)
-            const result = params.id === "new" ? await createRun(saveData) : await saveRun({...saveData, id: data?.id})
+            const result = params.id === "new" ? await createRun(saveData) : await saveRun({ ...saveData, id: data?.id })
             if (result) {
                 setWhen(false)
                 message.success("数据保存成功...")
@@ -262,53 +242,50 @@ export default function Edit() {
                 contractCode: contractValue.internalNumber,
                 contractType: contractValue.contractPlanStatus,
                 contractName: contractValue.contractName,
-                contractId:contractValue.id
+                contractId: contractValue.id
             })
         }
         // 回款占比计算
         if (fields.backProportion) {
             const ticketMoney = baseInfo.getFieldValue("ticketMoney")
-            console.log(ticketMoney)
             baseInfo.setFieldsValue({
                 backMoney: (parseFloat(fields.backProportion || "0") * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
             })
         }
 
         // 汇率变化计算人民币金额
-        if (fields.exchangeRate){
-            console.log(fields.exchangeRate)
+        if (fields.exchangeRate) {
             const ticketMoney = baseInfo.getFieldValue("ticketMoney")
             baseInfo.setFieldsValue({
-                rmb:(parseFloat(fields.exchangeRate || "0") * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
+                rmb: (parseFloat(fields.exchangeRate || "0") * parseFloat(ticketMoney || "0") * 0.01).toFixed(2)
             })
         }
 
         // 发票类型变更更新tab中所有数据
-        if (fields.ticketType){
-            setSaleInvoiceDtos(saleInvoiceDtos.map(item=>({
+        if (fields.ticketType) {
+            setSaleInvoiceDtos(saleInvoiceDtos.map(item => ({
                 ...item,
-                ticketType:baseInfo.getFieldValue("ticketType")
+                ticketType: baseInfo.getFieldValue("ticketType")
             })))
         }
 
         // 开票货币类型
-        if(fields.currencyType){
-            console.log(fields.currencyType)
-            let currencyName = currencyTypeOptions?.find(item=> item.id === fields.currencyType)?.name
+        if (fields.currencyType) {
+            let currencyName = currencyTypeOptions?.find(item => item.id === fields.currencyType)?.name
             baseInfo.setFieldsValue({
                 currencyName
             })
             // 更新列表内货币类型
-            setSaleInvoiceDtos(saleInvoiceDtos.map(item=>({
+            setSaleInvoiceDtos(saleInvoiceDtos.map(item => ({
                 ...item,
-                currencyType:fields.currencyType,
+                currencyType: fields.currencyType,
                 currencyName,
-                id:item.savedId ? item.savedId : null
+                id: item.savedId ? item.savedId : null
             })))
-            setInvoicingDetailDtos(invoicingDetailDtos.map(item=>({
+            setInvoicingDetailDtos(invoicingDetailDtos.map(item => ({
                 ...item,
-                currencyType:fields.currencyType,
-                id:item.savedId ? item.savedId : null,
+                currencyType: fields.currencyType,
+                id: item.savedId ? item.savedId : null,
                 currencyName
             })))
         }
@@ -317,7 +294,6 @@ export default function Edit() {
     const handleEditTableChange = async (fields: any, allFields: any) => {
         if (fields.submit.length - 1 >= 0) {
             const currentRowData = fields.submit[fields.submit.length - 1]
-            console.log(currentRowData)
             //承诺回款比例
             const backProportion = baseInfo.getFieldValue("backProportion") || "0"
             if (currentRowData.weight || currentRowData.moneyCount) {
@@ -327,19 +303,18 @@ export default function Edit() {
                 } = allFields.submit.reduce((result: { weight: string, moneyCount: string }, item: any) => ({
                     weight: parseFloat(result.weight || "0") + parseFloat(item.weight || "0"),
                     moneyCount: parseFloat(result.moneyCount || "0") + parseFloat(item.moneyCount || "0")
-                }), {weight: "0", moneyCount: "0"})
+                }), { weight: "0", moneyCount: "0" })
                 const newFields = allFields.submit.map((item: any, index: number) => index === fields.submit.length - 1 ? ({
                     ...item,
                     money: ["0", 0].includes(item.weight) || !item.weight ? "0" : (item.moneyCount / item.weight).toFixed(2)
                 }) : item)
-                billingForm.setFieldsValue({submit: newFields})
+                billingForm.setFieldsValue({ submit: newFields })
                 baseInfo.setFieldsValue({
                     ticketWeight: weight,
                     ticketMoney: moneyCount,
                     backMoney: (parseFloat(backProportion || "0") * parseFloat(moneyCount || "0") * 0.01).toFixed(2)
                 })
             }
-
         } else {
             baseInfo.setFieldsValue({
                 ticketWeight: 0,
@@ -354,96 +329,88 @@ export default function Edit() {
             let keys = item?.keys ? item?.keys : (Math.random() * 1000000).toFixed(0)
             return {
                 ...item,
-                currencyName:currencyTypeOptions?.find(el=> el.id === item.currencyType)?.name,
+                currencyName: currencyTypeOptions?.find(el => el.id === item.currencyType)?.name,
                 keys
             }
         })
-        if(!billingDataList){
+        if (!billingDataList) {
             billingDataList = []
         }
-        let saveData = [...billingDataList].map(item=>{
-            if(item.dataSource === "detailCreate"){
+        let saveData = [...billingDataList].map(item => {
+            if (item.dataSource === "detailCreate") {
                 return {
                     ...item,
                     // dataSource:"saved",
-                    id:item.savedId?item.savedId:null
+                    id: item.savedId ? item.savedId : null
                 }
             }
             return item
         })
 
         let key = fields.submit[fields.submit.length - 1]?.keys;
-        if(key){
-            saveData.forEach((item,index)=>{
-                if(item?.keys === key){
-                    saveData.splice(index,1)
+        if (key) {
+            saveData.forEach((item, index) => {
+                if (item?.keys === key) {
+                    saveData.splice(index, 1)
                 }
                 item.id = item.savedId ? item.savedId : null
             })
-            saveData.splice(saveData.length-1,1)
+            saveData.splice(saveData.length - 1, 1)
         }
         setInvoicingDetailDtos(saveData)
-        console.log(saveData)
     }
-    const addNewRow = async ()=>{
-        if(tab == 'c'){
-            try{
-        let data = [
-            {
-                keys : (Math.random() * 1000000).toFixed(0),
-                dataSource:'saleCreate',
-                // 发票类型
-                ticketType: baseInfo.getFieldValue("ticketType"),
-            },
-            ...saleInvoiceDtos
-        ]
-        setSaleInvoiceDtos(data)
-
-            }catch{
+    const addNewRow = async () => {
+        if (tab == 'c') {
+            try {
+                let data = [
+                    {
+                        keys: (Math.random() * 1000000).toFixed(0),
+                        dataSource: 'saleCreate',
+                        // 发票类型
+                        ticketType: baseInfo.getFieldValue("ticketType"),
+                    },
+                    ...saleInvoiceDtos
+                ]
+                setSaleInvoiceDtos(data)
+            } catch {
             }
-        }else  if (tab == 'a'){
-            try{
-            const data = [
-                {
-                    keys : (Math.random() * 1000000).toFixed(0),
-                    dataSource:'detailCreate',
+        } else if (tab == 'a') {
+            try {
+                const data = [
+                    {
+                        keys: (Math.random() * 1000000).toFixed(0),
+                        dataSource: 'detailCreate',
+                    },
+                    ...invoicingDetailDtos
+                ]
+                setInvoicingDetailDtos(data)
 
-                },
-                ...invoicingDetailDtos
-            ]
-            setInvoicingDetailDtos(data)
-
-            }catch{
+            } catch {
             }
         }
     }
     const invoiceTableChange = async (fields: any, allFields: any) => {
-        console.log(fields)
-
         if (fields.submit.length - 1 >= 0) {
             const saleInvoiceData = await saleInvoiceForm.validateFields();
-            console.log(saleInvoiceData)
             let saveData = saleInvoiceData?.submit || []
-
             let key = fields.submit[fields.submit.length - 1]?.keys;
-            if(key){
-                saveData.forEach((item:any,index:number)=>{
-                    if(item?.keys === key){
-                        saveData.splice(index,1)
+            if (key) {
+                saveData.forEach((item: any, index: number) => {
+                    if (item?.keys === key) {
+                        saveData.splice(index, 1)
                     }
-                    item.id = item.savedId?item.savedId:null
+                    item.id = item.savedId ? item.savedId : null
                 })
-                saveData.splice(saveData.length-1,1)
+                saveData.splice(saveData.length - 1, 1)
             }
-            saveData = saveData.map((el:any)=>{
+            saveData = saveData.map((el: any) => {
                 return {
                     ...el,
-                    currencyName:currencyTypeOptions?.find(item=> item.id === el.currencyType)?.name,
-                    taxAmount:(parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2)
+                    currencyName: currencyTypeOptions?.find(item => item.id === el.currencyType)?.name,
+                    taxAmount: (parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2)
                 }
             })
             setSaleInvoiceDtos(saveData)
-            // setSaleInvoiceDtos(saleInvoiceData?.submit)
         }
     }
     const handleInvoiceChange = (fields: any) => {
@@ -455,28 +422,23 @@ export default function Edit() {
         }
     }
 
-    const revisePlan = async ()=>{
-        if(!baseInfo.getFieldValue('contractCode')){
+    const revisePlan = async () => {
+        if (!baseInfo.getFieldValue('contractCode')) {
             return message.warn("请先选择内部合同...")
         }
         // 根据合同号获取 任务通知单
         await getPlanList()
         let planCode = baseInfo.getFieldValue("planCode")?.split(',')
-        console.log(planCode)
         setPlanSelectedData(planCode)
         setRevisePlanModal(true)
     }
-    const planChange = (e:any) => {
-        console.log(e)
-    }
-    const handleModalOk = () => {
 
+    const handleModalOk = () => {
         baseInfo.setFieldsValue({
-            planCode:planSelectedData.join(","),
+            planCode: planSelectedData.join(","),
 
         })
         // 重新计划计划重量/过磅重量
-
         setPlanSelectedData([])
         setRevisePlanModal(false)
     }
@@ -486,12 +448,12 @@ export default function Edit() {
         operation={[
             <Button
                 type="primary" key="save"
-                style={{marginRight: 16}}
+                style={{ marginRight: 16 }}
                 loading={saveLoading || creteLoading}
                 onClick={() => handleSave(1)}>保存</Button>,
             <Button
                 type="primary" key="saveOrSubmit"
-                style={{marginRight: 16}}
+                style={{ marginRight: 16 }}
                 loading={saveLoading || creteLoading}
                 onClick={() => handleSave(2)}>保存并发起审批</Button>,
             <Button key="cancel" onClick={() => history.go(-1)}>取消</Button>
@@ -520,7 +482,7 @@ export default function Edit() {
                     dataSource={planCodeData}
                 />
             </Modal>
-            <DetailTitle title="基本信息"/>
+            <DetailTitle title="基本信息" />
             <BaseInfo
                 onChange={handleBaseInfoChange}
                 form={baseInfo}
@@ -585,12 +547,12 @@ export default function Edit() {
                                     >
                                         <Form.Item
                                             name="planCode"
-                                            style={{width: "100%"}}
+                                            style={{ width: "100%" }}
                                         >
                                             <Input
                                                 defaultValue={records.value}
                                                 placeholder="请选择计划号"
-                                                style={{width: "100%"}}
+                                                style={{ width: "100%" }}
                                                 readOnly={true}
                                                 addonAfter={
                                                     <Button type='link' key='add'
@@ -598,7 +560,7 @@ export default function Edit() {
                                                     >
                                                         调整计划
                                                     </Button>
-                                                }/>
+                                                } />
                                         </Form.Item>
                                     </Form>
                                 }
@@ -613,23 +575,21 @@ export default function Edit() {
                     ticketType: 2,
                     openTicketType: 1,
                     ticketBasis: 1
-                }} edit/>
+                }} edit />
 
-            <DetailTitle title="发票信息"/>
+            <DetailTitle title="发票信息" />
             <BaseInfo
                 form={invoiceForm}
                 columns={invoiceHead}
                 onChange={handleInvoiceChange}
-                dataSource={data?.invoicingInfoVo || {}} edit/>
-
-            <DetailTitle title="移交信息"/>
+                dataSource={data?.invoicingInfoVo || {}} edit />
+            <DetailTitle title="移交信息" />
             <BaseInfo
                 form={transferForm}
                 columns={transferHead}
                 // onChange={handleInvoiceChange}
-                dataSource={data || {}} edit/>
-
-            <Radio.Group value={tab} onChange={handleRadioChange} style={{margin: "12px 0"}}>
+                dataSource={data || {}} edit />
+            <Radio.Group value={tab} onChange={handleRadioChange} style={{ margin: "12px 0" }}>
                 <Radio.Button value="a">开票明细</Radio.Button>
                 <Radio.Button value="c">销售发票</Radio.Button>
             </Radio.Group>
@@ -644,7 +604,7 @@ export default function Edit() {
                             [
                                 <Button
                                     type="primary" key="addRow"
-                                    style={{marginRight: 16}}
+                                    style={{ marginRight: 16 }}
                                     onClick={addNewRow}>新增一行</Button>,
                             ]
                         }
@@ -671,7 +631,7 @@ export default function Edit() {
                             }
                             return item
                         })}
-                        dataSource={invoicingDetailDtos || []}/>
+                        dataSource={invoicingDetailDtos || []} />
                 </> : <></>
             }
             {
@@ -685,7 +645,7 @@ export default function Edit() {
                             [
                                 <Button
                                     type="primary" key="addRow"
-                                    style={{marginRight: 16}}
+                                    style={{ marginRight: 16 }}
                                     onClick={addNewRow}>新增一行</Button>,
                             ]
                         }
@@ -702,10 +662,10 @@ export default function Edit() {
                             }
                             return item
                         })}
-                        dataSource={saleInvoiceDtos || []}/>
+                        dataSource={saleInvoiceDtos || []} />
                 </> : <></>
             }
-            <Attachment title="附件" ref={attchRef} edit dataSource={data?.attachInfoVos}/>
+            <Attachment title="附件" ref={attchRef} edit dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
 }

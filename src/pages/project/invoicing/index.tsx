@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Form } from 'antd'
-import { Link, useHistory, useLocation } from 'react-router-dom'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
+import { Link, useHistory } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
@@ -11,13 +11,30 @@ export default function Invoicing() {
     const history = useHistory()
     const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
     const [visible, setVisible] = useState<boolean>(false);
-    const location = useLocation<{ state?: number }>();
     const [filterValue, setFilterValue] = useState({
         ...history.location.state as object
     });
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: recallRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/recall/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const { run: closeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/invoicing/close/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -84,11 +101,37 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 130,
+                    width: 190,
                     render: (_: any, record: any) => {
                         return <>
-                            <span style={{ color: "#FF8C00", cursor: "pointer", marginRight: 12 }} onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</span>
-                            <Button className="btn-operation-link" type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                            <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
+                            <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                            <Popconfirm
+                                title="确定撤销此开票申请吗？"
+                                disabled={record.state !== 0}
+                                onConfirm={async () => {
+                                    await recallRun(record?.id)
+                                    message.success("撤销成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" size="small" disabled={[0, 2].includes(record.state)}>撤销</Button>
+                            </Popconfirm>
+                            <Popconfirm
+                                title="确定作废此开票申请吗？"
+                                disabled={record.state !== 0}
+                                onConfirm={async () => {
+                                    await closeRun(record?.id)
+                                    message.success("作废成功...")
+                                    history.go(0)
+                                }}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" size="small" disabled={![2].includes(record.state)}>作废</Button>
+                            </Popconfirm>
                             <Popconfirm
                                 title="确定删除此开票申请吗？"
                                 disabled={record.state !== 0}
@@ -100,7 +143,7 @@ export default function Invoicing() {
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="link" size="small" className="btn-operation-link" disabled={record.state !== 0}>删除</Button>
+                                <Button type="link" size="small" disabled={record.state !== 0}>删除</Button>
                             </Popconfirm>
                         </>
                     }
