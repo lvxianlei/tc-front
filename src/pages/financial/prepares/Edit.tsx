@@ -54,6 +54,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
              * 根据付款类型重置表头，根据不同的付款类型，处理不同回显操作
              */
             handleBaseColumn(result?.paymentReqType, result?.businessType)
+            setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${result?.businessType}&businessId=${result?.businessId}`)
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
@@ -201,6 +202,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const handleBaseInfoChange = (fields: any, allFields: { [key: string]: any }) => {
         if (fields.relatednotes) {
             let pleasePayAmount = "0.00"
+            console.log(fields.relatednotes)
             fields.relatednotes.records.forEach((item: any) => {
                 pleasePayAmount = (parseFloat(pleasePayAmount) + parseFloat(item.invoiceAmount || "0")).toFixed(2)
             })
