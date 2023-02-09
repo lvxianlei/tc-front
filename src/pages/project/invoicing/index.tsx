@@ -184,6 +184,8 @@ export default function Invoicing() {
                         <Select.Option value={1}>审批中</Select.Option>
                         <Select.Option value={2}>审批通过</Select.Option>
                         <Select.Option value={3}>被驳回</Select.Option>
+                        <Select.Option value={4}>已撤销</Select.Option>
+                        <Select.Option value={11}>已作废</Select.Option>
                     </Select>
                 },
                 {
