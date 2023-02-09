@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
-import { Space, Input, Button, Form, Modal, Table, Popconfirm, Spin } from 'antd'
-import { BaseInfo } from '../../common';
+import { Space, Input, Button, Form, Modal, Table, Popconfirm, Spin, Row, Col } from 'antd'
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { userBaseInfo } from "./userBase.json"
 import SelectUser from '../../common/SelectUser';
 export default function SchedulePlan(props: any) {
     const [visible, setVisible] = useState<boolean>(false);
@@ -51,7 +49,7 @@ export default function SchedulePlan(props: any) {
         <>
             <Modal
                 title='指派信息'
-                width={800}
+                width='80%'
                 visible={visible}
                 onCancel={handleModalCancel}
                 footer={
@@ -62,128 +60,282 @@ export default function SchedulePlan(props: any) {
                 }
             >
                 <Spin spinning={load}>
-                    <BaseInfo
-                        form={form}
-                        col={2}
-                        classStyle={"overall-form-class-padding0"}
-                        columns={userBaseInfo.map((item: any) => {
-                            switch (item.dataIndex) {
-                                case "assignName":
-                                    return ({
-                                        ...item, render: () => {
-                                            console.log(item)
-                                            return <Form.Item name="assignName" label="" rules={[{ required: true, message: '请填写指派方案名称' }]}>
-                                                <Input maxLength={20} />
-                                            </Form.Item>
-                                        }
-                                    })
-                                case "lofting":
-                                    return ({
-                                        ...item,
-                                        render: () => {
-                                            return <Form.Item name={'loftingName'} rules={[{
-                                                required: true,
-                                                message: '请输入放样负责人！'
-                                            }]}>
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            form.setFieldsValue({
-                                                                lofting: selectedRows[0]?.userId,
-                                                                loftingName: selectedRows[0]?.name,
-                                                            })
-                                                        }} />
-                                                } />
-                                            </Form.Item>
-                                        }
-                                    })
-                                case "welding":
-                                    return ({
-                                        ...item,
-                                        render: () => {
-                                            return <Form.Item name={'weldingName'} rules={[{
-                                                required: true,
-                                                message: '请输入编程负责人！'
-                                            }]}>
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser key={'welding'} selectedKey={[form?.getFieldsValue(true)?.welding]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            form.setFieldsValue({
-                                                                welding: selectedRows[0]?.userId,
-                                                                weldingName: selectedRows[0]?.name,
-                                                            })
-                                                        }} />
-                                                } />
-                                            </Form.Item>
-                                        }
-                                    })
-                                case "smallSample":
-                                    return ({
-                                        ...item,
-                                        render: () => {
-                                            return <Form.Item name={'smallSampleName'} rules={[{
-                                                required: true,
-                                                message: '请输入小样图负责人！'
-                                            }]}>
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser key={'smallSample'} selectedKey={[form?.getFieldsValue(true)?.smallSample]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            form.setFieldsValue({
-                                                                smallSample: selectedRows[0]?.userId,
-                                                                smallSampleName: selectedRows[0]?.name,
-                                                            })
-                                                        }} />
-                                                } />
-                                            </Form.Item>
-                                        }
-                                    })
-                                case "bolt":
-                                    return ({
-                                        ...item,
-                                        render: () => {
-                                            return <Form.Item name={'boltName'} rules={[{
-                                                required: true,
-                                                message: '请输入螺栓清单负责人！'
-                                            }]}>
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser key={'bolt'} selectedKey={[form?.getFieldsValue(true)?.bolt]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            form.setFieldsValue({
-                                                                bolt: selectedRows[0]?.userId,
-                                                                boltName: selectedRows[0]?.name,
-                                                            })
-                                                        }} />
-                                                } />
-                                            </Form.Item>
-                                        }
-                                    })
-                                case "draw":
-                                    return ({
-                                        ...item,
-                                        render: () => {
-                                            return <Form.Item name={'drawName'} rules={[{
-                                                required: true,
-                                                message: '请输入图纸上传负责人！'
-                                            }]}>
-                                                <Input size="small" disabled suffix={
-                                                    <SelectUser key={'draw'} selectedKey={[form?.getFieldsValue(true)?.draw]}
-                                                        onSelect={(selectedRows: Record<string, any>) => {
-                                                            form.setFieldsValue({
-                                                                draw: selectedRows[0]?.userId,
-                                                                drawName: selectedRows[0]?.name,
-                                                            })
-                                                        }} />
-                                                } />
-                                            </Form.Item>
-                                        }
-                                    })
-                                default:
-                                    return item
-                            }
-                        })}
-                        dataSource={scheduleData}
-                        edit
-                    />
+                    <Form form={form} labelCol={{ span: 8 }}>
+                        <Row gutter={12}>
+                            <Col span={6}>
+                                <Form.Item name="assignName" label="指派方案名称" rules={[{ required: true, message: '请填写指派方案名称' }]}>
+                                    <Input maxLength={20} />
+                                </Form.Item>
+                            </Col>
+                            <Col span={18}/>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="放样负责人" rules={[{
+                                    required: true,
+                                    message: '请输入放样负责人！'
+                                }]}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="编程负责人" rules={[{
+                                    required: true,
+                                    message: '请输入编程负责人！'
+                                }]}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="螺栓负责人" rules={[{
+                                    required: true,
+                                    message: '请输入螺栓负责人！'
+                                }]}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="图纸负责人" rules={[{
+                                    required: true,
+                                    message: '请输入图纸负责人！'
+                                }]}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="放样员">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="NC程序">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="螺栓计划校核">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="发货图纸">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="审图交卡">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="杆塔配段">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="螺栓清单">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="小样图上传" rules={[{
+                                    required: true,
+                                    message: '请输入小样图上传！'
+                                }]}>
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="组焊清单">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="包装清单">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="螺栓清单校核">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6} />
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="高低腿配置编制">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="编程高低腿">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={12} />
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="高低腿配置校核">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={18} />
+                            <Col span={6}>
+                                <Form.Item name={'loftingName'} label="挂线板校核">
+                                    <Input size="small" disabled suffix={
+                                        <SelectUser key={'lofting'} selectedKey={[form?.getFieldsValue(true)?.lofting]}
+                                            onSelect={(selectedRows: Record<string, any>) => {
+                                                form.setFieldsValue({
+                                                    lofting: selectedRows[0]?.userId,
+                                                    loftingName: selectedRows[0]?.name,
+                                                })
+                                            }} />
+                                    } />
+                                </Form.Item>
+                            </Col>
+                            <Col span={18} />
+                        </Row>
+                    </Form>
                 </Spin>
             </Modal>
             <Modal
