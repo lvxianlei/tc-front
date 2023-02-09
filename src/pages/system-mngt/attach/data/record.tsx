@@ -1,8 +1,6 @@
 import React from "react"
 import { Input, Select } from "antd"
 import { OperationRecord, SearchTable } from "../../../common"
-import useRequest from "@ahooksjs/use-request"
-import RequestUtil from "@utils/RequestUtil"
 import { signIn } from "./data.json"
 const recordEnum: { [key: string]: any } = {
     signIn: "签收日志",
