@@ -136,12 +136,18 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.createTimeStart = `${formatDate[0]} 00:00:00`
             value.createTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.createTime
+        } else {
+            value.createTimeStart = ``
+            value.createTimeEnd = ``
         }
         if (value.openTime) {
             const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startUpdateTime = `${formatDate[0]} 00:00:00`
             value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
+        } else {
+            value.startUpdateTime = ``
+            value.endUpdateTime = ``
         }
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value

@@ -7,7 +7,7 @@ import Overview from "./Overview"
 import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
+import { invoiceSourceOptions, invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditRefProps {
     onSubmit: () => void
     onSubmitApproval: () => void
@@ -17,6 +17,10 @@ interface EditRefProps {
 export default function Invoice() {
     const history = useHistory()
     const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
+    const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({
         value: item.id,
         label: item.name
     }))
@@ -232,10 +236,7 @@ export default function Invoice() {
                     name: 'invoiceSource',
                     label: '发票来源',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
-                        <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="1">供应商</Select.Option>
-                        <Select.Option value="2">装卸公司</Select.Option>
-                        <Select.Option value="3">运输公司</Select.Option>
+                        {invoiceSourceEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {

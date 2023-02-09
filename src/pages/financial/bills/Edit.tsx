@@ -31,10 +31,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [numData, setNumData] = useState<any>({});
     const [detail, setDetail] = useState<any>({})
+    const [path, setPath] = useState<any>(`/tower-storage/warehousingEntry/invoice/list?`)
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
             setDetail(result)
+            setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${result.businessName}&`)
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
@@ -42,11 +44,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 invoiceDate: moment(result.invoiceDate),
                 receiptVos: {
                     value: result?.receiptNumbers,
-                    records: result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
-                        return {
-                            id: item
-                        }
-                    }):[]
+                    id: result?.receiptIds
+                    // records: result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
+                    //     return {
+                    //         id: item
+                    //     }
+                    // }):[]
                 }
             })
             setPopDataList(result?.receiptVos)
@@ -56,8 +59,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
             const totalWeight = result?.receiptVos.reduce((pre: any,cur: { totalWeight: any; })=>{
                 return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
             },0)
-            const taxPrice = result?.receiptVos.reduce((pre: any,cur: { taxPrice: any; })=>{
-                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxPrice!==null?cur.taxPrice:0 )).toFixed(2)
+            const taxPrice = result?.receiptVos.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+                return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
             },0)
             const unTaxPrice = result?.receiptVos.reduce((pre: any,cur: { totalPrice: any; })=>{
                 return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
@@ -95,6 +98,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     operator: baseData?.operator.id,
                     approval: false,
                     receiptDtos: popDataList,
+                    invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
                     }).join(',') || data?.receiptNumbers,
@@ -126,6 +130,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     operator: baseData?.operator.id,
                     approval: true,
                     receiptDtos: popDataList,
+                    invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
                     receiptNumbers: baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
                     }).join(',') || data?.receiptNumbers,
@@ -200,8 +205,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 const totalWeight = list.reduce((pre: any,cur: { totalWeight: any; })=>{
                     return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
                 },0)
-                const taxPrice = list.reduce((pre: any,cur: { taxPrice: any; })=>{
-                    return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.taxPrice!==null?cur.taxPrice:0 )).toFixed(2)
+                const taxPrice = list.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+                    return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
                 },0)
                 const unTaxPrice = list.reduce((pre: any,cur: { totalPrice: any; })=>{
                     return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
@@ -218,7 +223,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.transportTaxPrice,
-                            totalInvoicePrice: item.totalTransportTaxPrice
+                            totalInvoicePrice: item.totalTransportTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }else if(['1192','1194'].includes(allFields.invoiceSource)){
@@ -226,7 +232,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.unloadTaxPrice,
-                            totalInvoicePrice: item.totalUnloadTaxPrice
+                            totalInvoicePrice: item.totalUnloadTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }else {
@@ -234,7 +241,8 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return{
                             ...item,
                             invoicePrice: item.taxPrice,
-                            totalInvoicePrice: item.totalTaxPrice
+                            totalInvoicePrice: item.totalTaxPrice,
+                            priceDifference:0
                         }
                     })
                 }
@@ -298,7 +306,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     ...item,
                     balanceTotalWeight: value,
                     totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
-                    priceDifference: 0,
+                    priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalTaxPrice : value * item.invoicePrice-item.totalTaxPrice,
                 })
             }
             return item
@@ -317,11 +325,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
         const isMaterial: boolean = baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))
         const list = popDataList.map((item: any) => {
             if (item.entryStockDetailId === id) {
+                console.log(isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice)
                 return ({
                     ...item,
                     invoicePrice: value,
                     totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
-                    priceDifference: 0, 
+                    priceDifference: isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice,
                 })
             }
             return item
@@ -366,7 +375,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item,
                     // disabled: !baseForm.getFieldValue("businessType"),
-                    path: `${item.path}?materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
+                    path: `${path}materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&businessType=${baseForm.getFieldValue("businessType")}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
                 })
             }
             if (item.dataIndex === "invoiceAmount") {
@@ -376,7 +385,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item, render: (data: any, props: any) => {
                         return <Form.Item name="businessType" style={{ width: "100%" }}>
-                            <Select disabled={type === 'edit'} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); }}>
+                            <Select disabled={type === 'edit'} onChange={(e: number) => { businessTypeChange(e); baseForm.setFieldsValue({ businessId: '' }); setPath(`/tower-storage/warehousingEntry/invoice/list?`)}}>
                                 <Select.Option value={1} key="1">供应商</Select.Option>
                                 <Select.Option value={2} key="2">装卸公司</Select.Option>
                                 <Select.Option value={3} key="3">运输公司</Select.Option>
@@ -391,6 +400,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         return <Form.Item name="businessId" style={{ width: "100%" }}>
                             <Select disabled={type === 'edit'} onChange={(e: any) => {
                                 console.log(e, "======")
+                                setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${e.split(",")[1]}&`)
                                 baseForm.setFieldsValue({ invoiceUnit: e.split(",")[1] })
                             }}>
                                 {companyList && companyList.map((item: any) => {
@@ -441,12 +451,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                             render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleInvoiceChange(value, records.entryStockDetailId)} key={key} />
                         })
                     }
-                    // if (["totalInvoicePrice"].includes(item.dataIndex)) {
-                    //     return ({
-                    //         ...item,
-                    //         render: (value: number, records: any, key: number) => <InputNumber min={0} value={value || undefined} onChange={(value: number) => handleTotalInvoiceChange(value, records.entryStockDetailId)} key={key} />
-                    //     })
-                    // }
+                    if (["priceDifference"].includes(item.dataIndex)) {
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => <span>{value!==null&&parseFloat(value).toFixed(2)||0}</span>
+                        })
+                    }
                     return item;
                 })]}
             pagination={false}
