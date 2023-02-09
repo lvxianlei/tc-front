@@ -24,6 +24,14 @@
                 {
                     "label": "被驳回",
                     "value": 3
+                },
+                {
+                    "label": "已撤销",
+                    "value": 4
+                },
+                {
+                    "label": "已作废",
+                    "value": 11
                 }
             ]
         },
@@ -279,7 +287,7 @@
         {
             "title": "合同ID",
             "dataIndex": "contractId",
-            "hide":true
+            "hide": true
         },
         {
             "title": "合同单位",
@@ -317,12 +325,12 @@
             "title": "开票货币类型",
             "dataIndex": "currencyType",
             "type": "select",
-            "enum":[]
+            "enum": []
         },
         {
             "title": "货币类型名称",
             "dataIndex": "currencyName",
-            "hidden":true
+            "hidden": true
         },
         {
             "title": "汇率",
@@ -852,7 +860,7 @@
         {
             "title": "货币类型名称",
             "dataIndex": "currencyName",
-            "width":200
+            "width": 200
         },
         {
             "title": "单价",
