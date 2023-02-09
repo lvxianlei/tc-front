@@ -32,7 +32,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const paymentMethodEnum = paymentMethodOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [detail, setDetail] = useState<any>({});
-    const [path, setPath] = useState<any>('/tower-supply/invoice?invoiceStatus=1');
+    const [path, setPath] = useState<any>('/tower-supply/invoice?');
 
     // 存储
     const [baseInfoColumn, setBaseInfoColumn] = useState<any[]>(ApplicationList);
@@ -54,16 +54,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
              * 根据付款类型重置表头，根据不同的付款类型，处理不同回显操作
              */
             handleBaseColumn(result?.paymentReqType, result?.businessType)
-            setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${result?.businessType}&businessId=${result?.businessId}`)
+            setPath(`/tower-supply/invoice?businessType=${result?.businessType}&businessId=${result?.businessId}`)
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
                 relatednotes: result.applyPaymentInvoiceVos&&result.applyPaymentInvoiceVos.length>0? {
                     value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","),
                     records: result.applyPaymentInvoiceVos?.map((item: any) => ({
-                        invoiceId: item.invoiceId,
+                        id: item.invoiceId,
                         billNumber: item.billNumber
-                    })) || []
+                    })) || [],
                 } : "",
                 receiptNumbers: result.receiveNumberList&&result.receiveNumberList.length>0? {
                     value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
@@ -402,7 +402,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                             pleasePayAmount:'',
                                             receiptNumbers:'' 
                                         })
-                                        setPath(`/tower-supply/invoice?invoiceStatus=1`)
+                                        setPath(`/tower-supply/invoice?`)
                                         if (e === '1156') {
                                             businessTypeChange(1);
                                         } else if (e === '1157') {
@@ -442,7 +442,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                             pleasePayAmount:'',
                                             receiptNumbers:''  
                                         });
-                                        setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${e}&businessId=${baseForm.getFieldsValue(true).businessId}`)
+                                        setPath(`/tower-supply/invoice?businessType=${e}&businessId=${baseForm.getFieldsValue(true).businessId}`)
                                     }}>
                                         <Select.Option value={1} key="1">供应商</Select.Option>
                                         <Select.Option value={2} key="2">装卸公司</Select.Option>
@@ -462,7 +462,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                             pleasePayAmount:'',
                                             receiptNumbers:''  
                                         });
-                                        setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${baseForm.getFieldsValue(true).businessType}&businessId=${e.split(',')[0]}`)
+                                        setPath(`/tower-supply/invoice?businessType=${baseForm.getFieldsValue(true).businessType}&businessId=${e.split(',')[0]}`)
                                     }}>
                                         {companyList && companyList.map((item: any) => {
                                             return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
