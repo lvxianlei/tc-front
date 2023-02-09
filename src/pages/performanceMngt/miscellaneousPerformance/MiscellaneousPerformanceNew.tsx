@@ -27,7 +27,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/sundryConfig/getDetail?id=${id}`)
-            planNumChange(result?.planNumber);
+            result?.planNumber && planNumChange(result?.planNumber);
             resole(result)
         } catch (error) {
             reject(error)
@@ -154,7 +154,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 style={{ width: "100%" }}
                                                 onChange={(e) => {
                                                     const data = items?.filter((res: any) => res?.name === e);
-                                                    setTypes(data[0]?.sundryConfigVOList || [])
+                                                    setTypes(data && data[0]?.sundryConfigVOList || [])
                                                     form.setFieldsValue({
                                                         type: '',
                                                         entry: ''
@@ -180,7 +180,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 style={{ width: "100%" }}
                                                 onChange={(e) => {
                                                     const data = types?.filter((res: any) => res?.name === e);
-                                                    setEntrys(data[0]?.sundryConfigVOS || [])
+                                                    setEntrys(data && data[0]?.sundryConfigVOS || [])
                                                     form.setFieldsValue({
                                                         entry: ''
                                                     })
@@ -188,7 +188,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 onDropdownVisibleChange={(open) => {
                                                     if (open) {
                                                         const data = items?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.category);
-                                                        setTypes(data[0]?.sundryConfigVOList || [])
+                                                        setTypes(data && data[0]?.sundryConfigVOList || [])
                                                     }
                                                 }}
                                             >
@@ -214,7 +214,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                     if (open) {
                                                         const typeList = items?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.category);
                                                         const data = typeList[0]?.sundryConfigVOList?.filter((res: any) => res?.name === form?.getFieldsValue(true)?.type);
-                                                        setEntrys(data[0]?.sundryConfigVOS || [])
+                                                        setEntrys(data && data[0]?.sundryConfigVOS || [])
                                                     }
                                                 }}>
                                                 {entrys && entrys?.map((item: any, index: number) => {
