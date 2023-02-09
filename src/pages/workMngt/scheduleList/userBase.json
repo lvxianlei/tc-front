@@ -1,40 +1,4 @@
 {
-    "userBaseInfo": [
-        {
-            "title": "指派方案名称",
-            "dataIndex": "assignName"
-        },
-        {
-            "title": "放样负责人",
-            "dataIndex": "lofting",
-            "width": 1101,
-            "value": "lofting"
-        },
-        {
-            "title": "编程负责人",
-            "dataIndex": "welding",
-            "width": 1101,
-            "value": "welding"
-        },
-        {
-            "title": "小样图负责人",
-            "dataIndex": "smallSample",
-            "width": 1101,
-            "value": "smallSample"
-        },
-        {
-            "title": "螺栓清单负责人",
-            "dataIndex": "bolt",
-            "value": "bolt",
-            "width": 1101
-        },
-        {
-            "title": "图纸上传负责人",
-            "dataIndex": "draw",
-            "width": 1101,
-            "value": "draw"
-        } 
-    ],
     "tableColumns": [
         { 
             "title": "操作部门", 
