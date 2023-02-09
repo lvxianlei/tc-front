@@ -508,6 +508,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
             form?.setFieldsValue({ data: [...valuesData] })
             setTableData([...valuesData])
             await onSubmitDone()
+            resolve(true)
         } catch (error) {
             reject(false)
         }
