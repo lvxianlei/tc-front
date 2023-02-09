@@ -108,7 +108,7 @@ export default function Invoicing() {
                             <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                             <Popconfirm
                                 title="确定撤销此开票申请吗？"
-                                disabled={record.state !== 0}
+                                disabled={[0, 2].includes(record.state)}
                                 onConfirm={async () => {
                                     await recallRun(record?.id)
                                     message.success("撤销成功...")
@@ -121,7 +121,7 @@ export default function Invoicing() {
                             </Popconfirm>
                             <Popconfirm
                                 title="确定作废此开票申请吗？"
-                                disabled={record.state !== 0}
+                                disabled={![2].includes(record.state)}
                                 onConfirm={async () => {
                                     await closeRun(record?.id)
                                     message.success("作废成功...")

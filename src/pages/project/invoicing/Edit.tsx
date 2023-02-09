@@ -323,41 +323,41 @@ export default function Edit() {
             })
         }
 
-        // 保存最新数据
-        const billingData = await billingForm.getFieldsValue();
-        let billingDataList = billingData?.submit?.map((item: any) => {
-            let keys = item?.keys ? item?.keys : (Math.random() * 1000000).toFixed(0)
-            return {
-                ...item,
-                currencyName: currencyTypeOptions?.find(el => el.id === item.currencyType)?.name,
-                keys
-            }
-        })
-        if (!billingDataList) {
-            billingDataList = []
-        }
-        let saveData = [...billingDataList].map(item => {
-            if (item.dataSource === "detailCreate") {
-                return {
-                    ...item,
-                    // dataSource:"saved",
-                    id: item.savedId ? item.savedId : null
-                }
-            }
-            return item
-        })
+        // // 保存最新数据
+        // const billingData = await billingForm.getFieldsValue();
+        // let billingDataList = billingData?.submit?.map((item: any) => {
+        //     let keys = item?.keys ? item?.keys : (Math.random() * 1000000).toFixed(0)
+        //     return {
+        //         ...item,
+        //         currencyName: currencyTypeOptions?.find(el => el.id === item.currencyType)?.name,
+        //         keys
+        //     }
+        // })
+        // if (!billingDataList) {
+        //     billingDataList = []
+        // }
+        // let saveData = [...billingDataList].map(item => {
+        //     if (item.dataSource === "detailCreate") {
+        //         return {
+        //             ...item,
+        //             // dataSource:"saved",
+        //             id: item.savedId ? item.savedId : null
+        //         }
+        //     }
+        //     return item
+        // })
 
-        let key = fields.submit[fields.submit.length - 1]?.keys;
-        if (key) {
-            saveData.forEach((item, index) => {
-                if (item?.keys === key) {
-                    saveData.splice(index, 1)
-                }
-                item.id = item.savedId ? item.savedId : null
-            })
-            saveData.splice(saveData.length - 1, 1)
-        }
-        setInvoicingDetailDtos(saveData)
+        // let key = fields.submit[fields.submit.length - 1]?.keys;
+        // if (key) {
+        //     saveData.forEach((item, index) => {
+        //         if (item?.keys === key) {
+        //             saveData.splice(index, 1)
+        //         }
+        //         item.id = item.savedId ? item.savedId : null
+        //     })
+        //     saveData.splice(saveData.length - 1, 1)
+        // }
+        // setInvoicingDetailDtos(saveData)
     }
     const addNewRow = async () => {
         if (tab == 'c') {
@@ -384,7 +384,6 @@ export default function Edit() {
                     ...invoicingDetailDtos
                 ]
                 setInvoicingDetailDtos(data)
-
             } catch {
             }
         }
