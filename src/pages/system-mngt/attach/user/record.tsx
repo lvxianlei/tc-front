@@ -15,7 +15,7 @@ interface EditProps {
 
 export default function Records({ id, type, noticeId }: EditProps) {
     if (type === "opration") {
-        return <OperationRecord serviceId={id} serviceName="tower-science" />
+        return <OperationRecord serviceId={id} serviceName="tower-system" />
     }
     if (type === "signIn") {
         return <SearchTable
