@@ -1,9 +1,7 @@
 import React from "react"
-import { Input, Select, Spin } from "antd"
-import { DetailTitle, OperationRecord, SearchTable } from "../../../common"
-import useRequest from "@ahooksjs/use-request"
-import RequestUtil from "@utils/RequestUtil"
-import { signIn, examine } from "./data.json"
+import { Input, Select } from "antd"
+import { OperationRecord, SearchTable } from "../../../common"
+import { signIn } from "./data.json"
 const recordEnum: { [key: string]: any } = {
     signIn: "签收日志",
     opration: "操作日志",
@@ -11,26 +9,18 @@ const recordEnum: { [key: string]: any } = {
 }
 interface EditProps {
     id: "create" | string
+    noticeId: string | undefined
     type: "signIn" | "opration" | "examine"
 }
 
-export default function Records({ id, type }: EditProps) {
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
-        try {
-            const data: { [key: string]: any } = await RequestUtil.get(`/tower-system/notice/staff/sign`, { id })
-            resole(data)
-        } catch (error) {
-            console.log(error)
-            reject(error)
-        }
-    }), { manual: type === "signIn" })
-
+export default function Records({ id, type, noticeId }: EditProps) {
     if (type === "opration") {
-        return <OperationRecord serviceId={id} serviceName="tower-science" />
+        return <OperationRecord serviceId={id} serviceName="tower-system" />
     }
     if (type === "signIn") {
         return <SearchTable
             path="/tower-system/notice/staff/sign"
+            filterValue={{ id: noticeId }}
             columns={signIn as any[]}
             modal
             searchFormItems={[{
