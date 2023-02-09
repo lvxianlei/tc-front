@@ -197,7 +197,7 @@ export default forwardRef(function Edit({ id, parent }: EditProps, ref) {
                         id: data?.receiveIds,
                         value: data?.receiveNames,
                         records: data?.receiveIds?.split(",").map((item: string, index: number) => ({
-                            userId: item,
+                            id: item,
                             name: data?.receiveNames.split(",")[index]
                         })) || []
                     },
