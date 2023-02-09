@@ -374,7 +374,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
             if (item.dataIndex === 'receiptVos') {
                 return ({
                     ...item,
-                    // disabled: !baseForm.getFieldValue("businessType"),
+                    disabled: !baseForm.getFieldValue("businessType"),
                     path: `${path}materialType=${baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))?2:1}&businessType=${baseForm.getFieldValue("businessType")}&invoiceEntryIds=${detail?.receiptIds?detail?.receiptIds:''}`
                 })
             }
