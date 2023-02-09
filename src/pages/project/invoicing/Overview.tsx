@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, message, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoHeadOverView, invoiceHead, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -54,7 +54,7 @@ export default function Edit() {
         ]}>
 
             <DetailTitle title="基本信息" />
-            <BaseInfo columns={baseInfoHeadOverView.map((item: any) => {
+            <BaseInfo columns={baseInfoHead.map((item: any) => {
                 if (item.dataIndex === "productTypeId") {
                     return ({
                         ...item,
@@ -82,7 +82,6 @@ export default function Edit() {
                 }
                 return item
             })} dataSource={data || {}} />
-
             <DetailTitle title="发票信息" />
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
 
@@ -92,12 +91,7 @@ export default function Edit() {
                 <Radio.Button value="c">销售发票</Radio.Button>
             </Radio.Group>
             {
-                tab === "a" ? <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos?.map((item: any) => {
-                    return {
-                        ...item,
-                        devNameText: productType.find((el: any) => el.id === item.devName)?.name
-                    }
-                }) || []} /> :
+                tab === "a" ? <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos || []} /> :
                     tab === "b" ? <CommonTable columns={invoicingStatistics} dataSource={data?.invoicingStatisticsVOS || []} /> :
                         tab === "c" ? <CommonTable columns={saleInvoiceOverView} dataSource={data?.invoicingSaleVOS || []} /> : <></>
             }
