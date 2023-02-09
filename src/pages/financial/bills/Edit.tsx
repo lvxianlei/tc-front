@@ -36,6 +36,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/invoice/${id}`)
             setDetail(result)
+            setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${result.businessName}&`)
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
