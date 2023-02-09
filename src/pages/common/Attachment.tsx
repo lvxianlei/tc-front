@@ -206,17 +206,15 @@ export default forwardRef(function ({
     useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs, resetFields }), [JSON.stringify(attchs), getDataSource, dataSource, resetFields])
 
     const handlePreview = useCallback((record: FileProps) => {
-        if (["png", "jpeg", "jpg", "gif", "dxf"].includes(record?.fileSuffix || "")) {
+        if (["png", "jpeg", "jpg", "gif", "dxf", "pdf"].includes(record?.fileSuffix || "")) {
             setPicInfo({
                 url: record.downloadUrl,
                 fileSuffix: record.fileSuffix,
                 title: record.originalName
             })
             setVisible(true)
-        } else if (["pdf"].includes(record?.fileSuffix || "")) {
-            window.open(record.downloadUrl)
         } else {
-            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
+            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf,*.dxf预览...")
         }
     }, [setPicInfo, setVisible])
 
@@ -280,7 +278,15 @@ export default forwardRef(function ({
                     minHeight: 400,
                     padding: 10
                 }}
-            /> : <Image src={picInfo.url} preview={false} />}
+            /> : picInfo.fileSuffix === "pdf" ? <iframe
+                src={`${process.env.PDF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
+                style={{
+                    border: "none",
+                    width: "100%",
+                    minHeight: 600,
+                }}
+            /> :
+                <Image src={picInfo.url} preview={false} />}
         </Modal>
         {isTable && title && <DetailTitle
             // style={{ marginTop: "24px" }}
