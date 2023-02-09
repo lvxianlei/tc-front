@@ -32,6 +32,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const paymentMethodEnum = paymentMethodOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const [detail, setDetail] = useState<any>({});
+    const [path, setPath] = useState<any>('/tower-supply/invoice?invoiceStatus=1');
 
     // 存储
     const [baseInfoColumn, setBaseInfoColumn] = useState<any[]>(ApplicationList);
@@ -369,6 +370,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "relatednotes":
                         return ({
                             ...item,
+                            path:`${path}`,
                             columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({
                                 ...item,
                                 type: "select",
@@ -391,7 +393,14 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                                 return <Form.Item name="pleasePayType" style={{ width: '100%' }}>
                                     <Select disabled={type === 'edit'}  onChange={(e: string) => {
                                         setPleasePayType(e);
-                                        baseForm.setFieldsValue({ businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : '' })
+                                        baseForm.setFieldsValue({ 
+                                            businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : '',
+                                            businessId: '',
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:'' 
+                                        })
+                                        setPath(`/tower-supply/invoice?invoiceStatus=1`)
                                         if (e === '1156') {
                                             businessTypeChange(1);
                                         } else if (e === '1157') {
@@ -423,7 +432,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="businessType" style={{ width: '100%' }}>
-                                    <Select disabled={type === 'edit'|| pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => businessTypeChange(e)}>
+                                    <Select disabled={type === 'edit'|| pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => {
+                                        businessTypeChange(e)
+                                        baseForm.setFieldsValue({ 
+                                            businessId: '',
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:''  
+                                        });
+                                        setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${e}&businessId=${baseForm.getFieldsValue(true).businessId}`)
+                                    }}>
                                         <Select.Option value={1} key="1">供应商</Select.Option>
                                         <Select.Option value={2} key="2">装卸公司</Select.Option>
                                         <Select.Option value={3} key="3">运输公司</Select.Option>
@@ -435,7 +453,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="businessId" style={{ width: '100%' }}>
-                                    <Select disabled={type === 'edit'} showSearch onChange={(e: string) => businessIdChange(e)}>
+                                    <Select disabled={type === 'edit'} showSearch onChange={(e: string) => {
+                                        businessIdChange(e)
+                                        baseForm.setFieldsValue({ 
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:''  
+                                        });
+                                        setPath(`/tower-supply/invoice?invoiceStatus=1&businessType=${baseForm.getFieldsValue(true).businessType}&businessId=${e.split(',')[0]}`)
+                                    }}>
                                         {companyList && companyList.map((item: any) => {
                                             return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
                                         })}
