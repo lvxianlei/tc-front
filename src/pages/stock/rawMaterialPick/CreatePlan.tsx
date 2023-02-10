@@ -387,7 +387,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...data,
                 id: props.id
             })
-            message.success("创建成功！");
+            message.success(props.type === "create" ?"创建成功！":"编辑成功！");
             setType(0)
             props?.handleCreate({ code: 1 })
             resove(result)
