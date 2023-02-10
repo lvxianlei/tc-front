@@ -210,8 +210,7 @@
     {
       "title": "交货方式",
       "dataIndex": "deliveryMethod",
-      "type": "select",
-      "required": true
+      "type": "select"
     },
     {
       "title": "签订时间",
@@ -228,8 +227,7 @@
     {
       "title": "运输方式",
       "dataIndex": "transportMethod",
-      "type": "select",
-      "required": true
+      "type": "select"
     },
     {
       "title": "交货时间",

@@ -3,12 +3,8 @@
     {
       "title": "采购计划编号",
       "dataIndex": "purchasePlanNumber",
-      "rules": [
-        {
-          "required": true,
-          "message": "请输入采购计划编号"
-        }
-      ]
+      "disabled": true,
+      "placeholder":"自动生成"
     },
     {
       "title": "购回日期",
