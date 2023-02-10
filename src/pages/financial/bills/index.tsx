@@ -25,6 +25,9 @@ export default function Invoice() {
         label: item.name
     }))
     const [visible, setVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
@@ -77,15 +80,29 @@ export default function Invoice() {
     const handleModalOk = (isType: 'save'|'approvalSave'|'cancelSave') => new Promise(async (resove, reject) => {
         try {
             // await editRef.current?.onSubmit()
-            isType==='save'&&await editRef.current?.onSubmit()
-            isType==='approvalSave'&&await editRef.current?.onSubmitApproval()
-            isType==='cancelSave'&&await editRef.current?.onSubmitCancel()
+            if(isType==='save'){
+                setSaveLoading(true)
+                await editRef.current?.onSubmit()
+                setSaveLoading(false)
+            }
+            if(isType==='approvalSave'){
+                setSubmitLoading(true)
+                await editRef.current?.onSubmitApproval()
+                setSubmitLoading(false)
+            }
+            if(isType==='cancelSave'){
+                setCancelLoading(true)
+                await editRef.current?.onSubmitCancel()
+                setCancelLoading(false)
+            }
             // message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
             setVisible(false)
             history.go(0)
             resove(true)
-            history.go(0)
         } catch (error) {
+            setSaveLoading(false)
+            setSubmitLoading(false)
+            setCancelLoading(false)
             reject(false)
         }
     })
@@ -103,17 +120,17 @@ export default function Invoice() {
                         setDetailedId("")
                         setVisible(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')}>保存并发起审批</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')}>撤销审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')} loading={cancelLoading}>撤销审批</Button>
                 </Space>:<Space>
                     <Button onClick={() => {
                         editRef.current?.resetFields()
                         setDetailedId("")
                         setVisible(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>  
                 </Space>}
             onCancel={() => {
                 editRef.current?.resetFields()
