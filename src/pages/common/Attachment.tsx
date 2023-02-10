@@ -206,13 +206,15 @@ export default forwardRef(function ({
     useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs, resetFields }), [JSON.stringify(attchs), getDataSource, dataSource, resetFields])
 
     const handlePreview = useCallback((record: FileProps) => {
-        if (["png", "jpeg", "jpg", "gif", "dxf", "pdf"].includes(record?.fileSuffix || "")) {
+        if (["png", "jpeg", "jpg", "gif", "dxf"].includes(record?.fileSuffix || "")) {
             setPicInfo({
                 url: record.downloadUrl,
                 fileSuffix: record.fileSuffix,
                 title: record.originalName
             })
             setVisible(true)
+        } else if (record?.fileSuffix === "pdf") {
+            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(record.originalName as string)}&url=${encodeURIComponent(record?.downloadUrl as string)}`)
         } else {
             message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf,*.dxf预览...")
         }
@@ -277,13 +279,6 @@ export default forwardRef(function ({
                     width: "100%",
                     minHeight: 400,
                     padding: 10
-                }}
-            /> : picInfo.fileSuffix === "pdf" ? <iframe
-                src={`${process.env.PDF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
-                style={{
-                    border: "none",
-                    width: "100%",
-                    minHeight: 600,
                 }}
             /> :
                 <Image src={picInfo.url} preview={false} />}
