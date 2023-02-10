@@ -22,13 +22,13 @@ export default forwardRef(function UserTable({
     searchItems = []
 }: UserTableProps, ref) {
     const [filterValue, setFilterValue] = useState<any>({});
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([...selectedKey]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([...selectedKey || []]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
-
+console.log(selectedKey)
     const columns = [
         {
             title: '账号',
