@@ -47,6 +47,7 @@ export default function TowerInformation(): React.ReactNode {
     const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.post(`/tower-science/productSegment/structure/statistics`, {
             ...filter,
+            productCategoryId: params.id,
             segmentIds: ids
         });
         resole(result)
