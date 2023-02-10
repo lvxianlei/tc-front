@@ -28,7 +28,7 @@ export default forwardRef(function UserTable({
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
-console.log(selectedKey)
+    
     const columns = [
         {
             title: '账号',

@@ -295,9 +295,22 @@ export default function ScheduleView(): React.ReactNode {
                                                         setScheduleData({
                                                             ...scheduleData,
                                                             // assignPlanId: resData.id,
-                                                            ...resData,
-                                                            name: form.getFieldsValue().name,
+                                                            ...resData, name: form.getFieldsValue().name,
                                                         });
+
+                                                        setDetailData({
+                                                            ...detailData,
+                                                            ...resData,
+                                                            programmingLeader: resData?.weldingLeader,
+                                                            programmingLeaderName: resData?.weldingLeaderName,
+                                                            deliveryDrawLeaderName: resData.deliveryDrawLeader ? resData.deliveryDrawLeaderName : '同上',
+                                                            loftingUser: resData.loftingUser && resData.loftingUser !== null ? resData.loftingUser.indexOf(',') > -1 ? resData.loftingUser.split(',') : [resData.loftingUser] : [],
+                                                            loftingMutualReview: resData.loftingMutualReview && resData.loftingMutualReview !== null ? resData.loftingMutualReview.indexOf(',') > -1 ? resData.loftingMutualReview.split(',') : [resData.loftingMutualReview] : [],
+                                                            weldingUser: resData.weldingUser && resData.weldingUser !== null ? resData.weldingUser.indexOf(',') > -1 ? resData.weldingUser.split(',') : [resData.weldingUser] : [],
+                                                            boltUser: resData.boltUser && resData.boltUser !== null ? resData.boltUser.indexOf(',') > -1 ? resData.boltUser.split(',') : [resData.boltUser] : [],
+                                                            boltCheckUser: resData.boltCheckUser && resData.boltCheckUser !== null ? resData.boltCheckUser.indexOf(',') > -1 ? resData.boltCheckUser.split(',') : [resData.boltCheckUser] : []
+
+                                                        })
                                                         form.setFieldsValue({
                                                             ...resData,
                                                             programmingLeader: resData?.weldingLeader,
@@ -306,6 +319,8 @@ export default function ScheduleView(): React.ReactNode {
                                                             loftingUser: resData.loftingUser && resData.loftingUser !== null ? resData.loftingUser.indexOf(',') > -1 ? resData.loftingUser.split(',') : [resData.loftingUser] : [],
                                                             loftingMutualReview: resData.loftingMutualReview && resData.loftingMutualReview !== null ? resData.loftingMutualReview.indexOf(',') > -1 ? resData.loftingMutualReview.split(',') : [resData.loftingMutualReview] : [],
                                                             weldingUser: resData.weldingUser && resData.weldingUser !== null ? resData.weldingUser.indexOf(',') > -1 ? resData.weldingUser.split(',') : [resData.weldingUser] : [],
+                                                            boltUser: resData.boltUser && resData.boltUser !== null ? resData.boltUser.indexOf(',') > -1 ? resData.boltUser.split(',') : [resData.boltUser] : [],
+                                                            boltCheckUser: resData.boltCheckUser && resData.boltCheckUser !== null ? resData.boltCheckUser.indexOf(',') > -1 ? resData.boltCheckUser.split(',') : [resData.boltCheckUser] : []
                                                         });
                                                         setLoad(false)
                                                     }
