@@ -105,7 +105,7 @@ export default function Invoicing() {
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
-                            <Button type="link" size="small" disabled={![0, 3].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
+                            <Button type="link" size="small" disabled={[1, 2].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                             <Popconfirm
                                 title="确定撤销此开票申请吗？"
                                 disabled={[0, 2].includes(record.state)}
@@ -117,7 +117,7 @@ export default function Invoicing() {
                                 okText="确认"
                                 cancelText="取消"
                             >
-                                <Button type="link" size="small" disabled={[0, 2].includes(record.state)}>撤销</Button>
+                                <Button type="link" size="small" disabled={[0, 2, 4, 11].includes(record.state)}>撤销</Button>
                             </Popconfirm>
                             <Popconfirm
                                 title="确定作废此开票申请吗？"

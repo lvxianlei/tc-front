@@ -30,6 +30,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
+                width: data.width || 140,
                 render: (text: string) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -43,6 +44,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
+                width: data.width || 140,
                 render: (text: string | number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -57,6 +59,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
+                width: data.width || 140,
                 render: (text: any) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -70,6 +73,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
+                width: data.width || 140,
                 render: data.render || ((text: number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{
@@ -83,6 +87,7 @@ export function generateRender(type: ColumnsItemsType, data: columnsProps) {
                 code: data.dataIndex,
                 lock: data.fixed,
                 editable: data.editable || true,
+                width: data.width || 140,
                 render: data.render || ((text: number) => <Text
                     style={{ width: "100%" }}
                     ellipsis={{ tooltip: text && !["-1", -1].includes(text) ? text : "-" }}>{text && !["-1", -1].includes(text) ? text : "-"}</Text>),
