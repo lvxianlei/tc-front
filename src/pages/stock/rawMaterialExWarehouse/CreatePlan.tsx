@@ -105,6 +105,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...item,
                 reservoirName: index===0?'':'0',
                 locatorName: index===0?'':'0',
+                outStockItemStatus: 0,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                         : (Number(item?.proportion || 1) / 1000).toFixed(5),
@@ -847,17 +848,18 @@ export default function CreatePlan(props: any): JSX.Element {
                     }}
                     onChange={(fields: any[]) => {
                         addCollectionForm.setFieldsValue({
-                            issuedNumber:fields[0]?.issuedNumber,
-                            projectName:fields[0]?.projectName,
-                            planNumber:fields[0]?.planNumber,
-                            internalNumber:fields[0]?.internalNumber,
-                            productCategoryName:fields[0]?.productCategoryName,
+                            issuedNumber:Array.from(new Set(fields.map((item)=>item.issuedNumber))).join(','),
+                            projectName:Array.from(new Set(fields.map((item)=>item.projectName))).join(','),
+                            planNumber:Array.from(new Set(fields.map((item)=>item.planNumber))).join(','),
+                            internalNumber:Array.from(new Set(fields.map((item)=>item.internalNumber))).join(','),
+                            productCategoryName:Array.from(new Set(fields.map((item)=>item.productCategoryName))).join(','),
                         })
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             num:1,
                             reservoirName:'',
                             locatorName:'',
+                            outStockItemStatus: 0,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
