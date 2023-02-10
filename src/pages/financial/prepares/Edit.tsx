@@ -122,7 +122,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
-                    applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
+                    applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
@@ -158,7 +158,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
-                    isApproval:0,
+                    isApproval:1,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
