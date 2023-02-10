@@ -260,6 +260,10 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                         unTaxPrice: 0,
                     })
                     setPopDataList([])
+                    baseForm.setFieldsValue({
+                        receiptVos:'',
+                        invoiceAmount:''
+                    })
                 }
             }
             
