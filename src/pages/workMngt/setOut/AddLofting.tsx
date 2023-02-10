@@ -613,7 +613,14 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'perforate',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforate"]} initialValue={_}>
-                    <InputNumber size="small" min={1} max={1} />
+                    <InputNumber size="small" min={1} max={1} onChange={() => {
+                        const data = form?.getFieldsValue(true)?.data;
+                        data[index] = {
+                            ...data[index],
+                            perforateNumber: ''
+                        }
+                        setTableData([...data])
+                    }} />
                 </Form.Item>
             )
         },
@@ -625,7 +632,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'perforateNumber',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "perforateNumber"]} initialValue={_}>
-                    <Input size="small" min={0} />
+                    <Input disabled={tableData[index]?.perforate != 1} size="small" min={0} />
                 </Form.Item>
             )
         },
@@ -637,7 +644,14 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'withReaming',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "withReaming"]} initialValue={_}>
-                    <InputNumber size="small" min={1} max={1} />
+                    <InputNumber size="small" min={1} max={1} onChange={() => {
+                        const data = form?.getFieldsValue(true)?.data;
+                        data[index] = {
+                            ...data[index],
+                            reamingNumber: ''
+                        }
+                        setTableData([...data])
+                    }} />
                 </Form.Item>
             )
         },
@@ -652,7 +666,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     pattern: /^[0-9*,.]*$/,
                     message: '仅可输入数字/,/*/.',
                 }]}>
-                    <Input size="small" />
+                    <Input size="small" disabled={tableData[index]?.withReaming != 1} />
                 </Form.Item>
             )
         },
@@ -664,7 +678,14 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'gasCutting',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "gasCutting"]} initialValue={_}>
-                    <InputNumber size="small" min={1} max={1} />
+                    <InputNumber size="small" min={1} max={1} onChange={() => {
+                        const data = form?.getFieldsValue(true)?.data;
+                        data[index] = {
+                            ...data[index],
+                            gasCuttingNumber: ''
+                        }
+                        setTableData([...data])
+                    }} />
                 </Form.Item>
             )
         },
@@ -679,7 +700,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
                     pattern: /^[0-9*,]*$/,
                     message: '仅可输入数字/,/*',
                 }]}>
-                    <Input size="small" />
+                    <Input size="small" disabled={tableData[index]?.gasCutting != 1} />
                 </Form.Item>
             )
         },
@@ -838,6 +859,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             const valuesData = form.getFieldsValue(true).data?.filter((res: any) => res?.code !== '')
             form?.setFieldsValue({ data: [...valuesData] })
             setTableData([...valuesData])
+            resolve(true)
             await onSubmitDone()
         } catch (error) {
             reject(false)
