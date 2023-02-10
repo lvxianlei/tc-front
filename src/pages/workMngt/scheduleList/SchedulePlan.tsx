@@ -206,13 +206,12 @@ export default function SchedulePlan(props: any) {
                         <Col span={6}>
                             <Form.Item name={'boltUserName'} label="螺栓清单">
                                 <Input size="small" disabled suffix={
-                                    <SelectUser key={'boltUser'} selectedKey={[form?.getFieldsValue(true)?.boltUser]}
-                                        onSelect={(selectedRows: Record<string, any>) => {
-                                            form.setFieldsValue({
-                                                boltUser: selectedRows[0]?.userId,
-                                                boltUserName: selectedRows[0]?.name,
-                                            })
-                                        }} />
+                                    <SelectUser key={'boltUser'} selectedKey={form?.getFieldsValue(true)?.boltUser?.split(',') || []} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                                        form.setFieldsValue({
+                                            boltUser: selectedRows.map((res: any) => res?.userId).join(','),
+                                            boltUserName: selectedRows.map((res: any) => res?.name).join(',')
+                                        })
+                                    }} />
                                 } />
                             </Form.Item>
                         </Col>
@@ -260,13 +259,12 @@ export default function SchedulePlan(props: any) {
                         <Col span={6}>
                             <Form.Item name={'boltCheckUserName'} label="螺栓清单校核">
                                 <Input size="small" disabled suffix={
-                                    <SelectUser key={'boltCheckUser'} selectedKey={[form?.getFieldsValue(true)?.boltCheckUser]}
-                                        onSelect={(selectedRows: Record<string, any>) => {
-                                            form.setFieldsValue({
-                                                boltCheckUser: selectedRows[0]?.userId,
-                                                boltCheckUserName: selectedRows[0]?.name,
-                                            })
-                                        }} />
+                                    <SelectUser key={'boltCheckUser'} selectedKey={form?.getFieldsValue(true)?.boltCheckUser?.split(',') || []} selectType="checkbox" onSelect={(selectedRows: Record<string, any>) => {
+                                        form.setFieldsValue({
+                                            boltCheckUser: selectedRows.map((res: any) => res?.userId).join(','),
+                                            boltCheckUserName: selectedRows.map((res: any) => res?.name).join(',')
+                                        })
+                                    }} />
                                 } />
                             </Form.Item>
                         </Col>
