@@ -236,7 +236,7 @@ export default function ApplyPayment() {
                 }),
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     fixed: "right",
                     width: 230,
                     render: (_: any, record: any) => {
