@@ -612,17 +612,6 @@
             "required": true
         },
         {
-            "title": "货币单位",
-            "dataIndex": "currencyType",
-            "type": "select",
-            "enum": []
-        },
-        {
-            "title": "货币单位名称",
-            "dataIndex": "currencyName",
-            "width": 0
-        },
-        {
             "title": "金额",
             "dataIndex": "moneyCount",
             "type": "number",
