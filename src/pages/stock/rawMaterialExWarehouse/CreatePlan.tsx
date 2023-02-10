@@ -384,7 +384,7 @@ export default function CreatePlan(props: any): JSX.Element {
             let flag = false;
             let num = false;
             let width = false;
-            let batch = false;
+            // let batch = false;
             let locator = false;
             let reservoir = false;
             for (let i = 0; i < popDataList.length; i += 1) {
@@ -394,9 +394,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 if (!(popDataList[i].width)){
                     width = true
                 }
-                if (!(popDataList[i].receiveBatchNumber)){
-                    batch = true
-                }
+                // if (!(popDataList[i].receiveBatchNumber)){
+                //     batch = true
+                // }
                 if (!(popDataList[i].locatorName)){
                     locator = true
                 }
@@ -415,10 +415,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写宽度！");
                 return false;
             }
-            if (batch) {
-                message.error("请您填写收货批次！");
-                return false;
-            }
+            // if (batch) {
+            //     message.error("请您填写收货标识码！");
+            //     return false;
+            // }
             if (locator) {
                 message.error("请您选择区位！");
                 return false;
@@ -659,11 +659,11 @@ export default function CreatePlan(props: any): JSX.Element {
                                             validator: async (rule: any, value: any, callback: (error?: string) => void) => {
                                                 const resData = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`);
                                                 if(!resData)
-                                                return Promise.reject('收货批次已存在');
-                                                else return Promise.resolve('收货批次可用');
+                                                return Promise.reject('收货标识码已存在');
+                                                else return Promise.resolve('收货标识码可用');
                                             }
                                         }]}>
-                                            <Input defaultValue={value || undefined}   onBlur={(e:any)=> handleBatchChange(e.target.value,records.id)} maxLength={30} />
+                                            <Input defaultValue={value || undefined} placeholder={'自动生成'} disabled   onBlur={(e:any)=> handleBatchChange(e.target.value,records.id)} maxLength={30} />
                                         </Form.Item>
                                 }})
                             }

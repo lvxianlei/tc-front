@@ -364,8 +364,13 @@
         },
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "dataIndex": "realReceiveBatchNumber",
             "width": 70
+        },
+        {
+            "title": "收货标识码",
+            "dataIndex": "receiveBatchNumber",
+            "width": 100
         },
         {
             "title": "品名",
@@ -505,10 +510,17 @@
     "editCargoDetails": [
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "dataIndex": "realReceiveBatchNumber",
             "type": "string",
             "required": true,
             "maxLength":50
+        },
+        {
+            "title": "收货标识码",
+            "dataIndex": "receiveBatchNumber",
+            "type": "string",
+            "disabled": true,
+            "placeholder": "自动生成"
         },
         {
             "title": "合同编号",
@@ -702,11 +714,18 @@
     "editCargoDetailsB": [
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "dataIndex": "realReceiveBatchNumber",
             "type": "string",
             "required": true,
             "disabled": true,
             "maxLength":50
+        },
+        {
+            "title": "收货标识码",
+            "dataIndex": "receiveBatchNumber",
+            "type": "string",
+            "disabled": true,
+            "placeholder": "自动生成"
         },
         {
             "title": "合同编号",
