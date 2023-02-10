@@ -213,6 +213,7 @@ export const PopTable: React.FC<PopTableProps> = ({ data, ...props }) => {
         const depFalseValue = popContent.id || popContent.value
         const changeValue = data.dependencies ? popContent : depFalseValue;
         depFalseValue && (props as any).onChange(changeValue)
+        data.selectType === "checkbox" && (props as any).onChange(changeValue)
         setValue(popContent)
         setVisible(false)
     }

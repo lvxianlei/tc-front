@@ -44,12 +44,12 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 invoiceDate: moment(result.invoiceDate),
                 receiptVos: {
                     value: result?.receiptNumbers,
-                    id: result?.receiptIds
-                    // records: result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
-                    //     return {
-                    //         id: item
-                    //     }
-                    // }):[]
+                    id: result?.receiptIds,
+                    records: result?.receiptIds!==null&&result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
+                        return {
+                            id: item
+                        }
+                    }):[]
                 }
             })
             setPopDataList(result?.receiptVos)
@@ -195,65 +195,74 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
             }
         }
         if (fields.receiptVos) {
-            console.log(fields.receiptVos)
-            if(fields.receiptVos&&fields.receiptVos?.records.length>0){
-                console.log(allFields?.invoiceSource)
-                let list:any[] = await RequestUtil.get(`/tower-storage/warehousingEntry/invoice/detail/list?entryStockIds=${fields.receiptVos?.records.map((item:any)=>{return item?.id}).join(',')}`)
-                const totalNum = list.reduce((pre: any,cur: { num: any; })=>{
-                    return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:0) 
-                },0)
-                const totalWeight = list.reduce((pre: any,cur: { totalWeight: any; })=>{
-                    return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
-                },0)
-                const taxPrice = list.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
-                    return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
-                },0)
-                const unTaxPrice = list.reduce((pre: any,cur: { totalPrice: any; })=>{
-                    return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
-                },0) 
-                setNumData({
-                    totalNum,
-                    totalWeight,
-                    taxPrice,
-                    unTaxPrice
-                })
-                let newList :any[] = []
-                if(['1191','1193'].includes(allFields.invoiceSource)){
-                    newList = list.map((item:any)=>{
-                        return{
-                            ...item,
-                            invoicePrice: item.transportTaxPrice,
-                            totalInvoicePrice: item.totalTransportTaxPrice,
-                            priceDifference:0
-                        }
+            if(fields.receiptVos){
+                if(fields.receiptVos?.records.length>0){
+                    let list:any[] = await RequestUtil.get(`/tower-storage/warehousingEntry/invoice/detail/list?entryStockIds=${fields.receiptVos?.records.map((item:any)=>{return item?.id}).join(',')}`)
+                    const totalNum = list.reduce((pre: any,cur: { num: any; })=>{
+                        return parseFloat(pre!==null?pre:0) + parseFloat(cur.num!==null?cur.num:0) 
+                    },0)
+                    const totalWeight = list.reduce((pre: any,cur: { totalWeight: any; })=>{
+                        return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0)).toFixed(5) 
+                    },0)
+                    const taxPrice = list.reduce((pre: any,cur: { totalTaxPrice: any; })=>{
+                        return (parseFloat(pre!==null?pre:0 )+ parseFloat(cur.totalTaxPrice!==null?cur.totalTaxPrice:0 )).toFixed(2)
+                    },0)
+                    const unTaxPrice = list.reduce((pre: any,cur: { totalPrice: any; })=>{
+                        return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalPrice!==null?cur.totalPrice:0)).toFixed(2)
+                    },0) 
+                    setNumData({
+                        totalNum,
+                        totalWeight,
+                        taxPrice,
+                        unTaxPrice
                     })
-                }else if(['1192','1194'].includes(allFields.invoiceSource)){
-                    newList = list.map((item:any)=>{
-                        return{
-                            ...item,
-                            invoicePrice: item.unloadTaxPrice,
-                            totalInvoicePrice: item.totalUnloadTaxPrice,
-                            priceDifference:0
-                        }
+                    let newList :any[] = []
+                    if(['1191','1193'].includes(allFields.invoiceSource)){
+                        newList = list.map((item:any)=>{
+                            return{
+                                ...item,
+                                invoicePrice: item.transportTaxPrice,
+                                totalInvoicePrice: item.totalTransportTaxPrice,
+                                priceDifference:0
+                            }
+                        })
+                    }else if(['1192','1194'].includes(allFields.invoiceSource)){
+                        newList = list.map((item:any)=>{
+                            return{
+                                ...item,
+                                invoicePrice: item.unloadTaxPrice,
+                                totalInvoicePrice: item.totalUnloadTaxPrice,
+                                priceDifference:0
+                            }
+                        })
+                    }else {
+                        newList = list.map((item:any)=>{
+                            return{
+                                ...item,
+                                invoicePrice: item.taxPrice,
+                                totalInvoicePrice: item.totalTaxPrice,
+                                priceDifference:0
+                            }
+                        })
+                    }
+                    setPopDataList(newList)
+                    const totalInvoicePrice = newList.reduce((pre: any,cur: { totalInvoicePrice: any; })=>{
+                        return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalInvoicePrice!==null?cur.totalInvoicePrice:0)).toFixed(2)
+                    },0) 
+                    baseForm.setFieldsValue({
+                        invoiceAmount: totalInvoicePrice
                     })
-                }else {
-                    newList = list.map((item:any)=>{
-                        return{
-                            ...item,
-                            invoicePrice: item.taxPrice,
-                            totalInvoicePrice: item.totalTaxPrice,
-                            priceDifference:0
-                        }
+                }else{
+                    setNumData({
+                        totalNum: 0,
+                        totalWeight: 0,
+                        taxPrice: 0,
+                        unTaxPrice: 0,
                     })
+                    setPopDataList([])
                 }
-                setPopDataList(newList)
-                const totalInvoicePrice = newList.reduce((pre: any,cur: { totalInvoicePrice: any; })=>{
-                    return (parseFloat(pre!==null?pre:0) + parseFloat(cur.totalInvoicePrice!==null?cur.totalInvoicePrice:0)).toFixed(2)
-                },0) 
-                baseForm.setFieldsValue({
-                    invoiceAmount: totalInvoicePrice
-                })
             }
+            
         }
     }
     const businessTypeChange = async (e: number) => {

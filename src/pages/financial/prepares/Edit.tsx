@@ -158,7 +158,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
-                    isApproval:0,
+                    isApproval:1,
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
