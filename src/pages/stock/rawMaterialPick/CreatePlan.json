@@ -151,7 +151,7 @@
     ],
     "material": [
         {
-            "title": "收货批次",
+            "title": "收货标识码",
             "dataIndex": "receiveBatchNumber"
         },
         {
@@ -236,12 +236,12 @@
                 "title": "查询",
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
-                "placeholder": "收货批次/品名/规格"
+                "placeholder": "收货标识码/品名/规格"
             }
         ],
         "columns": [
             {
-                "title": "收货批次",
+                "title": "收货标识码",
                 "dataIndex": "receiveBatchNumber"
             },
             {

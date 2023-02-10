@@ -177,7 +177,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             width: 100,
             render: (text: any) => <a>{text}</a>,
         }, {
-            title: '收货批次',
+            title: '收货标识码',
             dataIndex: 'receiveBatchNumber',
             width: 100,
         }, {
