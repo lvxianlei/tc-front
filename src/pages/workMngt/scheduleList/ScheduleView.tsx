@@ -92,7 +92,6 @@ export default function ScheduleView(): React.ReactNode {
             saveData.ncUser = saveData?.ncUser && saveData?.ncUser.indexOf('0') === 0 ? saveData?.programmingLeader : saveData?.ncUser;
             saveData.productPartUser = saveData?.productPartUser && saveData?.productPartUser.indexOf('0') === 0 ? saveData?.ncUser : saveData?.productPartUser;
             saveData.packageUser = saveData?.packageUser && saveData?.packageUser.indexOf('0') === 0 ? saveData?.productPartUser : saveData?.packageUser;
-            console.log(saveData?.boltLeader)
             saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser;
             if (saveData?.boltUser && saveData?.boltUser.indexOf('0') === 0) { //螺栓清单
                 saveData.boltUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser
@@ -106,7 +105,7 @@ export default function ScheduleView(): React.ReactNode {
                     saveData.boltCheckUser = Array.isArray(saveData.boltUser) ? saveData.boltUser?.join(',') : saveData.boltUser
                 }
             } else {
-                saveData.boltCheckUser = saveData.boltCheckUser.join(',')
+                saveData.boltCheckUser = saveData?.boltCheckUser?.join(',')
             }
             saveData.boltCheckUser = Array.isArray(saveData?.boltCheckUser) ? saveData?.boltCheckUser?.join(',') : saveData?.boltCheckUser;
             saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader && saveData?.deliveryDrawLeader.indexOf('0') === 0 ? saveData?.drawLeader : saveData?.deliveryDrawLeader;
@@ -302,7 +301,11 @@ export default function ScheduleView(): React.ReactNode {
                                                         form.setFieldsValue({
                                                             ...resData,
                                                             programmingLeader: resData?.weldingLeader,
-                                                            programmingLeaderName: resData?.weldingLeaderName
+                                                            programmingLeaderName: resData?.weldingLeaderName,
+                                                            deliveryDrawLeaderName: resData.deliveryDrawLeader ? resData.deliveryDrawLeaderName : '同上',
+                                                            loftingUser: resData.loftingUser && resData.loftingUser !== null ? resData.loftingUser.indexOf(',') > -1 ? resData.loftingUser.split(',') : [resData.loftingUser] : [],
+                                                            loftingMutualReview: resData.loftingMutualReview && resData.loftingMutualReview !== null ? resData.loftingMutualReview.indexOf(',') > -1 ? resData.loftingMutualReview.split(',') : [resData.loftingMutualReview] : [],
+                                                            weldingUser: resData.weldingUser && resData.weldingUser !== null ? resData.weldingUser.indexOf(',') > -1 ? resData.weldingUser.split(',') : [resData.weldingUser] : [],
                                                         });
                                                         setLoad(false)
                                                     }
