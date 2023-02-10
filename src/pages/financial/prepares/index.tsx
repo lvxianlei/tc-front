@@ -248,7 +248,7 @@ export default function ApplyPayment() {
                             <Button
                                 type="link"
                                 className="btn-operation-link"
-                                disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
+                                disabled={!['货到付款','预付款'].includes(record.paymentReqTypeName)&&![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
