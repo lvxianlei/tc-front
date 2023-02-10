@@ -46,7 +46,7 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
             setTowerData(towerData?.records.filter((item: any) => {
                 return item.isSpecial === 1 && item.isSpecial !== null && item.specialStatus !== 2
             }))
-            setMsgData(data?.loftingProductStructureVOS || [])
+            setMsgData(allotData?.loftingProductStructureVOS || [])
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
@@ -237,7 +237,7 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
                         className: record.basicsPartNum == 0 ?
                             undefined : styles.row_color_1
                     })}
-                    dataSource={msgData} />
+                    dataSource={msgData || []} />
             </Form>
         </DetailContent>
         <Modal
