@@ -20,6 +20,10 @@ export default function Invoice() {
         value: item.id,
         label: item.name
     }))
+    const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const [visible, setVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
@@ -232,7 +236,7 @@ export default function Invoice() {
                     name: 'invoiceSource',
                     label: '发票来源',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
-                        {invoiceSourceOptions?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                        {invoiceSourceEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
                     </Select>
                 },
                 {
