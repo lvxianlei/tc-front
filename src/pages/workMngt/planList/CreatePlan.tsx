@@ -74,14 +74,14 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const handleAddModalOk = () => {
         // const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
-        for (let i = 0; i < popDataList.length; i += 1) {
-            for (let p = 0; p < materialList.length; p += 1) {
-                if (popDataList[i].id === materialList[p].id) {
-                    materialList[p].structureTextureId = popDataList[i].structureTextureId;
-                    materialList[p].structureTexture = popDataList[i].structureTexture;
-                }
-            }
-        }
+        // for (let i = 0; i < popDataList.length; i += 1) {
+        //     for (let p = 0; p < materialList.length; p += 1) {
+        //         if (popDataList[i].id === materialList[p].id) {
+        //             materialList[p].structureTextureId = popDataList[i].structureTextureId;
+        //             materialList[p].structureTexture = popDataList[i].structureTexture;
+        //         }
+        //     }
+        // }
         setMaterialList([...materialList, ...addMaterialList.map((item: any) => {
             const num = parseFloat(item.planPurchaseNum || "1")
             return ({
