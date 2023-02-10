@@ -30,6 +30,9 @@ export default function ApplyPayment() {
     const editRef = useRef<EditRefProps>()
     const fileRef = useRef<EditRefProps>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [successVisible, setSuccessVisible] = useState<boolean>(false)
@@ -85,14 +88,29 @@ export default function ApplyPayment() {
             // await editRef.current?.onSubmit(type)
             // message.success("请款申请创建成功...")
             // setVisible(false)
-            isType==='save'&& await editRef.current?.onSubmit()
-            isType==='saveAndApply'&&await editRef.current?.onSubmitApproval()
-            isType==='cancelSave'&&await editRef.current?.onSubmitCancel()
+            if(isType==='save'){
+                setSaveLoading(true)
+                await editRef.current?.onSubmit()
+                setSaveLoading(false)
+            }
+            if(isType==='saveAndApply'){
+                setSubmitLoading(true)
+                await editRef.current?.onSubmitApproval()
+                setSubmitLoading(false)
+            }
+            if(isType==='cancelSave'){
+                setCancelLoading(true)
+                await editRef.current?.onSubmitCancel()
+                setCancelLoading(false)
+            }
             setVisible(false)
             history.go(0)
             resove(true)
         } catch (error) {
             console.log(error)
+            setSaveLoading(false)
+            setSubmitLoading(false)
+            setCancelLoading(false)
             reject(false)
         }
     })
@@ -172,9 +190,9 @@ export default function ApplyPayment() {
                         setType("new")
                         setVisible(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')}>保存并发起审批</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')}>撤销审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')} loading={submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')} loading={cancelLoading}>撤销审批</Button>
                 </Space>:<Space>
                     <Button onClick={async () => {
                         await editRef.current?.resetFields()
@@ -182,8 +200,8 @@ export default function ApplyPayment() {
                         setType("new")
                         setVisible(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')} loading={submitLoading}>保存并发起审批</Button>
                 </Space>}
             onCancel={() => {
                 editRef.current?.resetFields()
