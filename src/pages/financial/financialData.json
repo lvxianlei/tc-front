@@ -731,7 +731,7 @@
         },
         {
             "title": "备注",
-            "dataIndex": "description",
+            "dataIndex": "remark",
             "type":"textarea"
         }
     ],
