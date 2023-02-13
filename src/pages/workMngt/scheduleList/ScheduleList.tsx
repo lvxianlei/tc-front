@@ -1,12 +1,35 @@
-import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Form } from 'antd'
-import { Link, useLocation } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
+import { Space, Input, DatePicker, Select, Form, Modal, Button, message } from 'antd'
+import { Link, useHistory, useLocation } from 'react-router-dom'
 import { Page } from '../../common'
 import { FixedType } from 'rc-table/lib/interface';
+import SchedulePlan from './SchedulePlan';
+import useRequest from '@ahooksjs/use-request';
+import RequestUtil from '@utils/RequestUtil';
+import { modalProps } from './ScheduleView';
+import Assign from './Assign';
 
 export default function ScheduleList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const location = useLocation<{ state?: number }>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const [planData, setPlanData] = useState<any | undefined>([]);
+    const assignModalRef = useRef<modalProps>();
+    const history = useHistory()
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+
+    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+        const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
+        setPlanData(planData);
+        resole(data)
+    }), {})
+
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows);
+    }
+
     const columns = [
         {
             key: 'index',
@@ -116,7 +139,41 @@ export default function ScheduleList(): React.ReactNode {
         return value
     }
 
-    return (
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await assignModalRef.current?.onSubmit();
+            setVisible(false);
+            message.success('指派成功！')
+            history?.go(0)
+            assignModalRef.current?.resetFields();
+            resove(true);
+        } catch (error) {
+            reject(error)
+        }
+    })
+
+    const handleModalCancel = () => {
+        setVisible(false);
+        assignModalRef.current?.resetFields();
+    };
+
+    return (<>
+        <Modal
+            destroyOnClose
+            visible={visible}
+            width="95%"
+            title={"指派信息"}
+            footer={
+                <>
+                    <SchedulePlan plan={setPlanData} />
+                    <Button onClick={handleModalCancel}>取消</Button>
+                    <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
+                </>
+            }
+            key='add'
+            onCancel={handleModalCancel}>
+            <Assign id={''} ids={selectedKeys} type={'taskBatch'} planData={planData} ref={assignModalRef} />
+        </Modal>
         <Page
             path="/tower-science/loftingTask"
             columns={columns}
@@ -126,6 +183,20 @@ export default function ScheduleList(): React.ReactNode {
             requestData={{
                 status: location.state?.state
             }}
+            tableProps={{
+                rowSelection: {
+                    type: "checkbox",
+                    selectedRowKeys: selectedKeys,
+                    onChange: SelectChange,
+                }
+            }}
+            extraOperation={
+                <Space>
+                    <Button type="primary" ghost onClick={async () => {
+                        setVisible(true);
+                    }} disabled={!(selectedKeys.length > 0)}>批量指派</Button>
+                </Space>
+            }
             pageSize={100}
             searchFormItems={[
                 {
@@ -152,9 +223,10 @@ export default function ScheduleList(): React.ReactNode {
                 {
                     name: 'fuzzyMsg',
                     label: '模糊查询项',
-                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号"  style={{ width: "350px" }} />
+                    children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号" style={{ width: "350px" }} />
                 }
             ]}
         />
+    </>
     )
 }
