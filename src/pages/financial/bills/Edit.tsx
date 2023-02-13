@@ -45,9 +45,10 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 receiptVos: {
                     value: result?.receiptNumbers,
                     id: result?.receiptIds,
-                    records: result?.receiptIds!==null&&result?.receiptIds?result?.receiptIds.split(',').map((item:any)=>{
+                    records: result?.receiptIds!==null&&result?.receiptIds?result?.receiptIds.split(',').map((item:any,index:number)=>{
                         return {
-                            id: item
+                            id: item,
+                            warehousingEntryNumber: result?.receiptNumbers.split(',')[index]
                         }
                     }):[]
                 }
@@ -100,9 +101,9 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     approval: false,
                     receiptDtos: popDataList,
                     invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
-                    receiptNumbers: baseData.receiptVos?baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
+                    receiptNumbers: baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') : data?.receiptNumbers:'',
+                    }).join(',') : '',
                     fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                     invoiceRelationType: 1, // 新加票据是否关联 写死传1
                 })
@@ -132,9 +133,9 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     approval: true,
                     receiptDtos: popDataList,
                     invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
-                    receiptNumbers: baseData.receiptVos?baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
+                    receiptNumbers: baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') : data?.receiptNumbers:'',
+                    }).join(',') : '',
                     fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                     invoiceRelationType: 1, // 新加票据是否关联 写死传1
                 })
@@ -263,7 +264,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     })
                     setPopDataList([])
                     baseForm.setFieldsValue({
-                        receiptVos: '',
+                        receiptVos: fields.receiptVos,
                         invoiceAmount:''
                     })
                 }
