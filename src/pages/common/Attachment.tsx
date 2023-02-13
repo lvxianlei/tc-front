@@ -213,10 +213,10 @@ export default forwardRef(function ({
                 title: record.originalName
             })
             setVisible(true)
-        } else if (["pdf"].includes(record?.fileSuffix || "")) {
-            window.open(record.downloadUrl)
+        } else if (record?.fileSuffix === "pdf") {
+            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(record.originalName as string)}&url=${encodeURIComponent(record?.downloadUrl as string)}`)
         } else {
-            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
+            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf,*.dxf预览...")
         }
     }, [setPicInfo, setVisible])
 
@@ -280,7 +280,8 @@ export default forwardRef(function ({
                     minHeight: 400,
                     padding: 10
                 }}
-            /> : <Image src={picInfo.url} preview={false} />}
+            /> :
+                <Image src={picInfo.url} preview={false} />}
         </Modal>
         {isTable && title && <DetailTitle
             // style={{ marginTop: "24px" }}

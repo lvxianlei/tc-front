@@ -64,12 +64,6 @@
             "dataIndex": "isApprovalName"
         },
         {
-            "title": "归档日期--",
-            "dataIndex": "",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
             "title": "执行日期",
             "dataIndex": "executionTime",
             "type": "date",
@@ -82,12 +76,6 @@
             "format": "YYYY-MM-DD"
         },
         {
-            "title": "过期日期--",
-            "dataIndex": "",
-            "type": "date",
-            "format": "YYYY-MM-DD"
-        },
-        {
             "title": "备注",
             "dataIndex": "description"
         },
@@ -96,8 +84,8 @@
             "dataIndex": "sort"
         },
         {
-            "title": "起草时间--",
-            "dataIndex": "",
+            "title": "起草时间",
+            "dataIndex": "createTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
@@ -120,7 +108,8 @@
         "base": [
             {
                 "title": "文档编码",
-                "dataIndex": "code"
+                "dataIndex": "code",
+                "required": true
             },
             {
                 "title": "版本",
@@ -130,11 +119,31 @@
             {
                 "title": "文档状态",
                 "dataIndex": "docStatus",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "新建",
+                        "value": 1
+                    },
+                    {
+                        "label": "评审",
+                        "value": 2
+                    },
+                    {
+                        "label": "发布",
+                        "value": 3
+                    },
+                    {
+                        "label": "撤回",
+                        "value": 4
+                    }
+                ],
                 "disabled": true
             },
             {
                 "title": "文档名称",
-                "dataIndex": "name"
+                "dataIndex": "name",
+                "required": true
             },
             {
                 "title": "文件类型",
@@ -154,15 +163,295 @@
             },
             {
                 "title": "关联项目",
-                "dataIndex": "projectName"
+                "dataIndex": "projectName",
+                "type": "popTable",
+                "width": 1101,
+                "path": "/tower-market/projectInfo",
+                "rowKey": "id",
+                "readOnly": false,
+                "dependencies": true,
+                "value": "projectName",
+                "columns": [
+                    {
+                        "title": "项目名称",
+                        "dataIndex": "projectName",
+                        "width": 120
+                    },
+                    {
+                        "title": "项目编码",
+                        "dataIndex": "projectNumber"
+                    },
+                    {
+                        "title": "招标批次列",
+                        "dataIndex": "bidBatch"
+                    },
+                    {
+                        "title": "项目类型",
+                        "dataIndex": "projectType",
+                        "type": "select",
+                        "enum": [
+                            {
+                                "value": 0,
+                                "label": "公开招标"
+                            },
+                            {
+                                "value": 1,
+                                "label": "用户工程"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "标书购买截至日期",
+                        "dataIndex": "bidBuyEndTime"
+                    },
+                    {
+                        "title": "投标截至日期",
+                        "dataIndex": "biddingEndTime"
+                    },
+                    {
+                        "title": "项目阶段",
+                        "dataIndex": "currentProjectStage",
+                        "type": "select",
+                        "enum": [
+                            {
+                                "value": 0,
+                                "label": "准备投标"
+                            },
+                            {
+                                "value": 1,
+                                "label": "投标"
+                            },
+                            {
+                                "value": 2,
+                                "label": "合同签订"
+                            },
+                            {
+                                "value": 3,
+                                "label": "合同执行"
+                            },
+                            {
+                                "value": 4,
+                                "label": "项目结束"
+                            }
+                        ]
+                    },
+                    {
+                        "title": "项目负责人",
+                        "dataIndex": "projectLeader"
+                    },
+                    {
+                        "title": "创建时间",
+                        "dataIndex": "createTime"
+                    },
+                    {
+                        "title": "发布时间",
+                        "dataIndex": "releaseDate"
+                    },
+                    {
+                        "title": "说明",
+                        "dataIndex": "bidExplain"
+                    }
+                ],
+                "search": [
+                    {
+                        "dataIndex": "contractNumber",
+                        "title": "内部合同编号"
+                    },
+                    {
+                        "dataIndex": "saleOrderNumber",
+                        "title": "采购订单编号"
+                    },
+                    {
+                        "dataIndex": "contractName",
+                        "title": "合同工程名称"
+                    },
+                    {
+                        "dataIndex": "orderProjectName",
+                        "title": "订单工程名称"
+                    },
+                    {
+                        "dataIndex": "taskNumber",
+                        "title": "计划号"
+                    },
+                    {
+                        "title": "模糊",
+                        "dataIndex": "fuzzyQuery",
+                        "width": 200,
+                        "placeholder": "账号/手机号/姓名/工号/邮箱"
+                    }
+                ]
             },
             {
                 "title": "关联合同",
-                "dataIndex": "contractName"
+                "dataIndex": "contractName",
+                "type": "popTable",
+                "path": "/tower-market/contract",
+                "width": 1011,
+                "value": "contractName",
+                "dependencies": true,
+                "readOnly": false,
+                "columns": [
+                    {
+                        "title": "合同编号",
+                        "dataIndex": "contractNumber"
+                    },
+                    {
+                        "title": "采购订单编号",
+                        "dataIndex": "purchaseOrderNumber",
+                        "search": true
+                    },
+                    {
+                        "title": "内部合同编号",
+                        "dataIndex": "internalNumber",
+                        "search": true
+                    },
+                    {
+                        "title": "合同名称",
+                        "dataIndex": "contractName",
+                        "search": true
+                    },
+                    {
+                        "title": "销售类型",
+                        "dataIndex": "saleTypeName"
+                    },
+                    {
+                        "title": "业主单位",
+                        "dataIndex": "customerCompany",
+                        "search": true
+                    },
+                    {
+                        "title": "合同签订单位",
+                        "dataIndex": "signCustomerName"
+                    },
+                    {
+                        "title": "要求交货日期",
+                        "dataIndex": "deliveryTime"
+                    }
+                ]
             },
             {
                 "title": "关联销售计划",
-                "dataIndex": "taskNoticeName"
+                "dataIndex": "taskNoticeName",
+                "type": "popTable",
+                "path": "/tower-market/taskNotice",
+                "width": 1011,
+                "value": "planNumber",
+                "selectType": "checkbox",
+                "dependencies": true,
+                "readOnly": false,
+                "columns": [
+                    {
+                        "title": "任务单编号",
+                        "dataIndex": "taskNumber"
+                    },
+                    {
+                        "title": "计划号",
+                        "dataIndex": "planNumber"
+                    },
+                    {
+                        "title": "销售订单编号",
+                        "dataIndex": "saleOrderNumber"
+                    },
+                    {
+                        "title": "内部合同编号",
+                        "dataIndex": "internalNumber"
+                    },
+                    {
+                        "title": "订单工程名称",
+                        "dataIndex": "orderProjectName"
+                    },
+                    {
+                        "title": "塔型数",
+                        "dataIndex": "categoryNumber"
+                    },
+                    {
+                        "title": "基数",
+                        "dataIndex": "productNumber"
+                    },
+                    {
+                        "title": "总重(吨)",
+                        "dataIndex": "totalWeight"
+                    },
+                    {
+                        "title": "原材料标准",
+                        "dataIndex": "materialStandardName"
+                    },
+                    {
+                        "title": "原材料要求",
+                        "dataIndex": "materialDemand"
+                    },
+                    {
+                        "title": "客户交货日期",
+                        "dataIndex": "deliveryTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    },
+                    {
+                        "title": "计划交货日期",
+                        "dataIndex": "planDeliveryTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    },
+                    {
+                        "title": "加工场地",
+                        "dataIndex": "processingSite"
+                    },
+                    {
+                        "title": "制单人",
+                        "dataIndex": "createUserName"
+                    },
+                    {
+                        "title": "制单时间",
+                        "dataIndex": "createTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    },
+                    {
+                        "title": "下发日期",
+                        "dataIndex": "issueTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    },
+                    {
+                        "title": "审批状态",
+                        "dataIndex": "taskReviewStatus"
+                    },
+                    {
+                        "title": "审核完成日期",
+                        "dataIndex": "approvalTime",
+                        "type": "date",
+                        "format": "YYYY-MM-DD"
+                    }
+                ],
+                "search": [
+                    {
+                        "title": "计划号",
+                        "dataIndex": "planNumber"
+                    },
+                    {
+                        "dataIndex": "internalNumber",
+                        "title": "内部合同编号"
+                    },
+                    {
+                        "dataIndex": "orderProjectName",
+                        "title": "订单工程名称"
+                    },
+                    {
+                        "dataIndex": "startApprovalTime",
+                        "type": "date",
+                        "title": "审批完成日期"
+                    },
+                    {
+                        "dataIndex": "startCreateTime",
+                        "type": "date",
+                        "title": "制单日期"
+                    },
+                    {
+                        "dataIndex": "startIssueTime",
+                        "type": "date",
+                        "title": "下发日期"
+                    }
+                ]
             },
             {
                 "title": "起草人",
@@ -172,6 +461,7 @@
                 "path": "/tower-system/employee",
                 "rowKey": "userId",
                 "readOnly": true,
+                "required": true,
                 "dependencies": true,
                 "value": "name",
                 "columns": [
@@ -216,7 +506,8 @@
             {
                 "title": "接收人员",
                 "dataIndex": "receiveIds",
-                "type": "chooseUser"
+                "type": "chooseUser",
+                "required": true
             },
             {
                 "title": "使用部门",
@@ -228,6 +519,7 @@
                 "value": "name",
                 "dependencies": true,
                 "readOnly": true,
+                "required": true,
                 "selectType": "checkbox",
                 "columns": [
                     {
@@ -264,6 +556,7 @@
                 "title": "是否要审核",
                 "dataIndex": "isApproval",
                 "type": "select",
+                "required": true,
                 "enum": [
                     {
                         "label": "是",
@@ -294,6 +587,59 @@
                 "dataIndex": "description",
                 "type": "textarea"
             }
+        ],
+        "messageWarn": [
+            {
+                "title": "提醒时间",
+                "dataIndex": "reminderTime",
+                "type": "date",
+                "format": "YYYY-MM-DD"
+            },
+            {
+                "title": "提醒内容",
+                "dataIndex": "reminderContent",
+                "type": "text"
+            },
+            {
+                "title": "提醒类型",
+                "dataIndex": "reminderType",
+                "type": "addUser"
+            },
+            {
+                "title": "提醒人",
+                "dataIndex": "reminderNames",
+                "readOnly": true
+            },
+            {
+                "title": "是否签收",
+                "dataIndex": "isSign",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "是",
+                        "value": 1
+                    },
+                    {
+                        "label": "否",
+                        "value": 2
+                    }
+                ]
+            },
+            {
+                "title": "通知渠道",
+                "dataIndex": "noticeChannel",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "平台信息",
+                        "value": 1
+                    },
+                    {
+                        "label": "站内信息",
+                        "value": 2
+                    }
+                ]
+            }
         ]
     },
     "detail": {
@@ -310,6 +656,25 @@
             {
                 "title": "文档状态",
                 "dataIndex": "docStatus",
+                "type": "select",
+                "enum": [
+                    {
+                        "label": "新建",
+                        "value": 1
+                    },
+                    {
+                        "label": "评审",
+                        "value": 2
+                    },
+                    {
+                        "label": "发布",
+                        "value": 3
+                    },
+                    {
+                        "label": "撤回",
+                        "value": 4
+                    }
+                ],
                 "disabled": true
             },
             {
@@ -399,15 +764,15 @@
             "enum": [
                 {
                     "label": "未读",
-                    "value": 0
+                    "value": "0"
                 },
                 {
                     "label": "已读",
-                    "value": 1
+                    "value": "1"
                 },
                 {
                     "label": "签收",
-                    "value": 3
+                    "value": "3"
                 }
             ]
         },
@@ -419,14 +784,80 @@
         },
         {
             "title": "签收时间",
-            "dataIndex": "signInTime",
+            "dataIndex": "signTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
         {
             "title": "累计时长",
-            "dataIndex": ""
+            "dataIndex": "cumulativeTime"
         }
     ],
-    "examine": []
+    "examine": [],
+    "userSetting": {
+        "jobsMngt": [
+            {
+                "title": "岗位名称",
+                "dataIndex": "stationName"
+            }
+        ],
+        "staffMngt": [
+            {
+                "title": "账号",
+                "width": 100,
+                "dataIndex": "account"
+            },
+            {
+                "title": "手机号",
+                "width": 100,
+                "dataIndex": "phone"
+            },
+            {
+                "title": "角色",
+                "width": 150,
+                "dataIndex": "roleName"
+            },
+            {
+                "title": "姓名",
+                "width": 100,
+                "dataIndex": "name"
+            },
+            {
+                "title": "部门",
+                "width": 150,
+                "dataIndex": "deptName"
+            },
+            {
+                "title": "工号",
+                "dataIndex": "number",
+                "width": 120
+            },
+            {
+                "title": "员工类型",
+                "width": 100,
+                "dataIndex": "categoryName"
+            },
+            {
+                "title": "岗位",
+                "width": 150,
+                "dataIndex": "stationName"
+            },
+            {
+                "title": "邮箱",
+                "width": 150,
+                "dataIndex": "email"
+            },
+            {
+                "title": "状态",
+                "width": 50,
+                "dataIndex": "statusName"
+            }
+        ],
+        "roles": [
+            {
+                "title": "角色名称",
+                "dataIndex": "name"
+            }
+        ]
+    }
 }
