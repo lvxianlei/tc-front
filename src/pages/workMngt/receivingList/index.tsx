@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Spin } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Spin, Space } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { IntgSelect, SearchTable as Page } from '../../common'
 import { baseInfo } from "./receivingListData.json"
@@ -19,6 +19,7 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("");
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [confirmLoadingB, setConfirmLoadingB] = useState<boolean>(false);
+    const [togetherLoading, setTogetherLoadingB] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const editRefB = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
@@ -123,7 +124,18 @@ export default function Invoicing() {
             width={'90%'}
             confirmLoading={confirmLoading}
             title={type === "new" ? "创建" : "编辑"}
-            onOk={handleModalOk}
+            // onOk={handleModalOk}
+            footer={<Space direction="horizontal" size="small">
+            <Button onClick={() => {
+                setVisible(false)
+                editRef.current?.resetFields()
+            }}>取消</Button>
+            {type !== "new"&&<Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-storage/qualityInspection/synchronizeQualityInspection/${detailId}`)
+                message.success('同步成功！')
+            }} type="primary"  ghost>同步质检信息</Button>}
+             <Button onClick={handleModalOk} type="primary" loading={confirmLoading} ghost>确定</Button>
+            </Space>}
             onCancel={() => {
                 setVisible(false)
                 editRef.current?.resetFields()
@@ -137,6 +149,17 @@ export default function Invoicing() {
             confirmLoading={confirmLoadingB}
             title={ "编辑"}
             onOk={handleModalOkB}
+            footer={<Space direction="horizontal" size="small">
+            <Button onClick={() => {
+                setVisibleB(false)
+                editRefB.current?.resetFields()
+            }}>取消</Button>
+            <Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-storage/qualityInspection/synchronizeQualityInspection/${detailId}`)
+                message.success('同步成功！')
+            }} type="primary"  ghost>同步质检信息</Button>
+             <Button onClick={handleModalOkB} type="primary" loading={confirmLoading} ghost>确定</Button>
+            </Space>}
             onCancel={() => {
                 setVisibleB(false)
                 editRefB.current?.resetFields()

@@ -364,7 +364,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 message.error("请您选择入库明细!");
                 return false;
             }
-            let receiveBatchNumber = false;
+            // let receiveBatchNumber = false;
             let materialStandard = false;
             let structureTexture = false;
             let length = false;
@@ -374,9 +374,9 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
             let warrantyNumber = false;
             let width = false;
             for (let i = 0; i < popDataList.length; i += 1) {
-                if (!(popDataList[i].receiveBatchNumber)) {
-                    receiveBatchNumber = true;
-                }
+                // if (!(popDataList[i].receiveBatchNumber)) {
+                //     receiveBatchNumber = true;
+                // }
                 if (!(popDataList[i].materialStandard)) {
                     materialStandard = true;
                 }
@@ -402,10 +402,10 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                     width = true;
                 }
             }
-            if (receiveBatchNumber) {
-                message.error("请您填写收货批次！");
-                return false;
-            }
+            // if (receiveBatchNumber) {
+            //     message.error("请您填写收货批次！");
+            //     return false;
+            // }
             if (materialStandard) {
                 message.error("请您选择标准！");
                 return false;
@@ -750,8 +750,10 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                                 ...item,
                                 render: (value: number, records: any, key: number) => <Input
                                     defaultValue={value || undefined}
+                                    placeholder='自动生成'
                                     style={{width: '150px'}}
-                                    onBlur={(e: any) => handleABatchChange(e.target.value, key)}
+                                    disabled
+                                    // onBlur={(e: any) => handleABatchChange(e.target.value, key)}
                                  />
                             })
                         }
