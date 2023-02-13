@@ -134,7 +134,7 @@ export default function IngredientsList(): React.ReactNode {
 
     const [indeterminateStock, setIndeterminateStock] = useState(true);
     const [checkAllStock, setCheckAllStock] = useState(false);
-
+    const [disabledButton, setDisabledButton] = useState(false);
     // 当前选中的所有明细
     const [activeInfo, setActiveInfo] = useState<any>({});
 
@@ -168,6 +168,7 @@ export default function IngredientsList(): React.ReactNode {
                 break;
             case "generate":
                 const result = globallyStoredData?.sortChildren?.filter((v: any) => v.key === activeSort)[0].children;
+                setDisabledButton(true)
                 if (result.length !== 1) {
                     message.error("请您先进行方案对比!");
                     return false;
@@ -869,8 +870,10 @@ export default function IngredientsList(): React.ReactNode {
                 message.success("生成配料成功！");
                 history.go(-1);
             }
+            setDisabledButton(false)
             resole(result)
         } catch (error) {
+            setDisabledButton(false)
             reject(error)
         }
     }), { manual: true })
@@ -1203,6 +1206,7 @@ export default function IngredientsList(): React.ReactNode {
                     return <Button key={item.key}
                         type={item.type ? item.type : "primary"}
                         style={{ marginRight: 16 }}
+                        disabled={item.value==='保存'?disabledButton:false}
                         onClick={() => handleBtnClick(item)}
                     >{item.value}</Button>
                 })
