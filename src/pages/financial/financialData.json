@@ -450,7 +450,7 @@
         },
         {
             "title": "关联入库单",
-            "dataIndex": "receiptNumbers"
+            "dataIndex": "warehousingEntryNumbers"
         },
         {
             "title": "关联票据",
