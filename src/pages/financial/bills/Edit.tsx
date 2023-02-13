@@ -132,9 +132,9 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                     approval: true,
                     receiptDtos: popDataList,
                     invoiceDate: moment(baseData?.invoiceDate).format('YYYY-MM-DD'),
-                    receiptNumbers: baseData.receiptVos?baseData.receiptVos:baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
+                    receiptNumbers: baseData.receiptVos?baseData.receiptVos.records&&baseData.receiptVos.records.length>0?baseData.receiptVos.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :data?.receiptNumbers? data?.receiptNumbers:'',
+                    }).join(',') : data?.receiptNumbers:'',
                     fileIds: attchsRef.current?.getDataSource().map(item => item.id),
                     invoiceRelationType: 1, // 新加票据是否关联 写死传1
                 })
