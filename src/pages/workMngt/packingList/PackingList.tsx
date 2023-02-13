@@ -101,7 +101,7 @@ export default function List(): React.ReactNode {
                         cancelText="取消"
                         disabled={record.packageStatus === 2}
                     >
-                        <Button type='link'>完成打包</Button>
+                        <Button type='link' disabled={record.packageStatus === 2}>完成打包</Button>
                     </Popconfirm>
                 </>
 
