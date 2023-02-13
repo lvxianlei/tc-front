@@ -412,7 +412,7 @@
         },
         {
             "title": "开票日",
-            "dataIndex": "collectInvoiceDate",
+            "dataIndex": "invoiceDate",
             "type": "date",
             "format": "YYYY-MM-DD"
         },
