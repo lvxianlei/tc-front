@@ -59,7 +59,7 @@ export default function CreatePlan(props: any): JSX.Element {
         setPopDataList([...materialList.map((item: any) => {
             return ({
                 ...item,
-                furnaceBatch: item.furnaceBatchNumber,
+                furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
                 applyNum: item.num,
                 stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
                 stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
@@ -252,7 +252,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 materialPickingDetailDTOS: popDataList.map((item:any)=>{
                     return{
                         ...item,
-                        id: item?.ids?item.ids:item.id
+                        id: props.type === 'create'?'':item?.ids?item.ids:item.id
                     }
                 }),
                 ...baseInfo,
@@ -678,10 +678,10 @@ export default function CreatePlan(props: any): JSX.Element {
                         {
                             title: "操作",
                             fixed: "right",
-                            dataIndex: "opration",
+                            dataIndex: "operation",
                             render: (_: any, records: any) => <>
                                 {/* <Button type="link" style={{marginRight: 8}} onClick={() => handleCopy(records)} disabled={records.source === 1||(type===0&&records?.outStockItemStatus&&records?.outStockItemStatus!==0)}>复制</Button> */}
-                                <Button type="link" disabled={records.pickingStatus !==0} onClick={() => handleRemove(records.id)}>移除</Button>
+                                <Button type="link" disabled={records?.pickingStatus&&records.pickingStatus !==0} onClick={() => handleRemove(records.id)}>移除</Button>
                             </>
                         }]}
                     pagination={false}
@@ -726,6 +726,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             rawStockId: item.id,
                             applyNum: item.num,
                             stockNum: item.num,
+                            furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(5),
