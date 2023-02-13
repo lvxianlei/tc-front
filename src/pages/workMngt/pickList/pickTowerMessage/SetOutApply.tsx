@@ -38,6 +38,11 @@ export default function LoftingTowerApplication(): React.ReactNode {
             key: 'steelProductShape'
         },
         {
+            title: '计划号',
+            dataIndex: 'planNumber',
+            key: 'planNumber'
+        },
+        {
             title: '任务单号',
             dataIndex: 'taskNum',
             key: 'taskNum'
@@ -181,6 +186,9 @@ export default function LoftingTowerApplication(): React.ReactNode {
                     </Form.Item>
                     <Form.Item name="steelProductShape" label="塔型钢印号">
                         <Input placeholder="请输入" />
+                    </Form.Item>
+                    <Form.Item name="fuzzyMsg" label="查询">
+                        <Input placeholder="计划号" />
                     </Form.Item>
                     <Space direction="horizontal" className={styles.btnRight}>
                         <Button type="primary" htmlType="submit">搜索</Button>

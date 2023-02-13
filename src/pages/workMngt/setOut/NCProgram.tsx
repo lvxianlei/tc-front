@@ -111,7 +111,7 @@ export default function NCProgram(): React.ReactNode {
         extraOperation={<Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={() => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${params.id}`, "NC文件汇总", {}, true)}>下载</Button>
             <p>NC程序数 {detailData?.ncCount || 0}/{detailData?.structureCount || 0}</p>
-            <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
+            <Attachment multiple maxCount={99} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                 RequestUtil.post(`/tower-science/productNc/importProductNc`, {
                     fileVOList: [...dataInfo],
                     productCategoryId: params.id

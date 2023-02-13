@@ -1,11 +1,12 @@
 import React, { useRef, useState, } from "react"
-import { Button, message, Modal, Popconfirm, Image, Space, InputNumber, Form, Typography, } from 'antd'
+import { Button, message, Modal, Popconfirm, Image, Space, InputNumber, Form, Typography, Input, } from 'antd'
 import { Attachment, CommonTable, DetailContent } from '../../common'
 import { useHistory, useParams, } from "react-router-dom"
 import RequestUtil from "../../../utils/RequestUtil"
 import { downLoadFile } from "../../../utils";
 import { AttachmentRef, FileProps } from '../../common/Attachment';
 import useRequest from "@ahooksjs/use-request"
+import AuthUtil from "@utils/AuthUtil"
 
 interface EditableCellProps extends React.HTMLAttributes<HTMLElement> {
     editing: boolean;
@@ -51,7 +52,7 @@ export default function TemplateDetail() {
         children,
         ...restProps
     }) => {
-        const inputNode = inputType === 'number' ? <InputNumber style={{ width: '100%' }} min={1} precision={0} max={9999} /> : <p />;
+        const inputNode = inputType === 'number' ? <InputNumber style={{ width: '100%' }} min={1} precision={0} max={9999} /> : inputType === 'text' ? <Input maxLength={300} /> : <p />;
 
         return (
             <td {...restProps}>
@@ -78,7 +79,7 @@ export default function TemplateDetail() {
             title: '序号',
             dataIndex: 'entryNo',
             fixed: true,
-            align: 'center',
+            key: 'entryNo',
             render: (text: any, item: any, index: number) => {
                 return <span>{index + 1}</span>
             }
@@ -86,24 +87,24 @@ export default function TemplateDetail() {
         {
             title: '图纸名称',
             dataIndex: 'name',
-            align: 'center',
+            key: 'name',
         },
         {
             title: '接收时间',
             dataIndex: 'receiveTime',
-            align: 'center',
+            key: 'receiveTime',
         },
         {
             title: '上传时间',
             dataIndex: 'createTime',
-            align: 'center',
+            key: 'createTime',
         },
         {
             title: '图纸页数',
             dataIndex: 'pageNumber',
-            align: 'pageNumber',
             editable: true,
             type: 'number',
+            key: 'pageNumber',
             render: (text: any) => {
                 return <span>{text === null ? '-' : text}</span>
             }
@@ -111,12 +112,19 @@ export default function TemplateDetail() {
         {
             title: '上传人',
             dataIndex: 'createUserName',
-            align: 'center',
+            key: 'createUserName',
+        },
+        {
+            title: '备注',
+            dataIndex: 'description',
+            editable: true,
+            key: 'description',
+            type: 'text'
         },
         {
             title: '操作',
             dataIndex: 'operation',
-            align: 'center',
+            key: 'operation',
             render: (text: string, item: any) => {
                 const editable = isEditing(item);
                 return editable ? (
@@ -282,15 +290,15 @@ export default function TemplateDetail() {
         <>
             <DetailContent>
                 <Space size="small" style={{ marginBottom: "24px" }}>
-                    <Attachment isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
-                        let fileList = attchsRef.current.getDataSource().map((item, index) => {
+                    <Attachment multiple maxCount={99} isTable={false} ref={attchsRef} onDoneChange={(dataInfo: FileProps[]) => {
+                        let fileList = dataInfo.map((item, index) => {
                             return {
                                 name: item.originalName,
                                 fileId: item.id,
                                 templateId: params.id,
                                 productCategoryId: params.productCategoryId,
-                                createUser: sessionStorage.getItem('USER_ID') || '',
-                                createUserName: sessionStorage.getItem('USER_NAME') || '',
+                                createUser: AuthUtil.getUserInfo().user_id || '',
+                                createUserName: AuthUtil.getUserInfo().username || '',
                             }
                         })
                         if (!fileList.length) {
@@ -302,9 +310,7 @@ export default function TemplateDetail() {
                                 history.go(0)
                             }
                         })
-                    }}>
-                        <Button type="primary" ghost>上传</Button>
-                    </Attachment>
+                    }} />
                     <Button type="ghost" onClick={() => { history.go(-1) }}>返回</Button>
                 </Space>
                 <Form form={formRef} component={false} >

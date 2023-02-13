@@ -17,6 +17,13 @@ export default function ReleaseList(): React.ReactNode {
         resole(data?.records);
     }), {})
 
+
+    const { data: countNum } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`);
+        resole(data);
+    }), {})
+
+
     const { run: cancelRun } = useRequest<any>((params: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.delete(`/tower-science/loftingBatch/${params?.id}/${params?.description}`);
@@ -166,6 +173,12 @@ export default function ReleaseList(): React.ReactNode {
             // render:(text:number)=>{
             //     return text===1?'已下达':text===2?'已取消':'-'
             // }
+        },
+        {
+            key: 'productTypeName',
+            title: '产品类型',
+            width: 100,
+            dataIndex: 'productTypeName'
         },
         {
             key: 'updateStatusTime',
@@ -518,23 +531,23 @@ export default function ReleaseList(): React.ReactNode {
                 ]}
             />
             <Page
-                path="/tower-science/loftingBatch/count"
+                path="/tower-science/loftingBatch/batchResult"
                 columns={detailColumns}
                 onFilterSubmit={onFilterASubmit}
                 filterValue={aFilterValue}
                 requestData={{ size: 10 }}
                 exportPath="/tower-science/loftingBatch/batchResult"
-                sourceKey='loftingBatchResultVOS.records'
+                // sourceKey='loftingBatchResultVOS.records'
                 extraOperation={(data: any) =>
                     <><Row gutter={12}>
-                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{data?.totalPieceNumber}</span></Col>
-                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{data?.totalNumber}</span></Col>
-                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.totalWeight}</span></Col>
-                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.angleTotalWeight}</span></Col>
-                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.apertureWeight}</span></Col>
-                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{data?.perforateWeight}</span></Col>
-                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.cutPlateWeight}</span></Col>
-                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{data?.firePlateWeight}</span></Col>
+                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{countNum?.totalPieceNumber}</span></Col>
+                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{countNum?.totalNumber}</span></Col>
+                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.totalWeight}</span></Col>
+                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.angleTotalWeight}</span></Col>
+                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.apertureWeight}</span></Col>
+                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.perforateWeight}</span></Col>
+                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.cutPlateWeight}</span></Col>
+                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.firePlateWeight}</span></Col>
                     </Row>
                     </>
                 }
@@ -557,6 +570,18 @@ export default function ReleaseList(): React.ReactNode {
                         name: 'updateStatusTime',
                         label: '最新状态变更时间',
                         children: <DatePicker.RangePicker />
+                    },
+                    {
+                        name: 'productType',
+                        label: '产品类型',
+                        children: <Select style={{ width: "100px" }} defaultValue={''}>
+                            <Select.Option value={''} key={''}>全部</Select.Option>
+                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
                     },
                     {
                         name: 'issuedNumber',

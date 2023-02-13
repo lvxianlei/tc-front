@@ -27,6 +27,7 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [checkRowKeys, setCheckRowKeys] = useState<any[]>([]);
     const [checkRows, setCheckRows] = useState<any[]>([]);
+    const [msgData, setMsgData] = useState<any>();
     const { loading, data } = useRequest<IAllot>(() => new Promise(async (resole, reject) => {
         try {
             allotData = {
@@ -45,6 +46,7 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
             setTowerData(towerData?.records.filter((item: any) => {
                 return item.isSpecial === 1 && item.isSpecial !== null && item.specialStatus !== 2
             }))
+            setMsgData(allotData?.loftingProductStructureVOS || [])
             form.setFieldsValue({ ...allotData, loftingProductStructure: allotData?.loftingProductStructureVOS })
             resole(allotData)
         } catch (error) {
@@ -184,7 +186,10 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
                         form.validateFields()
                     }} disabled={data?.specialStatus === 2} size="small" /> */}
 
-                    <InputNumber min={0} max={99} size="small" />
+                    <InputNumber min={0} max={99} size="small" onChange={() => {
+                        const data = form?.getFieldsValue(true)?.loftingProductStructure;
+                        setMsgData([...data])
+                    }} />
                 </Form.Item>
             )
         },
@@ -228,7 +233,11 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
                 <CommonTable
                     columns={columns}
                     pagination={false}
-                    dataSource={data?.loftingProductStructureVOS} />
+                    onRow={(record: Record<string, any>) => ({
+                        className: record.basicsPartNum == 0 ?
+                            undefined : styles.row_color_1
+                    })}
+                    dataSource={msgData || []} />
             </Form>
         </DetailContent>
         <Modal

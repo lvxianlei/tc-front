@@ -223,7 +223,7 @@ export default function List(): React.ReactNode {
         {
             name: 'fuzzyMsg',
             label: '模糊查询项',
-            children: <Input style={{ width: '200px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称" />
+            children: <Input style={{ width: '200px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称/说明" />
         }
     ]
 
