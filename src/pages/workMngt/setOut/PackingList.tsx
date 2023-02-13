@@ -302,11 +302,11 @@ export default function PackingList(): React.ReactNode {
                         setLoading1(false);
                     })
                 }}
-                disabled={location.state?.status === 4 || !isShow}
+                disabled={location.state?.status === 1 || !isShow}
                 okText="确认"
                 cancelText="取消"
             >
-                <Button loading={loading1} disabled={location.state?.status === 4 || !isShow} type="primary">完成</Button>
+                <Button loading={loading1} disabled={location.state?.status === 1 || !isShow} type="primary">完成</Button>
             </Popconfirm>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>
