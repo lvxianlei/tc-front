@@ -252,7 +252,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 materialPickingDetailDTOS: popDataList.map((item:any)=>{
                     return{
                         ...item,
-                        id: item?.ids?item.ids:item.id
+                        id: props.type === 'create'?'':item?.ids?item.ids:item.id
                     }
                 }),
                 ...baseInfo,

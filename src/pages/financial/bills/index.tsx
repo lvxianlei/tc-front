@@ -177,7 +177,7 @@ export default function Invoice() {
                                 setType("edit")
                                 setDetailedId(record.id)
                                 setVisible(true)
-                            }}>编辑</Button>
+                            }} disabled={record.invoiceStatus===4}>编辑</Button>
                             <Button
                                 type="link"
                                 className="btn-operation-link"

@@ -656,14 +656,15 @@ export default function CreatePlan(props: any): JSX.Element {
                                     width: 160,
                                     render: (value: string, records: any, key: number) => {return <Form.Item 
                                         name={['list', key, 'receiveBatchNumber']}
-                                        rules={[{
-                                            validator: async (rule: any, value: any, callback: (error?: string) => void) => {
-                                                const resData = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`);
-                                                if(!resData)
-                                                return Promise.reject('收货标识码已存在');
-                                                else return Promise.resolve('收货标识码可用');
-                                            }
-                                        }]}>
+                                        // rules={[{
+                                        //     validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                        //         const resData = await RequestUtil.get(`/tower-storage/materialStock/checkReceiveBatchNumber?receiveBatchNumber=${value}`);
+                                        //         if(!resData)
+                                        //         return Promise.reject('收货标识码已存在');
+                                        //         else return Promise.resolve('收货标识码可用');
+                                        //     }
+                                        // }]}
+                                        >
                                             <Input defaultValue={value || undefined} placeholder={'自动生成'} disabled   onBlur={(e:any)=> handleBatchChange(e.target.value,records.id)} maxLength={30} />
                                         </Form.Item>
                                 }})
