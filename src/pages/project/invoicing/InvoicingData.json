@@ -285,11 +285,6 @@
             ]
         },
         {
-            "title": "合同ID",
-            "dataIndex": "contractId",
-            "hide": true
-        },
-        {
             "title": "合同单位",
             "dataIndex": "contractCompany",
             "disabled": true
@@ -705,6 +700,7 @@
             "title": "发票类型",
             "dataIndex": "ticketType",
             "type": "select",
+            "disabled": true,
             "enum": [
                 {
                     "value": 1,
