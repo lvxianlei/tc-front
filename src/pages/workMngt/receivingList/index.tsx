@@ -19,6 +19,7 @@ export default function Invoicing() {
     const [detailId, setDetailId] = useState<string>("");
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [confirmLoadingB, setConfirmLoadingB] = useState<boolean>(false);
+    const [togetherLoading, setTogetherLoadingB] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<object>({});
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const editRefB = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
@@ -129,9 +130,10 @@ export default function Invoicing() {
                 setVisible(false)
                 editRef.current?.resetFields()
             }}>取消</Button>
-            {type !== "new"&&<Button onClick={()=>{
-
-            }} type="primary" loading={confirmLoading} ghost>同步质检信息</Button>}
+            {type !== "new"&&<Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-storage/qualityInspection/synchronizeQualityInspection/${detailId}`)
+                message.success('同步成功！')
+            }} type="primary"  ghost>同步质检信息</Button>}
              <Button onClick={handleModalOk} type="primary" loading={confirmLoading} ghost>确定</Button>
             </Space>}
             onCancel={() => {
@@ -152,9 +154,10 @@ export default function Invoicing() {
                 setVisibleB(false)
                 editRefB.current?.resetFields()
             }}>取消</Button>
-            <Button onClick={()=>{
-
-            }} type="primary" loading={confirmLoading} ghost>同步质检信息</Button>
+            <Button onClick={async ()=>{
+                await RequestUtil.post(`/tower-storage/qualityInspection/synchronizeQualityInspection/${detailId}`)
+                message.success('同步成功！')
+            }} type="primary"  ghost>同步质检信息</Button>
              <Button onClick={handleModalOkB} type="primary" loading={confirmLoading} ghost>确定</Button>
             </Space>}
             onCancel={() => {
