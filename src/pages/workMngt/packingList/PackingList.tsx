@@ -159,11 +159,11 @@ export default function List(): React.ReactNode {
             "enum": [
                 {
                     "label": "未完成",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "label": "已完成",
-                    "value": "1"
+                    "value": 1
                 }
             ],
             "width": 120,
