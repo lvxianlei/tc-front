@@ -1351,49 +1351,49 @@
       "path": "/buyAuxiliaryMaterial/purchasePlan",
       "module": "./pages/buyAuxiliaryMaterial/purchasePlan",
       "exact": true,
-      "authority": "tc_erp_sw_purchaseTask_material_list"
+      "authority": "tc_erp_sw_auxiliary_purchase_plan_list"
     },
     { //辅材采购管理-辅材采购计划-采购清单
       "name": "辅材采购清单",
       "path": "/buyAuxiliaryMaterial/purchasePlan/:id",
       "module": "./pages/buyAuxiliaryMaterialList/buyAuxiliaryMaterialList",
       "exact": true,
-      "authority": "tc_erp_sw_purchaseTask_material_list"
+      "authority": "tc_erp_sw_auxiliary_purchase_plan_purchse_list"
     },
     { //辅材采购管理-辅材采购汇总
       "name": "辅材采购计划",
       "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "module": "./pages/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "exact": true,
-      "authority": "tc_erp_sw_purchaseTask_material_list"
+      "authority": "tc_erp_sw_auxiliary_purchase_collect_plan_list"
     },
     { //辅材采购管理-辅材采购汇总-采购清单
       "name": "辅材采购清单",
       "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial/:id",
       "module": "./pages/buyAuxiliaryMaterialList/buyAuxiliaryMaterialList",
       "exact": true,
-      "authority": "tc_erp_sw_purchaseTask_material_list"
+      "authority": "tc_erp_sw_auxiliary_purchase_collect_plan_purchse_list"
     },
     { //辅材采购管理-辅材询比价
       "name": "辅材询比价",
       "path": "/buyAuxiliaryMaterial/enquiryCompare",
       "module": "./pages/auxiliaryMaterialEnquiryCompare/enquiryCompare",
       "exact": true,
-      "authority": "tc_erp_sw_contract_comparison_list"
+      "authority": "tc_erp_sw_auxiliary_comparison_price_list"
     },
     { //辅材采购管理-询比价-询价信息
       "name": "询价信息",
       "path": "/buyAuxiliaryMaterial/enquiryCompare/:id/:approvalStatus",
       "module": "./pages/auxiliaryMaterialEnquiryCompare/enquiryCompareInformation",
       "exact": true,
-      "authority": "tc_erp_sw_contract_comparison_details"
+      "authority": "tc_erp_sw_auxiliary_comparison_price_detail"
     },
     { //辅材采购管理-辅材合同管理
       "name": "辅材合同管理",
       "path": "/buyAuxiliaryMaterial/ContractList",
       "module": "./pages/auxiliaryMaterialContract/ContractList",
       "exact": true,
-      "authority": "tc_erp_sw_contract_material_list"
+      "authority": "tc_erp_sw_auxiliary_contract_list"
     },
     { //采购任务-原材料-用料清单
       "name": "用料清单",

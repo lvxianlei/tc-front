@@ -194,10 +194,7 @@ export default function AnnouncementNew(): React.ReactNode {
                                         }} selectedKey={[]} planNumber={form.getFieldsValue(true)?.planNumber} />
                                     } disabled />
                                 </Form.Item>
-                                <Form.Item name="pieceCode" label="件号" rules={[{
-                                    "required": true,
-                                    "message": "请选择件号"
-                                }]}>
+                                <Form.Item name="pieceCode" label="件号">
                                     <Select style={{ width: '100%' }} mode='multiple' onChange={(value: any) => {
                                         if (value.length > 0) {
                                             const num = value.map((item: string) => item.split(',')[2])

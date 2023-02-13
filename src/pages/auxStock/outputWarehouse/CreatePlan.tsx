@@ -169,8 +169,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     value: result?.applyStaffName
                 },
                 dept:{
-                    id:result?.pickingTeamId,
-                    value:result?.pickingTeamName
+                    id:result?.pickingTeamId||'',
+                    value:result?.pickingTeamName||''
                 },
                 pickingTime: result?.createTime
             })
@@ -224,20 +224,25 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         resetFields
     }), [ref, handleCreateClick, resetFields])
 
+    useEffect(() => {
+        if (props.visible) {
+            addCollectionForm.setFieldsValue({
+                type:0,
+                pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
+                dept:{
+                    id:'',
+                    value:''
+                },
+            })
+        }
+    }, [props.visible])
     return (<>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo
                 form={addCollectionForm}
                 edit
-                dataSource={data || {
-                    type:0,
-                    pickingTime: moment(new Date()).format("YYYY-MM-DD HH:mm:ss"),
-                    dept:{
-                        id:'',
-                        value:''
-                    }
-                }}
+                dataSource={data||{}}
                 col={2}
                 classStyle={styles.baseInfo}
                 columns={baseInfoColumn.map((item: any) => {
