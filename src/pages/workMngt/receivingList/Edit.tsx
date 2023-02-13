@@ -201,6 +201,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const editData = editForm.getFieldsValue(true).submit
             if(editData.filter((item:any)=>{return item?.meteringMode!==baseFormData?.meteringMode}).length>0){
                 message.error('明细与基本信息中的计量方式不一致，不可确定！')
+                console.log(editData)
                 throw 'error'
             }else{
                 const result = {

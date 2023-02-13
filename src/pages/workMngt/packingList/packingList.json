@@ -1,0 +1,209 @@
+{
+    "columns": [
+        {
+            "key": "simplifyName",
+            "title": "奖励简称",
+            "width": 120,
+            "dataIndex": "simplifyName"
+        },
+        {
+            "key": "entry",
+            "title": "奖励条目",
+            "dataIndex": "entry",
+            "width": 200
+        },
+        {
+            "key": "amount",
+            "title": "奖励金额",
+            "dataIndex": "amount",
+            "width": 80
+        },
+        {
+            "key": "rewardNum",
+            "title": "奖励人数",
+            "dataIndex": "rewardNum",
+            "width": 50
+        },
+        {
+            "key": "rewardUserName",
+            "title": "符合奖励人员",
+            "dataIndex": "rewardUserName",
+            "width": 120
+        },
+        {
+            "key": "totalAmount",
+            "title": "奖励金额-总",
+            "dataIndex": "totalAmount",
+            "width": 120
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "dataIndex": "description",
+            "width": 120
+        }
+    ],
+    "detailColumns": [
+        {
+            "key": "userName",
+            "title": "姓名",
+            "width": 80,
+            "dataIndex": "userName"
+        },
+        {
+            "key": "projectName",
+            "title": "工程名称",
+            "width": 120,
+            "dataIndex": "projectName"
+        },
+        {
+            "key": "planNumber",
+            "title": "计划号",
+            "dataIndex": "planNumber",
+            "width": 80
+        },
+        {
+            "key": "productTypeName",
+            "title": "产品类型",
+            "dataIndex": "productTypeName",
+            "width": 80
+        },
+        {
+            "key": "voltageGradeName",
+            "title": "电压等级",
+            "dataIndex": "voltageGradeName",
+            "width": 120
+        },
+        {
+            "key": "productCategoryName",
+            "title": "塔型",
+            "dataIndex": "productCategoryName",
+            "width": 120
+        },
+        {
+            "key": "segmentType",
+            "title": "段类型",
+            "dataIndex": "segmentType",
+            "width": 120
+        },
+        {
+            "key": "partNum",
+            "title": "件号数",
+            "dataIndex": "partNum",
+            "width": 120
+        },
+        {
+            "key": "accuracy",
+            "title": "正确率%",
+            "dataIndex": "accuracy",
+            "width": 120
+        }
+    ],
+    "itemColumns": [
+        {
+            "key": "entry",
+            "title": "奖励条目",
+            "width": 120,
+            "dataIndex": "entry"
+        },
+        {
+            "key": "parameter1",
+            "title": "参数1",
+            "dataIndex": "parameter1",
+            "width": 80
+        },
+        {
+            "key": "parameter2",
+            "title": "参数2",
+            "dataIndex": "parameter2",
+            "width": 80
+        },
+        {
+            "key": "parameter3",
+            "title": "参数3",
+            "dataIndex": "parameter3",
+            "width": 120
+        },
+        {
+            "key": "parameter4",
+            "title": "参数4",
+            "dataIndex": "parameter4",
+            "width": 120
+        },
+        {
+            "key": "parameter5",
+            "title": "参数5",
+            "dataIndex": "parameter5",
+            "width": 120
+        },
+        {
+            "key": "parameter6",
+            "title": "参数6",
+            "dataIndex": "parameter6",
+            "width": 120
+        },
+        {
+            "key": "parameter7",
+            "title": "参数7",
+            "dataIndex": "parameter7",
+            "width": 120
+        },
+        {
+            "key": "parameter8",
+            "title": "参数8",
+            "dataIndex": "parameter8",
+            "width": 120
+        },
+        {
+            "key": "parameter9",
+            "title": "参数9",
+            "dataIndex": "parameter9",
+            "width": 120
+        },
+        {
+            "key": "parameter10",
+            "title": "参数10",
+            "dataIndex": "parameter10",
+            "width": 120
+        },
+        {
+            "key": "parameter11",
+            "title": "参数11",
+            "dataIndex": "parameter11",
+            "width": 120
+        },
+        {
+            "key": "parameter12",
+            "title": "参数12",
+            "dataIndex": "parameter12",
+            "width": 120
+        },
+        {
+            "key": "amount",
+            "title": "奖励金额",
+            "dataIndex": "amount",
+            "width": 120,
+            "type": "number"
+        }
+    ],
+    "otherColumns": [
+        {
+            "key": "entry",
+            "title": "配置条目",
+            "width": 120,
+            "dataIndex": "entry"
+        },
+        {
+            "key": "parameterName1",
+            "title": "参数1",
+            "dataIndex": "parameterName1",
+            "width": 80
+        },
+        {
+            "key": "parameter2",
+            "title": "参数2",
+            "dataIndex": "parameter2",
+            "width": 80
+        }
+    ]
+}

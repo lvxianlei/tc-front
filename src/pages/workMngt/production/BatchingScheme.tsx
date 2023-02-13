@@ -70,7 +70,18 @@ export default function BatchingScheme(): React.ReactNode {
                                 )
                             }
                         },
-                        ...MaterialSummary,
+                        ...MaterialSummary.map((item:any)=>{
+                            if (["alreadyPickingNum"].includes(item.dataIndex)) {
+                                return ({
+                                    ...item,
+                                    width: 160,
+                                    render: (value: string, records: any, key: number) => { 
+                                        return   <div className={Number(value)<Number(records?.num)?'':Number(value)===Number(records?.num)?'green':'red'}>{value}</div>
+                                       
+                                }})
+                            }
+                            return item;
+                        }),
                     ]} dataSource={(PurchaseBatchingSchemeData as any) || []}  scroll={{ y: 400 }}
                 />
                 <DetailTitle key={"detail"} title="配料方案" />

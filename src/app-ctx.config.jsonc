@@ -416,6 +416,11 @@
                         "authority": "tc_erp_sw_stock_material_receive"
                     },
                     {
+                        "label": "原材料领料单",
+                        "path": "/stock/pick",
+                        "authority": "tc_erp_sw_stock_material_out"
+                    },
+                    {
                         "label": "原材料入库",
                         "path": "/stock/rawMaterialWarehousing",
                         "authority": "tc_erp_sw_stock_material_in"
@@ -606,6 +611,11 @@
                         "label": "组焊列表",
                         "path": "/workMngt/assemblyWeldingList",
                         "authority": "tc_erp_rd_work_weld"
+                    },
+                    {
+                        "label": "包装列表",
+                        "path": "/workMngt/packingList",
+                        "authority": "tc_erp_rd_work_sample"
                     },
                     {
                         "label": "小样图列表",

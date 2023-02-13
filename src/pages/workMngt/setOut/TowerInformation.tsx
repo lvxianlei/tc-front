@@ -43,10 +43,19 @@ export default function TowerInformation(): React.ReactNode {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${productType}`);
         resole(result?.records || [])
     }), { manual: true })
+    
+    const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
+        const result: any = await RequestUtil.post(`/tower-science/productSegment/structure/statistics`, {
+            ...filter,
+            productCategoryId: params.id,
+            segmentIds: ids
+        });
+        resole(result)
+    }), {})
 
     const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
+            const result = await RequestUtil.get<any>(`/tower-system/employee?size=10000`);
             const user = await RequestUtil.get<any>(`/tower-science/productCategory/${params.id}`);
             let loftingUserList: any[] = [];
             let loftingMutualReviewList: any[] = [];
@@ -188,7 +197,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.loftingUserList?.map((item: any, index: number) =>
+                            optionalList?.loftingUserList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -211,7 +220,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样互审" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.loftingMutualReviewList?.map((item: any, index: number) =>
+                            optionalList?.loftingMutualReviewList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -234,7 +243,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择校核人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.programmingLeaderList?.map((item: any, index: number) =>
+                            optionalList?.programmingLeaderList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -517,6 +526,7 @@ export default function TowerInformation(): React.ReactNode {
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        getCount(filterValue, selectedRowKeys)
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
@@ -612,6 +622,7 @@ export default function TowerInformation(): React.ReactNode {
                 value.personnel = value.personnel?.value;
             }
             setFilterValue(value)
+            getCount(value, selectedKeys)
             setRefresh(!refresh);
         }}>
             <Form.Item label='最新状态变更时间' name='updateStatusTime'>
@@ -635,6 +646,17 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
+        <Space size="large">
+            <span>塔型：{detail?.productCategoryName}</span>
+            <span>计划号：{detail?.planNumber}</span>
+            <span>模式：{count?.patternName}</span>
+            <span>件号总数：{count?.structureCodeNum}</span>
+            <span>总件数：{count?.structureNum}</span>
+            <span>总重kg：{count?.totalWeight}</span>
+            <span>所选件号总数：{count?.structureCodePitchNum}</span>
+            <span>所选总件数：{count?.structurePitchNum}</span>
+            <span>所选总重kg：{count?.pitchTotalWeight}</span>
+        </Space>
         <Form form={editForm} className={styles.descripForm}>
             <Page
                 path={`/tower-science/productSegment`}
@@ -645,8 +667,6 @@ export default function TowerInformation(): React.ReactNode {
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={
                     <>
-                        <span>塔型：<span>{detail?.productCategoryName}</span></span>
-                        <span>计划号：<span>{detail?.planNumber}</span></span>
                         <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>

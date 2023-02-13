@@ -1626,6 +1626,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_bolt_check_detailed"
     },
+    { // 工作管理-包装列表
+      "name": "包装列表",
+      "path": "/workMngt/packingList",
+      "module": "./pages/workMngt/packingList/PackingList",
+      "exact": true,
+      "authority": "tc_erp_rd_work_sample_list"
+    },
     { // 工作管理-小样图列表
       "name": "小样图列表",
       "path": "/workMngt/sampleDrawList",
@@ -2544,24 +2551,17 @@
     { // 部门管理
       "name": "部门管理",
       "path": "/dept/deptMngt",
-      "module": "./pages/dept/dept/DepartmentMngt",
+      "module": "./pages/dept/dept/index",
       "exact": true,
       "authority": "tc_erp_sys_dept_list"
     },
     { // 部门修改
-      "name": "部门修改",
+      "name": "配置",
       "path": "/dept/deptMngt/setting/:id",
-      "module": "./pages/dept/dept/DepartmentSetting",
+      "module": "./pages/dept/dept/edit",
       "exact": true,
       "authority": "tc_erp_sys_dept_edit"
     },
-    // { // 部门新增
-    //   "name": "部门新增",
-    //   "path": "/dept/deptMngt/new/:id",
-    //   "module": "./pages/dept/dept/DepartmentNew",
-    //   "exact": true,
-    //   "authority": "auth_section"
-    // },
     { // 岗位管理
       "name": "岗位管理",
       "path": "/dept/jobsMngt",
@@ -3492,6 +3492,20 @@
       "module": "./pages/stock/rawMaterialAllocation/index",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_list"
+    },
+    { // 库存管理-原材料领料单
+      "name": "原材料领料单",
+      "path": "/stock/pick",
+      "module": "./pages/stock/rawMaterialPick/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
+    { // 库存管理-原材料领料单-详情
+      "name": "原材料领料单详情",
+      "path": "/stock/pick/detail/:id/:approval",
+      "module": "./pages/stock/rawMaterialPick/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_info"
     }
   ]
 }
