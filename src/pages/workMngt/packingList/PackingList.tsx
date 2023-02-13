@@ -176,7 +176,7 @@ export default function List(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.productCategory}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.productCategory}/packingList/${record.id}`, state: { status: record?.packageStatus } }}>
                         <Button type="link">包装清单</Button>
                     </Link>
                 </>
