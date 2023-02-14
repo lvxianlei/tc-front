@@ -120,7 +120,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):[],
+                    })):baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
                     isApproval:0,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
@@ -161,7 +161,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):[],
+                    })):baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
                     isApproval:1,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
