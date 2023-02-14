@@ -16,7 +16,7 @@
             "width": 120
         },
         {
-            "title": "收货批次",
+            "title": "收货标识码",
             "dataIndex": "receiveBatchNumber",
             "width": 120
         },

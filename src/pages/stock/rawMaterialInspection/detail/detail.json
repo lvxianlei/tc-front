@@ -17,7 +17,7 @@
         },
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "dataIndex": "realReceiveBatchNumber",
             "width": 80
         },
         {
@@ -159,7 +159,7 @@
         },
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber",
+            "dataIndex": "realReceiveBatchNumber",
             "width": 80
         },
         {
