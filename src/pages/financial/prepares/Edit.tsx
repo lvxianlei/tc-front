@@ -111,6 +111,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         try {
             if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
                 const baseData = await baseForm.validateFields()
+                console.log(baseData.receiptNumbers)
                 await saveRun({
                     ...baseData,
                     pleasePayOrganization: perData?.dept,
@@ -120,7 +121,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
                     isApproval:0,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
@@ -129,10 +130,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.receiptNumbers,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
                     warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
-                    }).join(',') :baseData.warehousingEntryIds,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
                 })
                 message.success("保存成功...")
                 resolve(true)
@@ -161,7 +162,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
                     isApproval:1,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
@@ -170,10 +171,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.receiptNumbers,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
                     warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
-                    }).join(',') :baseData.warehousingEntryIds,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
                 })
                 message.success("审批发起成功...")
                 resove(true)
