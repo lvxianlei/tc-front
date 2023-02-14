@@ -127,6 +127,11 @@
         },
         {
             "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber",
+            "width":100
+        },
+        {
+            "title": "收货标识码",
             "dataIndex": "receiveBatchNumber",
             "width":100
         },

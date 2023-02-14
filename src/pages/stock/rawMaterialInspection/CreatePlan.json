@@ -85,7 +85,7 @@
     "material": [
         {
             "title": "收货批次",
-            "dataIndex": "receiveBatchNumber"
+            "dataIndex": "realReceiveBatchNumber"
         },
         {
             "title": "品名",
