@@ -65,13 +65,13 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         billNumber: item.billNumber
                     })) || [],
                 } : "",
-                receiptNumbers: result.receiveNumberList&&result.receiveNumberList.length>0? {
-                    value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
-                    records: result.receiveNumberList?.map((item: any) => ({
-                        id: item.id,
-                        warehousingEntryNumber: item.receiveNumber
+                receiptNumbers: {
+                    value: result.warehousingEntryNumbers,
+                    records: result.warehousingEntryIds!==null&&result.warehousingEntryIds.split(',')?.map((item: any,index: number) => ({
+                        id: item,
+                        warehousingEntryNumber: result.warehousingEntryNumbers.split(',')[index]
                     })) || []
-                } : result?.receiptNumbers
+                }
             })
             console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
@@ -122,13 +122,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:0,
+                    receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
-                    receiptNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :data?.receiptNumbers? data?.receiptNumbers:'',
+                    }).join(',') :baseData.warehousingEntryNumbers,
+                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.id
+                    }).join(',') :baseData.warehousingEntryIds,
                 })
                 message.success("保存成功...")
                 resolve(true)
@@ -159,13 +163,17 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         warehousingEntryNumber: item.warehousingEntryNumber
                     })):[],
                     isApproval:1,
+                    receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
-                    receiptNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :data?.receiptNumbers? data?.receiptNumbers:'',
+                    }).join(',') :baseData.warehousingEntryNumbers,
+                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.id
+                    }).join(',') :baseData.warehousingEntryIds,
                 })
                 message.success("审批发起成功...")
                 resove(true)
@@ -218,7 +226,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             setBaseInfoColumn(result.slice(0))
             baseForm.setFieldsValue({
                 pleasePayAmount,
-                receiptNumbers: fields.relatednotes.records.map((item: any) => item.receiptNumbers).join(","),
+                receiptNumbers: fields.relatednotes.records.map((item: any) => item.receiptNumbers).join(",")
             })
         }
         if (fields.supplierName) {
