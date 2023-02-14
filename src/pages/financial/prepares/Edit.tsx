@@ -129,7 +129,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.warehousingEntryNumbers,
+                    }).join(',') :baseData.receiptNumbers,
                     warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
                     }).join(',') :baseData.warehousingEntryIds,
@@ -170,7 +170,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
                     warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.warehousingEntryNumbers,
+                    }).join(',') :baseData.receiptNumbers,
                     warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
                     }).join(',') :baseData.warehousingEntryIds,
