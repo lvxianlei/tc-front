@@ -29,6 +29,7 @@ export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
     const [visible, setVisible] = useState<boolean>(false);
     const [rowId, setRowId] = useState<string>()
+    const [date, setDate] = useState<any>();
     const halfYear = (new Date().getMonth() > 6) ? `${new Date().getFullYear()}-07,${new Date().getFullYear()}-12` : `${new Date().getFullYear()}-01,${new Date().getFullYear()}-06`;
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
@@ -144,7 +145,6 @@ export default function List(): React.ReactNode {
                     }
                 )
             });
-            console.log(data)
             setDetailData(data)
             resole(result)
         } catch (error) {
@@ -185,7 +185,7 @@ export default function List(): React.ReactNode {
     }
 
     const onRowChange = async (record: Record<string, any>) => {
-        detailRun(record.loftingUser)
+        detailRun(record.loftingUser, date)
         setRowId(record?.loftingUser)
     }
 
@@ -237,6 +237,7 @@ export default function List(): React.ReactNode {
                                         <Row>年份选择</Row>
                                         <Row>
                                             <Select size="small" placeholder="请选择" style={{ width: "150px" }} defaultValue={halfYear} onChange={(e) => {
+                                                setDate(e)
                                                 detailRun(rowId, e)
                                             }}>
                                                 {

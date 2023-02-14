@@ -1,17 +1,17 @@
-import React, {useState} from "react"
-import {Button, message, Radio, Spin} from 'antd'
+import React, { useState } from "react"
+import { Button, message, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead,saleInvoiceOverView,invoicingStatistics } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import {currencyTypeOptions, productTypeOptions} from "../../../configuration/DictionaryOptions"
+import { currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
     const productType: any = productTypeOptions
     const [tab, setTab] = useState<string>("a")
-    const  handleRadioChange = (e:any)=>{
+    const handleRadioChange = (e: any) => {
         setTab(e.target.value)
     }
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -65,9 +65,8 @@ export default function Edit() {
                     })
                 }
                 // 开票货币类型
-                if(item.dataIndex === "currencyType") {
-                    console.log(currencyTypeOptions)
-                    return{
+                if (item.dataIndex === "currencyType") {
+                    return {
                         ...item,
                         enum: currencyTypeOptions?.map((product: any) => ({
                             value: product.id,
@@ -87,15 +86,15 @@ export default function Edit() {
             <DetailTitle title="发票信息" />
             <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
 
-            <Radio.Group value={tab} onChange={handleRadioChange} style={{margin: "12px 0"}}>
+            <Radio.Group value={tab} onChange={handleRadioChange} style={{ margin: "12px 0" }}>
                 <Radio.Button value="a">开票明细</Radio.Button>
                 <Radio.Button value="b">累计开票</Radio.Button>
                 <Radio.Button value="c">销售发票</Radio.Button>
             </Radio.Group>
             {
-                tab === "a" ?  <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos || []} /> :
+                tab === "a" ? <CommonTable columns={billingHeadOverView} dataSource={data?.invoicingDetailVos || []} /> :
                     tab === "b" ? <CommonTable columns={invoicingStatistics} dataSource={data?.invoicingStatisticsVOS || []} /> :
-                tab === "c" ? <CommonTable columns={saleInvoiceOverView} dataSource={data?.invoicingSaleVOS || []} /> : <></>
+                        tab === "c" ? <CommonTable columns={saleInvoiceOverView} dataSource={data?.invoicingSaleVOS || []} /> : <></>
             }
 
 

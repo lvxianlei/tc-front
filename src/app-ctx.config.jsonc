@@ -369,27 +369,27 @@
                 "icon": "gongying-caigourenwu_caigourenwu",
                 "path": "/buyAuxiliaryMaterial",
                 "appName": "SW",
-                "authority": "tc_erp_sw_purchaseTask",
+                "authority": "tc_erp_sw_auxiliary_purchase",
                 "items": [
                     {
                         "label": "辅材采购计划",
                         "path": "/buyAuxiliaryMaterial/purchasePlan",
-                        "authority": "tc_erp_sw_purchaseTask_material"
+                        "authority": "tc_erp_sw_auxiliary_purchase_plan"
                     },
                     {
                         "label": "辅材采购汇总",
                         "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
-                        "authority": "tc_erp_sw_purchaseTask_material"
+                        "authority": "tc_erp_sw_auxiliary_purchase_collect_plan"
                     },
                     {
                         "label": "辅材询比价",
                         "path": "/buyAuxiliaryMaterial/enquiryCompare",
-                        "authority": "tc_erp_sw_purchaseTask_material"
+                        "authority": "tc_erp_sw_auxiliary_comparison_price"
                     },
                     {
                         "label": "辅材合同管理",
                         "path": "/buyAuxiliaryMaterial/ContractList",
-                        "authority": "tc_erp_sw_purchaseTask_material"
+                        "authority": "tc_erp_sw_auxiliary_contract"
                     }
                 ]
             },
@@ -606,6 +606,11 @@
                         "label": "组焊列表",
                         "path": "/workMngt/assemblyWeldingList",
                         "authority": "tc_erp_rd_work_weld"
+                    },
+                    {
+                        "label": "包装列表",
+                        "path": "/workMngt/packingList",
+                        "authority": "tc_erp_rd_work_sample"
                     },
                     {
                         "label": "小样图列表",

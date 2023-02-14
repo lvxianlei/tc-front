@@ -621,7 +621,7 @@
                     },
                     {
                         "label": "否",
-                        "value": 0
+                        "value": 2
                     }
                 ]
             },
@@ -784,7 +784,7 @@
         },
         {
             "title": "签收时间",
-            "dataIndex": "signInTime",
+            "dataIndex": "signTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },

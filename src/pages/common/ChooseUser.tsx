@@ -84,7 +84,7 @@ const TableTransfer = ({
 
     useEffect(() => setRightData([
         ...rightData,
-        initRightData.filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))]),
+        initRightData.filter((item: any) => !rightData.map((rItem: any) => rItem.id).includes(item.id))]),
         [JSON.stringify(initRightData)])
 
     const { loading: deptLoading, data: deptData } = useRequest<any>(() => new Promise(async (resolve, reject) => {
@@ -124,9 +124,9 @@ const TableTransfer = ({
         ready: chooseType === "dept",
         refreshDeps: [JSON.stringify(pagination), filterId],
         onSuccess: (data: any) => {
-            const currentData = data.records?.map((item: any) => ({ ...item, key: item.userId })) || []
+            const currentData = data.records?.map((item: any) => ({ ...item, key: item.id })) || []
             setLeftData(currentData)
-            setRightData([...rightData, ...currentData.filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))])
+            setRightData([...rightData, ...currentData.filter((item: any) => !rightData.map((rItem: any) => rItem.id).includes(item.id))])
         }
     })
 
@@ -135,18 +135,18 @@ const TableTransfer = ({
     const handleGroupSelect = (_: any, node: any) => {
         setLeftData(node?.node?.noticeGroupEmployeeVOList?.map((item: any) => ({
             ...item,
-            userId: item.employeeId,
+            id: item.employeeId,
             key: item.employeeId,
             name: item.employeeName,
             deptName: item.deptName
         })))
         setRightData([...rightData, ...node?.node?.noticeGroupEmployeeVOList?.map((item: any) => ({
             ...item,
-            userId: item.employeeId,
+            id: item.employeeId,
             key: item.employeeId,
             name: item.employeeName,
             deptName: item.deptName
-        })).filter((item: any) => !rightData.map((rItem: any) => rItem.userId).includes(item.userId))])
+        })).filter((item: any) => !rightData.map((rItem: any) => rItem.id).includes(item.id))])
     }
 
     const paginationChange = (page: number, pageSize: any) => setPagination({
@@ -158,7 +158,7 @@ const TableTransfer = ({
     return (
         <Transfer
             {...restProps}
-            rowKey={(record) => record.userId}
+            rowKey={(record) => record.id}
             titles={[
                 "待选区",
                 <Space key="choosed">
@@ -176,11 +176,11 @@ const TableTransfer = ({
             }) => {
                 const leftDataSource = leftData?.map((item: any) => ({
                     ...item,
-                    disabled: targetKeys.includes(item.userId)
+                    disabled: targetKeys.includes(item.id)
                 }))
 
                 const rightDataSource = rightData.filter((item: any) =>
-                    targetKeys.includes(item.userId)
+                    targetKeys.includes(item.id)
                 )
 
                 const rowSelection = {
@@ -190,14 +190,14 @@ const TableTransfer = ({
                     onSelectAll(selected: boolean, selectedRows: any[]) {
                         const treeSelectedKeys = selectedRows
                             .filter((item) => !item.disabled)
-                            .map(({ userId }) => userId)
+                            .map(({ id }) => id)
                         const diffKeys = selected
                             ? difference(treeSelectedKeys, listSelectedKeys)
                             : difference(listSelectedKeys, treeSelectedKeys)
                         onItemSelectAll(diffKeys, selected)
                     },
-                    onSelect({ userId }: any, selected: boolean) {
-                        onItemSelect(userId, selected)
+                    onSelect({ id }: any, selected: boolean) {
+                        onItemSelect(id, selected)
                     },
                     selectedRowKeys: listSelectedKeys
                 }
@@ -237,7 +237,6 @@ const TableTransfer = ({
                                 loading={loading || groupLoading}
                                 rowSelection={rowSelection}
                                 size="small"
-                                rowKey="userId"
                                 columns={userColumns}
                                 pagination={{
                                     total: userData?.total,
@@ -254,7 +253,6 @@ const TableTransfer = ({
                             bordered={false}
                             rowSelection={rowSelection}
                             size="small"
-                            rowKey="userId"
                             columns={[userColumns[1]]}
                             dataSource={rightDataSource}
                         />
@@ -271,7 +269,7 @@ interface ChooseUserContentProps {
 
 const ChooseUserContent: FC<ChooseUserContentProps> = ({ actionRef, values = [] }) => {
     const transferRef = useRef<any>()
-    const [targetKeys, setTargetKeys] = useState<any[]>(values.map((item: any) => item.userId));
+    const [targetKeys, setTargetKeys] = useState<any[]>(values.map((item: any) => item.id));
     const handleTransferChange = (targeted: any[], direction: "left" | "right", moveKeys: any[]) => {
         if (direction === "left") {
             setTargetKeys(targetKeys.filter((item: any) => !moveKeys.includes(item)))
@@ -283,7 +281,7 @@ const ChooseUserContent: FC<ChooseUserContentProps> = ({ actionRef, values = [] 
     }
 
     useImperativeHandle(actionRef, () => ({
-        dataSource: transferRef.current?.rightData.filter((item: any) => targetKeys.includes(item.userId))
+        dataSource: transferRef.current?.rightData.filter((item: any) => targetKeys.includes(item.id))
     }), [targetKeys, transferRef])
 
     return (<TableTransfer
@@ -313,7 +311,7 @@ const ChooseUser: FC<ChooseUserData> = ({ data, ...props }) => {
     const handleOk = () => {
         const dataSource = actionRef.current?.dataSource
         const newValue = {
-            id: dataSource?.map((item: any) => item.userId).join(","),
+            id: dataSource?.map((item: any) => item.id).join(","),
             value: dataSource?.map((item: any) => item.name).join(","),
             records: dataSource || []
         }

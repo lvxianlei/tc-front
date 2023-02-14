@@ -96,7 +96,11 @@ export default forwardRef(function ({
         pushUrl: "http://www."
     })
     const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
-    const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({ url: "", title: "" })
+    const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({
+        url: "",
+        title: "",
+        fileSuffix: ""
+    })
     const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
@@ -202,16 +206,17 @@ export default forwardRef(function ({
     useImperativeHandle(ref, () => ({ getDataSource, dataSource: attchs, resetFields }), [JSON.stringify(attchs), getDataSource, dataSource, resetFields])
 
     const handlePreview = useCallback((record: FileProps) => {
-        if (["png", "jpeg", "jpg", "gif"].includes(record?.fileSuffix || "")) {
+        if (["png", "jpeg", "jpg", "gif", "dxf"].includes(record?.fileSuffix || "")) {
             setPicInfo({
                 url: record.downloadUrl,
+                fileSuffix: record.fileSuffix,
                 title: record.originalName
             })
             setVisible(true)
-        } else if (["pdf"].includes(record?.fileSuffix || "")) {
-            window.open(record.downloadUrl)
+        } else if (record?.fileSuffix === "pdf") {
+            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(record.originalName as string)}&url=${encodeURIComponent(record?.downloadUrl as string)}`)
         } else {
-            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf预览...")
+            message.warning("暂只支持*.png,*.jpeg,*.jpg,*.gif*.pdf,*.dxf预览...")
         }
     }, [setPicInfo, setVisible])
 
@@ -267,7 +272,16 @@ export default forwardRef(function ({
             visible={visible}
             onCancel={handleCancel}
             footer={false}>
-            <Image src={picInfo.url} preview={false} />
+            {picInfo.fileSuffix === "dxf" ? <iframe
+                src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
+                style={{
+                    border: "none",
+                    width: "100%",
+                    minHeight: 400,
+                    padding: 10
+                }}
+            /> :
+                <Image src={picInfo.url} preview={false} />}
         </Modal>
         {isTable && title && <DetailTitle
             // style={{ marginTop: "24px" }}

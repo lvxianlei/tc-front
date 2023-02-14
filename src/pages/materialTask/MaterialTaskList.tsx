@@ -5,14 +5,15 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, Modal, message } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, Modal, message, Popconfirm } from 'antd';
 import { Page } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './MaterialTaskList.module.less';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import BatchAssigned, { EditRefProps } from './BatchAssigned';
 import AssignedInformation, { RefProps } from './AssignedInformation';
 import { IAssignedList } from './IMaterialTask';
+import RequestUtil from '@utils/RequestUtil';
 
 export default function MaterialTaskList(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -26,6 +27,7 @@ export default function MaterialTaskList(): React.ReactNode {
     const [informationVisible, setInformationVisible] = useState<boolean>(false);
     const [id, setId] = useState<string>('');
     const [status, setStatus] = useState(1);
+    const history = useHistory();
 
     const columns = [
         {
@@ -103,6 +105,20 @@ export default function MaterialTaskList(): React.ReactNode {
                         setId(record.id);
                         setStatus(record.status);
                     }}>指派信息</Button>
+                    <Popconfirm
+                        title="确认关闭?"
+                        onConfirm={() => {
+                            RequestUtil.post(`/tower-science/materialTask/close/${record?.id}`).then(res => {
+                                message.success('关闭成功');
+                                history.go(0);
+                            });
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={record.status !== 1}
+                    >
+                        <Button disabled={record.status !== 1} type="link">关闭</Button>
+                    </Popconfirm>
                 </Space>
             )
         }
@@ -197,6 +213,7 @@ export default function MaterialTaskList(): React.ReactNode {
                             <Select.Option value={1} key="1">待指派</Select.Option>
                             <Select.Option value={2} key="2">待完成</Select.Option>
                             <Select.Option value={3} key="3">已完成</Select.Option>
+                            <Select.Option value={0} key="4">已关闭</Select.Option>
                         </Select>
                     </Form.Item>
                 },

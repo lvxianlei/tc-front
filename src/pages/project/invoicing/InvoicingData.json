@@ -24,6 +24,14 @@
                 {
                     "label": "被驳回",
                     "value": 3
+                },
+                {
+                    "label": "已撤销",
+                    "value": 4
+                },
+                {
+                    "label": "已作废",
+                    "value": 11
                 }
             ]
         },
@@ -277,11 +285,6 @@
             ]
         },
         {
-            "title": "合同ID",
-            "dataIndex": "contractId",
-            "hide":true
-        },
-        {
             "title": "合同单位",
             "dataIndex": "contractCompany",
             "disabled": true
@@ -317,12 +320,12 @@
             "title": "开票货币类型",
             "dataIndex": "currencyType",
             "type": "select",
-            "enum":[]
+            "enum": []
         },
         {
             "title": "货币类型名称",
             "dataIndex": "currencyName",
-            "hidden":true
+            "hidden": true
         },
         {
             "title": "汇率",
@@ -601,36 +604,18 @@
             "title": "重量",
             "dataIndex": "weight",
             "type": "number",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
-        },
-        {
-            "title": "货币单位",
-            "dataIndex": "currencyType",
-            "type": "select",
-            "enum": []
-        },
-        {
-            "title": "货币单位名称",
-            "dataIndex": "currencyName",
-            "width": 0
+            "required": true
         },
         {
             "title": "金额",
             "dataIndex": "moneyCount",
             "type": "number",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入金额..."
-                }
-            ]
+            "required": true
+        },
+        {
+            "title": "外币金额",
+            "dataIndex": "otherMoney",
+            "type": "number"
         },
         {
             "title": "单价",
@@ -664,13 +649,7 @@
             "title": "重量",
             "dataIndex": "weight",
             "type": "number",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入重量..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "货币单位",
@@ -680,13 +659,7 @@
             "title": "金额",
             "dataIndex": "moneyCount",
             "type": "number",
-            "required": true,
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请输入金额..."
-                }
-            ]
+            "required": true
         },
         {
             "title": "单价",
@@ -727,6 +700,7 @@
             "title": "发票类型",
             "dataIndex": "ticketType",
             "type": "select",
+            "disabled": true,
             "enum": [
                 {
                     "value": 1,
@@ -852,7 +826,7 @@
         {
             "title": "货币类型名称",
             "dataIndex": "currencyName",
-            "width":200
+            "width": 200
         },
         {
             "title": "单价",

@@ -91,20 +91,6 @@ export default function PickCheckList(): React.ReactNode {
             editable: true
         },
         {
-            title: '大头',
-            dataIndex: 'bigHead',
-            key: 'bigHead',
-            width: 100,
-            editable: true
-        },
-        {
-            title: '小头',
-            dataIndex: 'smallHead',
-            key: 'smallHead',
-            width: 100,
-            editable: true
-        },
-        {
             title: '单段件数',
             dataIndex: 'basicsPartNum',
             key: 'basicsPartNum',
@@ -144,6 +130,20 @@ export default function PickCheckList(): React.ReactNode {
             dataIndex: 'description',
             key: 'description',
             width: 150,
+            editable: true
+        },
+        {
+            title: '大头',
+            dataIndex: 'bigHead',
+            key: 'bigHead',
+            width: 100,
+            editable: true
+        },
+        {
+            title: '小头',
+            dataIndex: 'smallHead',
+            key: 'smallHead',
+            width: 100,
             editable: true
         }
     ];

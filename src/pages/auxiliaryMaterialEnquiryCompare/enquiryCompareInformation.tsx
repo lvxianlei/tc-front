@@ -90,7 +90,7 @@ export default function Overview(): JSX.Element {
                     })
                     resove(true)
                     message.success("您已完成询价...")
-                    history.goBack()
+                    history.go(0)
                 } catch (error) {
                     reject(false)
                 }

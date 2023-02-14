@@ -29,6 +29,7 @@ export default function Index() {
     const [recordVisible, setRecordVisible] = useState<boolean>(false)
     const [selectedKeys, setSelectedKeys] = useState<string[]>()
     const [editId, setEditId] = useState<"create" | string>("create")
+    const [noticeId, setNoticeId] = useState<string>()
     const [recordType, setRecordType] = useState<"signIn" | "opration" | "examine">("signIn")
 
     const { loading, data: treeData } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
@@ -111,8 +112,9 @@ export default function Index() {
     //     history.go(0)
     // }
 
-    const handleRecords = ({ key }: any, id: string) => {
+    const handleRecords = ({ key }: any, id: string, noticeId: string) => {
         setEditId(id)
+        setNoticeId(noticeId)
         setRecordType(key)
         setRecordVisible(true)
     }
@@ -163,7 +165,7 @@ export default function Index() {
                     onClick={() => setRecordVisible(false)}>关闭</Button>
             ]}
         >
-            <Records id={editId} type={recordType} />
+            <Records id={editId} noticeId={noticeId} type={recordType} />
         </Modal>
         <SearchTable
             path="/tower-system/doc"
@@ -224,7 +226,7 @@ export default function Index() {
                         撤回
                     </Button>
                     <Dropdown
-                        overlay={(<Menu onClick={(event: any) => handleRecords(event, records?.id)}>
+                        overlay={(<Menu onClick={(event: any) => handleRecords(event, records?.id, records?.noticeId)}>
                             <Menu.Item key="signIn">签收日志</Menu.Item>
                             <Menu.Item key="opration">操作日志</Menu.Item>
                             {/* <Menu.Item key="examine">审核日志</Menu.Item> */}

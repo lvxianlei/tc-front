@@ -4,7 +4,6 @@ import { Attachment, AttachmentRef, Page } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import AuthUtil from '../../../utils/AuthUtil';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import styles from './sample.module.less';
 import { FileProps } from '../../common/Attachment';
@@ -15,7 +14,7 @@ export default function SampleDraw(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [url, setUrl] = useState<string>('');
+    const [url, setUrl] = useState<any>();
     const [form] = Form.useForm();
     const [headerName, setHeaderName] = useState({
         uploadSmallSampleCount: 0,
@@ -104,9 +103,12 @@ export default function SampleDraw(): React.ReactNode {
                     <Button type='link' onClick={async () => {
                         const url: any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         if (url?.fileSuffix === 'pdf') {
-                            window.open(url?.downloadUrl)
+                            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(url?.originalName as string)}&url=${encodeURIComponent(url?.downloadUrl as string)}`)
                         } else {
-                            setUrl(url?.downloadUrl);
+                            setUrl({
+                                downloadUrl: url?.downloadUrl,
+                                fileSuffix: url?.fileSuffix
+                            });
                             setVisible(true)
                         }
                     }}>查看</Button>
@@ -167,11 +169,28 @@ export default function SampleDraw(): React.ReactNode {
 
     return (
         <>
-            <Modal visible={visible} title="图片" footer={false} onOk={handleModalOk} onCancel={handleModalCancel} width={800}>
-                <Image
-                    src={url}
-                    preview={false}
-                />
+            <Modal
+                visible={visible}
+                title="预览" footer={false}
+                onOk={handleModalOk}
+                onCancel={handleModalCancel}
+                width={1011}>
+                {
+                    url?.fileSuffix === "dxf" ? <>
+                        <iframe
+                            src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
+                            style={{
+                                border: "none",
+                                width: "100%",
+                                minHeight: 400,
+                                padding: 10
+                            }}
+                        />
+                    </> : <Image
+                        src={url?.downloadUrl}
+                        preview={false}
+                    />
+                }
             </Modal>
             <Page
                 path="/tower-science/smallSample/sampleList"
