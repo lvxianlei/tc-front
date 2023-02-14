@@ -103,9 +103,8 @@ export default function SampleDraw(): React.ReactNode {
                     <Button type='link' onClick={async () => {
                         const url: any = await RequestUtil.get(`/tower-science/smallSample/sampleView/${record.id}`);
                         if (url?.fileSuffix === 'pdf') {
-                            window.open(url?.downloadUrl)
+                            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(url?.originalName as string)}&url=${encodeURIComponent(url?.downloadUrl as string)}`)
                         } else {
-                            console.log(url.downloadUrl)
                             setUrl({
                                 downloadUrl: url?.downloadUrl,
                                 fileSuffix: url?.fileSuffix

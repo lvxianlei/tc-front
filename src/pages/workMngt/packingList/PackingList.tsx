@@ -99,8 +99,9 @@ export default function List(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
+                        disabled={record.packageStatus === 2}
                     >
-                        <Button type='link'>完成打包</Button>
+                        <Button type='link' disabled={record.packageStatus === 2}>完成打包</Button>
                     </Popconfirm>
                 </>
 
@@ -159,11 +160,11 @@ export default function List(): React.ReactNode {
             "enum": [
                 {
                     "label": "未完成",
-                    "value": "0"
+                    "value": 0
                 },
                 {
                     "label": "已完成",
-                    "value": "1"
+                    "value": 1
                 }
             ],
             "width": 120,
@@ -176,7 +177,7 @@ export default function List(): React.ReactNode {
             width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.productCategory}/packingList/${record.id}`, state: { status: record?.loftingStatus } }}>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${record.productCategory}/packingList/${record.id}`, state: { status: record?.packageStatus } }}>
                         <Button type="link">包装清单</Button>
                     </Link>
                 </>

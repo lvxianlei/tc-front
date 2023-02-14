@@ -529,8 +529,8 @@ export default function Lofting(): React.ReactNode {
             <span>件号总数：{count?.structureCodeNum}</span>
             <span>总件数：{count?.structureNum}</span>
             <span>总重kg：{count?.totalWeight}</span>
-            <span>所选件号总数：{count?.structurePitchNum}</span>
-            <span>所选总件数：{count?.patternName}</span>
+            <span>所选件号总数：{count?.structureCodePitchNum}</span>
+            <span>所选总件数：{count?.structurePitchNum}</span>
             <span>所选总重kg：{count?.pitchTotalWeight}</span>
         </Space>
         <Form
