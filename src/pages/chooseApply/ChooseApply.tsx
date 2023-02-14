@@ -81,13 +81,19 @@ export default function ChooseApply(): JSX.Element {
                         src={`${baseUrl}/#/tower/flowLaunch`}
                     />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="已办事宜" key="3">
+                <Tabs.TabPane tab="我可见的" key="3">
+                    <iframe
+                        style={{ width: "100%", minHeight: 500 }}
+                        src={`${baseUrl}/#/tower/flowLaunchPermission`}
+                    />
+                </Tabs.TabPane>
+                <Tabs.TabPane tab="已办事宜" key="4">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
                         src={`${baseUrl}/#/tower/flowDone`}
                     />
                 </Tabs.TabPane>
-                <Tabs.TabPane tab="抄送事宜" key="4">
+                <Tabs.TabPane tab="抄送事宜" key="5">
                     <iframe
                         style={{ width: "100%", minHeight: 500 }}
                         src={`${baseUrl}/#/tower/flowCirculate`}

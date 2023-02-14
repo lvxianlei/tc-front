@@ -10,6 +10,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import styles from './template.module.less';
 import { SelectValue } from 'antd/lib/select';
 import { FileProps } from '../../common/Attachment';
+import SelectUser from '../../common/SelectUser';
 
 export default function TaskNew(props: any) {
     const [visible, setVisible] = useState<boolean>(false);
@@ -480,42 +481,44 @@ export default function TaskNew(props: any) {
             >
                 <DetailTitle title='基本信息' />
                 <Form form={form} {...formItemLayout} initialValues={printData || {}}>
-                    <Row>
+                    <Row gutter={12}>
                         <Col span={12}>
-                            <Row>
-                                <Col span={15}>
-                                    <Form.Item name="planNumber" label="计划号" rules={[{ required: true, message: '请选择计划号' }]}>
-                                        <Select style={{ width: '100%' }} onChange={async (value) => {
-                                            const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
-                                            setTower(towerData);
-                                            setRead(false)
-                                            formRef.setFieldsValue({
-                                                print: {
-                                                    printSpecifications: ''
-                                                },
-                                                printSpecialProcess: ''
-                                            });
-                                            form.setFieldsValue({
-                                                planNumber: value,
-                                                productCategoryId: '',
-                                                productTypeName: '',
-                                                print: '',
-                                                structureNumber: '',
-                                                drawLeaderDepartment: '',
-                                                drawLeader: ''
-                                            })
-                                        }}>
-                                            {planData && planData.map(({ planNumber }: any, index: string | number | undefined) => {
-                                                return <Select.Option key={index} value={planNumber}>
-                                                    {planNumber}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                            <Form.Item name="planNumber" label="计划号" rules={[{ required: true, message: '请选择计划号' }]}>
+                                <Select
+                                    style={{ width: '100%' }}
+                                    filterOption={(input, option) =>
+                                        option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
+                                    }
+                                    showSearch
+                                    onChange={async (value) => {
+                                        const towerData: any = await RequestUtil.get(`/tower-science/loftingTask/list/${value}`);
+                                        setTower(towerData);
+                                        setRead(false)
+                                        formRef.setFieldsValue({
+                                            print: {
+                                                printSpecifications: ''
+                                            },
+                                            printSpecialProcess: ''
+                                        });
+                                        form.setFieldsValue({
+                                            planNumber: value,
+                                            productCategoryId: '',
+                                            productTypeName: '',
+                                            print: '',
+                                            structureNumber: '',
+                                            drawLeaderDepartment: '',
+                                            drawLeader: ''
+                                        })
+                                    }}>
+                                    {planData && planData.map(({ planNumber }: any, index: string | number | undefined) => {
+                                        return <Select.Option key={index} value={planNumber}>
+                                            {planNumber}
+                                        </Select.Option>
+                                    })}
+                                </Select>
+                            </Form.Item>
                         </Col>
-                        <Col span={11}>
+                        <Col span={12}>
                             <Form.Item name="productCategoryId" label="塔型" rules={[{ required: true, message: '请选择塔型' }]}>
                                 <Select style={{ width: '100%' }} onChange={async (value) => {
                                     formRef.setFieldsValue({
@@ -525,11 +528,11 @@ export default function TaskNew(props: any) {
                                         printSpecialProcess: ''
                                     });
                                     const formValue = tower.filter((item: { productCategoryId: SelectValue; }) => { return item.productCategoryId === value })
-
-                                    if (formValue[0].drawLeaderDepartment) {
-                                        const drawLeaderDepartment: any = await RequestUtil.get(`/tower-system/employee?dept=${formValue[0].drawLeaderDepartment}&size=1000`);
-                                        setMaterialUser(drawLeaderDepartment.records);
-
+                                    if (formValue[0].drawLeader) {
+                                        form.setFieldsValue({
+                                            drawLeaderName: formValue[0]?.drawLeaderName,
+                                            drawLeader: formValue[0]?.drawLeader,
+                                        })
                                     }
                                     const type: any = formValue[0]?.productTypeName;
                                     if (type === '四管塔' || type === '管塔' || type === '架构' || type === '架构塔' || type === '钢架构') {
@@ -596,43 +599,31 @@ export default function TaskNew(props: any) {
                                 </Select>
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span={12}>
-                            <Row>
-                                <Col span={15}>
-                                    <Form.Item name="productTypeName" label="产品类型" >
-                                        {/* <Select style={{width:'100%'}} disabled>
+                            <Form.Item name="productTypeName" label="产品类型" >
+                                {/* <Select style={{width:'100%'}} disabled>
                                             {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
                                                 return <Select.Option key={index} value={name}>
                                                     {name}
                                                 </Select.Option>
                                             })}
                                         </Select> */}
-                                        <Input disabled />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                                <Input disabled />
+                            </Form.Item>
                         </Col>
-                        <Col span={11}>
+                        <Col span={12}>
                             <Form.Item name="print" label="打印条件" >
                                 <Input addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                                     setPrintVisible(true)
                                 }}>+编辑</Button>} disabled />
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span={12}>
-                            <Row>
-                                <Col span={15}>
-                                    <Form.Item name="structureNumber" label="数量" rules={[{ required: true, message: '请输入数量' }]}>
-                                        <InputNumber min={1} max={9999} precision={0} style={{ width: '100%' }} />
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                            <Form.Item name="structureNumber" label="数量" rules={[{ required: true, message: '请输入数量' }]}>
+                                <InputNumber min={1} max={9999} precision={0} style={{ width: '100%' }} />
+                            </Form.Item>
                         </Col>
-                        <Col span={11}>
+                        <Col span={12}>
                             <Form.Item name="detail" label="钢板明细" >
                                 <Button type='link' onClick={async () => {
                                     const data: any = await RequestUtil.post(`/tower-science/loftingTemplate/plate/list`, {
@@ -646,31 +637,19 @@ export default function TaskNew(props: any) {
                                 }} disabled={!read}>查看</Button>
                             </Form.Item>
                         </Col>
-                    </Row>
-                    <Row>
                         <Col span={12}>
-                            <Row>
-                                <Col span={15}>
-                                    <Form.Item name="drawLeaderDepartment" label="接收人" rules={[{ required: true, message: '请选择接收人部门' }]}>
-                                        <TreeSelect
-                                            onChange={(value: any) => { onDepartmentChange(value, 'drawLeaderDepartment') }}
-                                        >
-                                            {renderTreeNodes(wrapRole2DataNode(department))}
-                                        </TreeSelect>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={8}>
-                                    <Form.Item name="drawLeader" label="" rules={[{ required: true, message: '请选择接收人' }]} >
-                                        <Select >
-                                            {materialUser && materialUser.map((item: any) => {
-                                                return <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
+                            <Form.Item name="drawLeaderName" label="接收人" rules={[{ required: true, message: '请选择接收人' }]} >
+                                <Input size="small" disabled suffix={
+                                    <SelectUser key={'drawLeader'} selectedKey={[form?.getFieldsValue(true)?.drawLeader]} onSelect={(selectedRows: Record<string, any>) => {
+                                        form?.setFieldsValue({
+                                            drawLeader: selectedRows[0]?.userId,
+                                            drawLeaderName: selectedRows[0]?.name
+                                        })
+                                    }} />
+                                } />
+                            </Form.Item>
                         </Col>
-                        <Col span={11}>
+                        <Col span={12}>
                             <Form.Item name="description" label="备注">
                                 <TextArea maxLength={200} showCount rows={1} />
                             </Form.Item>

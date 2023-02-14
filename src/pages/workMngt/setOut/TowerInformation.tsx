@@ -55,7 +55,7 @@ export default function TowerInformation(): React.ReactNode {
 
     const { data: userList } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.get<any>(`/tower-system/employee?deptName=技术部&size=1000`);
+            const result = await RequestUtil.get<any>(`/tower-system/employee?size=10000`);
             const user = await RequestUtil.get<any>(`/tower-science/productCategory/${params.id}`);
             let loftingUserList: any[] = [];
             let loftingMutualReviewList: any[] = [];
@@ -197,7 +197,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.loftingUserList?.map((item: any, index: number) =>
+                            optionalList?.loftingUserList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -220,7 +220,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择放样互审" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.loftingMutualReviewList?.map((item: any, index: number) =>
+                            optionalList?.loftingMutualReviewList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>
@@ -243,7 +243,7 @@ export default function TowerInformation(): React.ReactNode {
                 }]} >
                     <Select style={{ width: '120px' }} placeholder="请选择校核人" mode='multiple' onChange={() => rowChange(index)}>
                         {
-                            optionalList.programmingLeaderList?.map((item: any, index: number) =>
+                            optionalList?.programmingLeaderList?.map((item: any, index: number) =>
                                 <Select.Option value={item.userId} key={index}>
                                     {item.name}
                                 </Select.Option>

@@ -9,7 +9,6 @@ import RequestUtil from '../../utils/RequestUtil';
 import styles from './AnnouncementMngt.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
 import { RouteComponentProps, withRouter } from 'react-router';
-import { IDept } from '../dept/dept/DepartmentMngt';
 import { DataNode } from 'antd/lib/tree';
 import { IStaff } from '../dept/staff/StaffMngt';
 import { TablePaginationConfig } from 'antd/lib/table';
@@ -34,7 +33,7 @@ export interface ISelectUserTransferRouteProps extends RouteComponentProps<Selec
 export interface SelectUserTransferState {
     readonly visible: boolean;
     readonly targetKeys?: string[];
-    readonly deptData?: IDept[];
+    readonly deptData?: any[];
     readonly treeData?: IStaff[];
     readonly selectedRows?: IStaff[];
     readonly selectedRowKeys?: React.Key[];
@@ -57,7 +56,7 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
     }
 
     private async modalShow(): Promise<void> {
-        const data: IDept[] = await RequestUtil.get(`/tower-system/department`);
+        const data: any[] = await RequestUtil.get(`/tower-system/department`);
         this.setState({
             visible: true,
             deptData: data,

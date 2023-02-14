@@ -12,14 +12,16 @@ export default function ReleaseList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [aFilterValue, setAFilterValue] = useState({});
     const [form] = Form.useForm();
+    const [count, setCount] = useState<any>({});
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data?.records);
     }), {})
 
 
-    const { data: countNum } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`);
+    const { run: getCount } = useRequest<any>((filter: any) => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`, {...filter});
+        setCount(data)
         resole(data);
     }), {})
 
@@ -430,6 +432,7 @@ export default function ReleaseList(): React.ReactNode {
         if (values.createUser) {
             values.createUser = values.createUser?.value;
         }
+        getCount(values)
         setAFilterValue(values)
         return values
     }
@@ -540,14 +543,14 @@ export default function ReleaseList(): React.ReactNode {
                 // sourceKey='loftingBatchResultVOS.records'
                 extraOperation={(data: any) =>
                     <><Row gutter={12}>
-                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{countNum?.totalPieceNumber}</span></Col>
-                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{countNum?.totalNumber}</span></Col>
-                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.totalWeight}</span></Col>
-                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.angleTotalWeight}</span></Col>
-                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.apertureWeight}</span></Col>
-                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.perforateWeight}</span></Col>
-                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.cutPlateWeight}</span></Col>
-                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{countNum?.firePlateWeight}</span></Col>
+                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber}</span></Col>
+                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber}</span></Col>
+                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight}</span></Col>
+                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight}</span></Col>
+                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight}</span></Col>
+                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight}</span></Col>
+                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight}</span></Col>
+                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight}</span></Col>
                     </Row>
                     </>
                 }

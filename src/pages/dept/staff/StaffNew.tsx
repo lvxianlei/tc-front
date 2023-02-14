@@ -14,7 +14,6 @@ import styles from './StaffMngt.module.less';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { FixedType } from 'rc-table/lib/interface';
 import { IStaff } from './StaffMngt';
-import { IMetaDept } from '../dept/DepartmentMngt';
 import { staffTypeOptions } from '../../../configuration/DictionaryOptions';
 import layoutStyles from '../../../layout/Layout.module.less';
 import { IRole } from '../../auth/role/IRole';
@@ -33,12 +32,12 @@ export default function StaffNew(): React.ReactNode {
     const location = useLocation<{ type: string, data: IStaff[] }>();
     const [dataList, setDataList] = useState<IStaff[]>([]);
     const [oldDataList, setOldDataList] = useState<IStaff[]>([]);
-    const [departData, setDepartData] = useState<IMetaDept[]>([]);
+    const [departData, setDepartData] = useState<any[]>([]);
     const [roleList, setRoleList] = useState<IRole[]>([]);
     const [jobsList, setJobsList] = useState<IJobs[]>([]);
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
-        const deptData: IMetaDept[] = await RequestUtil.get(`/tower-system/department`);
+        const deptData: any[] = await RequestUtil.get(`/tower-system/department`);
         setDepartData(deptData);
         const roles: IRole[] = await RequestUtil.get<IRole[]>('/sinzetech-system/role/tree');
         setRoleList(roles);

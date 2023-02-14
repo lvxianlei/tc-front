@@ -7,6 +7,7 @@
 import React, { useImperativeHandle, forwardRef, useState } from "react";
 import { Form, Input } from 'antd';
 import Page from "./Page";
+import AuthUtil from "@utils/AuthUtil";
 
 interface UserTableProps {
     selectedKey?: string[];
@@ -22,13 +23,14 @@ export default forwardRef(function UserTable({
     searchItems = []
 }: UserTableProps, ref) {
     const [filterValue, setFilterValue] = useState<any>({});
-    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([...selectedKey || []]);
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([...(selectedKey || [])]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
     }
-    
+    const tenantName: string =  AuthUtil?.getTenantName()
+
     const columns = [
         {
             title: '账号',
@@ -77,7 +79,7 @@ export default forwardRef(function UserTable({
         columns={columns}
         headTabs={[]}
         requestData={{
-            deptName: '技术部',
+            deptName: `${tenantName === '江苏江电电力设备有限公司' ? '':'技术部'}`,
             ...requests
         }}
         tableProps={{
