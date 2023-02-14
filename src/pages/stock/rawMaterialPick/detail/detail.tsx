@@ -1,7 +1,6 @@
 /***
- * 新修改的原材料出库详情
- * 原文件地址当前目录：OriginalDocument.tsx
- * 时间：2022/01/11
+ * 原材料领料详情
+ * 时间：2023/01/16
  */
 import React, { useState } from 'react';
 import { Input, Select, DatePicker, Button, Modal, message, Table, Popconfirm } from 'antd';
@@ -320,7 +319,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     // 获取统计的数据
     const { run: getUser, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/detail/statistics`, {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/materialPicking/detail/statistics`, {
                 ...filterValue,
                 id:params.id
             })
@@ -514,7 +513,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         history.go(0)
     }
     const handleAddModalOk = async () => {
-        await RequestUtil.post(`/tower-storage/outStock/relationIssued`, {
+        await RequestUtil.post(`/tower-storage/materialPicking/relationIssued`, {
             id: params.id,
             internalNumber: materialList[0].internalNumber,
             issuedNumber: materialList[0].issuedNumber,
@@ -531,57 +530,52 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-storage/outStock/detail"
-                exportPath={"/tower-storage/outStock/detail"}
+                path="/tower-storage/materialPicking/detail"
+                exportPath={"/tower-storage/materialPicking/detail"}
                 exportObject={{ id: params.id }}
-                exportFileName="原材料出库明细"
+                exportFileName="原材料领料单明细"
                 extraOperation={(data: any) => {
                     return <>
-                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => {
-                            let flag = false;
-                            for (let i = 0; i < selectedRows.length; i += 1) {
-                                if (selectedRows[i].materialPickingDetailId&&selectedRows[i].materialPickingDetailId!==null) {
-                                    flag = true;
-                                }
-                            }
-                            if (flag) {
-                                message.error("领料单数据不可关联下达单！");
-                                return false;
-                            }
-                            setVisible(true)
-                        }}>关联下达单</Button>
-                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/batchOutStock`,{
-                            outStockDetailId: selectedKeys,
-                            outStockId: params.id
+                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => setVisible(true)}>关联下达单</Button>
+                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/materialPicking/createOutStock`,{
+                            materialPickingDetailIds: selectedKeys,
+                            materialPickingId: params.id
                         }).then(()=>{
                             message.success('出库成功！')
                             history.go(0)
-                        })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
+                        })}} disabled={!(selectedKeys.length>0)}>生成出库单</Button>
                         <Button type="primary" ghost onClick={async () => { 
-                            if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
-                                await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
-                                message.success('审批发起成功！')
-                                history.go(-1)
-                            }else{
+                            // if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
+                            //     await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
+                            //     message.success('审批发起成功！')
+                            //     history.go(-1)
+                            // }else{
                                 message.error("当前不可发起审批！")
-                            }
+                            // }
                         }} >发起审批</Button>
                         <Button type="primary" ghost onClick={async () => {
-                            if([1,'1'].includes(params?.approval)){
-                                await RequestUtil.get(`/tower-storage/outStock/workflow/cancel/${params.id}`)
-                                message.success('撤销成功！')
-                                history.go(-1)
-                            }else{
-                                message.error('不可撤销！')
-                            }
+                            // if([1,'1'].includes(params?.approval)){
+                            //     await RequestUtil.get(`/tower-storage/outStock/workflow/cancel/${params.id}`)
+                            //     message.success('撤销成功！')
+                            //     history.go(-1)
+                            // }else{
+                            //     message.error('不可撤销！')
+                            // }
+                            message.error("当前不可撤销审批！")
                         }} >撤销审批</Button>
-                        <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
+                        {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            总重量： {weightData?.weightCount || "0.00"} 吨
+                            数量合计： {weightData?.totalNum || "0.00"} 
                         </span>
                         <span style={{ marginLeft: "10px" }}>
-                            缺料总重量：{weightData?.excessWeight || "0.00"} 吨
+                            重量合计（吨）{weightData?.weightCount || "0.00"} 
+                        </span>
+                        <span style={{ marginLeft: "10px" }}>
+                            未出库数量合计{weightData?.toBePickingTotalNum || "0.00"} 
+                        </span>
+                        <span style={{ marginLeft: "10px" }}>
+                            未出库重量合计（吨）{weightData?.toBePickingWeightCount || "0.00"} 
                         </span>
                     </>
                 }}
@@ -589,7 +583,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     rowSelection: {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange,
-                        getCheckboxProps: (record: any) => record.outStockItemStatus !== 0 
+                        getCheckboxProps: (record: any) => record.pickingStatus !== 0
                     }
                 }}
                 columns={[
@@ -602,34 +596,34 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...(baseColumn as any),
-                    {
-                        title: '操作',
-                        width: 180,
-                        fixed: 'right' as FixedType,
-                        render: (_: undefined, record: any): React.ReactNode => (
-                            // 0待出库 2 已出库  1缺料中
-                            <>
-                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={() => { IssueOperation(record) }}>出库</Button>
-                                <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
-                                <Popconfirm
-                                    title="确认撤销?"
-                                    onConfirm={() => handleRevocation(record.id)}
-                                    okText="确认"
-                                    cancelText="取消"
-                                >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
-                                </Popconfirm>
-                                <Popconfirm
-                                    title="确认删除?"
-                                    onConfirm={() => handleDelete(record?.id)}
-                                    okText="确认"
-                                    cancelText="取消"
-                                >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
-                                </Popconfirm>
-                            </>
-                        )
-                    }
+                    // {
+                    //     title: '操作',
+                    //     width: 180,
+                    //     fixed: 'right' as FixedType,
+                    //     render: (_: undefined, record: any): React.ReactNode => (
+                    //         // 0待出库 2 已出库  1缺料中
+                    //         <>
+                    //             <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={() => { IssueOperation(record) }}>出库</Button>
+                    //             <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
+                    //             <Popconfirm
+                    //                 title="确认撤销?"
+                    //                 onConfirm={() => handleRevocation(record.id)}
+                    //                 okText="确认"
+                    //                 cancelText="取消"
+                    //             >
+                    //                 <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                    //             </Popconfirm>
+                    //             <Popconfirm
+                    //                 title="确认删除?"
+                    //                 onConfirm={() => handleDelete(record?.id)}
+                    //                 okText="确认"
+                    //                 cancelText="取消"
+                    //             >
+                    //                 <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                    //             </Popconfirm>
+                    //         </>
+                    //     )
+                    // }
                 ]}
                 onFilterSubmit={onFilterSubmit}
                 filterValue={filterValue}
@@ -640,20 +634,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
-                        name: 'status',
+                        name: 'pickingStatus',
                         label: '状态',
                         children: (
-                            <Select placeholder="请选择状态" style={{ width: "140px" }}>
-                                <Select.Option value="0">待出库</Select.Option>
-                                <Select.Option value="1">缺料中</Select.Option>
-                                <Select.Option value="2">已出库</Select.Option>
+                            <Select placeholder="请选择" style={{ width: "140px" }}>
+                                <Select.Option value={0}>未发料</Select.Option>
+                                <Select.Option value={1}>部分发料</Select.Option>
+                                <Select.Option value={2}>已发料</Select.Option>
                             </Select>
                         )
-                    },
-                    {
-                        name: 'outStockStaffId',
-                        label: '出库人',
-                        children: <IntgSelect width={200} />
                     },
                     {
                         name: 'structureTexture',

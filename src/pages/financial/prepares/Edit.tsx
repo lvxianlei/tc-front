@@ -1,10 +1,10 @@
 import React, { useImperativeHandle, forwardRef, useState, useRef } from "react"
-import { Spin, Form, Select, TreeSelect } from 'antd'
+import { Spin, Form, Select, TreeSelect, message } from 'antd'
 import { DetailContent, BaseInfo, formatData, Attachment, AttachmentRef } from '../../common'
 import { ApplicationList } from "../financialData.json"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
-import { costTypeOptions, invoiceTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
+import { costTypeOptions, invoiceTypeOptions, invoiceSourceOptions ,paymentMethodOptions } from "../../../configuration/DictionaryOptions"
 interface EditProps {
     type: "new" | "edit",
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
@@ -29,7 +29,10 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const [pleasePayType, setPleasePayType] = useState('');
     const [sourceData, setSourceData] = useState<any[]>([]);
     const invoiceTypeEnum = invoiceTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
-    const paymentMethodEnum = payTypeOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const paymentMethodEnum = paymentMethodOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const [detail, setDetail] = useState<any>({});
+    const [path, setPath] = useState<any>('/tower-supply/invoice?');
 
     // 存储
     const [baseInfoColumn, setBaseInfoColumn] = useState<any[]>(ApplicationList);
@@ -46,27 +49,29 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/${id}`)
+            setDetail(result)
             /**
              * 根据付款类型重置表头，根据不同的付款类型，处理不同回显操作
              */
             handleBaseColumn(result?.paymentReqType, result?.businessType)
+            setPath(`/tower-supply/invoice?businessType=${result?.businessType}&businessId=${result?.businessId}`)
             baseForm.setFieldsValue({
                 ...result,
                 businessId: result.businessId + ',' + result.businessName,
-                relatednotes: result?.paymentReqType === 2 ? {
+                relatednotes: result.applyPaymentInvoiceVos&&result.applyPaymentInvoiceVos.length>0? {
                     value: result.applyPaymentInvoiceVos?.map((item: any) => item.billNumber).join(","),
                     records: result.applyPaymentInvoiceVos?.map((item: any) => ({
-                        invoiceId: item.invoiceId,
+                        id: item.invoiceId,
                         billNumber: item.billNumber
-                    })) || []
+                    })) || [],
                 } : "",
-                receiptNumbers: result?.paymentReqType !== 2 ? {
-                    value: result.receiveNumberList?.map((item: any) => item.receiveNumber).join(","),
-                    records: result.receiveNumberList?.map((item: any) => ({
-                        id: item.id,
-                        receiveNumber: item.receiveNumber
+                receiptNumbers: {
+                    value: result.warehousingEntryNumbers,
+                    records: result.warehousingEntryIds!==null&&result.warehousingEntryIds.split(',')?.map((item: any,index: number) => ({
+                        id: item,
+                        warehousingEntryNumber: result.warehousingEntryNumbers.split(',')[index]
                     })) || []
-                } : result?.receiptNumbers
+                }
             })
             console.log(result?.paymentReqType !== 2, "编辑")
             businessTypeChange(result.businessType);
@@ -78,91 +83,126 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         }
     }), { manual: type === "new", refreshDeps: [id] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any, saveType?: "save" | "saveAndApply") => new Promise(async (resole, reject) => {
+    // const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any, saveType?: "save" | "saveAndApply") => new Promise(async (resole, reject) => {
+    //     try {
+    //         if (saveType === "saveAndApply") {
+    //             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment/saveAndStartApplyPayment`, data)
+    //             resole(result)
+    //             return
+    //         } else {
+    //             const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment`, data)
+    //             resole(result)
+    //             return
+    //         }
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
-            if (saveType === "saveAndApply") {
-                const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment/saveAndStartApplyPayment`, data)
-                resole(result)
-                return
-            } else {
-                const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment`, data)
-                resole(result)
-                return
-            }
+            const result: { [key: string]: any } = await RequestUtil[type === "new" ? "post" : "put"](`/tower-supply/applyPayment`, { ...postData, id: data?.id })
+            resole(result)
         } catch (error) {
             reject(error)
         }
     }), { manual: true })
 
-    const onSubmit = (saveType?: "save" | "saveAndApply") => new Promise(async (resolve, reject) => {
+    const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const baseData = await baseForm.validateFields()
-            let postData: any = {};
-            // 付款类型为货到票到付款 关联票据
-            if (baseData.paymentReqType === 2) { 
-                postData = type === "new" ? {
+            if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
+                const baseData = await baseForm.validateFields()
+                console.log(baseData.receiptNumbers)
+                await saveRun({
                     ...baseData,
                     pleasePayOrganization: perData?.dept,
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
-                    applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                        warehousingEntryId: item.id,
+                        warehousingEntryNumber: item.warehousingEntryNumber
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    isApproval:0,
+                    receiptNumbers:'',
+                    applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
-                    })) || data?.applyPaymentInvoiceVos
-                } : {
-                    ...baseData,
-                    pleasePayOrganization: perData?.dept,
-                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
-                    id: data?.id,
-                    businessId: baseData.businessId?.split(',')[0],
-                    businessName: baseData.businessId?.split(',')[1],
-                    applyPaymentInvoiceDtos: baseData.relatednotes.records?.map((item: any) => ({
-                        invoiceId: item.id,
-                        billNumber: item.billNumber
-                    })) || data?.applyPaymentInvoiceVos.map((item: any) => ({
-                        invoiceId: item.invoiceId,
-                        billNumber: item.billNumber
-                    }))
-                }
-            } else {
-                // 其他两种关联票据禁用  关联收货单
-                let v: any[] = [];
-                baseData.receiptNumbers.records?.map((item: any) => v.push(item.receiveNumber))
-                postData = type === "new" ? {
-                    ...baseData,
-                    pleasePayOrganization: perData?.dept,
-                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
-                    businessId: baseData.businessId?.split(',')[0],
-                    businessName: baseData.businessId?.split(',')[1],
-                    receivingNoteList: baseData.receiptNumbers.records?.map((item: any) => ({
-                        id: item.id,
-                        receiveNumber: item.receiveNumber
-                    })),
-                    receiptNumbers: v.join(",")
-                } : {
-                    ...baseData,
-                    pleasePayOrganization: perData?.dept,
-                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
-                    id: data?.id,
-                    businessId: baseData.businessId?.split(',')[0],
-                    businessName: baseData.businessId?.split(',')[1],
-                    receivingNoteList: baseData.receiptNumbers.records?.map((item: any) => ({
-                        id: item.id,
-                        receiveNumber: item.receiveNumber
-                    })),
-                    receiptNumbers: v.join(",")
-                }
+                    })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
+                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.warehousingEntryNumber
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
+                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.id
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
+                })
+                message.success("保存成功...")
+                resolve(true)
+            }else if([2,'2'].includes(detail?.approval)){
+                message.error("当前数据已审批，修改后请重新发起审批！")
+                throw new Error('审批通过数据，修改后只能重新发起审批！！')
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            console.log(postData, "============postData")
-            await saveRun(postData, saveType)
-            resolve(true)
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+    const onSubmitApproval = () => new Promise(async (resove, reject) => {
+        try {
+            if([undefined,0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseData = await baseForm.validateFields()
+                await saveRun({
+                    ...baseData,
+                    pleasePayOrganization: perData?.dept,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id), 
+                    businessId: baseData.businessId?.split(',')[0],
+                    businessName: baseData.businessId?.split(',')[1],
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                        warehousingEntryId: item.id,
+                        warehousingEntryNumber: item.warehousingEntryNumber
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    isApproval:1,
+                    receiptNumbers:'',
+                    applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
+                        invoiceId: item.id,
+                        billNumber: item.billNumber
+                    })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
+                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.warehousingEntryNumber
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
+                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                        return item.id
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
+                })
+                message.success("审批发起成功...")
+                resove(true)
+            }else{
+                message.error("当前不可发起审批！")
+                throw new Error('当前不可发起审批！')
+            }
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+    const onSubmitCancel = () => new Promise(async (resove, reject) => {
+        try {
+            if([1,'1'].includes(detail?.approval)){
+                await RequestUtil.get(`/tower-supply/workflow/invoice/cancel/${id}`)
+                message.success("撤销成功...")
+                resove(true)
+            }
+            else{
+                await message.error("不可撤销...")
+                throw new Error('不可撤销')
+            }
         } catch (error) {
             reject(false)
         }
     })
-
-    useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
+    useImperativeHandle(ref, () => ({ onSubmit, onSubmitApproval, onSubmitCancel, resetFields }), [ref, onSubmit, onSubmitCancel, onSubmitApproval])
 
     const resetFields = () => {
         baseForm.resetFields()
@@ -171,12 +211,23 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
     const handleBaseInfoChange = (fields: any, allFields: { [key: string]: any }) => {
         if (fields.relatednotes) {
             let pleasePayAmount = "0.00"
+            console.log(fields.relatednotes)
             fields.relatednotes.records.forEach((item: any) => {
                 pleasePayAmount = (parseFloat(pleasePayAmount) + parseFloat(item.invoiceAmount || "0")).toFixed(2)
             })
+            const result = baseInfoColumn.map(((item: any) => {
+                if(item.dataIndex==='receiptNumbers'){
+                    return{
+                        ...item,
+                        disabled: fields.relatednotes.records.length>0
+                    }
+                }
+                return item
+            }))
+            setBaseInfoColumn(result.slice(0))
             baseForm.setFieldsValue({
                 pleasePayAmount,
-                receiptNumbers: fields.relatednotes.records.map((item: any) => item.receiptNumbers).join(","),
+                receiptNumbers: fields.relatednotes.records.map((item: any) => item.receiptNumbers).join(",")
             })
         }
         if (fields.supplierName) {
@@ -189,102 +240,24 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         if (fields.receiptNumbers) {
             baseForm.setFieldsValue({
                 receiptNumbers: {
-                    value: fields.receiptNumbers.records.map((item: any) => item.receiveNumber).join(","),
-                    records: fields.receiptNumbers.records.map((item: any) => ({ ...item, receiveNumber: item.receiveNumber }))
+                    value: fields.receiptNumbers.records.map((item: any) => item.warehousingEntryNumber).join(","),
+                    records: fields.receiptNumbers.records.map((item: any) => ({ ...item, receiveNumber: item.warehousingEntryNumber }))
                 }
             })
         }
 
-        if (fields.businessType || fields.pleasePayType) {
-            if (allFields.paymentReqType !== 2) {
-                const result = baseInfoColumn.map(((item: any) => {
-                    if (item.dataIndex === "receiptNumbers") {
-                        return ({
-                            "dataIndex": "receiptNumbers",
-                            "title": "关联收货单",
-                            "type": "popTable",
-                            "path": `/tower-storage/receiveStock?receiveStatus=1&companyRelationStatus=${allFields.businessType || ""}`,
-                            "width": 1011,
-                            "value": "receiptNumbers",
-                            "selectType": "checkbox",
-                            "dependencies": true,
-                            "readOnly": true,
-                            "disabled": false,
-                            "search": [
-                                {
-                                    "title": "月份选择",
-                                    "dataIndex": "receiveTime",
-                                    "type": "date",
-                                    "width": 200
-                                },
-                                {
-                                    "title": "查询",
-                                    "dataIndex": "fuzzyQuery",
-                                    "width": 200,
-                                    "placeholder": "合同编号/收货单号/联系人"
-                                }
-                            ],
-                            "columns": [
-                                {
-                                    "title": "收货单号",
-                                    "dataIndex": "receiveNumber",
-                                    "type": "string"
-                                },
-                                {
-                                    "title": "联系人",
-                                    "dataIndex": "contactsUser"
-                                },
-                                {
-                                    "title": "合同编号",
-                                    "dataIndex": "contractNumber"
-                                },
-                                {
-                                    "title": "完成时间",
-                                    "dataIndex": "receiveTime",
-                                    "type": "date",
-                                    "format": "YYYY-MM-DD"
-                                },
-                                {
-                                    "title": "创建人",
-                                    "dataIndex": "createUserName"
-                                },
-                                {
-                                    "title": "重量（吨）合计",
-                                    "dataIndex": "weight"
-                                },
-                                {
-                                    "title": "原材料价税合计（元）",
-                                    "dataIndex": "price"
-                                },
-                                {
-                                    "title": "运费价税合计（元）",
-                                    "dataIndex": "transportPriceCount"
-                                },
-                                {
-                                    "title": "装卸费价税合计（元）",
-                                    "dataIndex": "unloadPriceCount"
-                                },
-                                {
-                                    "title": "备注",
-                                    "dataIndex": "remark"
-                                }
-                            ],
-                            "rules": [
-                                {
-                                    "required": true,
-                                    "message": "请选择关联收货单"
-                                }
-                            ]
-                        })
-                    }
-                    return item
-                }))
-                setBaseInfoColumn(result.slice(0))
-                baseForm.setFieldsValue({
-                    receiptNumbers: ""
-                })
-            }
-        }
+        // if (fields.businessType || fields.pleasePayType) {
+        //     if (allFields.paymentReqType !== 2) {
+        //         const result = baseInfoColumn.map(((item: any) => {
+                    
+        //             return item
+        //         }))
+        //         setBaseInfoColumn(result.slice(0))
+        //         baseForm.setFieldsValue({
+        //             receiptNumbers: ""
+        //         })
+        //     }
+        // }
 
         // 付款类型变化
         if (fields.paymentReqType) {
@@ -307,25 +280,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         if (type === 2) {
             // 货到票到付款
             const result = baseInfoColumn.map(((item: any) => {
-                if (item.dataIndex === "relatednotes") {
-                    return ({
-                        ...item,
-                        disabled: false,
-                        "rules": [
-                            {
-                                "required": true,
-                                "message": "请选择关联票据..."
-                            }
-                        ]
-                    })
-                }
-                if (item.dataIndex === "receiptNumbers") {
-                    return ({
-                        "title": "关联收货单",
-                        "dataIndex": "receiptNumbers",
-                        "disabled": true,
-                    })
-                }
                 if (item.dataIndex === "pleasePayAmount") {
                     return ({
                         "title": "请款金额",
@@ -340,97 +294,6 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
             setBaseInfoColumn(result.slice(0))
         } else {
             const result = baseInfoColumn.map(((item: any) => {
-                if (item.dataIndex === "relatednotes") {
-                    return ({
-                        ...item,
-                        disabled: true,
-                        "rules": [
-                            {
-                                "required": false,
-                                "message": "请选择关联票据..."
-                            }
-                        ]
-                    })
-                }
-                if (item.dataIndex === "receiptNumbers") {
-                    return ({
-                        "dataIndex": "receiptNumbers",
-                        "title": "关联收货单",
-                        "type": "popTable",
-                        "path": `/tower-storage/receiveStock?receiveStatus=1&companyRelationStatus=${businessType || ""}`,
-                        "width": 1011,
-                        "value": "receiptNumbers",
-                        "selectType": "checkbox",
-                        "dependencies": true,
-                        "readOnly": true,
-                        "disabled": businessType ? false : true,
-                        "search": [
-                            {
-                                "title": "月份选择",
-                                "dataIndex": "receiveTime",
-                                "type": "date",
-                                "width": 200
-                            },
-                            {
-                                "title": "查询",
-                                "dataIndex": "fuzzyQuery",
-                                "width": 200,
-                                "placeholder": "合同编号/收货单号/联系人"
-                            }
-                        ],
-                        "columns": [
-                            {
-                                "title": "收货单号",
-                                "dataIndex": "receiveNumber",
-                                "type": "string"
-                            },
-                            {
-                                "title": "联系人",
-                                "dataIndex": "contactsUser"
-                            },
-                            {
-                                "title": "合同编号",
-                                "dataIndex": "contractNumber"
-                            },
-                            {
-                                "title": "完成时间",
-                                "dataIndex": "receiveTime",
-                                "type": "date",
-                                "format": "YYYY-MM-DD"
-                            },
-                            {
-                                "title": "创建人",
-                                "dataIndex": "createUserName"
-                            },
-                            {
-                                "title": "重量（吨）合计",
-                                "dataIndex": "weight"
-                            },
-                            {
-                                "title": "原材料价税合计（元）",
-                                "dataIndex": "price"
-                            },
-                            {
-                                "title": "运费价税合计（元）",
-                                "dataIndex": "transportPriceCount"
-                            },
-                            {
-                                "title": "装卸费价税合计（元）",
-                                "dataIndex": "unloadPriceCount"
-                            },
-                            {
-                                "title": "备注",
-                                "dataIndex": "remark"
-                            }
-                        ],
-                        "rules": [
-                            {
-                                "required": true,
-                                "message": "请选择关联收货单"
-                            }
-                        ]
-                    })
-                }
                 if (item.dataIndex === "pleasePayAmount") {
                     return ({
                         "title": "请款金额",
@@ -518,19 +381,37 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "relatednotes":
                         return ({
                             ...item,
+                            path:`${path}`,
                             columns: item.columns.map((item: any) => item.dataIndex === "invoiceType" ? ({
                                 ...item,
                                 type: "select",
                                 enum: invoiceTypeEnum
-                            }) : item)
+                            }) :item.dataIndex === "invoiceSource" ? ({
+                                ...item,
+                                type: "select",
+                                enum: invoiceSourceEnum
+                            })
+                            : item)
+                        })
+                    case "receiptNumbers":
+                        return ({
+                            ...item,
+                            // disabled: baseForm.getFieldsValue(true).relatednotes
                         })
                     case "pleasePayType":
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="pleasePayType" style={{ width: '100%' }}>
-                                    <Select disabled={type === 'edit'} onChange={(e: string) => {
+                                    <Select disabled={type === 'edit'}  onChange={(e: string) => {
                                         setPleasePayType(e);
-                                        baseForm.setFieldsValue({ businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : '' })
+                                        baseForm.setFieldsValue({ 
+                                            businessType: e === '1156' ? 1 : e === '1157' ? 3 : e === '1158' ? 2 : '',
+                                            businessId: '',
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:'' 
+                                        })
+                                        setPath(`/tower-supply/invoice?`)
                                         if (e === '1156') {
                                             businessTypeChange(1);
                                         } else if (e === '1157') {
@@ -562,7 +443,16 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="businessType" style={{ width: '100%' }}>
-                                    <Select disabled={pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => businessTypeChange(e)}>
+                                    <Select disabled={type === 'edit'|| pleasePayType === '1156' || pleasePayType === '1157' || pleasePayType === '1158'} onChange={(e: number) => {
+                                        businessTypeChange(e)
+                                        baseForm.setFieldsValue({ 
+                                            businessId: '',
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:''  
+                                        });
+                                        setPath(`/tower-supply/invoice?businessType=${e}&businessId=${baseForm.getFieldsValue(true).businessId}`)
+                                    }}>
                                         <Select.Option value={1} key="1">供应商</Select.Option>
                                         <Select.Option value={2} key="2">装卸公司</Select.Option>
                                         <Select.Option value={3} key="3">运输公司</Select.Option>
@@ -574,7 +464,15 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                         return ({
                             ...item, render: (data: any, props: any) => {
                                 return <Form.Item name="businessId" style={{ width: '100%' }}>
-                                    <Select disabled={type === 'edit'} onChange={(e: string) => businessIdChange(e)}>
+                                    <Select disabled={type === 'edit'} showSearch onChange={(e: string) => {
+                                        businessIdChange(e)
+                                        baseForm.setFieldsValue({ 
+                                            relatednotes:'',
+                                            pleasePayAmount:'',
+                                            receiptNumbers:''  
+                                        });
+                                        setPath(`/tower-supply/invoice?businessType=${baseForm.getFieldsValue(true).businessType}&businessId=${e.split(',')[0]}`)
+                                    }}>
                                         {companyList && companyList.map((item: any) => {
                                             return <Select.Option key={item.id + ',' + item.name} value={item.id + ',' + item.name}>{item.name}</Select.Option>
                                         })}

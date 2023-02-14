@@ -58,6 +58,8 @@ export enum DictionaryEnums {
     DOCUMENT_TYPE = 1014,
     FILE_TYPE = 1015,
     IMPLEMENT_STANDARD = 1233,
+    INVOICE_SOURCE= 119,
+    PAYMENT_METHOD = 1310,
 }
 
 let productType: IDict[] | undefined = [];
@@ -103,7 +105,7 @@ let tenderDeliveryMethod: IDict[] | undefined = [];
 let compoundType: IDict[] | undefined = [];
 let factoryType: IDict[] | undefined = [];
 let componentType: IDict[] | undefined = [];
-
+let invoiceSource: IDict[] | undefined = [];
 let unloadMode: IDict[] | undefined = [];
 let settlementMode: IDict[] | undefined = [];
 let planName: IDict[] | undefined = [];
@@ -116,6 +118,7 @@ let fileType: IDict[] | undefined = [];
 let testType: IDict[] | undefined = [];
 let typeOfChange: IDict[] | undefined = [];
 let implementStandard: IDict[] | undefined = [];
+let paymentMethod: IDict[] | undefined = [];
 if (dictionary) {
     productType = dictionary[DictionaryEnums.PRODUCT_TYPE];
     voltageGrade = dictionary[DictionaryEnums.VOLTAGE_GRADE];
@@ -172,6 +175,8 @@ if (dictionary) {
     testType = dictionary[DictionaryEnums.TEST_TYPE];
     typeOfChange = dictionary[DictionaryEnums.TYPE_OF_CHANGE];
     implementStandard = dictionary[DictionaryEnums.IMPLEMENT_STANDARD];
+    invoiceSource = dictionary[DictionaryEnums.INVOICE_SOURCE];
+    paymentMethod = dictionary[DictionaryEnums.PAYMENT_METHOD];
 }
 
 export const productTypeOptions = productType;  //产品类型
@@ -228,3 +233,5 @@ export const fileTypeOptions = fileType; // 文件类型
 export const testTypeOptions = testType; //检验类型
 export const typeOfChangeOptions = typeOfChange; // 变更类型
 export const implementStandardOptions = implementStandard; //执行标准
+export const invoiceSourceOptions = invoiceSource; //发票来源
+export const paymentMethodOptions = paymentMethod; //付款方式

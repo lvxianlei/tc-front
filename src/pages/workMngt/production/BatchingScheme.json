@@ -1,6 +1,10 @@
 {
     "MaterialSummary": [
         {
+            "title": "领取数量",
+            "dataIndex": "alreadyPickingNum"
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName"
         },

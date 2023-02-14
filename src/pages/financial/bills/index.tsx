@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react"
-import { Button, DatePicker, Select, Modal, message, Input, Popconfirm } from 'antd'
+import { Button, DatePicker, Select, Modal, message, Input, Popconfirm, Space } from 'antd'
 import { useHistory } from 'react-router-dom'
 import { SearchTable as Page } from '../../common'
 import Edit from "./Edit"
@@ -7,9 +7,11 @@ import Overview from "./Overview"
 import { baseinfo } from "../financialData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
+import { invoiceSourceOptions, invoiceTypeOptions } from "../../../configuration/DictionaryOptions"
 interface EditRefProps {
     onSubmit: () => void
+    onSubmitApproval: () => void
+    onSubmitCancel: () => void
     resetFields: () => void
 }
 export default function Invoice() {
@@ -18,7 +20,14 @@ export default function Invoice() {
         value: item.id,
         label: item.name
     }))
+    const invoiceSourceEnum = invoiceSourceOptions?.map((item: { id: string, name: string }) => ({
+        value: item.id,
+        label: item.name
+    }))
     const [visible, setVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [detailedId, setDetailedId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
@@ -68,14 +77,32 @@ export default function Invoice() {
         })
     }
 
-    const handleModalOk = () => new Promise(async (resove, reject) => {
+    const handleModalOk = (isType: 'save'|'approvalSave'|'cancelSave') => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit()
-            message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
+            // await editRef.current?.onSubmit()
+            if(isType==='save'){
+                setSaveLoading(true)
+                await editRef.current?.onSubmit()
+                setSaveLoading(false)
+            }
+            if(isType==='approvalSave'){
+                setSubmitLoading(true)
+                await editRef.current?.onSubmitApproval()
+                setSubmitLoading(false)
+            }
+            if(isType==='cancelSave'){
+                setCancelLoading(true)
+                await editRef.current?.onSubmitCancel()
+                setCancelLoading(false)
+            }
+            // message.success(`票据${type === "new" ? "创建" : "编辑"}成功...`)
             setVisible(false)
-            resove(true)
             history.go(0)
+            resove(true)
         } catch (error) {
+            setSaveLoading(false)
+            setSubmitLoading(false)
+            setCancelLoading(false)
             reject(false)
         }
     })
@@ -86,14 +113,32 @@ export default function Invoice() {
             visible={visible}
             width={1011}
             title={type === "new" ? "创建" : "编辑"}
-            onOk={handleModalOk}
+            // onOk={handleModalOk}
+            footer={type ==='edit'?<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailedId("")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')} loading={cancelLoading}>撤销审批</Button>
+                </Space>:<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setDetailedId("")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>  
+                </Space>}
             onCancel={() => {
                 editRef.current?.resetFields()
                 setType("new")
                 setDetailedId("")
                 setVisible(false)
             }}>
-            <Edit type={type} ref={editRef} id={detailedId} />
+            <Edit type={type} ref={editRef} id={detailedId} visibleP={visible}/>
         </Modal>
         <Modal
             destroyOnClose
@@ -128,11 +173,11 @@ export default function Invoice() {
                     width: 200,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.invoiceStatus)} onClick={() => {
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setType("edit")
                                 setDetailedId(record.id)
                                 setVisible(true)
-                            }}>编辑</Button>
+                            }} disabled={record.invoiceStatus===4}>编辑</Button>
                             <Button
                                 type="link"
                                 className="btn-operation-link"
@@ -202,6 +247,24 @@ export default function Invoice() {
                         <Select.Option value="1">供应商</Select.Option>
                         <Select.Option value="2">装卸公司</Select.Option>
                         <Select.Option value="3">运输公司</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'invoiceSource',
+                    label: '发票来源',
+                    children: <Select style={{ width: 200 }} defaultValue="全部">
+                        {invoiceSourceEnum?.map((item: any) => <Select.Option key={item.value} value={item.value}>{item.label}</Select.Option>)}
+                    </Select>
+                },
+                {
+                    name: 'approval',
+                    label: '审批状态',
+                    children: <Select placeholder="请选择" style={{ width: "100px" }}>
+                        <Select.Option value="0">待发起</Select.Option>
+                        <Select.Option value="1">审批中</Select.Option>
+                        <Select.Option value="2">审批通过</Select.Option>
+                        <Select.Option value="3">审批驳回</Select.Option>
+                        <Select.Option value="4">已撤销</Select.Option>
                     </Select>
                 },
                 {

@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
-import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
+import { Button, Input, DatePicker, Select, Modal, message, Popconfirm, Space } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { SearchTable as Page } from '../../common'
+import {  Page } from '../../common'
 import Edit from "./Edit"
 import Overview from "./Overview"
 import AttachFile from "./AttachFile"
@@ -11,7 +11,9 @@ import RequestUtil from '../../../utils/RequestUtil'
 import { costTypeOptions, payTypeOptions } from "../../../configuration/DictionaryOptions"
 
 interface EditRefProps {
-    onSubmit: (type?: "saveAndApply" | "save") => void
+    onSubmit: () => void
+    onSubmitApproval: () => void
+    onSubmitCancel: () => void
     resetFields: () => void
 }
 
@@ -28,6 +30,9 @@ export default function ApplyPayment() {
     const editRef = useRef<EditRefProps>()
     const fileRef = useRef<EditRefProps>()
     const [visible, setVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [type, setType] = useState<"new" | "edit">("new")
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
     const [successVisible, setSuccessVisible] = useState<boolean>(false)
@@ -44,7 +49,7 @@ export default function ApplyPayment() {
 
     const { run: cancelRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/recallApply?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/workflow/cancel/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -53,7 +58,7 @@ export default function ApplyPayment() {
 
     const { run: approvalRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/applyPayment/initiateApproval?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/applyPayment/workflow/start/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -78,14 +83,34 @@ export default function ApplyPayment() {
         setFilterValue(value)
         return value
     }
-    const handleModalOk = (type?: "saveAndApply" | "save") => new Promise(async (resove, reject) => {
+    const handleModalOk = (isType?: "saveAndApply" | "save" | "cancelSave") => new Promise(async (resove, reject) => {
         try {
-            await editRef.current?.onSubmit(type)
-            message.success("请款申请创建成功...")
+            // await editRef.current?.onSubmit(type)
+            // message.success("请款申请创建成功...")
+            // setVisible(false)
+            if(isType==='save'){
+                setSaveLoading(true)
+                await editRef.current?.onSubmit()
+                setSaveLoading(false)
+            }
+            if(isType==='saveAndApply'){
+                setSubmitLoading(true)
+                await editRef.current?.onSubmitApproval()
+                setSubmitLoading(false)
+            }
+            if(isType==='cancelSave'){
+                setCancelLoading(true)
+                await editRef.current?.onSubmitCancel()
+                setCancelLoading(false)
+            }
             setVisible(false)
             history.go(0)
             resove(true)
         } catch (error) {
+            console.log(error)
+            setSaveLoading(false)
+            setSubmitLoading(false)
+            setCancelLoading(false)
             reject(false)
         }
     })
@@ -148,16 +173,36 @@ export default function ApplyPayment() {
     return <>
         <Modal visible={visible} destroyOnClose
             width={1011} title={type === "new" ? "创建申请信息" : "编辑申请信息"}
-            footer={[
-                <Button key="close" type="ghost" onClick={async () => {
-                    await editRef.current?.resetFields()
-                    setDetailId("")
-                    setType("new")
-                    setVisible(false)
-                }}>关闭</Button>,
-                <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
-                <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
-            ]}
+            // footer={[
+            //     <Button key="close" type="ghost" onClick={async () => {
+            //         await editRef.current?.resetFields()
+            //         setDetailId("")
+            //         setType("new")
+            //         setVisible(false)
+            //     }}>关闭</Button>,
+            //     <Button key="save" type="primary" onClick={() => handleModalOk()}>保存</Button>,
+            //     <Button key="saveOr" type="primary" onClick={() => handleModalOk("saveAndApply")} >保存并发起审批</Button>
+            // ]}
+            footer={type ==='edit'?<Space>
+                    <Button onClick={async () => {
+                        await editRef.current?.resetFields()
+                        setDetailId("")
+                        setType("new")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')} loading={submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('cancelSave')} loading={cancelLoading}>撤销审批</Button>
+                </Space>:<Space>
+                    <Button onClick={async () => {
+                        await editRef.current?.resetFields()
+                        setDetailId("")
+                        setType("new")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleModalOk('saveAndApply')} loading={submitLoading}>保存并发起审批</Button>
+                </Space>}
             onCancel={() => {
                 editRef.current?.resetFields()
                 setDetailId("")
@@ -194,8 +239,8 @@ export default function ApplyPayment() {
         <Page
             path="/tower-supply/applyPayment"
             exportPath={"/tower-supply/applyPayment/export"}
-            // sourceKey="page.records"
-            transformResult={(result:any)=>result?.page.records}
+            sourceKey="page.records"
+            // transformResult={(result:any)=>result?.page.records}
             columns={[
                 { title: "序号", dataIndex: "index", width: 50, render: (_: any, _a: any, index) => <>{index + 1}</> },
                 ...ApplicationForPayment.map((item: any) => {
@@ -209,7 +254,7 @@ export default function ApplyPayment() {
                 }),
                 {
                     title: "操作",
-                    dataIndex: "opration",
+                    dataIndex: "operation",
                     fixed: "right",
                     width: 230,
                     render: (_: any, record: any) => {
@@ -221,18 +266,18 @@ export default function ApplyPayment() {
                             <Button
                                 type="link"
                                 className="btn-operation-link"
-                                disabled={![0, 3].includes(record.applyStatus)}
+                                disabled={!['货到付款','预付款'].includes(record.paymentReqTypeName)&&![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 onClick={() => {
                                     setType("edit")
                                     setDetailId(record.id)
                                     setVisible(true)
                                 }}>编辑</Button>
-                            <Button type="link" className="btn-operation-link" disabled={![0, 3].includes(record.applyStatus)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
-                            <Button type="link" className="btn-operation-link" disabled={![1].includes(record.applyStatus)}
+                            <Button type="link" className="btn-operation-link" disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)} onClick={() => handleApprovalRun(record.id)}>发起</Button>
+                            <Button type="link" className="btn-operation-link" disabled={![1,'1'].includes(record.approval)}
                                 onClick={() => handleCancel(record.id)}>撤回</Button>
                             <Popconfirm
                                 title="确定删除此请款申请吗？"
-                                disabled={![0, 3].includes(record.applyStatus)}
+                                disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 onConfirm={async () => {
                                     await deleteRun(record?.id)
                                     message.success("删除成功...")
@@ -245,7 +290,7 @@ export default function ApplyPayment() {
                                     type="link"
                                     size="small"
                                     className="btn-operation-link"
-                                    disabled={![0, 3].includes(record.applyStatus)}
+                                    disabled={![undefined, 0,'0',3,'3',4,'4'].includes(record.approval)}
                                 >删除</Button>
                             </Popconfirm>
                         </>
@@ -267,15 +312,15 @@ export default function ApplyPayment() {
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                 },
                 {
-                    name: 'applyStatus',
+                    name: 'approval',
                     label: '审批状态',
                     children: <Select style={{ width: 200 }} defaultValue="全部">
                         <Select.Option value="">全部</Select.Option>
-                        <Select.Option value="0">未发起</Select.Option>
-                        <Select.Option value="1">待审批</Select.Option>
-                        <Select.Option value="2">已拒绝</Select.Option>
-                        <Select.Option value="3">已撤回</Select.Option>
-                        <Select.Option value="4">已通过</Select.Option>
+                        <Select.Option value="0">待发起</Select.Option>
+                        <Select.Option value="1">审批中</Select.Option>
+                        <Select.Option value="2">审批通过</Select.Option>
+                        <Select.Option value="3">审批驳回</Select.Option>
+                        <Select.Option value="4">已撤销</Select.Option>
                     </Select>
                 },
                 {
