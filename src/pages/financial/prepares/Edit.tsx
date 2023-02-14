@@ -218,7 +218,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 if(item.dataIndex==='receiptNumbers'){
                     return{
                         ...item,
-                        disabled:true
+                        disabled: fields.relatednotes.records.length>0
                     }
                 }
                 return item
@@ -395,7 +395,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "receiptNumbers":
                         return ({
                             ...item,
-                            disabled: baseForm.getFieldsValue(true).relatednotes
+                            // disabled: baseForm.getFieldsValue(true).relatednotes
                         })
                     case "pleasePayType":
                         return ({
