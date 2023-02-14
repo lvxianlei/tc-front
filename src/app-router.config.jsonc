@@ -3381,6 +3381,13 @@
       "exact": true,
       "authority": "tc_erp_rd_fix_item_config_list"
     },
+    { // WO-工单设置-自动同步
+      "name": "自动同步",
+      "path": "/worksheetSetting/selfSynchronizing",
+      "module": "./pages/worksheetSetting/selfSynchronizing/List",
+      "exact": true,
+      "authority": "tc_erp_rd_fix_item_config_list"
+    },
     { // WO-工单管理-工单管理
       "name": "工单管理",
       "path": "/worksheetMngt/management",

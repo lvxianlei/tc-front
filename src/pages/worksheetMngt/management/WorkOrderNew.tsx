@@ -102,18 +102,18 @@ export default forwardRef(function WorkOrderNew({ type, rowId, getLoading }: mod
             dataIndex: 'postName',
             width: 100
         },
-        {
-            key: 'colour',
-            title: '颜色',
-            dataIndex: 'colour',
-            width: 100,
-            render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
-                <Space>
-                    <div className={styles.color_set_show} style={{ backgroundColor: _ }}></div>
-                    <div>{_}</div>
-                </Space>
-            )
-        }
+        // {
+        //     key: 'colour',
+        //     title: '颜色',
+        //     dataIndex: 'colour',
+        //     width: 100,
+        //     render: (_: string, record: Record<string, any>, index: number): React.ReactNode => (
+        //         <Space>
+        //             <div className={styles.color_set_show} style={{ backgroundColor: _ }}></div>
+        //             <div>{_}</div>
+        //         </Space>
+        //     )
+        // }
     ]
 
     const customColumns = [

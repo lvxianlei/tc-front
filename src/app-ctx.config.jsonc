@@ -1710,6 +1710,11 @@
                         "label": "字段同步",
                         "path": "/worksheetSetting/fieldSynchronous",
                         "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "自动同步",
+                        "path": "/worksheetSetting/selfSynchronizing",
+                        "authority": "tc_erp_sc_workbench_list"
                     }
                 ]
             }

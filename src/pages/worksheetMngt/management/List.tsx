@@ -11,7 +11,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import styles from './Management.module.less';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import SelectUser from '../../common/SelectUser';
 import WorkOrderNew from './WorkOrderNew';
 import WorkOrderDetail from './WorkOrderDetail';
@@ -92,7 +92,10 @@ export default function List(): React.ReactNode {
         {
             "key": "fieldValue",
             "title": "业务编号",
-            "dataIndex": "fieldValue"
+            "dataIndex": "fieldValue",
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                _ ? <Link to={record?.apiUrl}>{_}</Link> : <span>-</span>
+            )
         },
         {
             "key": "buildChannel",
