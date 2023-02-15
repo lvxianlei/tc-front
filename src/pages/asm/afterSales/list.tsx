@@ -110,6 +110,11 @@ export default () => {
             ]
         },
         {
+            title: "问题描述/备注",
+            dataIndex: "description",
+            width: 200
+        },
+        {
             title: "创建人",
             dataIndex: "createUserName",
             width: 150,
