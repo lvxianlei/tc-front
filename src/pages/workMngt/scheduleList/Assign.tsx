@@ -62,22 +62,24 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
                 setScheduleData(resData);
                 if (resData?.assignConfigVO?.weldingCompletionTime
                     && resData?.assignConfigVO?.loftingWithSectionCompletionTime
-                    && resData?.assignConfigVO.smallSampleCompletionTime
-                    && resData?.assignConfigVO.boltCompletionTime
-                    && resData?.assignConfigVO.drawDeliverTime
-                    && resData?.assignConfigVO.blotDrawDeliverTime
+                    && resData?.assignConfigVO?.smallSampleCompletionTime
+                    && resData?.assignConfigVO?.boltCompletionTime
+                    && resData?.assignConfigVO?.weldingDrawDeliverTime
+                    && resData?.assignConfigVO?.blotDrawDeliverTime
                     && resData?.loftingDeliverTime) {
-                    const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
-                    const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
-                    const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
-                    const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                    const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
-                    const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
+                    const weldingCompletionTime = Number(resData.assignConfigVO?.weldingCompletionTime);
+                    const loftingWithSectionCompletionTime = Number(resData.assignConfigVO?.loftingWithSectionCompletionTime);
+                    const smallSampleCompletionTime = Number(resData.assignConfigVO?.smallSampleCompletionTime);
+                    const boltCompletionTime = Number(resData.assignConfigVO?.boltCompletionTime);
+                    const weldingDrawTime = Number(resData.assignConfigVO?.blotDrawDeliverTime);
+                    const boltDrawTime = Number(resData.assignConfigVO?.weldingDrawDeliverTime);
+
                     let newWeldingCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
                     let newLoftingWithSectionCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
                     let newSmallSampleCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
                     let newBoltCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + loftingWithSectionCompletionTime));
                     let newWeldingDrawTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime + boltDrawTime));
+
                     let newBoltDrawTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + boltCompletionTime + weldingDrawTime));
                     resData.weldingDeliverTime = newWeldingCompletionTime
                     resData.boltDeliverTime = newBoltCompletionTime
@@ -121,17 +123,17 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
                 setScheduleData(resData);
                 if (resData?.assignConfigVO?.weldingCompletionTime
                     && resData?.assignConfigVO?.loftingWithSectionCompletionTime
-                    && resData?.assignConfigVO.smallSampleCompletionTime
-                    && resData?.assignConfigVO.boltCompletionTime
-                    && resData?.assignConfigVO.drawDeliverTime
-                    && resData?.assignConfigVO.blotDrawDeliverTime
+                    && resData?.assignConfigVO?.smallSampleCompletionTime
+                    && resData?.assignConfigVO?.boltCompletionTime
+                    && resData?.assignConfigVO?.weldingDrawDeliverTime
+                    && resData?.assignConfigVO?.blotDrawDeliverTime
                     && resData?.loftingDeliverTime) {
                     const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
                     const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
                     const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
                     const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                    const weldingDrawTime = Number(scheduleData.assignConfigVO.blotDrawDeliverTime);
-                    const boltDrawTime = Number(scheduleData.assignConfigVO.weldingDrawDeliverTime);
+                    const weldingDrawTime = Number(resData.assignConfigVO.blotDrawDeliverTime);
+                    const boltDrawTime = Number(resData.assignConfigVO.weldingDrawDeliverTime);
                     let newWeldingCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
                     let newLoftingWithSectionCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
                     let newSmallSampleCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
@@ -171,22 +173,23 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
                     boltUser: resData.boltUser && resData.boltUser.split(','),
                     deliveryDrawLeader: resData.deliveryDrawLeader ? resData.deliveryDrawLeader : '0'
                 });
-            } else if(type === 'batch') {
+            } else if (type === 'batch') {
                 const resData: any = ids && ids?.length > 1 ? await RequestUtil.get(`/tower-science/productCategory/category/name`, { ids: ids.join(',') }) : await RequestUtil.get(`/tower-science/productCategory/${ids?.join(',')}`);
                 setScheduleData(resData);
                 if (resData?.assignConfigVO?.weldingCompletionTime
                     && resData?.assignConfigVO?.loftingWithSectionCompletionTime
-                    && resData?.assignConfigVO.smallSampleCompletionTime
-                    && resData?.assignConfigVO.boltCompletionTime
-                    && resData?.assignConfigVO.drawDeliverTime
-                    && resData?.assignConfigVO.blotDrawDeliverTime
+                    && resData?.assignConfigVO?.smallSampleCompletionTime
+                    && resData?.assignConfigVO?.boltCompletionTime
+                    && resData?.assignConfigVO?.weldingDrawDeliverTime
+                    && resData?.assignConfigVO?.blotDrawDeliverTime
                     && resData?.loftingDeliverTime) {
                     const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
                     const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
                     const smallSampleCompletionTime = Number(resData.assignConfigVO.smallSampleCompletionTime);
                     const boltCompletionTime = Number(resData.assignConfigVO.boltCompletionTime);
-                    const weldingDrawTime = Number(resData.assignConfigVO.drawDeliverTime);
-                    const boltDrawTime = Number(resData.assignConfigVO.blotDrawDeliverTime);
+                    const weldingDrawTime = Number(resData.assignConfigVO.blotDrawDeliverTime);
+                    const boltDrawTime = Number(resData.assignConfigVO.weldingDrawDeliverTime);
+
                     let newWeldingCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + weldingCompletionTime));
                     let newLoftingWithSectionCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + loftingWithSectionCompletionTime));
                     let newSmallSampleCompletionTime = new Date(new Date(resData.loftingDeliverTime).setHours(new Date(resData.loftingDeliverTime).getHours() + smallSampleCompletionTime));
@@ -217,10 +220,10 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
                 setScheduleData(resData);
                 if (resData?.assignConfigVO?.weldingCompletionTime
                     && resData?.assignConfigVO?.loftingWithSectionCompletionTime
-                    && resData?.assignConfigVO.smallSampleCompletionTime
-                    && resData?.assignConfigVO.boltCompletionTime
-                    && resData?.assignConfigVO.drawDeliverTime
-                    && resData?.assignConfigVO.blotDrawDeliverTime
+                    && resData?.assignConfigVO?.smallSampleCompletionTime
+                    && resData?.assignConfigVO?.boltCompletionTime
+                    && resData?.assignConfigVO?.weldingDrawDeliverTime
+                    && resData?.assignConfigVO?.blotDrawDeliverTime
                     && resData?.loftingDeliverTime) {
                     const weldingCompletionTime = Number(resData.assignConfigVO.weldingCompletionTime);
                     const loftingWithSectionCompletionTime = Number(resData.assignConfigVO.loftingWithSectionCompletionTime);
@@ -263,7 +266,6 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            console.log(postData)
             const result = await RequestUtil.post('/tower-science/productCategory/assign', postData)
             resole(result)
         } catch (error) {
@@ -304,7 +306,7 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
             }
             if (saveData.boltCheckUser && saveData.boltCheckUser.indexOf('0') === 0) { //螺栓清单校核
                 if (saveData.boltUser && saveData.boltUser?.indexOf('0') === 0) {
-                    saveData.boltCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData.loftingUser : saveData?.boltPlanCheckUser
+                    saveData.boltCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.loftingUser : saveData?.boltPlanCheckUser
                 } else {
                     saveData.boltCheckUser = Array.isArray(saveData.boltUser) ? saveData.boltUser?.join(',') : saveData.boltUser
                 }
@@ -313,7 +315,7 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
             }
             saveData.boltCheckUser = Array.isArray(saveData?.boltCheckUser) ? saveData?.boltCheckUser?.join(',') : saveData?.boltCheckUser;
             saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader && saveData?.deliveryDrawLeader.indexOf('0') === 0 ? saveData?.drawLeader : saveData?.deliveryDrawLeader;
-            console.log(scheduleData?.productCategoryIds)
+
             await saveRun({
                 ...saveData,
                 boltDeliverTime: saveData?.boltDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
@@ -324,7 +326,7 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
                 smallSampleDeliverTime: saveData?.smallSampleDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
                 deliveryDrawDeliverTime: saveData?.deliveryDrawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
                 drawDeliverTime: saveData?.drawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                idList: type === 'batch' ? scheduleData?.productCategoryIds: type === 'taskBatch' ?scheduleData?.productCategoryIds : [scheduleData.productCategoryId]
+                idList: type === 'batch' ? scheduleData?.productCategoryIds : type === 'taskBatch' ? scheduleData?.productCategoryIds : [scheduleData.productCategoryId]
             })
             resolve(true)
         } catch (error) {
