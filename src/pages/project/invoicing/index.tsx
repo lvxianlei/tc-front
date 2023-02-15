@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { SearchTable as Page } from '../../common'
+import { SearchTable as Page, Workflow } from '../../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
@@ -101,7 +101,7 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 190,
+                    width: 240,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
@@ -145,6 +145,7 @@ export default function Invoicing() {
                             >
                                 <Button type="link" size="small" disabled={record.state !== 0}>删除</Button>
                             </Popconfirm>
+                            <Workflow workflowId={record?.id} />
                         </>
                     }
                 }]}
