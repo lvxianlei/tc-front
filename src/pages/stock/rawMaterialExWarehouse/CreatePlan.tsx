@@ -867,7 +867,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                     }
                                     return res
                         }),
-                        path: `${addDetailMaterial.path}?outStockItemStatus=2&outStockType=0`
+                        path: `${addDetailMaterial.path}?materialType=1&outStockItemStatus=2`
                     }}
                     value={{
                         id: "",
