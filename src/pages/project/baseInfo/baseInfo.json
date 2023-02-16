@@ -35,11 +35,13 @@
                 {
                     "title": "项目编号",
                     "dataIndex": "projectNumber",
+                    "search": true,
                     "width": 140
                 },
                 {
                     "title": "项目名称",
                     "dataIndex": "projectName",
+                    "search": true,
                     "width": 140
                 },
                 {
@@ -55,6 +57,7 @@
                 {
                     "title": "批次号",
                     "dataIndex": "batchSn",
+                    "search": true,
                     "width": 100
                 },
                 {
