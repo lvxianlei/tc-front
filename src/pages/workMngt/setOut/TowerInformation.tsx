@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -520,7 +520,7 @@ export default function TowerInformation(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
-    const [tableColumns, setTableColumns] = useState(columnsSetting);
+    const [tableColumns, setTableColumns] = useState<any>(columnsSetting);
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -658,7 +658,7 @@ export default function TowerInformation(): React.ReactNode {
             <span>所选总重kg：{count?.pitchTotalWeight}</span>
         </Space>
         <Form form={editForm} className={styles.descripForm}>
-            <Page
+            <SearchTable
                 path={`/tower-science/productSegment`}
                 columns={tableColumns}
                 headTabs={[]}
