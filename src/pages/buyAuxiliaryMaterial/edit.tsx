@@ -110,14 +110,22 @@ export default forwardRef(function Edit({ id, type, visibleP}: EditProps, ref): 
                 }
             })
         })
-        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,select)
-        console.log(data)
-        setPopDataList(select.map((item:any)=>{
-            return {
-                ...item,
-                stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum
-            }
-        }))
+        if(select.length>0){
+            const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getAuxiliaryStockNum`,select)
+            setPopDataList(select.map((item:any)=>{
+                return {
+                    ...item,
+                    stockNum: data.filter((eve:any)=> item.id===eve.id)[0].stockNum
+                }
+            }))
+        }else{
+            setPopDataList(select.map((item:any)=>{
+                return {
+                    ...item,
+                    stockNum: 0
+                }
+            }))
+        }
         setVisible(false);
     }
 
