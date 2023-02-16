@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, message } from 'antd';
-import { Page } from '../common';
+import { Page, SearchTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOutTask.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -143,9 +143,9 @@ export default function SetOutTaskList(): React.ReactNode {
         }
     ]
 
-    return <Page
+    return <SearchTable
         path="/tower-science/loftingTask/taskPage"
-        columns={columns}
+        columns={columns as any}
         headTabs={[]}
         requestData={{ status: location.state?.state }}
         exportPath={`/tower-science/loftingTask/taskPage`}
@@ -182,7 +182,7 @@ export default function SetOutTaskList(): React.ReactNode {
             }
         ]}
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

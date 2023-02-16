@@ -6,7 +6,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Space, DatePicker, Select, Button, Spin, message } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -271,7 +271,7 @@ export default function PoleInformation(): React.ReactNode {
         >
             <AllotModal getLoading={(loading: boolean) => setConfirmLoading(loading)} id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus} />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/product/lofting"
             exportPath={`/tower-science/product/lofting`}
             columns={columns}
@@ -306,7 +306,7 @@ export default function PoleInformation(): React.ReactNode {
                     children: <IntgSelect width={200} />
                 }
             ]}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 if (values.newStatusTime) {
                     const formatDate = values.newStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

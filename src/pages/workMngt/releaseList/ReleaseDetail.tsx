@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { Page, SearchTable } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/lib/form/Form';
@@ -593,7 +593,7 @@ export default function ReleaseList(): React.ReactNode {
                 </Form.Item>
             </Form>
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/loftingBatch/batchDetail"
             columns={columns}
             onFilterSubmit={onFilterSubmit}

@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table, Checkbox, Select } from 'antd';
-import { SearchTable as Page } from '../../../common';
+import { SearchTable as Page, SearchTable } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
 import { useHistory, useParams } from 'react-router-dom';
@@ -549,7 +549,7 @@ export default function Lofting(): React.ReactNode {
                 }]}
             />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/drawProductStructure"
             exportPath="/tower-science/drawProductStructure"
             columns={[...columnsSetting as any, {

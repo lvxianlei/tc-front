@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker } from 'antd';
-import { Page } from '../common';
+import { Page, SearchTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './DrawTower.module.less';
 import { Link } from 'react-router-dom';
@@ -129,7 +129,7 @@ export default function DrawTowerMngt(): React.ReactNode {
         }
     ]
 
-    return <Page
+    return <SearchTable
         path="/tower-science/productCategory/draw/page"
         exportPath={`/tower-science/productCategory/draw/page`}
         columns={columns}
@@ -148,7 +148,7 @@ export default function DrawTowerMngt(): React.ReactNode {
             }
         ]}
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.time) {
                 const formatDate = values.time.map((item: any) => item.format("YYYY-MM-DD"));
                 values.creationTimeStart = formatDate[0] + ' 00:00:00';

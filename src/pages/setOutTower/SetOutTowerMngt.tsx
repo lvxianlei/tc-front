@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Modal, Select } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
-import { CommonTable, Page } from '../common';
+import { CommonTable, Page, SearchTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { downloadTemplate } from '../workMngt/setOut/downloadTemplate';
 import { patternTypeOptions } from '../../configuration/DictionaryOptions';
@@ -203,7 +203,7 @@ export default function SetOutTowerMngt(): React.ReactNode {
                 path: `/tower-science/productNc/downloadSummary?productCategoryId=${taskId}`
             }]} />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/productCategory/lofting/page"
             columns={columns}
             filterValue={filterValue}

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Select, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { IntgSelect, Page } from '../common'
+import { IntgSelect, Page, SearchTable } from '../common'
 import styles from './question.module.less';
 
 export default function QuestionMngt(): React.ReactNode {
@@ -151,7 +151,7 @@ export default function QuestionMngt(): React.ReactNode {
         return value
     }
     return <>
-        <Page
+        <SearchTable
             path="/tower-science/issue"
             columns={columns}
             exportPath="/tower-science/issue"
