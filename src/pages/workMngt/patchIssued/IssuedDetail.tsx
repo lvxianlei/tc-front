@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Input, message, Modal, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page } from '../../common';
+import { Page, SearchTable } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/es/form/Form';
@@ -405,7 +405,7 @@ export default function IssuedDetail(): React.ReactNode {
                 </Form.Item>
             </Form>
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/supplyBatch/batchDetail"
             columns={columns}
             onFilterSubmit={onFilterSubmit}

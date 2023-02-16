@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react'
 import { Space, Input, DatePicker, Select, Form, Modal, Button, message } from 'antd'
 import { Link, useHistory, useLocation } from 'react-router-dom'
-import { Page } from '../../common'
+import { Page, SearchTable } from '../../common'
 import { FixedType } from 'rc-table/lib/interface';
 import SchedulePlan from './SchedulePlan';
 import useRequest from '@ahooksjs/use-request';
@@ -174,7 +174,7 @@ export default function ScheduleList(): React.ReactNode {
             onCancel={handleModalCancel}>
             <Assign id={''} ids={selectedKeys} type={'taskBatch'} planData={planData} ref={assignModalRef} />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/loftingTask"
             columns={columns}
             exportPath="/tower-science/loftingTask"

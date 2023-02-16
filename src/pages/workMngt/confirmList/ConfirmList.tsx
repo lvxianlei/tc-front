@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Select, Form } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
 import { FixedType } from 'rc-table/lib/interface';
-import { IntgSelect, Page } from '../../common'
+import { IntgSelect, Page, SearchTable } from '../../common'
 import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -126,7 +126,7 @@ export default function ConfirmList() {
         return value
     }
     return (
-        <Page
+        <SearchTable
             path="/tower-science/drawProductDetail"
             columns={columns}
             filterValue={filterValue}

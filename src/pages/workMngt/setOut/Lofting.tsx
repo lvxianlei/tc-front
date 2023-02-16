@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu, InputNumber, Select } from 'antd';
-import { DetailContent, Page } from '../../common';
+import { DetailContent, Page, SearchTable } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -933,7 +933,7 @@ export default function Lofting(): React.ReactNode {
             </Form.Item>
         </Form> */}
         {/* <Form form={form} className={styles.descripForm}> */}
-        <Page
+        <SearchTable
             path="/tower-science/productStructure/list"
             exportPath={`/tower-science/productStructure/list`}
             columns={columns}
@@ -1055,7 +1055,7 @@ export default function Lofting(): React.ReactNode {
                 ]
             }
             filterValue={filterValue}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 setFilterValue(values);
                 return values;
             }}
