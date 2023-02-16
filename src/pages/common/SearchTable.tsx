@@ -78,14 +78,13 @@ export default function SearchTable({
     const location = useLocation<{ state: {} }>();
     const history = useHistory()
     const uriSearch: any = parse(location.search.replace("?", ""))
-    const [pagenationParams, setPagenationParams] = useState<PagenationProps>({ current: uriSearch?.current || 1, pageSize })
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
     const { loading, data } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
         try {
             if (pagination !== false) {
-                params.current = pagenationParams.current
-                params.size = pagenationParams.pageSize
+                params.current = uriSearch.current || 1
+                params.size = uriSearch.pageSize || pageSize
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
             const paramsOptions = stringify({ ...search, ...params, ...filterValue }, { skipNull: true })
@@ -101,8 +100,6 @@ export default function SearchTable({
         }
     }), {
         refreshDeps: [
-            pagenationParams.current,
-            pagenationParams.pageSize,
             JSON.stringify(filterValue),
             path,
             location.search
@@ -111,15 +108,24 @@ export default function SearchTable({
 
     useEffect(() => {
         form.setFieldsValue(formatURISearch(uriSearch))
+        // setPagenationParams({
+        //     current: uriSearch?.current || 1,
+        //     pageSize: uriSearch?.pageSize || pageSize
+        // })
     }, [location.search])
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
-        setPagenationParams({
-            ...pagenationParams,
+        // setPagenationParams({
+        //     ...pagenationParams,
+        //     current: page,
+        //     pageSize: pageSize || pagenationParams.pageSize
+        // })
+        history.replace(`${location.pathname}?${stringify({
+            ...uriSearch,
             current: page,
-            pageSize: pageSize || pagenationParams.pageSize
-        })
-    }, [setPagenationParams, JSON.stringify(pagenationParams)])
+            pageSize: pageSize || uriSearch.pageSize
+        })}`)
+    }, [uriSearch, location])
 
     return <>
         {searchFormItems.length > 0 && <Form
@@ -199,8 +205,8 @@ export default function SearchTable({
                     <Pagination
                         className={styles.pagination}
                         total={data?.result?.total}
-                        pageSize={pagenationParams.pageSize}
-                        current={pagenationParams.current}
+                        pageSize={(uriSearch.pageSize || pageSize) * 1}
+                        current={(uriSearch.current || 1) * 1}
                         showTotal={(total: number) => `共${total}条记录`}
                         showSizeChanger
                         onChange={paginationChange}
@@ -223,8 +229,8 @@ export default function SearchTable({
                     <Pagination
                         className={styles.pagination}
                         total={data?.result?.total}
-                        pageSize={pagenationParams.pageSize}
-                        current={pagenationParams.current}
+                        pageSize={(uriSearch.pageSize || pageSize) * 1}
+                        current={(uriSearch.current || 1) * 1}
                         showTotal={(total: number) => `共${total}条记录`}
                         showSizeChanger
                         onChange={paginationChange}
@@ -238,8 +244,8 @@ export default function SearchTable({
             location={location}
             match={match}
             columnsKey={() => columns.filter((item: any) => item.title !== "操作")}
-            current={pagenationParams.current || 1}
-            size={pagenationParams.pageSize || 10}
+            size={(uriSearch.pageSize || pageSize) * 1}
+            current={(uriSearch.current || 1) * 1}
             total={data?.result?.total || 0}
             url={exportPath}
             fileName={exportFileName}
