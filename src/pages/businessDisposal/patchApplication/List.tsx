@@ -5,7 +5,7 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip, Modal, InputNumber } from 'antd';
+import { Space, Input, DatePicker, Select, Button, Form, message, Popconfirm, Row, Col, TablePaginationConfig, Tooltip, Modal, InputNumber, TreeSelect } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchApplication.module.less';
 import { Link, useHistory } from 'react-router-dom';
@@ -14,6 +14,8 @@ import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
 import { CommonTable, IntgSelect } from '../../common';
 import useRequest from '@ahooksjs/use-request';
+import { TreeNode } from 'antd/lib/tree-select';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 
 export default function List(): React.ReactNode {
     const history = useHistory();
@@ -40,6 +42,12 @@ export default function List(): React.ReactNode {
             setPartsData([]);
         }
         resole(data?.records);
+    }), {})
+
+
+    const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const departmentData: any = await RequestUtil.get(`/tower-system/department`);
+        resole(departmentData)
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
@@ -90,6 +98,31 @@ export default function List(): React.ReactNode {
         run({}, { ...values });
     }
 
+    const renderTreeNodes = (data: any) =>
+        data.map((item: any) => {
+            if (item.children) {
+                return (
+                    <TreeNode key={item.id} title={item.name} value={item.id} className={styles.node}>
+                        {renderTreeNodes(item.children)}
+                    </TreeNode>
+                );
+            }
+            return <TreeNode {...item} key={item.id} title={item.name} value={item.id} />;
+        });
+
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles.forEach((role: any & SelectDataNode): void => {
+            role.value = role.id;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            } else {
+                role.children = []
+            }
+        });
+        return roles;
+    }
+
     return <>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
             <Form.Item label='日期' name="updateStatusTime">
@@ -113,6 +146,11 @@ export default function List(): React.ReactNode {
                         </Select.Option>
                     })}
                 </Select>
+            </Form.Item>
+            <Form.Item name="applyUserDept" label="申请部门">
+                <TreeSelect style={{ width: "150px" }} placeholder="请选择">
+                    {renderTreeNodes(wrapRole2DataNode(department))}
+                </TreeSelect>
             </Form.Item>
             <Form.Item label='申请人' name="applyUser">
                 <IntgSelect width={200} />
@@ -269,7 +307,7 @@ export default function List(): React.ReactNode {
                                                     <Input maxLength={100} />
                                                 </Form.Item>
                                                 <Form.Item name='freightPrice' label="运费">
-                                                    <InputNumber style={{width: '100%'}} max={999999.99}/>
+                                                    <InputNumber style={{ width: '100%' }} max={999999.99} />
                                                 </Form.Item>
                                             </Form>,
                                             onOk: () => new Promise(async (resolve, reject) => {
