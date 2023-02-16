@@ -3,10 +3,204 @@
         {
             "title": "项目名称",
             "dataIndex": "projectName",
-            "rules": [
+            "required": true,
+            "width": 1011,
+            "type": "popTable",
+            "path": "/tower-market-presale/niche",
+            "value": "projectName",
+            "rowKey": "id",
+            "readOnly": false,
+            "dependencies": true,
+            "columns": [
                 {
-                    "required": true,
-                    "message": "请输入项目名称..."
+                    "title": "状态",
+                    "dataIndex": "status",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 1,
+                            "label": "应标中"
+                        },
+                        {
+                            "value": 2,
+                            "label": "中标"
+                        },
+                        {
+                            "value": 3,
+                            "label": "关闭"
+                        }
+                    ],
+                    "width": 100
+                },
+                {
+                    "title": "项目编号",
+                    "dataIndex": "projectNumber",
+                    "width": 140
+                },
+                {
+                    "title": "项目名称",
+                    "dataIndex": "projectName",
+                    "width": 140
+                },
+                {
+                    "title": "招标单位",
+                    "dataIndex": "bidCompanyName",
+                    "width": 100
+                },
+                {
+                    "title": "招标代理机构",
+                    "dataIndex": "bidAgencyName",
+                    "width": 100
+                },
+                {
+                    "title": "批次号",
+                    "dataIndex": "batchSn",
+                    "width": 100
+                },
+                {
+                    "title": "参与类型",
+                    "dataIndex": "partakeType",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 1,
+                            "label": "按包"
+                        },
+                        {
+                            "value": 2,
+                            "label": "按项目"
+                        }
+                    ],
+                    "width": 100
+                },
+                {
+                    "title": "总包数",
+                    "dataIndex": "totalPackage",
+                    "width": 100
+                },
+                {
+                    "title": "总重量",
+                    "dataIndex": "totalWeight",
+                    "width": 100
+                },
+                {
+                    "title": "标书购买截止日期",
+                    "dataIndex": "bidBuyEndTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD",
+                    "width": 140
+                },
+                {
+                    "title": "投标截止日期",
+                    "dataIndex": "biddingEndTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD",
+                    "width": 100
+                },
+                {
+                    "title": "开标日期",
+                    "dataIndex": "bidTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD HH",
+                    "width": 120
+                },
+                {
+                    "title": "招标地点",
+                    "dataIndex": "bidAddress",
+                    "width": 100
+                },
+                {
+                    "title": "渠道",
+                    "dataIndex": "channelName",
+                    "width": 100
+                },
+                {
+                    "title": "归属区域",
+                    "dataIndex": "regionName",
+                    "width": 100
+                },
+                {
+                    "title": "发布日期",
+                    "dataIndex": "releaseDate",
+                    "type": "date",
+                    "format": "YYYY-MM-DD",
+                    "width": 100
+                },
+                {
+                    "title": "业务经理",
+                    "dataIndex": "salesmanName",
+                    "width": 100
+                },
+                {
+                    "title": "商机来源",
+                    "dataIndex": "source",
+                    "type": "select",
+                    "enum": [
+                        {
+                            "value": 1,
+                            "label": "人工录入"
+                        },
+                        {
+                            "value": 2,
+                            "label": "线索自动推送"
+                        },
+                        {
+                            "value": 3,
+                            "label": "报价补充自动推送"
+                        }
+                    ],
+                    "width": 140
+                },
+                {
+                    "title": "商机类型",
+                    "dataIndex": "nicheType",
+                    "width": 100
+                },
+                {
+                    "title": "创建人",
+                    "dataIndex": "createUserName",
+                    "width": 100
+                },
+                {
+                    "title": "创建日期",
+                    "dataIndex": "createTime",
+                    "type": "date",
+                    "format": "YYYY-MM-DD",
+                    "width": 100
+                },
+                {
+                    "title": "未中标/流标原因",
+                    "dataIndex": "closeStatus",
+                    "width": 140,
+                    "type": "select",
+                    "enum": [
+                        {
+                            "label": "流标",
+                            "value": 1
+                        },
+                        {
+                            "label": "废标",
+                            "value": 2
+                        },
+                        {
+                            "label": "未中标",
+                            "value": 3
+                        },
+                        {
+                            "label": "资格入围",
+                            "value": 4
+                        }
+                    ]
+                },
+                {
+                    "title": "关联单据",
+                    "dataIndex": "sourceNumber",
+                    "width": 140
+                },
+                {
+                    "title": "备注",
+                    "dataIndex": "description",
+                    "width": 100
                 }
             ]
         },
