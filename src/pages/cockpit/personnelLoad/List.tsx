@@ -36,14 +36,14 @@ export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any[] = await RequestUtil.get<any[]>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
+        const data: any = await RequestUtil.get<any>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
         // setPage({ ...data });
-        if (data?.length > 0 && data[0]?.id) {
-            detailRun(data[0]?.userId, data[0]?.type)
+        if (data?.workLoadVOList?.length > 0 && data?.workLoadVOList[0]?.id) {
+            detailRun(data?.workLoadVOList[0]?.userId, data?.workLoadVOList[0]?.type)
         } else {
             setDetailData([]);
         }
-        resole(data);
+        resole(data?.workLoadVOList);
     }), {})
 
     const { run: detailRun } = useRequest<any>((id: string, type: number) => new Promise(async (resole, reject) => {
