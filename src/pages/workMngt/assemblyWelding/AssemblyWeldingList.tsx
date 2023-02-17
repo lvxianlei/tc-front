@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, Row, Col, TreeSelect, message } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -206,7 +206,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 </Row>
             </Form>
         </Modal> */}
-        <Page
+        <SearchTable
             path="/tower-science/welding"
             exportPath={`/tower-science/welding`}
             columns={columns}
@@ -258,7 +258,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型" />
                 }
             ]}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 if (values.updateTime) {
                     const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

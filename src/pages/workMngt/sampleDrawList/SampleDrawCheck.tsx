@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Modal, Form, Image, Popconfirm, Descriptions, Upload, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { CommonTable, DetailTitle, Page } from '../../common';
+import { CommonTable, DetailTitle, Page, SearchTable } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import { CloudUploadOutlined } from '@ant-design/icons';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -223,7 +223,7 @@ export default function SampleDrawCheck(): React.ReactNode {
                     <Button type='primary' onClick={handleErrorModalOk}>确定</Button>
                 </Space>:null}
             </Modal>
-            <Page
+            <SearchTable
                 path="/tower-science/smallSample/checkList"
                 columns={columns}
                 onFilterSubmit={onFilterSubmit}

@@ -414,7 +414,7 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
                 return ({
                     ...item, render: (data: any, props: any) => {
                         return <Form.Item name="businessId" style={{ width: "100%" }}>
-                            <Select disabled={type === 'edit'} onChange={(e: any) => {
+                            <Select disabled={type === 'edit'} showSearch onChange={(e: any) => {
                                 console.log(e, "======")
                                 setPath(`/tower-storage/warehousingEntry/invoice/list?supplierName=${e.split(",")[1]}&`)
                                 baseForm.setFieldsValue({ invoiceUnit: e.split(",")[1] })

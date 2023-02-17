@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './sample.module.less';
@@ -138,7 +138,7 @@ export default function SampleDrawList(): React.ReactNode {
         return value
     }
     return (
-        <Page
+        <SearchTable
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}

@@ -144,6 +144,8 @@ export default function List(): React.ReactNode {
                                 cancelText: "关闭",
                                 okButtonProps: { style: { display: 'none' } }
                             })
+                        } else if (record?.fileSuffix === 'pdf') {
+                            window.open(`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(record?.fileVo?.originalName as string)}&url=${encodeURIComponent(record?.fileVo?.downloadUrl as string)}`)
                         } else {
                             window.open(record?.fileVo?.downloadUrl)
                         }
