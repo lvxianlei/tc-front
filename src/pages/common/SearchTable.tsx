@@ -38,16 +38,11 @@ interface SearchTableProps {
     requestData?: {}
 }
 
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
-
 function formatURISearch(search: { [key: string]: any }) {
     const formObj: { [key: string]: any } = {}
     Object.keys(search).forEach((item: string) => {
         if (search[item] instanceof Array) {
-            formObj[item] = search[item].map((item: any) => moment(item.format))
+            formObj[item] = search[item].map((item: any) => moment(item))
         } else {
             formObj[item] = search[item]
         }
@@ -108,19 +103,11 @@ export default function SearchTable({
     })
 
     useEffect(() => {
+        console.log(formatURISearch(uriSearch))
         form.setFieldsValue(formatURISearch(uriSearch))
-        // setPagenationParams({
-        //     current: uriSearch?.current || 1,
-        //     pageSize: uriSearch?.pageSize || pageSize
-        // })
     }, [location.search])
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
-        // setPagenationParams({
-        //     ...pagenationParams,
-        //     current: page,
-        //     pageSize: pageSize || pagenationParams.pageSize
-        // })
         history.replace(`${location.pathname}?${stringify({
             ...uriSearch,
             current: page,
@@ -137,20 +124,16 @@ export default function SearchTable({
                 const formObj: { [key: string]: any } = {}
                 Object.keys(formValue).forEach((item: string) => {
                     if (formValue[item] instanceof Array) {
-                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD") : item)
+                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
                     } else {
                         formObj[item] = formValue[item]
                     }
                 })
+                console.log(formObj,"---------")
                 history.replace(`${location.pathname}?${stringify(formObj, { skipNull: true })}`)
-                // setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
-                // run(params)
             }}
             onReset={() => {
                 form.resetFields()
-                // const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-                // setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
-                // run(params)
                 history.replace(location.pathname)
             }}
         >
