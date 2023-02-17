@@ -224,10 +224,12 @@ export default function List(): React.ReactNode {
                     return e
                 }}
                 tableProps={{
-                    onRow: (record: Record<string, any>) => ({
-                        onClick: () => onRowChange(record),
-                        className: styles.tableRow
-                    })
+                    getRowProps: (record: Record<string, any>) => {
+                        return ({
+                            onClick: () => onRowChange(record)
+
+                        })
+                    }
                 }}
                 headTabs={[]}
                 searchFormItems={[

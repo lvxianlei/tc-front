@@ -12,7 +12,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns, partsColumns } from "./patchApplication.json"
-import { CommonTable, IntgSelect } from '../../common';
+import { CommonTable, IntgSelect, SearchTable as Page } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { TreeNode } from 'antd/lib/tree-select';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -22,28 +22,8 @@ export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
     const [partsData, setPartsData] = useState<any>();
     const [rowId, setRowId] = useState<string>('')
-    const [page, setPage] = useState({
-        current: 1,
-        size: 10,
-        total: 0
-    })
-    const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [deliveryForm] = Form.useForm();
-
-    const { loading, data, run } = useRequest<any[]>((pagenation: TablePaginationConfig, filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get<any>(`/tower-science/supplyEntry`, { current: pagenation?.current || 1, size: pagenation?.size || 10, ...filterValue });
-        setPage({ ...data });
-        if (data.records.length > 0 && data.records[0]?.id) {
-            detailRun(data.records[0]?.id)
-            setRowId(data.records[0]?.id)
-        } else {
-            setDetailData([]);
-            setPartsData([]);
-        }
-        resole(data?.records);
-    }), {})
-
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const departmentData: any = await RequestUtil.get(`/tower-system/department`);
@@ -80,24 +60,6 @@ export default function List(): React.ReactNode {
         partsRun(record.id)
     }
 
-    const handleChangePage = (current: number, pageSize: number) => {
-        setPage({ ...page, current: current, size: pageSize });
-        run({ current: current, size: pageSize }, { ...filterValues })
-    }
-
-    const onSearch = (values: Record<string, any>) => {
-        if (values.updateStatusTime) {
-            const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
-            values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
-            values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
-        }
-        if (values.applyUser) {
-            values.applyUser = values.applyUser?.value
-        }
-        setFilterValues(values);
-        run({}, { ...values });
-    }
-
     const renderTreeNodes = (data: any) =>
         data.map((item: any) => {
             if (item.children) {
@@ -123,55 +85,22 @@ export default function List(): React.ReactNode {
         return roles;
     }
 
-    return <>
-        <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item label='日期' name="updateStatusTime">
-                <DatePicker.RangePicker />
-            </Form.Item>
-            <Form.Item label='审批状态' name="status">
-                <Select placeholder="请选择审批状态">
-                    <Select.Option value={1} key="1">未发起</Select.Option>
-                    <Select.Option value={2} key="2">待审批</Select.Option>
-                    <Select.Option value={3} key="3">审批中</Select.Option>
-                    <Select.Option value={4} key="4">已通过</Select.Option>
-                    <Select.Option value={5} key="5">已撤回</Select.Option>
-                    <Select.Option value={0} key="6">已拒绝</Select.Option>
-                </Select>
-            </Form.Item>
-            <Form.Item label='补件类型' name="supplyType">
-                <Select placeholder="请选择补件类型">
-                    {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
-                        return <Select.Option key={index} value={id}>
-                            {name}
-                        </Select.Option>
-                    })}
-                </Select>
-            </Form.Item>
-            <Form.Item name="applyUserDept" label="申请部门">
-                <TreeSelect style={{ width: "150px" }} placeholder="请选择">
-                    {renderTreeNodes(wrapRole2DataNode(department))}
-                </TreeSelect>
-            </Form.Item>
-            <Form.Item label='申请人' name="applyUser">
-                <IntgSelect width={200} />
-            </Form.Item>
-            <Form.Item label='塔型名称' name="productCategoryName">
-                <Input placeholder="请输入" />
-            </Form.Item>
-            <Form.Item label='模糊查询项' name="fuzzyMsg">
-                <Input style={{ width: '400px' }} placeholder="补件编号/计划号/工程名称/说明" />
-            </Form.Item>
-            <Form.Item>
-                <Space direction="horizontal">
-                    <Button type="primary" htmlType="submit">搜索</Button>
-                    <Button htmlType="reset">重置</Button>
+    const onFilterSubmit = (values: any) => {
+        if (values.updateStatusTime) {
+            const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
+            values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
+            values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
+        }
+        if (values.applyUser) {
+            values.applyUser = values.applyUser?.value
+        }
+        setFilterValues(values)
+        return values
+    }
 
-                </Space>
-            </Form.Item>
-        </Form>
-        <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
-        <CommonTable
-            haveIndex
+    return <>
+        <Page
+            path='/tower-science/supplyEntry'
             columns={[
                 {
                     "key": "supplyNumber",
@@ -201,7 +130,7 @@ export default function List(): React.ReactNode {
                     title: '操作',
                     dataIndex: 'operation',
                     fixed: 'right' as FixedType,
-                    width: 150,
+                    width: 400,
                     render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                         <Space direction="horizontal" size="small">
                             <Link to={`/businessDisposal/patchApplication/edit/${record.id}`}>
@@ -335,29 +264,115 @@ export default function List(): React.ReactNode {
                             }
                         </Space>
                     )
-                }]}
-            dataSource={data}
-            pagination={{
-                current: page.current,
-                pageSize: page.size,
-                total: page?.total,
-                showSizeChanger: true,
-                onChange: handleChangePage
+                }] as any}
+
+            searchFormItems={[
+                {
+                    name: 'updateStatusTime',
+                    label: '日期',
+                    children: <DatePicker.RangePicker />
+                },
+                {
+                    name: 'status',
+                    label: '审批状态',
+                    children: <Select placeholder="请选择审批状态">
+                        <Select.Option value={1} key="1">未发起</Select.Option>
+                        <Select.Option value={2} key="2">待审批</Select.Option>
+                        <Select.Option value={3} key="3">审批中</Select.Option>
+                        <Select.Option value={4} key="4">已通过</Select.Option>
+                        <Select.Option value={5} key="5">已撤回</Select.Option>
+                        <Select.Option value={0} key="6">已拒绝</Select.Option>
+                    </Select>
+                },
+                {
+                    name: 'supplyType',
+                    label: '补件类型',
+                    children:
+                        <Select placeholder="请选择补件类型">
+                            {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                },
+                {
+                    name: 'applyUserDept',
+                    label: '申请部门',
+                    children:
+                        <TreeSelect style={{ width: "150px" }} placeholder="请选择">
+                            {renderTreeNodes(wrapRole2DataNode(department))}
+                        </TreeSelect>
+                },
+                {
+                    name: 'applyUser',
+                    label: '申请人',
+                    children: <IntgSelect width={200} />
+                },
+                {
+                    name: 'productCategoryName',
+                    label: '塔型名称',
+                    children: <Input placeholder="请输入" />
+                },
+                {
+                    name: 'fuzzyMsg',
+                    label: '模糊查询项',
+                    children: <Input style={{ width: '400px' }} placeholder="补件编号/计划号/工程名称/说明" />
+                }
+            ]}
+            onFilterSubmit={onFilterSubmit}
+            filterValue={filterValues}
+            getDataSource={(e: any) => {
+                if (e.records.length > 0 && e.records[0]?.id) {
+                    detailRun(e.records[0]?.id)
+                    setRowId(e.records[0]?.id)
+                } else {
+                    setDetailData([]);
+                    setPartsData([]);
+                }
+                return e
             }}
-            onRow={(record: Record<string, any>) => ({
-                onClick: () => onRowChange(record)
-            })}
-            className={styles.patchList}
-            //未入库 未发货 颜色显示
-            rowClassName={(record: Record<string, any>) =>
-                record?.id === rowId ?
-                    styles.selected :
-                    record?.warehousingStatus === 0 ?
-                        styles.noDelivery :
-                        record?.shipmentStatus === 0 ?
-                            styles.noPutStorage :
+            tableProps={{
+                getRowProps: (record: Record<string, any>) => {
+                    return ({
+                        onClick: () => onRowChange(record),
+                        // style: record?.id === rowId ?
+                        // styles.selected :
+                        // record?.warehousingStatus === 0 ?
+                        //     styles.noDelivery :
+                        //     record?.shipmentStatus === 0 ?
+                        //         styles.noPutStorage :
+                        //         undefined
+                        style: record?.id === rowId ?
+                            {
+                                //     outlineOffset: -2,
+                                // outline: '2px solid gold',
+                                // '--hover-bgcolor': 'transparent',
+                                // background: 'linear-gradient(140deg, #ff000038, #009cff3d)',
+                                backgroundColor: "#ffb65d"
+                            } :
+                            // record?.warehousingStatus === 0 ?
+                            //     styles.noDelivery :
+                            //     record?.shipmentStatus === 0 ?
+                            //         styles.noPutStorage :
                             undefined
-            }
+
+                    })
+                }
+                ,
+                // //未入库 未发货 颜色显示
+                // rowClassName: (record: Record<string, any>) =>
+                //     record?.id === rowId ?
+                //         styles.selected :
+                //         record?.warehousingStatus === 0 ?
+                //             styles.noDelivery :
+                //             record?.shipmentStatus === 0 ?
+                //                 styles.noPutStorage :
+                //                 undefined
+
+            }}
+            className={styles.patchList}
+
         />
         <Row gutter={12} style={{ marginTop: '16px' }}>
             <Col span={8}>

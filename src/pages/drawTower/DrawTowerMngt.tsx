@@ -118,7 +118,7 @@ export default function DrawTowerMngt(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 150,
+            width: 200,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/drawTower/drawTowerMngt/towerInformation/${record.id}`}>塔型信息</Link>
