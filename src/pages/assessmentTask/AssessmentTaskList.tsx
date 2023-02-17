@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Popconfirm, Form, Modal, message } from 'antd';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { IntgSelect, Page } from '../common';
+import { IntgSelect, SearchTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import AssessmentInformation from './AssessmentInformation';
 import styles from './AssessmentTask.module.less';
@@ -174,7 +174,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <Page
+            <SearchTable
                 path="/tower-science/assessTask"
                 columns={columns}
                 headTabs={[]}
@@ -214,7 +214,7 @@ export default function AssessmentTaskList(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                onFilterSubmit={(values: Record<string, any>) => {
+                onFilterSubmit={(values: any) => {
                     if (values.a) {
                         const formatDate = values.a.map((item: any) => item.format("YYYY-MM-DD"));
                         values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

@@ -709,7 +709,7 @@ export default function Lofting(): React.ReactNode {
                                 : null
                         }
                         {(params.status === '1' || params.status === '2') && params.materialLeader === AuthUtil.getUserInfo().user_id ? <TowerPickAssign title="塔型提料指派" id={params.id} update={onRefresh} path={pathLink} /> : null}
-                        <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
+                        <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[]}
