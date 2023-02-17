@@ -34,6 +34,7 @@ interface SearchTableProps {
     getDataSource?: (dataSource: any[]) => void
     tableRender?: (dom: ReactElement) => ReactElement
     [key: string]: any
+    requestData?: {}
 }
 
 interface PagenationProps {
@@ -73,7 +74,7 @@ export default function SearchTable({
                 params.current = pagenationParams.current
                 params.size = pagenationParams.pageSize
             }
-            const paramsOptions = stringify({ ...params, ...filterValue })
+            const paramsOptions = stringify({ ...params, ...filterValue, ...props.requestData })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
