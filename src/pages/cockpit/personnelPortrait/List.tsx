@@ -45,13 +45,13 @@ export default function List(): React.ReactNode {
 
     const { run: detailRun } = useRequest<any>((id: string, time: string) => new Promise(async (resole, reject) => {
         try {
-            let result = await RequestUtil.get<any>(`/tower-science/loftingUserWork/getLoftingUserWork`, {
+            let result: any = await RequestUtil.get<any>(`/tower-science/loftingUserWork/getLoftingUserWork`, {
                 loftingUser: id,
                 timeEnd: time ? time.split(',')[1] : halfYear.split(',')[1],
                 timeStart: time ? time.split(',')[0] : halfYear.split(',')[0]
             });
             const data: any[] = [];
-            result.forEach((element: any) => {
+            result?.loftingUserWorkVOList?.forEach((element: any) => {
                 data.push(
                     {
                         years: element.years?.split('-')[1],
@@ -146,7 +146,7 @@ export default function List(): React.ReactNode {
                 )
             });
             setDetailData(data)
-            resole(result)
+            resole(result?.loftingUserWorkVOList)
         } catch (error) {
             reject(error)
         }
