@@ -374,7 +374,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
         return -1;
       }
-    const handleSaveClick = async (type: string) => {
+    const handleSaveClick = async (typeClick: string) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
             if (popDataList.length < 1) {
@@ -432,12 +432,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写数量！");
                 return false;
             }
-            type==='save'&&saveRun({
+            typeClick==='save'&&saveRun({
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
-                        num: 0- item.num,
-                        totalWeight:0- item.totalWeight,
+                        num: type !== 2 ? item.num : 0- item.num,
+                        totalWeight: type !==2 ? item.totalWeight : 0- item.totalWeight,
                         warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         id: item?.ids?item.ids:item.id,
                         reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
@@ -452,12 +452,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
-            type==='submit'&&submitRun({
+            typeClick==='submit'&&submitRun({
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
-                        num: 0- item.num,
-                        totalWeight:0- item.totalWeight,
+                        num: type !==2 ? item.num : 0- item.num,
+                        totalWeight: type !==2 ? item.totalWeight : 0- item.totalWeight,
                         warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
                         reservoirId: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirId:item.reservoirId,

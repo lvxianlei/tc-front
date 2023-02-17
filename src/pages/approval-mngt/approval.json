@@ -1021,7 +1021,7 @@
             "width": 1011,
             "value": "projectName",
             "dependencies": true,
-            "readOnly": true,
+            "readOnly": false,
             "columns": [
                 {
                     "title": "项目名称",
@@ -1036,14 +1036,64 @@
             ]
         },
         {
-            "title": "招标人",
+            "title": "招标单位",
             "dataIndex": "biddingPerson",
-            "disabled": true
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "width": 1011,
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
         },
         {
             "title": "招标代理单位",
             "dataIndex": "biddingAgency",
-            "disabled": true
+            "type": "popTable",
+            "path": "/tower-market/customer",
+            "width": 1011,
+            "readOnly": false,
+            "value": "name",
+            "dependencies": true,
+            "required": true,
+            "columns": [
+                {
+                    "title": "客户类型",
+                    "dataIndex": "typeName"
+                },
+                {
+                    "title": "客户名称",
+                    "dataIndex": "name",
+                    "search": true
+                },
+                {
+                    "title": "首要联系人",
+                    "dataIndex": "linkman"
+                },
+                {
+                    "title": "联系电话",
+                    "dataIndex": "phone"
+                }
+            ]
         },
         {
             "title": "总金额",
@@ -1053,7 +1103,37 @@
         {
             "title": "业务经理",
             "dataIndex": "projectLeader",
-            "disabled": true
+            "type": "popTable",
+            "width": 1101,
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "dependencies": true,
+            "required": true,
+            "readOnly": false,
+            "search": [
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "fuzzyName"
+                }
+            ],
+            "columns": [
+                {
+                    "title": "登录账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "用户姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "所属角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "所属机构",
+                    "dataIndex": "deptName"
+                }
+            ]
         },
         {
             "title": "联系人",
@@ -1183,7 +1263,6 @@
             "title": "出厂单价",
             "dataIndex": "outFactoryPrice",
             "type": "number",
-            "disabled": true,
             "rules": [
                 {
                     "required": true,

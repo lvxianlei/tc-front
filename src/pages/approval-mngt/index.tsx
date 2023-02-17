@@ -27,7 +27,7 @@ export default function Information(): React.ReactNode {
     }))
 
     const history = useHistory()
-    const location = useLocation<{ auditStatus?: number, processName?: string }> ();
+    const location = useLocation<{ auditStatus?: number, processName?: string }>();
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object
     });
@@ -119,7 +119,7 @@ export default function Information(): React.ReactNode {
     }
 
     // 提交保函
-    const handGuaranteOk = async() => {
+    const handGuaranteOk = async () => {
         const postData = await guaranteeForm.validateFields();
         console.log(postData, "看看数据");
         postData.contractId = postData.contractId?.id || "";
@@ -198,8 +198,12 @@ export default function Information(): React.ReactNode {
             return;
         }
         const result = await run({
-            path: "/tower-market/OutFactory/submitAudit", data: {
+            path: "/tower-market/OutFactory/submitAudit",
+            data: {
                 ...postData,
+                biddingPerson: postData.biddingPerson?.value,
+                biddingAgency: postData.biddingAgency?.value,
+                projectLeader: postData.projectLeader?.value,
                 projectName: postData.projectName?.value || "",
                 projectId: postData.projectName?.id || "",
                 auditOutInfoDTOList: auditOutInfoDTOList.submit
@@ -211,8 +215,12 @@ export default function Information(): React.ReactNode {
             history.go(0)
         } else {
             const result = await run({
-                path: "/tower-market/OutFactory/submitAudit", data: {
+                path: "/tower-market/OutFactory/submitAudit",
+                data: {
                     ...postData,
+                    biddingPerson: postData.biddingPerson?.value,
+                    biddingAgency: postData.biddingAgency?.value,
+                    projectLeader: postData.projectLeader?.value,
                     projectName: postData.projectName?.value || "",
                     projectId: postData.projectName?.id || "",
                     auditOutInfoDTOList: auditOutInfoDTOList.submit
@@ -345,21 +353,32 @@ export default function Information(): React.ReactNode {
 
     const handleOutFactoryChange = async (changedFields: any) => {
         if (Object.keys(changedFields).length > 0 && Object.keys(changedFields)[0] === "projectName") {
-            const { biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency, id } = changedFields.projectName?.records[0]
-            const result: any = await productRun(id)
-            outFactoryForm.setFieldsValue({ bidDeadline: biddingEndTime, biddingPerson, projectNumber, projectLeader, biddingAgency })
-            outFactoryTableForm.setFieldsValue({
-                submit: result.productArr?.map((item: any) => ({
-                    ...item,
-                    productType: item.productName,
-                    price: item.data.cc || "0.00",
-                    accountingPrice: item.data.bhls || "0.00",
-                    logisticsPrice: item.data.logistics_price || "0.00",
-                    applyPrice: item.data.applyPrice || "0.00",
-                    outFactoryPrice: (parseFloat(item.data.bhls || "0.00") - parseFloat(item.data.logistics_price || "0.00")).toFixed(2),
-                    offerDiff: (parseFloat(item.data.accountingPrice || "0.00") - parseFloat(item.data.applyPrice || "0.00")).toFixed(2)
-                })) || []
+            const {
+                biddingPerson,
+                projectNumber,
+                projectLeader,
+                biddingAgency,
+                id
+            } = changedFields.projectName?.records?.[0] || {}
+            // const result: any = await productRun(id)
+            outFactoryForm.setFieldsValue({
+                biddingPerson,
+                projectNumber,
+                projectLeader,
+                biddingAgency
             })
+            // outFactoryTableForm.setFieldsValue({
+            //     submit: result.productArr?.map((item: any) => ({
+            //         ...item,
+            //         productType: item.productName,
+            //         price: item.data.cc || "0.00",
+            //         accountingPrice: item.data.bhls || "0.00",
+            //         logisticsPrice: item.data.logistics_price || "0.00",
+            //         applyPrice: item.data.applyPrice || "0.00",
+            //         outFactoryPrice: (parseFloat(item.data.bhls || "0.00") - parseFloat(item.data.logistics_price || "0.00")).toFixed(2),
+            //         offerDiff: (parseFloat(item.data.accountingPrice || "0.00") - parseFloat(item.data.applyPrice || "0.00")).toFixed(2)
+            //     })) || []
+            // })
         }
     }
 
@@ -509,13 +528,18 @@ export default function Information(): React.ReactNode {
             confirmLoading={loading}
         >
             <DetailTitle title="基本信息" />
-            <BaseInfo 
+            <BaseInfo
                 form={outFactoryForm}
                 onChange={handleOutFactoryChange}
                 columns={outFactoryHead}
                 dataSource={{}} edit col={3} />
             <DetailTitle title="申请明细" />
-            <EditTable form={outFactoryTableForm} onChange={outFactoryTableChange} columns={addanewone} dataSource={[]} />
+            <EditTable
+                form={outFactoryTableForm}
+                onChange={outFactoryTableChange}
+                columns={addanewone}
+                dataSource={[]}
+            />
         </Modal>
         <SelectAuditType
             visible={visible}
@@ -582,7 +606,7 @@ export default function Information(): React.ReactNode {
                             <Select.Option value={1} key="audit-1">已通过</Select.Option>
                             <Select.Option value={2} key="audit-2">已驳回</Select.Option>
                         </Select>
-                        </Form.Item>
+                    </Form.Item>
                 },
                 {
                     name: 'omnipotentQuery',
