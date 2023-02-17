@@ -19,6 +19,10 @@
                 {
                     "value": "2",
                     "label": "盘点入库"
+                },
+                {
+                    "value": "4",
+                    "label": "退货出库"
                 }
             ]
         },
@@ -86,6 +90,18 @@
                 {
                     "required": true,
                     "message": "请选择到货仓库"
+                }
+            ]
+        },
+        {
+            "title": "入库日期",
+            "dataIndex": "warehousingEntryTime",
+            "type": "date",
+            "format":"YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择入库日期"
                 }
             ]
         }
@@ -288,6 +304,81 @@
             {
                 "title": "备注",
                 "dataIndex": "remark"
+            }
+        ]
+    },
+    "addMaterialB": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/auxiliary/details",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "入库日期",
+                "type":"date",
+                "dataIndex": "entryTime"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "locatorId",
+                "type":"tree"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "含税单价（元）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
             }
         ]
     }
