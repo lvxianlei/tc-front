@@ -438,7 +438,7 @@ export default function ReleaseList(): React.ReactNode {
     }
     return (
         <>
-            <SearchTable
+            <Page
                 path="/tower-science/loftingList"
                 columns={releaseColumns}
                 onFilterSubmit={onFilterSubmit}
@@ -533,7 +533,7 @@ export default function ReleaseList(): React.ReactNode {
                     }
                 ]}
             />
-            <SearchTable
+            <Page
                 path="/tower-science/loftingBatch/batchResult"
                 columns={detailColumns}
                 onFilterSubmit={onFilterASubmit}

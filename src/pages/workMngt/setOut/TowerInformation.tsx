@@ -349,7 +349,7 @@ export default function TowerInformation(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -646,7 +646,7 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        <Space size="large">
+        <Space size="large" style={{padding: "16px"}}>
             <span>塔型：{detail?.productCategoryName}</span>
             <span>计划号：{detail?.planNumber}</span>
             <span>模式：{count?.patternName}</span>
