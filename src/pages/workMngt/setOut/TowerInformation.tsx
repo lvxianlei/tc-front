@@ -667,7 +667,7 @@ export default function TowerInformation(): React.ReactNode {
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={
                     <>
-                        <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
+                        <Space direction="horizontal" size="small">
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
                             <Dropdown trigger={['click']} overlay={
