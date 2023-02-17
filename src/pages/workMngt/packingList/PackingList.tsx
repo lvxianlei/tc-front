@@ -215,9 +215,9 @@ export default function List(): React.ReactNode {
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...columns]}
-                onGetDataSource={(e: any) => {
-                    if (e.length > 0 && e[0]?.id) {
-                        detailRun(e[0]?.id)
+                getDataSource={(e: any) => {
+                    if (e?.records?.length > 0 && e?.records[0]?.id) {
+                        detailRun(e?.records[0]?.id)
                     } else {
                         setDetailData([]);
                     }
