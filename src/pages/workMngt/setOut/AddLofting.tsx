@@ -859,8 +859,8 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             const valuesData = form.getFieldsValue(true).data?.filter((res: any) => res?.code !== '')
             form?.setFieldsValue({ data: [...valuesData] })
             setTableData([...valuesData])
-            resolve(true)
             await onSubmitDone()
+            resolve(true)
         } catch (error) {
             reject(false)
         }
