@@ -45,6 +45,8 @@ function formatURISearch(search: { [key: string]: any }) {
             formObj[item] = search[item].map((item: any) => moment(item))
         } else if (search[item]?.slice(0, 2) === "n_") {
             formObj[item] = Number(search[item].slice(2))
+        } else if (search[item]?.slice(0, 2) === "o_") {
+            formObj[item] = parse(search[item].slice(2))
         } else {
             formObj[item] = search[item]
         }
@@ -78,14 +80,15 @@ export default function SearchTable({
     const uriSearch: any = parse(location.search.replace("?", ""))
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
-    const { loading, data } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
+            let params: any = {}
             if (pagination !== false) {
                 params.current = uriSearch.current || 1
                 params.size = uriSearch.pageSize || pageSize
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
-            const paramsOptions = stringify({ ...search, ...params, ...filterValue, ...props.requestData }, { skipNull: true })
+            const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -128,15 +131,18 @@ export default function SearchTable({
                         formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
                     } else if (typeof formValue[item] === "number") {
                         formObj[item] = `n_${formValue[item]}`
+                    } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
+                        formObj[item] = `o_${stringify(formValue[item])}`
                     } else {
                         formObj[item] = formValue[item]
                     }
                 })
-                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: true })}`)
+                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
             }}
-            onReset={() => {
+            onReset={async () => {
                 form.resetFields()
-                history.replace(location.pathname)
+                const formValue = await form.getFieldsValue()
+                history.replace(`${location.pathname}?${stringify({ ...formValue })}`)
             }}
         >
             <Row gutter={[8, 8]}>

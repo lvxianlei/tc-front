@@ -2,17 +2,15 @@
  * 原材料领料
  * 时间：2023/01/16
  */
-import React, { useEffect, useState } from 'react';
-import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber } from 'antd';
+import React, { useState } from 'react';
+import { Input, Select, DatePicker, Button, message, Popconfirm } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { baseColumn } from "./data.json";
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
-
 
 export default function RawMaterialWarehousing(): React.ReactNode {
     const outStockList = [
@@ -55,7 +53,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link" disabled={record.pickingStatus !== 0 }>删除</Button>
+                        <Button type="link" disabled={record.pickingStatus !== 0}>删除</Button>
                     </Popconfirm>
 
                 </>
@@ -68,7 +66,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [pagePath, setPagePath] = useState<string>("/tower-storage/materialPicking")
     const [columns, setColumns] = useState<any[]>(outStockList)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
-    const [num, setNum] = useState<any>({});
     const [filterValue, setFilterValue] = useState<any>({
         selectName: "",
         status: "",
@@ -100,11 +97,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const onFilterSubmit = (value: any) => {
         if (value.createTime) {
             const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startCreateTime  = `${formatDate[0]} 00:00:00`
+            value.startCreateTime = `${formatDate[0]} 00:00:00`
             value.endCreateTime = `${formatDate[1]} 23:59:59`
             delete value.createTime
-        } else{
-            value.startCreateTime  = ``
+        } else {
+            value.startCreateTime = ``
             value.endCreateTime = ``
         }
         if (value.applyStaffId) {
@@ -204,7 +201,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'warehouseId',
                         label: '领料仓库',
                         children: <Select placeholder="请选择" style={{ width: "100px" }} showSearch>
-                            {batchingStrategy?.map((item: any,index: number) => {
+                            {batchingStrategy?.map((item: any, index: number) => {
                                 return <Select.Option value={item.id} key={index}>{item.name}</Select.Option>
                             })}
                         </Select>
