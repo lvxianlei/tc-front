@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef } from "react";
-import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
+import { Attachment, BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './RequestForChange.module.less';
@@ -187,6 +187,7 @@ export default forwardRef(function ApplyOrDetail({ id }: modalProps, ref) {
                 pagination={false}
                 dataSource={data?.productChangeDetailList || []}
             />
+            <Attachment dataSource={data?.fileVOList || []}/>
             <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
         </DetailContent>
     </Spin>

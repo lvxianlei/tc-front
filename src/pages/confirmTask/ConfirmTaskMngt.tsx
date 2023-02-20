@@ -126,6 +126,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'confirmName'
         },
         {
+            key: 'productCategoryName',
+            title: '塔型名称',
+            width: 200,
+            dataIndex: 'productCategoryName'
+        },
+        {
             key: 'contractNum',
             title: '内部合同编号',
             width: 200,
@@ -292,6 +298,11 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     name: 'confirmId',
                     label: '确认人',
                     children: <IntgSelect width={200} />
+                },
+                {
+                    name: 'productCategoryName',
+                    label: '塔型名称',
+                    children: <Input placeholder='请输入'/>
                 },
                 {
                     name: 'fuzzyMsg',

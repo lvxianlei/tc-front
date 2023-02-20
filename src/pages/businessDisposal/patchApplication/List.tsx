@@ -265,7 +265,10 @@ export default function List(): React.ReactNode {
                         </Space>
                     )
                 }] as any}
+            extraOperation={
+                <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
 
+            }
             searchFormItems={[
                 {
                     name: 'updateStatusTime',
@@ -358,8 +361,7 @@ export default function List(): React.ReactNode {
                             undefined
 
                     })
-                }
-                ,
+                },
                 // //未入库 未发货 颜色显示
                 // rowClassName: (record: Record<string, any>) =>
                 //     record?.id === rowId ?

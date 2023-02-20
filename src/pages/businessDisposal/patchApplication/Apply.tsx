@@ -7,7 +7,7 @@
 import React, { useRef, useState } from 'react';
 import { Input, Button, Form, Descriptions, Select, TreeSelect, DatePicker, Row, Col, Modal, InputNumber, Space, message } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
-import { CommonTable, DetailContent } from '../../common';
+import { Attachment, AttachmentRef, CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { supplyTypeOptions } from '../../../configuration/DictionaryOptions';
@@ -39,6 +39,7 @@ export default function Apply(): React.ReactNode {
     const [numbers, setNumbers] = useState<any>([]);
     const params = useParams<{ id: string }>();
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
+    const attachRef = useRef<AttachmentRef>()
 
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -215,7 +216,8 @@ export default function Apply(): React.ReactNode {
                     RequestUtil.post(`/tower-science/supplyEntry`, {
                         ...value,
                         planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
-                        supplyStructureList: [...patchList]
+                        supplyStructureList: [...patchList],
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id)
                     }).then(res => {
                         setSaveLoading(false);
                         history.goBack();
@@ -249,7 +251,8 @@ export default function Apply(): React.ReactNode {
                         RequestUtil.post(`/tower-science/supplyEntry/submit`, {
                             ...value,
                             planDeliveryTime: value?.planDeliveryTime.format('YYYY-MM-DD HH:mm:ss'),
-                            supplyStructureList: [...patchList]
+                            supplyStructureList: [...patchList],
+                            fileIds: attachRef.current?.getDataSource().map(item => item.id)
                         }).then(res => {
                             setSaveLoading(false);
                             history.goBack();
@@ -421,6 +424,7 @@ export default function Apply(): React.ReactNode {
                         <Col span={8}>
                             <CommonTable
                                 haveIndex
+                                className={styles.heightscroll}
                                 columns={[
                                     ...towerTypeColumns,
                                     {
@@ -446,6 +450,7 @@ export default function Apply(): React.ReactNode {
                                 <CommonTable
                                     haveIndex
                                     rowKey="index"
+                                    className={styles.heightscroll}
                                     columns={[
                                         ...patchColumns.map(res => {
                                             if (res.dataIndex === 'basicsPartNum') {
@@ -519,10 +524,10 @@ export default function Apply(): React.ReactNode {
                                     pagination={false}
                                 />
                             </Form>
-
                         </Col>
                     </Row>
                 </Form>
+                <Attachment isBatchDel ref={attachRef} dataSource={data?.fileVOList} edit />
             </DetailContent>
         </>
     )
