@@ -872,7 +872,7 @@ export default function Statements(): React.ReactNode {
         return <div className={styles.statement} id={'statement'}>
             <div className={styles.header}>
                 <div className={styles.headerbg}>
-                    <span className={styles.headerTitle}>汇金通技术部放样统计数据分析</span>
+                    <span className={styles.headerTitle}>技术部放样统计数据分析</span>
                 </div>
                 <Button type="primary" onClick={() => setIsFull(!isFull)} className={styles.fullBtn} size='small' ghost>{isFull ? '退出全屏' : '全屏'}</Button>
             </div>
