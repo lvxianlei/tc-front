@@ -32,6 +32,15 @@ export default function Index() {
         }
     }), { manual: true })
 
+    const { run: recallNoticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/taskNotice/recall/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const deleteSaleOrderItem = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -39,6 +48,22 @@ export default function Index() {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await deleteNoticeRun(id)
+                    resove("")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const recallSaleOrderItem = (id: string) => {
+        Modal.confirm({
+            title: "撤销",
+            content: "确定撤销此数据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await recallNoticeRun(id)
                     resove("")
                     history.go(0)
                 } catch (error) {
@@ -120,7 +145,8 @@ export default function Index() {
                                         record.taskReviewStatus === 1 ?
                                             "审批通过" :
                                             record.taskReviewStatus === 2 ?
-                                                "审批驳回" : "-"}
+                                                "审批驳回" : record.taskReviewStatus === 3 ?
+                                                    "已撤销" : "-"}
                                 </span>;
                             }
                         });
@@ -131,14 +157,38 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
+                    width: 200,
                     render: (_: any, record: any) => {
+                        const commonDisable: boolean = ![2, -1].includes(record.taskReviewStatus)
                         return <>
-                            <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/${entryPath}/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
-                            {[2, -1].includes(record.taskReviewStatus) && <>
-                                <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/${entryPath}/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
-                                <Button type="link" size="small" className='btn-operation-link' onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
-                                <Button type="link" size="small" className='btn-operation-link' loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
-                            </>}
+                            <Button
+                                type="link" size="small" className='btn-operation-link'
+                                onClick={() => history.push(`/project/${entryPath}/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                            <Button
+                                type="link" size="small" className='btn-operation-link'
+                                disabled={commonDisable}
+                            ><Link to={`/project/${entryPath}/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={commonDisable}
+                                onClick={() => deleteSaleOrderItem(record.id)}
+                            >删除</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={commonDisable}
+                                loading={noticeLoading}
+                                onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={commonDisable}
+                                onClick={() => recallSaleOrderItem(record.id)}
+                            >撤销</Button>
                         </>;
                     }
                 }
