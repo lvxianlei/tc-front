@@ -4,9 +4,9 @@
  * @description 业务处置管理-明细变更申请-申请
  */
 
-import React, { useImperativeHandle, forwardRef, useState } from "react";
+import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
 import { Button, Form, Input, Select, Modal, Spin, message } from "antd";
-import { BaseInfo, CommonTable, DetailContent } from "../../common";
+import { Attachment, AttachmentRef, BaseInfo, CommonTable, DetailContent } from "../../common";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
 import styles from "./RequestForChange.module.less";
@@ -30,6 +30,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [selectedData, setSelectedData] = useState<any>([]);
     const [detailData, setDetailData] = useState({});
+    const attachRef = useRef<AttachmentRef>()
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -292,7 +293,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                     getLoading(true)
                     await saveRun({
                         ...value,
-                        productChangeDetailList: values
+                        productChangeDetailList: values,
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
                     })
                     resolve(true);
                 })
@@ -579,6 +581,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                     dataSource={selectedData}
                 />
             </Form>
+            <Attachment isBatchDel ref={attachRef} dataSource={data?.fileVOList} edit/>
         </DetailContent>
     </Spin>
 })
