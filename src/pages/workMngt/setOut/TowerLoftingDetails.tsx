@@ -6,13 +6,13 @@
 
 import React, { useState } from 'react';
 import { Space, Button, Input, Select, Form } from 'antd';
-import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import result from 'antd/lib/result';
 import RequestUtil from '../../../utils/RequestUtil';
+import { SearchTable } from '../../common';
 
 const columns = [
     {
@@ -297,7 +297,7 @@ export default function TowerLoftingDetails(): React.ReactNode {
         }
     }), {})
 
-    return <Page
+    return <SearchTable
         path="/tower-science/productStructure/list"
         exportPath={`/tower-science/productStructure/list`}
         columns={columns}
@@ -340,7 +340,7 @@ export default function TowerLoftingDetails(): React.ReactNode {
             ]
         }
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             setFilterValue(values);
             return values;
         }}

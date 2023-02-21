@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, message, Spin, Select } from 'antd';
-import { Attachment, Page } from '../../common';
+import { Attachment, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useParams, useLocation } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -102,7 +102,7 @@ export default function NCProgram(): React.ReactNode {
         </Spin>
     }
 
-    return <Page
+    return <SearchTable
         path="/tower-science/productNc"
         requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
         columns={columns}
@@ -151,7 +151,7 @@ export default function NCProgram(): React.ReactNode {
                 children: <Input placeholder="NC程序名/构件编号" />
             }
         ]}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.createTime) {
                 const formatDate = values.createTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.createTimeStart = formatDate[0] + ' 00:00:00';

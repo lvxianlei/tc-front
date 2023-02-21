@@ -1,6 +1,6 @@
 import React, { useState, } from "react"
 import { Input, DatePicker, Select, Form, Spin, Button, Space, message, Popconfirm, Modal, InputNumber, } from 'antd'
-import { CommonTable, IntgSelect, Page } from '../../common'
+import { IntgSelect, SearchTable } from '../../common'
 import { Link, useHistory, useLocation } from "react-router-dom"
 import { FixedType } from 'rc-table/lib/interface';
 import useRequest from "@ahooksjs/use-request"
@@ -161,7 +161,7 @@ export default function TemplateList() {
     }
 
     return (
-        <Page
+        <SearchTable
             path="/tower-science/loftingTemplate"
             filterValue={filterValue}
             columns={columns}

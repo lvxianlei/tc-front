@@ -237,6 +237,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">采购入库</Select.Option>
                                 <Select.Option value="2">盘点入库</Select.Option>
+                                <Select.Option value="3">退货出库</Select.Option>
                             </Select>
                         )
                     },

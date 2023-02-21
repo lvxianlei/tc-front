@@ -289,7 +289,7 @@ export default function Index(): React.ReactNode {
     // 获取统计的数据
     const { run: getUser, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/outStock/detail/statistics`, {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/detail/statistics`, {
                 ...filterValue
             })
             resole(result)
@@ -297,11 +297,19 @@ export default function Index(): React.ReactNode {
             reject(error)
         }
     }), {})
-
+    // 获取详情
+    const { data: userData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/${params.id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/auxiliaryOutStock/detail/revocation/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -311,7 +319,7 @@ export default function Index(): React.ReactNode {
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/outStock/detail/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/auxiliaryOutStock/detail/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -358,6 +366,8 @@ export default function Index(): React.ReactNode {
         }
         if (value.outStockStaffId) {
             value.outStockStaffId = value.outStockStaffId.value
+        }else{
+            value.outStockStaffId = ''
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -396,7 +406,7 @@ export default function Index(): React.ReactNode {
     }
     //获取列表详情数据数据
     const getDetailData = async (id: any) => {
-        const data: any = await RequestUtil.get(`/tower-storage/outStock/detail/${id}`, {
+        const data: any = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/detail/${id}`, {
             materialType: 2
         });
         let supplierObj = {
@@ -443,7 +453,7 @@ export default function Index(): React.ReactNode {
             return
         }
         if (ary.length == 0) return message.error('所有数据无出库数量')
-        await RequestUtil.post(`/tower-storage/outStock/auxiliaryOutStock`, {
+        await RequestUtil.post(`/tower-storage/auxiliaryOutStock/auxiliaryOutStock`, {
             id: OutboundId,
             materialStockList: ary
         });
@@ -487,14 +497,14 @@ export default function Index(): React.ReactNode {
     return (
         <>
             <Page
-                path="/tower-storage/outStock/detail"
-                exportPath={"/tower-storage/outStock/detail"}
+                path="/tower-storage/auxiliaryOutStock/detail"
+                exportPath={"/tower-storage/auxiliaryOutStock/detail"}
                 exportObject={{ id: params.id }}
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
                         {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
-                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/outStock/auxiliary/batchOutStock`,{
+                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/auxiliaryOutStock/auxiliary/batchOutStock`,{
                             outStockDetailId: selectedKeys,
                             outStockId: params.id
                         }).then(()=>{
@@ -504,7 +514,7 @@ export default function Index(): React.ReactNode {
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null,'null', 0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
-                                await RequestUtil.get(`/tower-storage/outStock/auxiliary/workflow/start/${params.id}`)
+                                await RequestUtil.get(`/tower-storage/auxiliaryOutStock/auxiliary/workflow/start/${params.id}`)
                                 message.success('发起成功！')
                                 history.go(-1)
                             }else{
@@ -513,7 +523,7 @@ export default function Index(): React.ReactNode {
                         }} >发起审批</Button>
                         <Button type="primary" ghost onClick={async () => {
                             if([1,'1'].includes(params?.approval)){
-                                await RequestUtil.get(`/tower-storage/outStock/workflow/cancel/${params.id}`)
+                                await RequestUtil.get(`/tower-storage/auxiliaryOutStock/workflow/cancel/${params.id}`)
                                 message.success('撤销成功！')
                                 history.go(-1)
                             }else{
@@ -521,7 +531,16 @@ export default function Index(): React.ReactNode {
                             }
                         }} >撤销审批</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            总数量： {weightData?.totalNum || "0.00"}
+                            申请人： {userData?.applyStaffName || "无" }
+                        </span>
+                        <span style={{ marginLeft: "20px" }}>
+                            领料车间： {userData?.departmentName || "无" }
+                        </span>
+                        <span style={{ marginLeft: "20px" }}>
+                            领料班组： {userData?.pickingTeamName || "无" }
+                        </span>
+                        <span style={{ marginLeft: "20px" }}>
+                            总数量： {weightData?.totalNum || "0.00" }
                         </span>
                     </>
                 }}
@@ -541,7 +560,44 @@ export default function Index(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(baseColumn as any),
+                    ...(baseColumn as any).map((item: any) => {
+                        if (["num"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: any, records: any, key: number) => <span>{value}</span>
+                            })
+                        }
+                        if (["taxPrice"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: any, records: any, key: number) => <span>{value}</span>
+                            })
+                        }
+                        if (["totalTaxPrice"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: any, records: any, key: number) => <span>{value}</span>
+                            })
+                        }
+                        if (["unTaxPrice"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: any, records: any, key: number) => <span>{value}</span>
+                            })
+                        }
+                        if (["totalUnTaxPrice"].includes(item.dataIndex)) {
+                            return ({
+                                ...item,
+                                width: 160,
+                                render: (value: any, records: any, key: number) => <span>{value}</span>
+                            })
+                        }
+                        return item;
+                    }),
                     {
                         title: '操作',
                         width: 180,
@@ -549,7 +605,13 @@ export default function Index(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中
                             <>
-                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={() => { IssueOperation(record) }}>出库</Button>
+                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={async () => { userData?.outType===1||userData?.outType==='1'?await RequestUtil.post(`/tower-storage/auxiliaryOutStock/auxiliary/batchOutStock`,{
+                                    outStockDetailId: [record.id],
+                                    outStockId: params.id
+                                    }).then(()=>{
+                                        message.success(`出库成功！`)
+                                        history.go(0)
+                                    }):IssueOperation(record) }}>出库</Button>
                                 <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
                                 <Popconfirm
                                     title="确认撤销?"

@@ -90,7 +90,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false)
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [oprationType, setOperationType] = useState<"create" | "edit">("create")
-    const [pagePath, setPagePath] = useState<string>("/tower-storage/outStock")
+    const [pagePath, setPagePath] = useState<string>("/tower-storage/auxiliaryOutStock")
     const [columns, setColumns] = useState<any[]>(outStockList)
     const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
     const [filterValue, setFilterValue] = useState<any>({
@@ -100,15 +100,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         updateTimeEnd: "",
         departmentId: "",
         applyStaffId: "",
-        outStockItemStatus: 2,
-        materialType: 2,
+        // outStockItemStatus: 2,
+        // materialType: 2,
         ...history.location.state as object
     });
 
     // 删除
     const { loading: deleting, run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/outStock/${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-storage/auxiliaryOutStock/${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -122,9 +122,23 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.createTimeStart = `${formatDate[0]} 00:00:00`
             value.createTimeEnd = `${formatDate[1]} 23:59:59`
             delete value.createTime
+        }else{
+            value.createTimeStart = ``
+            value.createTimeEnd = ``
+        }
+        if (value.pickTime) {
+            const formatDate = value.pickTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startPickingTime = `${formatDate[0]} 00:00:00`
+            value.endPickingTime = `${formatDate[1]} 23:59:59`
+            delete value.pickTime
+        }else{
+            value.startPickingTime = ``
+            value.endPickingTime = ``
         }
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value
+        }else{
+            value.applyStaffId = ''
         }
         setFilterValue({ ...filterValue, ...value })
         return value
@@ -132,12 +146,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     const handleRadioChange = (event: any) => {
         if (event.target.value === "b") {
-            setPagePath("/tower-storage/outStock/detail")
+            setPagePath("/tower-storage/auxiliaryOutStock/detail")
             setColumns(outStock)
             return
         }
         if (event.target.value === "a") {
-            setPagePath("/tower-storage/outStock")
+            setPagePath("/tower-storage/auxiliaryOutStock")
             setColumns(outStockList)
             return
         }
@@ -227,14 +241,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'outStockType',
+                        name: 'type',
                         label: '出库类型',
                         children: (
                             <Select placeholder="请选择" style={{ width: "140px" }}>
                                 <Select.Option value="0">正常出库</Select.Option>
-                                <Select.Option value="1">盘点出库</Select.Option>
-                                <Select.Option value="2">余料回库</Select.Option>
-                                <Select.Option value="4">销售出库</Select.Option>
+                                <Select.Option value="1">退料回库</Select.Option>
+                                {/* <Select.Option value="2">余料回库</Select.Option>
+                                <Select.Option value="4">销售出库</Select.Option> */}
                             </Select>
                         )
                     },
@@ -283,7 +297,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select.Option value="3">审批驳回</Select.Option>
                             <Select.Option value="4">已撤销</Select.Option>
                         </Select>
-                    }
+                    },
+                    {
+                        name: 'pickTime',
+                        label: '出库日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
                 ]}
             />
             <Modal

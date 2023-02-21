@@ -67,7 +67,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 } : "",
                 receiptNumbers: {
                     value: result.warehousingEntryNumbers,
-                    records: result.warehousingEntryIds!==null&&result.warehousingEntryIds.split(',')?.map((item: any,index: number) => ({
+                    records: result.warehousingEntryIds&&result.warehousingEntryIds!==null&&result.warehousingEntryIds.split(',')?.map((item: any,index: number) => ({
                         id: item,
                         warehousingEntryNumber: result.warehousingEntryNumbers.split(',')[index]
                     })) || []
@@ -118,22 +118,22 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
-                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}):[],
                     isApproval:0,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
-                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    warehousingEntryNumbers: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
-                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers:'',
+                    warehousingEntryIds: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
-                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds:'',
                 })
                 message.success("保存成功...")
                 resolve(true)
@@ -159,22 +159,22 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     fileIds: attachRef.current?.getDataSource().map(item => item.id), 
                     businessId: baseData.businessId?.split(',')[0],
                     businessName: baseData.businessId?.split(',')[1],
-                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
+                    applyPaymentWarehousingEntryDTOS: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => ({
                         warehousingEntryId: item.id,
                         warehousingEntryNumber: item.warehousingEntryNumber
-                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}),
+                    })):baseData.receiptNumbers.records.length===0?[]:baseData.receiptNumbers.split(',').map((item:any)=>{return{ warehousingEntryNumber: item}}):[],
                     isApproval:1,
                     receiptNumbers:'',
                     applyPaymentInvoiceDtos: baseData.relatednotes?.records&&baseData.relatednotes?.records.length>0?baseData.relatednotes?.records?.map((item: any) => ({
                         invoiceId: item.id,
                         billNumber: item.billNumber
                     })) :data?.applyPaymentInvoiceVos?data?.applyPaymentInvoiceVos:[],
-                    warehousingEntryNumbers: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    warehousingEntryNumbers: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.warehousingEntryNumber
-                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers,
-                    warehousingEntryIds: baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.receiptNumbers:'',
+                    warehousingEntryIds: baseData.receiptNumbers?baseData.receiptNumbers.records&&baseData.receiptNumbers.records.length>0?baseData.receiptNumbers?.records?.map((item: any) => {
                         return item.id
-                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds,
+                    }).join(',') :baseData.receiptNumbers.records.length===0?'':baseData.warehousingEntryIds:'',
                 })
                 message.success("审批发起成功...")
                 resove(true)
@@ -319,7 +319,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         let result: IResponse = {};
         let list: any = {};
         if (e === 1) {
-            result = await RequestUtil.get(`/tower-supply/supplier?size=100`);
+            result = await RequestUtil.get(`/tower-supply/supplier?size=500`);
             list = result?.records?.map((item: { supplierName: string, bankDepositName: string }) => {
                 return {
                     ...item,
@@ -328,7 +328,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         } else if (e === 2) {
-            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
+            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=500`);
             list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
                 return {
                     ...item,
@@ -337,7 +337,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         } else {
-            result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
+            result = await RequestUtil.get(`/tower-logistic/carrier?size=500`);
             list = result?.records?.map((item: { companyName: string }) => {
                 return {
                     ...item,
@@ -396,7 +396,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                     case "receiptNumbers":
                         return ({
                             ...item,
-                            // disabled: baseForm.getFieldsValue(true).relatednotes
+                            disabled: baseForm.getFieldsValue(true)?.relatednotes&&baseForm.getFieldsValue(true)?.relatednotes?.records?.length>0
                         })
                     case "pleasePayType":
                         return ({

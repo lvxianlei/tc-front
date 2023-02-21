@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select, message, Modal, Row, Col } from 'antd';
 import { useHistory } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Form, Button } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
 import EvaluationInformation from './EvaluationInformation';
@@ -105,7 +105,7 @@ export default function EvaluationList(): React.ReactNode {
         return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
     });
 
-    return <Page
+    return <SearchTable
         path="/tower-science/assessTask/assessList"
         columns={columns}
         headTabs={[]}
@@ -141,7 +141,7 @@ export default function EvaluationList(): React.ReactNode {
             }
         ]}
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.expectDeliverTimeAll) {
                 const formatDate = values.expectDeliverTimeAll.map((item: any) => item.format("YYYY-MM-DD"));
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';

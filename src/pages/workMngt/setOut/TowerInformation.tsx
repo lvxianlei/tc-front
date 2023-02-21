@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -349,7 +349,7 @@ export default function TowerInformation(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -520,7 +520,7 @@ export default function TowerInformation(): React.ReactNode {
     const [loading1, setLoading1] = useState(false);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
     const [editorLock, setEditorLock] = useState('编辑');
-    const [tableColumns, setTableColumns] = useState(columnsSetting);
+    const [tableColumns, setTableColumns] = useState<any>(columnsSetting);
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -646,7 +646,7 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        <Space size="large">
+        <Space size="large" style={{padding: "16px"}}>
             <span>塔型：{detail?.productCategoryName}</span>
             <span>计划号：{detail?.planNumber}</span>
             <span>模式：{count?.patternName}</span>
@@ -658,7 +658,7 @@ export default function TowerInformation(): React.ReactNode {
             <span>所选总重kg：{count?.pitchTotalWeight}</span>
         </Space>
         <Form form={editForm} className={styles.descripForm}>
-            <Page
+            <SearchTable
                 path={`/tower-science/productSegment`}
                 columns={tableColumns}
                 headTabs={[]}
@@ -667,7 +667,7 @@ export default function TowerInformation(): React.ReactNode {
                 requestData={{ productCategoryId: params.id, ...filterValue }}
                 extraOperation={
                     <>
-                        <Space direction="horizontal" size="small" style={{ position: 'absolute', right: 0, top: 0 }}>
+                        <Space direction="horizontal" size="small">
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
                             <Dropdown trigger={['click']} overlay={

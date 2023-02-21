@@ -8,12 +8,12 @@ import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Form, Ta
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchIssued.module.less';
 import { Link, useHistory } from 'react-router-dom';
-import Page from '../../common/Page';
 import { productTypeOptions, supplyTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
 import { useForm } from 'antd/lib/form/Form';
 import useRequest from '@ahooksjs/use-request';
 import { patchEntryColumns } from "./patchIssued.json"
+import { SearchTable } from '../../common';
 
 interface IPatchIssued {
     supplyBatchEntryVO: any;
@@ -223,7 +223,7 @@ export default function List(): React.ReactNode {
         {
             name: 'fuzzyMsg',
             label: '模糊查询项',
-            children: <Input style={{ width: '200px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称/说明" />
+            children: <Input style={{ width: '300px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称/说明" />
         }
     ]
 
@@ -338,7 +338,7 @@ export default function List(): React.ReactNode {
         </Space>
         {
             status === 1 ?
-                <Page
+                <SearchTable
                     path="/tower-science/supplyBatch/batchPage"
                     exportPath='/tower-science/supplyBatch/batchPage'
                     columns={columns}
@@ -347,7 +347,7 @@ export default function List(): React.ReactNode {
                     filterValue={filterValues}
                 />
                 :
-                <Page
+                <SearchTable
                     path="/tower-science/supplyBatch/getEntryPage"
                     exportPath='/tower-science/supplyBatch/getEntryPage'
                     columns={[

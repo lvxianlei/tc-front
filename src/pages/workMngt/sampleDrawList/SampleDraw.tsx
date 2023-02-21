@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload, Select } from 'antd';
-import { Attachment, AttachmentRef, Page } from '../../common';
+import { Attachment, AttachmentRef, Page, SearchTable } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -194,7 +194,7 @@ export default function SampleDraw(): React.ReactNode {
                     />
                 }
             </Modal>
-            <Page
+            <SearchTable
                 path="/tower-science/smallSample/sampleList"
                 columns={columns}
                 refresh={refresh}

@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Button, Input, Popconfirm, Select, Form, Row, Col } from 'antd';
-import { Page } from '../../common';
+import { Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { useHistory, useParams } from 'react-router-dom';
@@ -407,7 +407,7 @@ export default function TowerCheck(): React.ReactNode {
     }), {})
 
     return <div className={wordSize == 2 ? styles?.check : wordSize == 3 ? styles?.checkXL : undefined}>
-        <Page
+        <SearchTable
             path="/tower-science/productStructure/list"
             columns={columnsSetting}
             requestData={{ segmentId: params.productSegmentId, productCategoryId: params.id, ...filterValue }}
@@ -461,7 +461,7 @@ export default function TowerCheck(): React.ReactNode {
                     </Form.Item>
                 }
             ]}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 setFilterValue(values);
                 return values;
             }}
