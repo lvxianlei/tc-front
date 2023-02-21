@@ -44,7 +44,7 @@ class MaterialTypeMngt extends AbstractMngtComponent<IMaterialTypeTypeMngtWithRo
     protected renderExtraOperationContent(item: ITabItem): React.ReactNode {
         return (<Space direction="horizontal" size="small" style={{ marginBottom: '12px' }}>
             <Button type="primary" onClick={this.onNewClick}>新增一级类目</Button>
-            <Button type="ghost" onClick={() => this.props.history.push('/config/configList')}>返回</Button>
+            <Button type="ghost" onClick={() => this.props.history.goBack()}>返回</Button>
         </Space>
         );
     }

@@ -24,7 +24,7 @@ export default function Overview() {
     return <Spin spinning={loading}>
         <DetailContent operation={[
             <Button key="edit" style={{ marginRight: '16px' }} type="primary" onClick={() => history.push(`/project/management/edit/frameAgreement/${params.id}`)}>编辑</Button>,
-            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
             <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />
             <BaseInfo columns={frameAgreementColumns.map((item: any) => item.dataIndex === "bidType" ? ({

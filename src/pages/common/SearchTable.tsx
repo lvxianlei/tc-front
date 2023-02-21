@@ -38,16 +38,15 @@ interface SearchTableProps {
     requestData?: {}
 }
 
-interface PagenationProps {
-    current: number
-    pageSize: number
-}
-
 function formatURISearch(search: { [key: string]: any }) {
     const formObj: { [key: string]: any } = {}
     Object.keys(search).forEach((item: string) => {
         if (search[item] instanceof Array) {
-            formObj[item] = search[item].map((item: any) => moment(item.format))
+            formObj[item] = search[item].map((item: any) => moment(item))
+        } else if (search[item] ?.slice(0, 2) === "n_") {
+            formObj[item] = Number(search[item].slice(2))
+        } else if (search[item] ?.slice(0, 2) === "o_") {
+            formObj[item] = parse(search[item].slice(2))
         } else {
             formObj[item] = search[item]
         }
@@ -81,14 +80,15 @@ export default function SearchTable({
     const uriSearch: any = parse(location.search.replace("?", ""))
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
-    const { loading, data } = useRequest<{ [key: string]: any }>((params: { [key: string]: any } = {}) => new Promise(async (resole, reject) => {
+    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
+            let params: any = {}
             if (pagination !== false) {
                 params.current = uriSearch.current || 1
                 params.size = uriSearch.pageSize || pageSize
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
-            const paramsOptions = stringify({ ...search, ...params, ...filterValue, ...props.requestData }, { skipNull: true })
+            const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -100,27 +100,18 @@ export default function SearchTable({
             reject(false)
         }
     }), {
-        refreshDeps: [
-            JSON.stringify(filterValue),
-            path,
-            location.search
-        ]
-    })
+            refreshDeps: [
+                JSON.stringify(filterValue),
+                path,
+                location.search
+            ]
+        })
 
     useEffect(() => {
         form.setFieldsValue(formatURISearch(uriSearch))
-        // setPagenationParams({
-        //     current: uriSearch?.current || 1,
-        //     pageSize: uriSearch?.pageSize || pageSize
-        // })
     }, [location.search])
 
     const paginationChange = useCallback((page: number, pageSize?: number) => {
-        // setPagenationParams({
-        //     ...pagenationParams,
-        //     current: page,
-        //     pageSize: pageSize || pagenationParams.pageSize
-        // })
         history.replace(`${location.pathname}?${stringify({
             ...uriSearch,
             current: page,
@@ -137,21 +128,21 @@ export default function SearchTable({
                 const formObj: { [key: string]: any } = {}
                 Object.keys(formValue).forEach((item: string) => {
                     if (formValue[item] instanceof Array) {
-                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD") : item)
+                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
+                    } else if (typeof formValue[item] === "number") {
+                        formObj[item] = `n_${formValue[item]}`
+                    } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
+                        formObj[item] = `o_${stringify(formValue[item])}`
                     } else {
                         formObj[item] = formValue[item]
                     }
                 })
-                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: true })}`)
-                // setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
-                // run(params)
+                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
             }}
-            onReset={() => {
+            onReset={async () => {
                 form.resetFields()
-                // const params = onFilterSubmit ? onFilterSubmit(formValue) : formValue
-                // setPagenationParams({ ...pagenationParams, current: 1, pageSize: pagenationParams?.pageSize || 10 })
-                // run(params)
-                history.replace(location.pathname)
+                const formValue = await form.getFieldsValue()
+                history.replace(`${location.pathname}?${stringify({ ...formValue })}`)
             }}
         >
             <Row gutter={[8, 8]}>
@@ -189,7 +180,7 @@ export default function SearchTable({
                     setIsExport(true)
                 }}>导出</Button>
             }
-            {typeof extraOperation === "function" ? extraOperation(data?.source) : extraOperation}
+            {typeof extraOperation === "function" ? extraOperation(data ?.source) : extraOperation}
         </Space>
         {tableRender ? tableRender(<>
             <CommonAliTable
@@ -197,7 +188,7 @@ export default function SearchTable({
                 rowKey={rowKey || ((record: any) => record.id)}
                 size="small"
                 isLoading={loading}
-                dataSource={data?.result?.records || data?.result || []}
+                dataSource={data ?.result ?.records || data ?.result || []}
                 {...tableProps}
                 {...props}
             />
@@ -205,7 +196,7 @@ export default function SearchTable({
                 pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
                     <Pagination
                         className={styles.pagination}
-                        total={data?.result?.total}
+                        total={data ?.result ?.total}
                         pageSize={(uriSearch.pageSize || pageSize) * 1}
                         current={(uriSearch.current || 1) * 1}
                         showTotal={(total: number) => `共${total}条记录`}
@@ -216,30 +207,30 @@ export default function SearchTable({
                 </footer>
             }
         </>) : <>
-            <CommonAliTable
-                columns={columns}
-                rowKey={rowKey || ((record: any) => record.id)}
-                size="small"
-                isLoading={loading}
-                dataSource={data?.result?.records || data?.result || []}
-                {...tableProps}
-                {...props}
-            />
-            {
-                pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
-                    <Pagination
-                        className={styles.pagination}
-                        total={data?.result?.total}
-                        pageSize={(uriSearch.pageSize || pageSize) * 1}
-                        current={(uriSearch.current || 1) * 1}
-                        showTotal={(total: number) => `共${total}条记录`}
-                        showSizeChanger
-                        onChange={paginationChange}
-                        {...paginationProps}
-                    />
-                </footer>
-            }
-        </>}
+                <CommonAliTable
+                    columns={columns}
+                    rowKey={rowKey || ((record: any) => record.id)}
+                    size="small"
+                    isLoading={loading}
+                    dataSource={data ?.result ?.records || data ?.result || []}
+                    {...tableProps}
+                    {...props}
+                />
+                {
+                    pagination !== false && <footer className={modal ? styles.pagenationWarpModal : styles.pagenationWarp}>
+                        <Pagination
+                            className={styles.pagination}
+                            total={data ?.result ?.total}
+                            pageSize={(uriSearch.pageSize || pageSize) * 1}
+                            current={(uriSearch.current || 1) * 1}
+                            showTotal={(total: number) => `共${total}条记录`}
+                            showSizeChanger
+                            onChange={paginationChange}
+                            {...paginationProps}
+                        />
+                    </footer>
+                }
+            </>}
         {isExport ? <ExportList
             history={history}
             location={location}
@@ -247,7 +238,7 @@ export default function SearchTable({
             columnsKey={() => columns.filter((item: any) => item.title !== "操作")}
             size={(uriSearch.pageSize || pageSize) * 1}
             current={(uriSearch.current || 1) * 1}
-            total={data?.result?.total || 0}
+            total={data ?.result ?.total || 0}
             url={exportPath}
             fileName={exportFileName}
             serchObj={{
