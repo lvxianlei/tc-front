@@ -1,16 +1,13 @@
 import React, { useRef, useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Spin, message, Radio, Checkbox } from 'antd'
+import { Space, Input, Button, Modal, Select, message } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { CommonTable, DetailTitle, Page } from '../../common';
+import { SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import TextArea from 'antd/lib/input/TextArea';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
-import moment from 'moment';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import SchedulePlan from './SchedulePlan';
-import { tableColumns, columns } from "./userBase.json"
-import SelectUser from '../../common/SelectUser';
+import { columns } from "./userBase.json"
 import Assign from './Assign';
 
 export interface modalProps {
@@ -73,7 +70,7 @@ export default function ScheduleView(): React.ReactNode {
                 width="95%"
                 title={"指派信息"}
                 footer={
-                    type==='detail' ? null : <>
+                    type === 'detail' ? null : <>
                         <SchedulePlan plan={setPlanData} />
                         <Button onClick={handleModalCancel}>取消</Button>
                         <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
@@ -83,7 +80,7 @@ export default function ScheduleView(): React.ReactNode {
                 onCancel={handleModalCancel}>
                 <Assign id={rowId} ids={selectedKeys} type={type} planData={planData} ref={assignModalRef} />
             </Modal>
-            <Page
+            <SearchTable
                 path={`/tower-science/productCategory/taskPage`}
                 columns={[
                     {
@@ -111,7 +108,7 @@ export default function ScheduleView(): React.ReactNode {
                                     setVisible(true);
                                     setType('detail');
                                     setRowId(record?.id);
-                                    
+
                                 }} disabled={!record.loftingLeaderName}>详情</Button>
                             </Space>
                         )

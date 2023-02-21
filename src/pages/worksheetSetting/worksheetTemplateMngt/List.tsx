@@ -5,16 +5,14 @@
  */
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, Form, Spin, TreeSelect, Popconfirm, message, Switch, Modal } from 'antd';
+import { Space, Input, Select, Button, Form, TreeSelect, Popconfirm, message, Switch, Modal } from 'antd';
 import { SearchTable as Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
-import { Link, useHistory, useLocation } from 'react-router-dom';
-import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
+import { useHistory } from 'react-router-dom';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import WorkOrderTemplateNew from './WorkOrderTemplateNew';
-import { rowDetail } from 'ali-react-table/dist/pipeline/features';
 
 export interface EditRefProps {
     onSubmit: () => void

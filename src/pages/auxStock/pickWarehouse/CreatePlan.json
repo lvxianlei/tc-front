@@ -1,0 +1,351 @@
+{
+    "baseInfoColumn": [
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserId",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/employee",
+            "rowKey": "userId",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "deptName"
+                },
+                {
+                    "title": "姓名",
+                    "dataIndex": "name"
+                },
+                {
+                    "title": "账号",
+                    "dataIndex": "account"
+                },
+                {
+                    "title": "手机号",
+                    "dataIndex": "phone"
+                },
+                {
+                    "title": "角色",
+                    "dataIndex": "roleName"
+                },
+                {
+                    "title": "工号",
+                    "dataIndex": "number"
+                },
+                {
+                    "title": "邮箱",
+                    "dataIndex": "email"
+                }
+            ],
+            "search": [
+                {
+                    "title": "",
+                    "dataIndex": "fuzzyQuery",
+                    "width": 200,
+                    "placeholder": "账号/手机号/姓名/工号/邮箱"
+                }
+            ]
+        },
+        {
+            "title": "领料部门",
+            "dataIndex": "departmentName",
+            "required": true,
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "dependencies": true,
+            "value": "name",
+            "path": "/tower-system/department",
+            "columns": [
+                {
+                    "title": "部门",
+                    "dataIndex": "name"
+                }
+            ],
+            "search": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "请输入部门名称"
+                }
+            ]
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "dept",
+            "type": "popTable",
+            "width": 1101,
+            "readOnly": true,
+            "value": "name",
+            "dependencies": true,
+            "path": "/tower-system/department",
+            "columns": [
+                {
+                    "title": "部门名称",
+                    "dataIndex": "name"
+                }
+            ],
+            "search": [
+                {
+                    "title": "查询",
+                    "dataIndex": "name",
+                    "width": 200,
+                    "placeholder": "输入部门名称进行查询"
+                }
+                
+            ]
+        },
+        {
+            "title": "领料日期",
+            "dataIndex": "pickingTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料日期"
+                }
+            ]
+        },
+        {
+            "title": "领料仓库",
+            "dataIndex": "warehouseId",
+            "type": "select",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择领料仓库"
+                }
+            ]
+        }
+    ],
+    "material": [
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode"
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec"
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num"
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit"
+        },
+        {
+            "title": "含税单价（元）",
+            "dataIndex": "taxPrice"
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice"
+        },
+        {
+            "title": "不含税单价（元）",
+            "dataIndex": "unTaxPrice"
+        },
+        {
+            "title": "不含税金额（元）",
+            "dataIndex": "totalUnTaxPrice"
+        },
+        {
+            "title": "库位",
+            "dataIndex": "reservoirName"
+        },
+        {
+            "title": "区位",
+            "dataIndex": "locatorName"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark"
+        }
+    ],
+    "addMaterial": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/outDetails",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "locatorId",
+                "type":"tree"
+            },
+            {
+                "title": "物料编码",
+                "dataIndex": "materialCode",
+                "type": "string"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "realReceiveBatchNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "含税单价（元）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            }
+        ]
+    },
+    "addMaterialB": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock/outDetails",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "出库日期",
+                "dataIndex": "outputTime",
+                "type":"date"
+            },
+            {
+                "title": "领料人",
+                "dataIndex": "pickUser",
+                "type": "string"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "出库日期",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "领料人",
+                "dataIndex": "applyStaffName"
+            },
+            {
+                "title": "领料车间",
+                "dataIndex": "departmentName"
+            },
+            {
+                "title": "供应商",
+                "dataIndex": "supplierName"
+            },
+            {
+                "title": "含税单价（元）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "仓库",
+                "dataIndex": "warehouseName"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            }
+        ]
+    }
+}

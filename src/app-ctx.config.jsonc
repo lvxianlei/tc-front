@@ -201,6 +201,11 @@
                 "authority": "tc_erp_rd_workbench",
                 "items": [
                     {
+                        "label": "数字门户-个人",
+                        "path": "/workBench/gatewayPersonal",
+                        "authority": "tc_erp_rd_workbench_work"
+                    },
+                    {
                         "label": "工作台",
                         "path": "/workBench/workBenchMngt",
                         "authority": "tc_erp_rd_workbench_work"
@@ -467,6 +472,11 @@
                     {
                         "label": "辅材出库",
                         "path": "/auxStock/outputWarehouse",
+                        "authority": "tc_erp_sw_stock_material_out"
+                    },
+                    {
+                        "label": "辅材领料单",
+                        "path": "/auxStock/pickWarehouse",
                         "authority": "tc_erp_sw_stock_material_out"
                     }
                 ]
@@ -1714,6 +1724,11 @@
                     {
                         "label": "字段同步",
                         "path": "/worksheetSetting/fieldSynchronous",
+                        "authority": "tc_erp_sc_workbench_list"
+                    },
+                    {
+                        "label": "自动同步",
+                        "path": "/worksheetSetting/selfSynchronizing",
                         "authority": "tc_erp_sc_workbench_list"
                     }
                 ]

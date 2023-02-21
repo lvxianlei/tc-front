@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { IntgSelect, Page } from '../common';
+import { IntgSelect, Page, SearchTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
@@ -124,6 +124,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             title: '确认人',
             width: 200,
             dataIndex: 'confirmName'
+        },
+        {
+            key: 'productCategoryName',
+            title: '塔型名称',
+            width: 200,
+            dataIndex: 'productCategoryName'
         },
         {
             key: 'contractNum',
@@ -249,7 +255,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 </Form.Item>
             </Form>
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/drawTask"
             columns={columns}
             refresh={refresh}
@@ -292,6 +298,11 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     name: 'confirmId',
                     label: '确认人',
                     children: <IntgSelect width={200} />
+                },
+                {
+                    name: 'productCategoryName',
+                    label: '塔型名称',
+                    children: <Input placeholder='请输入'/>
                 },
                 {
                     name: 'fuzzyMsg',

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
+import { Attachment, BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './PatchApplication.module.less';
@@ -45,6 +45,7 @@ export default function Detail(): React.ReactNode {
                 })} dataSource={data || {}} col={4} />
                 <CommonTable columns={detailTableColumns} dataSource={data?.supplyStructureVOList || []} />
                 <OperationRecord title="操作信息" serviceId={params.id} serviceName="tower-science" />
+                <Attachment dataSource={data?.fileVOList || []} />
             </DetailContent>
         </Spin>
     )

@@ -66,13 +66,13 @@ export default function List(): React.ReactNode {
       },
       {
         label: '处理节点',
-        name: "node",
+        name: "processingName",
         align: "center",
         width: 100,
         template: function (task: any) {
           return (
             `
-              <span title="处理节点：${task.node}" >${task.node || '-'}</span>
+              <span title="处理节点：${task.processingName}" >${task.processingName || '-'}</span>
               `
           )
 
@@ -139,6 +139,7 @@ export default function List(): React.ReactNode {
     gantt.config.drag_move = false;
     gantt.config.show_errors = false;
 
+    gantt.config.task_scroll_offset = 50;
     gantt.config.layout = {
       css: "gantt_container",
       cols: [
@@ -165,9 +166,9 @@ export default function List(): React.ReactNode {
     gantt.init("planProd");
     gantt.i18n.setLocale("cn");
     gantt.templates.task_class = function (start, end, item) {
-      return  item?.workOrderNumber ? item?.status ===1 ? 'dashed' : '' :  item?.status ===3 ? '' : 'dashed'
+      return item?.workOrderNumber ? item?.status === 1 ? 'dashed' : '' : item?.status === 3 ? '' : 'dashed'
     };
-  
+
     const value = data?.length > 0 && data?.reduce((res: any, item: any) => {
       const parent = { ...item };
       delete parent?.workOrderNodeViewList;
@@ -178,7 +179,8 @@ export default function List(): React.ReactNode {
         ...item,
         start_date: item.planStartTime ? new Date(item.planStartTime) : new Date(),
         end_date: item.planEndTime ? new Date(item.planEndTime) : new Date(),
-        color: item.workOrderNumber ? '#0ac189' : item?.colour,
+        // color: item.workOrderNumber ? '#0ac189' : item?.colour,
+        color: item.status === 3 ? '#0ac189' : '#0000003b',
         "border": "1px dashed #ff0 !important"
       }
     })

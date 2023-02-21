@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Space, Input, Button, Select } from 'antd';
 import { useHistory, useParams } from 'react-router-dom'
-import { Page } from '../../../common'
+import { Page, SearchTable } from '../../../common'
 import QuestionnaireModal from './QuestionnaireModal';
 import RequestUtil from '../../../../utils/RequestUtil';
 import styles from './SetOut.module.less';
@@ -202,7 +202,7 @@ export default function PickCheckList(): React.ReactNode {
     }
     return (
         <div className={wordSize == 2 ? styles?.check : wordSize == 3 ? styles?.checkXL : undefined}>
-            <Page
+            <SearchTable
                 path={`/tower-science/drawProductStructure/check`}
                 requestData={{
                     segmentId: params.productSegmentId === 'all' ? '' : params.productSegmentId,
