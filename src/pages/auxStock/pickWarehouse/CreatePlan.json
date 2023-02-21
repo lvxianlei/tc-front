@@ -284,7 +284,7 @@
         "columns": [
             {
                 "title": "收货批次",
-                "dataIndex": "realReceiveBatchNumber"
+                "dataIndex": "receiveBatchNumber"
             },
             {
                 "title": "品名",

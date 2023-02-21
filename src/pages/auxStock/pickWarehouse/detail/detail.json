@@ -42,7 +42,7 @@
         },
         {
             "title": "收货批次",
-            "dataIndex": "realReceiveBatchNumber",
+            "dataIndex": "receiveBatchNumber",
             "width": 120
         },
         {

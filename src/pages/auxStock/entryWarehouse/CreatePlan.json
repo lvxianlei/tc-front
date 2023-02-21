@@ -338,7 +338,7 @@
         "columns": [
             {
                 "title": "收货批次",
-                "dataIndex": "receiveNumber"
+                "dataIndex": "receiveBatchNumber"
             },
             {
                 "title": "品名",
