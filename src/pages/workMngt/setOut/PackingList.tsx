@@ -30,7 +30,6 @@ export default function PackingList(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
     const userId = AuthUtil.getUserInfo().user_id;
-    const [form] = useForm();
     const [pageForm] = useForm();
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
@@ -144,9 +143,9 @@ export default function PackingList(): React.ReactNode {
 
     const GeneratePDF = () => new Promise(async (resolve, reject) => {
         try {
-            form.validateFields().then(res => {
+            pageForm.validateFields().then(res => {
                 setConfirmLoading(true)
-                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}?printerName=${form.getFieldsValue(true)?.printerName}&printMain=${mainPartChecked ? 1 : 0}`).then(res => {
+                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}?printerName=${pageForm.getFieldsValue(true)?.printerName}&printMain=${mainPartChecked ? 1 : 0}`).then(res => {
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
