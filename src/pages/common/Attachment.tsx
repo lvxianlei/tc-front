@@ -271,6 +271,7 @@ export default forwardRef(function ({
             width={1011}
             visible={visible}
             onCancel={handleCancel}
+            destroyOnClose
             footer={false}>
             {picInfo.fileSuffix === "dxf" ? <iframe
                 src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(picInfo?.url)}`}
