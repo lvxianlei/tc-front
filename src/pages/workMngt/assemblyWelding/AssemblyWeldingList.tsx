@@ -212,7 +212,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
             columns={columns}
             headTabs={[]}
             refresh={refresh}
-            requestData={{ status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator }}
+            // requestData={{ status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator }}
             filterValue={filterValue}
             searchFormItems={[
                 {
