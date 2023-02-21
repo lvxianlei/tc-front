@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, Button, Popconfirm, Spin, Modal, message, Form, Select } from 'antd';
+import { Space, Button, Popconfirm, Spin, Modal, message, Form, Select, Checkbox, Radio } from 'antd';
 import { CommonTable, DetailContent } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -30,11 +30,11 @@ export default function PackingList(): React.ReactNode {
     const editRef = useRef<EditProps>();
     const [visible, setVisible] = useState<boolean>(false);
     const userId = AuthUtil.getUserInfo().user_id;
-    const [form] = useForm();
     const [pageForm] = useForm();
-    const [noPageVisible, setNoPageVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [weightChecked, setWeightChecked] = useState<boolean>(false);
+    const [mainPartChecked, setMainPartChecked] = useState<boolean>(false);
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -107,7 +107,7 @@ export default function PackingList(): React.ReactNode {
         try {
             pageForm.validateFields().then(res => {
                 setConfirmLoading(true)
-                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/${params.productId}?printerName=${pageForm.getFieldsValue(true)?.printerName}`).then(res => {
+                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/${params.productId}?printerName=${pageForm.getFieldsValue(true)?.printerName}&printMain=${mainPartChecked ? 1 : 0}`).then(res => {
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
@@ -121,6 +121,7 @@ export default function PackingList(): React.ReactNode {
                         return res?.json();
                     }).then((res) => {
                         res?.Msg === '' ? message.success('打印成功') : message.success(res?.Msg)
+                        setPageVisible(false)
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
@@ -142,9 +143,9 @@ export default function PackingList(): React.ReactNode {
 
     const GeneratePDF = () => new Promise(async (resolve, reject) => {
         try {
-            form.validateFields().then(res => {
+            pageForm.validateFields().then(res => {
                 setConfirmLoading(true)
-                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}?printerName=${form.getFieldsValue(true)?.printerName}`).then(res => {
+                RequestUtil.get<any>(`/tower-science/packageStructure/packagePrint/noWeight/${params.productId}?printerName=${pageForm.getFieldsValue(true)?.printerName}&printMain=${mainPartChecked ? 1 : 0}`).then(res => {
                     fetch(`http://127.0.0.1:2001/print`, {
                         mode: 'cors',
                         method: 'post',
@@ -161,13 +162,11 @@ export default function PackingList(): React.ReactNode {
                         resolve(true)
                     }).catch(e => {
                         setConfirmLoading(false)
-                        console.log(e)
                         reject(false)
                     })
 
                 }).catch(e => {
                     setConfirmLoading(false)
-                    console.log(e)
                     reject(false)
                 })
             })
@@ -182,15 +181,21 @@ export default function PackingList(): React.ReactNode {
     return <>
         <Modal
             visible={pageVisible}
-            title="生成PDF-带重量"
-            onOk={GeneratePDFWeight}
+            title="生成PDF"
+            onOk={() => {
+                if (weightChecked) {
+                    GeneratePDF()
+                } else {
+                    GeneratePDFWeight()
+                }
+            }}
             onCancel={() => {
                 setPageVisible(false);
                 pageForm.resetFields()
             }}
             confirmLoading={confirmLoading}
         >
-            <Form form={pageForm} layout='horizontal' labelCol={{ span: 4 }}>
+            <Form form={pageForm} layout='horizontal' labelCol={{ span: 8 }}>
                 <Form.Item label='打印机' name='printerName' rules={[{
                     required: true,
                     message: '请选择打印机'
@@ -203,33 +208,15 @@ export default function PackingList(): React.ReactNode {
                         })}
                     </Select>
                 </Form.Item>
-                <Form.Item>
-                    <Button htmlType="reset">重置</Button>
+                <Form.Item label='包装不带重量' name='hasWeight'>
+                    <Checkbox checked={weightChecked} onChange={(e) => {
+                        setWeightChecked(e.target.checked)
+                    }} />
                 </Form.Item>
-            </Form>
-        </Modal>
-        <Modal
-            visible={noPageVisible}
-            title="生成PDF-不带重量"
-            onOk={GeneratePDF}
-            onCancel={() => {
-                setNoPageVisible(false);
-                form.resetFields()
-            }}
-            confirmLoading={confirmLoading}
-        >
-            <Form form={form} layout='horizontal' labelCol={{ span: 4 }}>
-                <Form.Item label='打印机' name='printerName' rules={[{
-                    required: true,
-                    message: '请选择打印机'
-                }]}>
-                    <Select placeholder="请选择打印机">
-                        {printerDatas && printerDatas.map((item, index) => {
-                            return <Select.Option key={index} value={item}>
-                                {item}
-                            </Select.Option>
-                        })}
-                    </Select>
+                <Form.Item label='电焊只打印主件号' name='hasMainPart'>
+                    <Checkbox checked={mainPartChecked} onChange={(e) => {
+                        setMainPartChecked(e.target.checked)
+                    }} />
                 </Form.Item>
                 <Form.Item>
                     <Button htmlType="reset">重置</Button>
@@ -274,13 +261,9 @@ export default function PackingList(): React.ReactNode {
         </Space>
         <Space direction="horizontal" size="small" className={`${styles.padding16}`}>
             <Button type="primary" onClick={() => {
-                setNoPageVisible(true);
-                printerRun()
-            }} ghost>生成PDF-不带重量</Button>
-            <Button type="primary" onClick={() => {
                 setPageVisible(true);
                 printerRun()
-            }} ghost>生成PDF-带重量</Button>
+            }} ghost>生成PDF</Button>
             <Button type="primary" onClick={() => setIsExport(true)} ghost>导出</Button>
             <Button type="primary" ghost onClick={() => setVisible(true)} disabled={!isShow}>套用包</Button>
             <Button type="primary" disabled={!isShow} onClick={() => {
