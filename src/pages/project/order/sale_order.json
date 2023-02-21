@@ -91,7 +91,7 @@
         },
         {
             "title": "订单要求交货日期",
-            "dataIndex": "deliveryTime",
+            "dataIndex": "orderDeliveryTime",
             "type": "date",
             "format": "YYYY-MM-DD"
         },

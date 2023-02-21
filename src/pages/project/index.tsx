@@ -112,6 +112,11 @@ export default function Management(): React.ReactNode {
                 children: <Input placeholder="计划号" style={{ width: 210 }} />
             },
             {
+                name: 'frameInternalNumber',
+                label: '框架协议内合同编号',
+                children: <Input placeholder="框架协议内合同编号" style={{ width: 210 }} />
+            },
+            {
                 name: 'startBidBuyEndTime',
                 label: '购买截至日期',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
