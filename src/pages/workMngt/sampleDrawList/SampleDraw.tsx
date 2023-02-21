@@ -179,8 +179,8 @@ export default function SampleDraw(): React.ReactNode {
                 {
                     url?.fileSuffix === "dxf" ? <>
                         <iframe
-                            // src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
-                            src={`http://localhost:4000/#/dxfPreview?url=${encodeURIComponent(url?.downloadUrl)}`}
+                            src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
+                            // src={`http://localhost:4000/#/dxfPreview?url=${encodeURIComponent(url?.downloadUrl)}`}
                             style={{
                                 border: "none",
                                 width: "100%",
