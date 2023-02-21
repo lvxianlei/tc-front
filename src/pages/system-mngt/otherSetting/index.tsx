@@ -291,7 +291,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": selected===0,
                             "message": "请输入appId"
                         }]}>
-                            <Input maxLength={ 32 } placeholder={"请输入appId"} disabled={title==='查看'}/>
+                            <Input maxLength={ 128 } placeholder={"请输入appId"} disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                     <Col span={12}>
@@ -299,7 +299,7 @@ export default function JobsMngt(): React.ReactNode {
                             "required": selected===0,
                             "message": "请输入appSecret"
                         }]}>
-                            <Input maxLength={ 32 } placeholder={"请输入appSecret"} disabled={title==='查看'}/>
+                            <Input maxLength={ 128 } placeholder={"请输入appSecret"} disabled={title==='查看'}/>
                         </Form.Item>
                     </Col>
                 </Row>
