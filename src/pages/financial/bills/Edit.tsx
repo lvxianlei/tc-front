@@ -316,14 +316,33 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
     }, [visibleP])
     const handleBanlanceChange = (value: number, id: string) => {
         const isMaterial: boolean = baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))
+        const isTransport: boolean = baseForm.getFieldValue("invoiceSource")&&['1191','1193'].includes(baseForm.getFieldValue("invoiceSource"))
+        const isUnload: boolean  = baseForm.getFieldValue("invoiceSource")&&['1192','1194'].includes(baseForm.getFieldValue("invoiceSource"))
         const list = popDataList.map((item: any) => {
             if (item.entryStockDetailId === id) {
-                return ({
-                    ...item,
-                    balanceTotalWeight: value,
-                    totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
-                    priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalTaxPrice : value * item.invoicePrice-item.totalTaxPrice,
-                })
+                if(isTransport){
+                    return ({
+                        ...item,
+                        balanceTotalWeight: value,
+                        totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
+                        priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalInvoicePrice : value * item.invoicePrice-item.totalInvoicePrice,
+                    })
+                }else if(isUnload){
+                    return ({
+                        ...item,
+                        balanceTotalWeight: value,
+                        totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
+                        priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalUnloadTaxPrice : value * item.invoicePrice-item.totalUnloadTaxPrice,
+                    })
+                }else{
+                    return ({
+                        ...item,
+                        balanceTotalWeight: value,
+                        totalInvoicePrice: isMaterial ? item.num*item.invoicePrice : value * item.invoicePrice,
+                        priceDifference: isMaterial ? item.num*item.invoicePrice-item.totalTaxPrice : value * item.invoicePrice-item.totalTaxPrice,
+                    })
+                }
+                
             }
             return item
         })
@@ -339,15 +358,34 @@ export default forwardRef(function Edit({ type, id, visibleP }: EditProps, ref) 
     }
     const handleInvoiceChange = (value: number, id: string) => {
         const isMaterial: boolean = baseForm.getFieldValue("invoiceSource")&&['1193','1194','1195'].includes(baseForm.getFieldValue("invoiceSource"))
+        const isTransport: boolean = baseForm.getFieldValue("invoiceSource")&&['1191','1193'].includes(baseForm.getFieldValue("invoiceSource"))
+        const isUnload: boolean  = baseForm.getFieldValue("invoiceSource")&&['1192','1194'].includes(baseForm.getFieldValue("invoiceSource"))
         const list = popDataList.map((item: any) => {
             if (item.entryStockDetailId === id) {
-                console.log(isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice)
-                return ({
-                    ...item,
-                    invoicePrice: value,
-                    totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
-                    priceDifference: isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice,
-                })
+                console.log(baseForm.getFieldValue("invoiceSource"))
+                if(isTransport){
+                    return ({
+                        ...item,
+                        invoicePrice: value,
+                        totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
+                        priceDifference: isMaterial ? item.num*value-item.totalInvoicePrice :  value * item.balanceTotalWeight-item.totalInvoicePrice,
+                    })
+                }else if(isUnload){
+                    return ({
+                        ...item,
+                        invoicePrice: value,
+                        totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
+                        priceDifference: isMaterial ? item.num*value-item.totalUnloadTaxPrice :  value * item.balanceTotalWeight-item.totalUnloadTaxPrice,
+                    })
+                }else{
+                    return ({
+                        ...item,
+                        invoicePrice: value,
+                        totalInvoicePrice: isMaterial ? item.num*value : value * item.balanceTotalWeight,
+                        priceDifference: isMaterial ? item.num*value-item.totalTaxPrice :  value * item.balanceTotalWeight-item.totalTaxPrice,
+                    })
+                }
+                
             }
             return item
         })
