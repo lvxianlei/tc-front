@@ -135,8 +135,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.startPickingTime = ``
             value.endPickingTime = ``
         }
-        if (value.batcherId) {
-            value.applyStaffId = value.batcherId.value
+        if (value.applyStaffId) {
+            value.applyStaffId = value.applyStaffId.value
         }else{
             value.applyStaffId = ''
         }
@@ -253,7 +253,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'batcherId',
+                        name: 'applyStaffId',
                         label: '申请人',
                         children: <IntgSelect width={200} />
                     },

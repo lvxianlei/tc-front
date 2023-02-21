@@ -354,7 +354,7 @@
             },
             {
                 "title": "入库日期",
-                "dataIndex": "warehousingEntryTime"
+                "dataIndex": "entryTime"
             },
             {
                 "title": "品名",
@@ -414,11 +414,11 @@
             },
             {
                 "title": "库位",
-                "dataIndex": "reservoirArea"
+                "dataIndex": "reservoirName"
             },
             {
                 "title": "区位",
-                "dataIndex": "location"
+                "dataIndex": "locatorName"
             },
             {
                 "title": "炉批号",

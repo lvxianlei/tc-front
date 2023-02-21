@@ -293,7 +293,7 @@
             },
             {
                 "title": "领料人",
-                "dataIndex": "pickingUserId"
+                "dataIndex": "applyStaffId"
             }
         ],
         "columns": [

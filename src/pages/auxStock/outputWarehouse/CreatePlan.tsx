@@ -476,7 +476,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                 treeData: locatorData,
                             })
                         }
-                        if (item.dataIndex === 'pickingUserId') {
+                        if (item.dataIndex === 'applyStaffId') {
                             return ({
                                 ...item,
                                 format: (search:any) => {return search.value},
@@ -485,7 +485,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         }
                         return item
                     }),
-                    path: `${addMaterialB.path}?status=2&warehouseId=${warehouseId}`
+                    path: `${addMaterialB.path}?status=2&warehouseId=${warehouseId}&outType=0`
                 }}
                 value={{
                     id: "",
