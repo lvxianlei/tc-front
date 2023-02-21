@@ -12,7 +12,7 @@
         },
         {
             "title": "入库日期",
-            "dataIndex": "createTime",
+            "dataIndex": "entryTime",
             "type":"date",
             "format":"YYYY-MM-DD",
             "width": 80
