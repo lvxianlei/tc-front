@@ -110,6 +110,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.createUser) {
             value.createUser = value.createUser.value
+        }else{
+            value.createUser = ''
         }
         setFilterValue({ ...filterValue, ...value })
         // run({...filterValue, ...value})

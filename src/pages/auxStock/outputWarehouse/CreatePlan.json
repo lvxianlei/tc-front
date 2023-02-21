@@ -2,7 +2,7 @@
     "baseInfoColumn": [
         {
             "title": "出库类型",
-            "dataIndex": "type",
+            "dataIndex": "outType",
             "type": "select",
             "required": true,
             "enum": [
@@ -222,6 +222,10 @@
         ],
         "columns": [
             {
+                "title": "收货批次",
+                "dataIndex": "realReceiveBatchNumber"
+            },
+            {
                 "title": "品名",
                 "dataIndex": "materialName"
             },
@@ -252,6 +256,102 @@
             {
                 "title": "不含税金额（元）",
                 "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
+            }
+        ]
+    },
+    "addMaterialB": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/auxiliaryOutStock/detail",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "出库日期",
+                "dataIndex": "outputTime",
+                "type":"date"
+            },
+            {
+                "title": "领料人",
+                "dataIndex": "pickingUserId"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "realReceiveBatchNumber"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "单位",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "出库日期",
+                "dataIndex": "unit"
+            },
+            {
+                "title": "领料人",
+                "dataIndex": "applyStaffName"
+            },
+            {
+                "title": "领料车间",
+                "dataIndex": "departmentName"
+            },
+            {
+                "title": "供应商",
+                "dataIndex": "supplierName"
+            },
+            {
+                "title": "含税单价（元）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "仓库",
+                "dataIndex": "warehouseName"
             },
             {
                 "title": "库位",
