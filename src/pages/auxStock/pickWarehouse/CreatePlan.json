@@ -1,22 +1,6 @@
 {
     "baseInfoColumn": [
         {
-            "title": "出库类型",
-            "dataIndex": "outType",
-            "type": "select",
-            "required": true,
-            "enum": [
-                {
-                    "label": "正常出库",
-                    "value": 0
-                },
-                {
-                    "label": "退料回库",
-                    "value": 1
-                }
-            ]
-        },
-        {
             "title": "领料人",
             "dataIndex": "pickingUserId",
             "required": true,
@@ -270,7 +254,7 @@
     "addMaterialB": {
         "title": "原材料",
         "type": "popTable",
-        "path": "/tower-storage/auxiliaryOutStock/detail",
+        "path": "/tower-storage/materialStock/outDetails",
         "width": 1011,
         "selectType": "checkbox",
         "dependencies": true,
@@ -293,7 +277,8 @@
             },
             {
                 "title": "领料人",
-                "dataIndex": "pickingUserId"
+                "dataIndex": "pickUser",
+                "type": "string"
             }
         ],
         "columns": [

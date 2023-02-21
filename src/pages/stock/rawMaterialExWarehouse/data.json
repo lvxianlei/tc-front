@@ -11,6 +11,11 @@
             "width": 100
         },
         {
+            "title": "出库日期",
+            "dataIndex": "outStockTime",
+            "width": 100
+        },
+        {
             "title": "状态",
             "dataIndex": "stockStatusName",
             "width": 80

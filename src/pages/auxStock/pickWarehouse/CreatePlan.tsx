@@ -3,7 +3,7 @@
  */
 import React, { useEffect, useState, useImperativeHandle, forwardRef } from 'react';
 import { Modal, Form, Button, InputNumber, message, Spin, TreeSelect, Input } from 'antd';
-import { BaseInfo, CommonTable, DetailTitle, IntgSelect, PopTableContent } from '../../common';
+import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import {
@@ -24,7 +24,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
-    const [type, setType] = useState<any>(0);
+    const [type, setType] = useState<number>(0);
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
@@ -102,8 +102,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
-        if (fields.outType) {
-            setType(fields.outType)
+        if (fields.type) {
+            setType(fields.type)
             setPopDataList([])
             setMaterialList([])
             return;
@@ -146,21 +146,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 throw Error('请您填写数量！')
             }
             await saveRun({
-                outStockDetailDTOList: materialList.map((item:any)=>{
-                    return {
-                        ...item,
-                        num: type===1||type==='1'? 0-item.num : item.num, 
-                        totalTaxPrice: type===1||type==='1'? 0-item.totalTaxPrice : item.totalTaxPrice,
-                        totalUnTaxPrice: type===1||type==='1'? 0-item.totalUnTaxPrice : item.totalUnTaxPrice,
-                    }
-                }),
-                ...baseInfo,
+                materialPickingDetailDTOS: materialList,
+                // ...baseInfo,
+                isApproval: 0,
                 pickingTeamName: baseInfo?.dept.value,
                 pickingTeamId: baseInfo?.dept.id,
-                pickingTime: baseInfo.pickingTime+' 00:00:00',
-                pickingUserId: baseInfo?.pickingUserId.id,
-                departmentId: baseInfo?.departmentName?.id,
-                departmentName: baseInfo?.departmentName?.value
+                pickingTime: baseInfo.pickingTime+" 23:59:59",
+                pickingUser: baseInfo?.pickingUserId.id,
+                deptId: baseInfo?.departmentName?.id,
+                deptName: baseInfo?.departmentName?.value,
+                warehouseId: baseInfo?.warehouseId
             });
             resove(true)
         } catch (error) {
@@ -169,16 +164,15 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
     })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { run: saveRun } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
         try {
-            const path = props.type === "create" ? `/tower-storage/auxiliaryOutStock/save` : '/tower-storage/auxiliaryOutStock'
+            const path = `/tower-storage/auxiliaryMaterialPicking` 
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? {
-                ...data,
-                materialType: 2
+                ...requestData,
             } : {
-                ...data,
-                materialType: 2,
-                id: props.id
+                ...requestData,
+                id: props.id,
+                pickingStatus: data?.pickingStatus
             })
             resove(result)
         } catch (error) {
@@ -189,39 +183,27 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
-                `/tower-storage/auxiliaryOutStock/${props.id}`,
-                { materialType: 2 }
+                `/tower-storage/auxiliaryMaterialPicking/${props.id}`
             )
-            setPopDataList(result?.outStockDetailVOList.map((item:any)=>{
-                return {
-                    ...item,
-                    num: result?.outType===1||result?.outType==='1' ? 0 - item.num : item.num, 
-                    totalTaxPrice: result?.outType===1||result?.outType==='1' ? 0 - item.totalTaxPrice : item.totalTaxPrice,
-                    totalUnTaxPrice: result?.outType===1||result?.outType==='1' ? 0 - item.totalUnTaxPrice : item.totalUnTaxPrice,
-                }
-            }))
-            setMaterialList(result?.outStockDetailVOList.map((item:any)=>{
-                return {
-                    ...item,
-                    num: result?.outType===1||result?.outType==='1' ? 0 - item.num : item.num, 
-                    totalTaxPrice: result?.outType===1||result?.outType==='1' ? 0 - item.totalTaxPrice : item.totalTaxPrice,
-                    totalUnTaxPrice: result?.outType===1||result?.outType==='1' ? 0 - item.totalUnTaxPrice : item.totalUnTaxPrice,
-                }
-            }))
+            setPopDataList(result?.materialPickingDetailVOS)
+            setMaterialList(result?.materialPickingDetailVOS)
             setWarehouseId(result?.warehouseId)
-            setType(result?.outType)
             // addCollectionForm.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             resole({
                 ...result,
                 pickingUserId: {
-                    id: result?.applyStaffId,
-                    value: result?.applyStaffName
+                    id: result?.pickingUser,
+                    value: result?.pickingUserName
                 },
                 dept:{
                     id:result?.pickingTeamId||'',
                     value:result?.pickingTeamName||''
                 },
-                pickingTime: result?.createTime
+                departmentName:{
+                    id:result?.deptId||'',
+                    value:result?.deptName||''
+                },
+                pickingTime: result?.pickingTime
             })
         } catch (error) {
             reject(error)
@@ -276,7 +258,6 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     useEffect(() => {
         if (props.visible) {
             addCollectionForm.setFieldsValue({
-                type:0,
                 pickingTime: moment(new Date()).format("YYYY-MM-DD"),
                 dept:{
                     id:'',
@@ -319,20 +300,13 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             />
             <DetailTitle title="出库明细" />
             <div className={styles.btnWrapper}>
-                { (type === 1 || type === '1')?<Button
+                <Button
                     type='primary'
                     key="add"
                     ghost
                     style={{ marginRight: 8 }}
                     disabled={!warehouseId}
-                    onClick={() => setVisibleB(true)}>选择出库明细</Button>
-                :<Button
-                    type='primary'
-                    key="add"
-                    ghost
-                    style={{ marginRight: 8 }}
-                    disabled={!warehouseId}
-                    onClick={() => setVisible(true)}>选择库存</Button>}
+                    onClick={() => setVisible(true)}>选择库存</Button>
             </div>
             <Form form={form} className={styles.descripForm}>
             <CommonTable
@@ -359,26 +333,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         //         render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                         //     })
                         // }
-                        if (["num"].includes(item.dataIndex)&&![1,'1'].includes(type)) {
-                            return ({
-                                ...item,
-                                render: (value: number, records: any, key: number) => {return <Form.Item 
-                                    name={['list', key, 'num']}
-                                    initialValue={value||undefined}
-                                    rules={[{
-                                        validator: async (rule: any, value: any, callback: (error?: string) => void) => {
-                                            const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10&rawStockId=${records?.rawStockId}`);
-                                            if(resData.records[0]?.num < value)
-                                            return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
-                                            else return Promise.resolve('数量可用');
-                                        }
-                                    }]}>
-                                        <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
-                                    </Form.Item>
-                                // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
-                            }})
-                        }
-                        if (["num"].includes(item.dataIndex)&&[1,'1'].includes(type)) {
+                        if (["num"].includes(item.dataIndex)) {
                             return ({
                                 ...item,
                                 render: (value: number, records: any, key: number) => {return <Form.Item 
@@ -393,7 +348,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                     //     }
                                     // }]}
                                     >
-                                        <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
+                                        <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
                                     </Form.Item>
                                 // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                             }})
@@ -443,49 +398,6 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         return item
                     }),
                     path: `${addMaterial.path}?materialType=2&warehouseId=${warehouseId}`
-                }}
-                value={{
-                    id: "",
-                    records: popDataList,
-                    value: ""
-                }}
-                onChange={(fields: any[]) => {
-                    setMaterialList(fields.map((item:any)=>{
-                        return{
-                            ...item,
-                            rawStockId: item.id,
-                        }
-                    }) || [])
-                }}
-            />
-        </Modal>
-        <Modal width={1100} title={`选择出库明细`} destroyOnClose
-            visible={visibleB}
-            onOk={handleAddModalOkB}
-            onCancel={() => {
-                setVisibleB(false);
-            }}
-        >
-            <PopTableContent
-                data={{
-                    ...addMaterialB as any,
-                    search: (addMaterialB as any).search.map((item: any) => {
-                        if (item.dataIndex === "locatorId") {
-                            return ({
-                                ...item,
-                                treeData: locatorData,
-                            })
-                        }
-                        if (item.dataIndex === 'pickingUserId') {
-                            return ({
-                                ...item,
-                                format: (search:any) => {return search.value},
-                                render: () => <IntgSelect width={200} />
-                            })
-                        }
-                        return item
-                    }),
-                    path: `${addMaterialB.path}?status=2&warehouseId=${warehouseId}`
                 }}
                 value={{
                     id: "",

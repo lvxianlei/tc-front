@@ -11,6 +11,11 @@
             "width": 150
         },
         {
+            "title": "入库时间",
+            "dataIndex": "warehousingTime",
+            "width": 150
+        },
+        {
             "title": "收货单号",
             "dataIndex": "receiveNumber",
             "width": 150
@@ -100,7 +105,7 @@
         },
         {
             "title": "入库日期",
-            "dataIndex": "entryTime",
+            "dataIndex": "warehousingTime",
             "type": "date",
             "format":"YYYY-MM-DD",
             "width": 100
