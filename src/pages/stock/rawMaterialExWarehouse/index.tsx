@@ -151,6 +151,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.batcherId) {
             value.applyStaffId = value.batcherId.value
+        }else{
+            value.applyStaffId = ''
         }
         setFilterValue({ ...filterValue, ...value })
         run({...filterValue, ...value})

@@ -236,6 +236,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">采购入库</Select.Option>
                                 <Select.Option value="2">盘点入库</Select.Option>
+                                <Select.Option value="4">退货出库</Select.Option>
                             </Select>
                         )
                     },
@@ -294,7 +295,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     setVisible(false)
                     editRef.current?.resetFields()
                 }}>
-                <CreatePlan ref={editRef} id={editId} type={oprationType} />
+                <CreatePlan ref={editRef} id={editId} type={oprationType} visible={visible}/>
             </Modal>
         </>
     )
