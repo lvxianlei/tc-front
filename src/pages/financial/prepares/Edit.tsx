@@ -319,7 +319,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
         let result: IResponse = {};
         let list: any = {};
         if (e === 1) {
-            result = await RequestUtil.get(`/tower-supply/supplier?size=100`);
+            result = await RequestUtil.get(`/tower-supply/supplier?size=500`);
             list = result?.records?.map((item: { supplierName: string, bankDepositName: string }) => {
                 return {
                     ...item,
@@ -328,7 +328,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         } else if (e === 2) {
-            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=100`);
+            result = await RequestUtil.get(`/tower-supply/stevedoreCompany?size=500`);
             list = result?.records?.map((item: { stevedoreCompanyName: string, openBankName: string }) => {
                 return {
                     ...item,
@@ -337,7 +337,7 @@ export default forwardRef(function Edit({ type, id }: EditProps, ref) {
                 }
             })
         } else {
-            result = await RequestUtil.get(`/tower-logistic/carrier?size=100`);
+            result = await RequestUtil.get(`/tower-logistic/carrier?size=500`);
             list = result?.records?.map((item: { companyName: string }) => {
                 return {
                     ...item,
