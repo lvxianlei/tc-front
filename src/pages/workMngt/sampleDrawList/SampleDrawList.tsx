@@ -133,6 +133,8 @@ export default function SampleDrawList(): React.ReactNode {
         }
         if (value.smallSampleLeader) {
             value.smallSampleLeader = value.smallSampleLeader?.value;
+        } else {
+            value.smallSampleLeader = ''
         }
         setFilterValue(value)
         return value
@@ -144,7 +146,7 @@ export default function SampleDrawList(): React.ReactNode {
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={{ smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId }}
+            // requestData={{ smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId }}
             exportPath="/tower-science/smallSample"
             searchFormItems={[
                 {
