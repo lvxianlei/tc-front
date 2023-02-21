@@ -155,7 +155,7 @@
         },
         {
             "title": "出库类型",
-            "dataIndex": "outStockTypeName",
+            "dataIndex": "outTypeName",
             "width": 100
         },
         {

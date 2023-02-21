@@ -241,7 +241,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'type',
+                        name: 'outType',
                         label: '出库类型',
                         children: (
                             <Select placeholder="请选择" style={{ width: "140px" }}>
