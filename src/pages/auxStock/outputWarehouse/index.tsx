@@ -146,7 +146,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     const handleRadioChange = (event: any) => {
         if (event.target.value === "b") {
-            setPagePath("/tower-storage/auxiliaryOutStock/detail")
+            setPagePath("/tower-storage/auxiliaryOutStock/detail?outType=0")
             setColumns(outStock)
             return
         }
