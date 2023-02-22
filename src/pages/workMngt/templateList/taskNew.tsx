@@ -1,10 +1,9 @@
 import React, { useRef, useState } from 'react'
-import { Space, Input, Button, Form, Modal, Row, Col, Select, DatePicker, TreeSelect, Table, InputNumber, Radio, message, Checkbox } from 'antd'
+import { Space, Input, Button, Form, Modal, Row, Col, Select, InputNumber, message, Checkbox } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { Attachment, AttachmentRef, CommonTable, DetailTitle, Page } from '../../common';
+import { Attachment, AttachmentRef, CommonTable, DetailTitle } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import TextArea from 'antd/lib/input/TextArea';
-import useRequest from '@ahooksjs/use-request';
 import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import RequestUtil from '../../../utils/RequestUtil';
 import moment from 'moment';
@@ -12,9 +11,7 @@ import { TreeNode } from 'antd/lib/tree-select';
 import styles from './template.module.less';
 import { productTypeOptions } from '../../../configuration/DictionaryOptions';
 import { SelectValue } from 'antd/lib/select';
-import { idText } from 'typescript';
 import { FileProps } from '../../common/Attachment';
-import { Console } from 'console';
 import SelectUser from '../../common/SelectUser';
 
 
@@ -26,7 +23,6 @@ export default function TaskNew(props: any) {
     const [checked, setChecked] = useState<any>(false);
     const [steelVisible, setSteelVisible] = useState<boolean>(false);
     const [scheduleData, setScheduleData] = useState<any | undefined>({});
-    const history = useHistory();
     const attachRef = useRef<AttachmentRef>()
     const [form] = Form.useForm();
     const [radioValue, setRadioValue] = useState<string>('Apple');
@@ -627,7 +623,9 @@ export default function TaskNew(props: any) {
                                     }
                                     form.setFieldsValue({
                                         ...formValue[0],
-                                        structureNumber: data?.length
+                                        structureNumber: data?.length,
+                                        loftingUserName: tower?.filter((e: any) => e?.productCategoryId === value)[0]?.loftingUserName,
+                                        programmingLeaderName: tower?.filter((e: any) => e?.productCategoryId === value)[0]?.programmingLeaderName
                                     })
                                     setRead(true)
                                 }}>
@@ -656,6 +654,16 @@ export default function TaskNew(props: any) {
                                 <Input disabled={true} addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                                     setPrintVisible(true)
                                 }}>+编辑</Button>} />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="loftingUserName" label="放样员" >
+                                <Input disabled />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="programmingLeaderName" label="编程负责人" >
+                                <Input disabled />
                             </Form.Item>
                         </Col>
                         <Col span={12}>
