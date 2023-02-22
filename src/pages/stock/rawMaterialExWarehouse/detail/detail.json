@@ -62,6 +62,11 @@
             "width": 150
         },
         {
+            "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber",
+            "width": 100
+        },
+        {
             "title": "收货标识码",
             "dataIndex": "receiveBatchNumber",
             "width": 100
@@ -212,6 +217,11 @@
             "title": "总重量(吨)",
             "dataIndex": "totalWeight",
             "width": 120
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber",
+            "width": 100
         },
         {
             "title": "收货标识码",
