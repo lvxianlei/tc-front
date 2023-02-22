@@ -33,8 +33,8 @@ export default function PackingList(): React.ReactNode {
     const [pageForm] = useForm();
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
-    const [weightChecked, setWeightChecked] = useState<boolean>(false);
-    const [mainPartChecked, setMainPartChecked] = useState<boolean>(false);
+    const [weightChecked, setWeightChecked] = useState<boolean>(true);
+    const [mainPartChecked, setMainPartChecked] = useState<boolean>(true);
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
