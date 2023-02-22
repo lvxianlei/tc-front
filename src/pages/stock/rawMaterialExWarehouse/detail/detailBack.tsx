@@ -34,9 +34,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const params = useParams<{ id: string, approval: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
-// 批量入库
-const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
-
+    // 批量入库
+    const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
 
     const [filterValue, setFilterValue] = useState<any>({
         id: params.id,
@@ -57,12 +57,24 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
     const { loading: backing, run: backRun } = useRequest<{ [key: string]: any }>((data) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/outStock/excess`,{outStockDetailIds:data, outStockId: params.id})
+            setSaveLoading(false)
             resole(result)
         } catch (error) {
+            setSaveLoading(false)
             reject(error)
         }
     }), { manual: true })
 
+    const { loading: backSingleing, run: backSingleRun } = useRequest<{ [key: string]: any }>((data) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/outStock/excess`,{outStockDetailIds:data, outStockId: params.id})
+            setSaveLoading(false)
+            resole(result)
+        } catch (error) {
+            setSaveLoading(false)
+            reject(error)
+        }
+    }), { manual: true })
     // 撤销
     const { loading: revocating, run: revocationRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -145,8 +157,10 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
         //     }
         //     result.push(v)
         // }
+        setSaveLoading(true)
         await backRun(selectedRowKeys);
         history.go(0);
+        setSaveLoading(false)
     }
 
     const handleExport = () => exportDown(
@@ -181,7 +195,7 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                 extraOperation={(data: any) => {
                     return <>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
-                        <Button type="primary" ghost onClick={() => handleBackWarehousingClick()} >批量回库</Button>
+                        <Button type="primary" ghost onClick={() => handleBackWarehousingClick()} loading={saveLoading}>批量回库</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined', null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
@@ -237,9 +251,9 @@ const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
                                 
                                 <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 2} onClick={async () => {
                                     const result = [ record.id ]
-                                    await backRun(result);
+                                    await backSingleRun(result);
                                     history.go(0);
-                                }}>回库</Button>
+                                }} loading={backSingleing}>回库</Button>
                                 <Popconfirm
                                     title="确认撤销?"
                                     onConfirm={() => handleRevocation(record.id)}
