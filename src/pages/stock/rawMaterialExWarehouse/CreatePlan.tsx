@@ -23,6 +23,8 @@ export default function CreatePlan(props: any): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [pickVisible, setPickVisible] = useState<boolean>(false)
     const [detailVisible, setDetailVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
     const [type, setType] = useState<number>(0);
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
@@ -308,7 +310,15 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.outStockType) {
+        console.log(fields)
+        if (fields.outStockType&&fields.outStockType!==0) {
+            console.log(fields.outStockType)
+            setType(fields.outStockType)
+            setPopDataList([])
+            setMaterialList([])
+            return;
+        }
+        if (fields.outStockType===0) {
             setType(fields.outStockType)
             setPopDataList([])
             setMaterialList([])
@@ -333,6 +343,7 @@ export default function CreatePlan(props: any): JSX.Element {
 
     const handleCreateClick = async () => {
         try {
+            setSaveLoading(true)
             const baseInfo = await addCollectionForm.validateFields();
             if (popDataList.length < 1) {
                 message.error("请您选择出库明细!");
@@ -362,6 +373,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
+            setSaveLoading(false)
             console.log(error);
         }
     }
@@ -432,6 +444,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写数量！");
                 return false;
             }
+            typeClick==='save'&& setSaveLoading(true)
             typeClick==='save'&&saveRun({
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
@@ -452,6 +465,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 issuedNumber: typeof(baseInfo?.issuedNumber)==='object'?'':baseInfo?.issuedNumber,
                 pickingUserId: baseInfo?.pickingUserId.id
             });
+            typeClick==='submit'&& setSubmitLoading(true)
             typeClick==='submit'&&submitRun({
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
@@ -472,6 +486,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 pickingUserId: baseInfo?.pickingUserId.id
             });
         } catch (error) {
+            setSaveLoading(false)
+            setSubmitLoading(false)
             console.log(error);
         }
     }
@@ -499,9 +515,11 @@ export default function CreatePlan(props: any): JSX.Element {
             })
             message.success("创建成功！");
             setType(0)
+            setSaveLoading(false)
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
+            setSaveLoading(false)
             reject(error)
         }
     }), { manual: true })
@@ -513,9 +531,11 @@ export default function CreatePlan(props: any): JSX.Element {
                 id: props.id
             })
             message.success("创建成功！");
+            setSubmitLoading(false)
             props?.handleCreate({ code: 1 })
             resove(result)
         } catch (error) {
+            setSubmitLoading(false)
             reject(error)
         }
     }), { manual: true })
@@ -574,7 +594,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
             ]:[
@@ -585,10 +605,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleSaveClick('save')}>
+                <Button key="create" type="primary" onClick={() => handleSaveClick('save')} loading={saveLoading}>
                     保存
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleSaveClick('submit')}>
+                <Button key="create" type="primary" onClick={() => handleSaveClick('submit')} loading={submitLoading}>
                     保存并提交
                 </Button>
             ]}
