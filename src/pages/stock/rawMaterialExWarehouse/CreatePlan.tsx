@@ -308,17 +308,19 @@ export default function CreatePlan(props: any): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
-        if (fields.outStockType!==0) {
+        console.log(fields)
+        if (fields.outStockType&&fields.outStockType!==0) {
             console.log(fields.outStockType)
             setType(fields.outStockType)
             setPopDataList([])
             setMaterialList([])
             return;
-        }else{
+        }
+        if (fields.outStockType===0) {
             setType(fields.outStockType)
             setPopDataList([])
             setMaterialList([])
-            // return;
+            return;
         }
         if (fields.issuedNumber) {
             const result = fields.issuedNumber.records[0];
