@@ -97,8 +97,12 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
 
     // 移除
     const handleRemove = (id: string) => {
-        setMaterialList(materialList.filter((item: any) => item.id !== id))
-        setPopDataList(materialList.filter((item: any) => item.id !== id))
+        const value = materialList.filter((item: any) => item.id !== id)
+        form.setFieldsValue({
+            list: value
+        })
+        setMaterialList(value)
+        setPopDataList(value)
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
