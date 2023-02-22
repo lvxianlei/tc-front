@@ -203,7 +203,7 @@ export default function TemplateList() {
                 },
                 {
                     name: 'drawLeader',
-                    label: '样板负责人',
+                    label: '人员',
                     children: <IntgSelect width={200} />
                 },
                 {
