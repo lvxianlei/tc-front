@@ -33,8 +33,8 @@ export default function MargePurchasePlan() {
             value.startCreateTime = null
             value.endCreateTime = null
         }
-        if (value.purchaserName) {
-            value.purchaserId = value.purchaserName.value
+        if (value.purchaserId) {
+            value.purchaserId = value.purchaserId.value
         }else{
             value.purchaserId = null
         }
@@ -91,7 +91,7 @@ export default function MargePurchasePlan() {
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
-                        name: 'purchaserName',
+                        name: 'purchaserId',
                         label: '制单人',
                         children: <IntgSelect width={200} />
                     },

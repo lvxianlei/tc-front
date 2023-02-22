@@ -48,9 +48,15 @@ export default function EnquiryCompare() {
             const formatDate = value.createTimeOrder.map((item: any) => item.format("YYYY-MM-DD"))
             value.createStartTime = formatDate[0] + " 00:00:00"
             value.createEndTime = formatDate[1] + " 23:59:59"
+            delete value.createTimeOrder
+        }else{
+            value.createStartTime = ''
+            value.createEndTime = ''
         }
         if (value.comparisonPersonId) {
             value.comparisonPersonId = value.comparisonPersonId.value
+        }else{
+            value.comparisonPersonId = null
         }
         setFilterValue({ ...value })
         return ({ ...value })
