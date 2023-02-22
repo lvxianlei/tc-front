@@ -55,22 +55,41 @@ export default function CreatePlan(props: any): JSX.Element {
         
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         setMaterialList([...materialList, ...newMaterialList])
-        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,materialList)
-        setPopDataList([...materialList.map((item: any) => {
-            return ({
-                ...item,
-                furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
-                applyNum: item.num,
-                stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
-                stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(5),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
-            })
-        })])
+        if(materialList.length>0){
+            const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,materialList)
+            setPopDataList([...materialList.map((item: any) => {
+                return ({
+                    ...item,
+                    furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
+                    applyNum: item.num,
+                    stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                    stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
+                })
+            })])
+        }else{
+            setPopDataList([...materialList.map((item: any) => {
+                return ({
+                    ...item,
+                    furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
+                    applyNum: item.num,
+                    stockNum: 0,
+                    stockTotalWeight: 0,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
+                })
+            })])
+        }
+        
         setVisible(false)
     }
 
