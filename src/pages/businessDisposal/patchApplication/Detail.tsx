@@ -27,7 +27,7 @@ export default function Detail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space direction="horizontal" size="small" >
-                    <Button onClick={() => history.push(`/businessDisposal/patchApplication`)}>关闭</Button>
+                    <Button onClick={() => history.goBack()}>关闭</Button>
                 </Space>
             ]}>
                 <BaseInfo columns={detailColumns.map(res => {
