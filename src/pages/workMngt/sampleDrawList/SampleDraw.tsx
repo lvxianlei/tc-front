@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Upload, Select } from 'antd';
-import { Attachment, AttachmentRef, Page, SearchTable } from '../../common';
+import { Space, Input, DatePicker, Button, Modal, Form, Image, message, Popconfirm, Select } from 'antd';
+import { BatchAttachment as Attachment, AttachmentRef, SearchTable } from '../../common';
 import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -220,24 +220,29 @@ export default function SampleDraw(): React.ReactNode {
                         >
                             <Button type="primary">完成小样图</Button>
                         </Popconfirm> : null}
-                        <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                            const data = dataInfo.map(res => {
-                                return {
-                                    ...res,
-                                    fileName: res.originalName
-                                }
-                            })
-                            RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...data]).then(res => {
-                                if (res) {
-                                    message.success('上传成功');
-                                    history.go(0);
-                                }
-                            }).catch(error => {
-                                setTimeout(() => {
-                                    history.go(0);
-                                }, 1500)
-                            })
-                        }}>
+                        <Attachment
+                            multiple
+                            ref={attachRef}
+                            isTable={false}
+                            dataSource={[]}
+                            onDoneChange={(dataInfo: FileProps[]) => {
+                                const data = dataInfo.map(res => {
+                                    return {
+                                        ...res,
+                                        fileName: res.originalName
+                                    }
+                                })
+                                RequestUtil.post(`/tower-science/smallSample/sampleUploadByZip/${params.id}`, [...data]).then(res => {
+                                    if (res) {
+                                        message.success('上传成功');
+                                        history.go(0);
+                                    }
+                                }).catch(error => {
+                                    setTimeout(() => {
+                                        history.go(0);
+                                    }, 1500)
+                                })
+                            }}>
                             <Button type="primary" ghost>导入</Button>
                         </Attachment>
                         <Button type="primary" onClick={() => {
