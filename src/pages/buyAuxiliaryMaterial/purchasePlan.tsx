@@ -139,8 +139,8 @@ export default function PurchasePlan() {
             value.startCreateTime = null
             value.endCreateTime = null
         }
-        if (value.applyName) {
-            value.purchaserId = value.applyName.value
+        if (value.purchaserId) {
+            value.purchaserId = value.purchaserId.value
         }else{
             value.purchaserId = null
         }
@@ -251,7 +251,7 @@ export default function PurchasePlan() {
                     },
                     // todo 申请人字段未返回
                     {
-                        name: 'applyName',
+                        name: 'purchaserId',
                         label: '申请人',
                         children: <IntgSelect width={200} />
                     },
