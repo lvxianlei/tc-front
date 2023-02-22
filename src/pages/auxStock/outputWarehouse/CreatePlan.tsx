@@ -102,7 +102,13 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
-        if (fields.outType) {
+        if (fields.outType&&fields.outType!==0) {
+            setType(fields.outType)
+            setPopDataList([])
+            setMaterialList([])
+            return;
+        }
+        if (fields.outType===0) {
             setType(fields.outType)
             setPopDataList([])
             setMaterialList([])
@@ -110,6 +116,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
         if (fields.pickingUserId) {

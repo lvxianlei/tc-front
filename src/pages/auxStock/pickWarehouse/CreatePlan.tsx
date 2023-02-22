@@ -110,6 +110,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setMaterialList([])
+            setPopDataList([])
             return;
         }
         if (fields.pickingUserId) {
