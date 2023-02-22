@@ -208,10 +208,14 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId.value);
+            type===4||type==='4'&&setMaterialList([])
+            type===4||type==='4'&&setPopDataList([])
             return;
         }
         if (fields.supplierId) {
             setSupplierId(fields.supplierId?.id);
+            setMaterialList([])
+            setPopDataList([])
             return;
         }
     }
