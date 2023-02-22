@@ -22,11 +22,8 @@ export default function Release(): React.ReactNode {
     const [disabled, setDisabled] = useState<boolean>(true);
     const [visible, setVisible] = useState<boolean>(false);
     const [releaseData, setReleaseData] = useState<any | undefined>({});
-    const rowChange = (index: number) => {
-        form.setFieldsValue({
-            trialAssembleSegment: ""
-        })
-    }
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
+
     const [formTable] = Form.useForm()
     const columnsCommon: any[] = [
         {
@@ -199,62 +196,74 @@ export default function Release(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    <Button type='primary' onClick={async () => {
-                        await form.validateFields()
-                        const value = form.getFieldsValue(true)
-                        if (value.trialAssemble === 1) {
-                            if (!value.trialAssembleSegment)
-                                return message.error('未填写试装段，不可保存！')
-                        }
-                        const trialValue = formRef.getFieldsValue(true)?.trialAssembleSegments ? formRef.getFieldsValue(true)?.trialAssembleSegments.map((item: any) => {
-                            return {
-                                id: item.id,
-                                productCategoryId: params.id,
-                                segmentId: item.segmentId,
-                                segmentName: item.segmentName,
-                                trialAssembleNum: item.trialAssembleNum ? item.trialAssembleNum : 0,
+                    <Button type='primary' loading={saveLoading} onClick={async () => {
+                        setSaveLoading(true)
+                        form.validateFields().then(res => {
+                            const value = form.getFieldsValue(true)
+                            if (value.trialAssemble === 1) {
+                                if (!value.trialAssembleSegment) {
+                                    message.error('未填写试装段，不可保存！')
+                                    setSaveLoading(false)
+                                }
                             }
-                        }) : []
-                        let arr: any[] = [];
-                        tableDataSource.forEach((item: any) => {
-                            const value = item.loftingBatchSegmentVOList.map((itemItem: any) => {
+                            const trialValue = formRef.getFieldsValue(true)?.trialAssembleSegments ? formRef.getFieldsValue(true)?.trialAssembleSegments.map((item: any) => {
                                 return {
-                                    ...itemItem,
-                                    productId: itemItem?.productId,
-                                    productNumber: item?.productNumber,
-                                    batchNum: itemItem?.batchNum ? String(itemItem?.batchNum) : '0'
+                                    id: item.id,
+                                    productCategoryId: params.id,
+                                    segmentId: item.segmentId,
+                                    segmentName: item.segmentName,
+                                    trialAssembleNum: item.trialAssembleNum ? item.trialAssembleNum : 0,
                                 }
+                            }) : []
+                            let arr: any[] = [];
+                            tableDataSource.forEach((item: any) => {
+                                const value = item.loftingBatchSegmentVOList.map((itemItem: any) => {
+                                    return {
+                                        ...itemItem,
+                                        productId: itemItem?.productId,
+                                        productNumber: item?.productNumber,
+                                        batchNum: itemItem?.batchNum ? String(itemItem?.batchNum) : '0'
+                                    }
+                                })
+                                arr.push(...value)
                             })
-                            arr.push(...value)
-                        })
-                        const submitValue = {
-                            galvanizeDemand: value.galvanizeDemand,
-                            machiningDemand: value.machiningDemand,
-                            implementStandardName: value.implementStandardName,
-                            implementStandard: value.implementStandard,
-                            packDemand: value.packDemand,
-                            cancelIssuedNumber: value.cancelIssuedNumber ? value.cancelIssuedNumber.join(',') : "",
-                            planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
-                            productCategoryId: params.id,
-                            trialAssemble: value.trialAssemble,
-                            trialAssembleDemand: value.trialAssembleDemand,
-                            voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
-                            weldingDemand: value.weldingDemand,
-                            isPerforate: value.isPerforate,
-                            description: value.description,
-                            trialAssembleSegments: trialValue,
-                            loftingBatchProductDTOList: arr,
-                            loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
-                                return {
-                                    ...item,
-                                    batchNum: item?.batchNum ? String(item?.batchNum) : '0'
-                                }
+                            const submitValue = {
+                                galvanizeDemand: value.galvanizeDemand,
+                                machiningDemand: value.machiningDemand,
+                                implementStandardName: value.implementStandardName,
+                                implementStandard: value.implementStandard,
+                                packDemand: value.packDemand,
+                                cancelIssuedNumber: value.cancelIssuedNumber ? value.cancelIssuedNumber.join(',') : "",
+                                planNumber: releaseData?.productCategoryVOList[0].voltageLevel,
+                                productCategoryId: params.id,
+                                trialAssemble: value.trialAssemble,
+                                trialAssembleDemand: value.trialAssembleDemand,
+                                voltageLevel: releaseData?.productCategoryVOList[0].voltageLevel,
+                                weldingDemand: value.weldingDemand,
+                                isPerforate: value.isPerforate,
+                                description: value.description,
+                                trialAssembleSegments: trialValue,
+                                loftingBatchProductDTOList: arr,
+                                loftingBatchStatisticsDTOList: bTableDataSource.map((item: any) => {
+                                    return {
+                                        ...item,
+                                        batchNum: item?.batchNum ? String(item?.batchNum) : '0'
+                                    }
+                                })
+                            }
+                            RequestUtil.post(`/tower-science/loftingBatch/save`, submitValue).then(() => {
+                                message.success('保存成功');
+                                history.push(`/workMngt/releaseList`)
+                                setSaveLoading(false)
+                            }).catch(e => {
+
+                                console.log(e)
+                                setSaveLoading(false)
                             })
-                        }
-                        RequestUtil.post(`/tower-science/loftingBatch/save`, submitValue).then(() => {
-                            message.success('保存成功');
-                            history.push(`/workMngt/releaseList`)
+                        }).catch(e => {
+                            console.log(e)
                         })
+
                     }}>保存</Button>
                 </Space>
             ]}>
