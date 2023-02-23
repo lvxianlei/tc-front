@@ -147,7 +147,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(tabs === 1 ? baseColumn : baseDetail) as any,
+                    ...(tabs === 1 ? baseColumn : baseDetail.map((item)=>{
+                        switch (item.dataIndex) {
+                            case "num":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalTaxPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                }) 
+                            default:
+                                return item
+                        }
+                    })) as any,
                     {
                         title: '操作',
                         dataIndex: 'key',

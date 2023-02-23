@@ -147,7 +147,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const handleRadioChange = (event: any) => {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/auxiliaryOutStock/detail?outStockItemStatus=2")
-            setColumns(outStock)
+            setColumns(outStock.map((item)=>{
+                switch (item.dataIndex) {
+                    case "num":
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => {
+                                    return <span>{value}</span>
+                            }
+                        })
+                    case "totalTaxPrice":
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => {
+                                    return <span>{value}</span>
+                            }
+                        })
+                    case "totalUnTaxPrice":
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => {
+                                    return <span>{value}</span>
+                            }
+                        }) 
+                    default:
+                        return item
+                }
+            }))
             return
         }
         if (event.target.value === "a") {
