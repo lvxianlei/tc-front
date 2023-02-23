@@ -348,6 +348,13 @@
             "dataIndex": "perforate",
             "width": 130,
             "type": "number"
+        },
+        {
+            "key": "punching",
+            "title": "冲孔",
+            "dataIndex": "punching",
+            "width": 130,
+            "type": "number"
         }
     ],
     "towerTypeColumns": [
@@ -545,6 +552,13 @@
             "dataIndex": "perforate",
             "width": 130,
             "type": "number"
+        },
+        {
+            "key": "punching",
+            "title": "冲孔",
+            "dataIndex": "punching",
+            "width": 130,
+            "type": "number"
         }
     ],
     "addColumns": [
@@ -719,6 +733,13 @@
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
+            "width": 130,
+            "type": "number"
+        },
+        {
+            "key": "punching",
+            "title": "钻孔",
+            "dataIndex": "punching",
             "width": 130,
             "type": "number"
         }
@@ -926,6 +947,13 @@
             "key": "perforate",
             "title": "钻孔",
             "dataIndex": "perforate",
+            "width": 130,
+            "type": "number"
+        },
+        {
+            "key": "punching",
+            "title": "冲孔",
+            "dataIndex": "punching",
             "width": 130,
             "type": "number"
         }
