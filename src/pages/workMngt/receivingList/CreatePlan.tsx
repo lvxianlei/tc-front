@@ -216,7 +216,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }, [props.visible])
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading,  run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = '/tower-storage/qualityInspection'
             const result: { [key: string]: any } = await RequestUtil.post(path, {
@@ -230,7 +230,7 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path =  '/tower-storage/tower-storage/qualityInspection/inspection'
             const result: { [key: string]: any } = await RequestUtil.post(path,  data )
@@ -274,10 +274,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
                     保存
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('submit')}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('submit')} loading={submitLoading}>
                     保存并提交
                 </Button>
             ]}
