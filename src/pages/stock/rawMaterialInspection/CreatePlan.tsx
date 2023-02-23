@@ -152,7 +152,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 if (!(popDataList[i].machiningNum)) {
                     machiningNum = true;
                 }
-                if (!(popDataList[i].inspectionScheme)&&popDataList[i].inspectionNum!==0) {
+                if (popDataList[i].inspectionScheme === undefined&&popDataList[i].inspectionNum!==0) {
                     inspectionScheme = true;
                 }
             }
