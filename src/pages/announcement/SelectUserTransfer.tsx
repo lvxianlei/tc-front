@@ -4,7 +4,7 @@
  * @description 选择用户穿梭框
 */
 import React from 'react';
-import { Button, Space, Modal, Tree, Table, Col, Row, Switch } from 'antd';
+import { Button, Space, Modal, Tree, Table, Col, Row, Switch, Input, Form } from 'antd';
 import RequestUtil from '../../utils/RequestUtil';
 import styles from './AnnouncementMngt.module.less';
 import { WithTranslation, withTranslation } from 'react-i18next';
@@ -94,6 +94,24 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
             })
         }
     }
+    protected getStaffUserList = async (fuzzyQuery: string, pagination?: TablePaginationConfig) => {
+        if (fuzzyQuery && fuzzyQuery !== '') {
+            const data: IResponseData = await RequestUtil.get<IResponseData>(`/tower-system/employee`, { fuzzyQuery, ...pagination })
+            this.setState({
+                treeData: data.records,
+                detailData: data
+            })
+        } else {
+            this.setState({
+                treeData: [],
+                detailData: {
+                    current: 0,
+                    size: 10,
+                    total: 0
+                }
+            })
+        }
+    }
 
     /**
     * @description Renders AbstractDetailComponent
@@ -118,6 +136,24 @@ class SelectUserTransfer extends React.Component<ISelectUserTransferRouteProps, 
             >
                 <Row>
                     <Col span={11} className={styles.left}>
+                        <Form
+                            onFinish={(event: any) => this.getStaffUserList(event?.fuzzyQuery)}
+                            onReset={(event: any) => this.getStaffUserList(event?.fuzzyQuery)}
+                        >
+                            <Row>
+                                <Col span={14}>
+                                    <Form.Item label="姓名" name="fuzzyQuery">
+                                        <Input />
+                                    </Form.Item>
+                                </Col>
+                                <Col span={10}>
+                                    <Form.Item>
+                                        <Button size="small" type="primary" htmlType="submit" style={{ marginLeft: 12 }}>查询</Button>
+                                        <Button size="small" type="default" htmlType="reset" style={{ marginLeft: 12 }}>重置</Button>
+                                    </Form.Item>
+                                </Col>
+                            </Row>
+                        </Form>
                         <Tree
                             treeData={this.wrapRole2DataNode(this.state.deptData)}
                             onSelect={(selectedKeys) => {
