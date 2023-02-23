@@ -145,10 +145,14 @@ export default function CreatePlan(props: any): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
         if (fields.supplierId) {
             setSupplierId(fields.supplierId?.id);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
     }
@@ -288,7 +292,7 @@ export default function CreatePlan(props: any): JSX.Element {
     }), { manual: true })
 
     
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/warehousingEntry`
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
@@ -325,7 +329,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
             ]}

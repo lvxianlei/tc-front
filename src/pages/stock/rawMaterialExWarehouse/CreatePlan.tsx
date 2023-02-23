@@ -337,6 +337,8 @@ export default function CreatePlan(props: any): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList(popDataList.filter(item=>item.materialPickingDetailId))
+            setMaterialList(popDataList.filter(item=>item.materialPickingDetailId))
             return;
         }
     }

@@ -36,6 +36,8 @@ export default function Overview(): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
     const [batchVisible, setBatchVisible] = useState<boolean>(false)
     const [attchVisible, setAttchVisible] = useState<boolean>(false)
+    const [addPriceLoading, setAddPriceLoading] = useState<boolean>(false)
+    const [addBatchPriceLoading, setAddBatchPriceLoading] = useState<boolean>(false)
     const [supplierVisible, setSupplierVisible] = useState<boolean>(false)
     const [supplier, setSupplier] = useState('')
     const [oprationType, setOprationType] = useState<"new" | "edit" | "batch_new" | "batch_edit">("new")
@@ -104,23 +106,29 @@ export default function Overview(): JSX.Element {
 
     const handleAddPriceOk = () => new Promise(async (resolve, reject) => {
         try {
+            setAddPriceLoading(true)
             await addPriceRef.current?.onSubmit()
             await message.success("成功添加报价...")
+            setAddPriceLoading(false)
             setVisible(false)
             history.go(0)
             resolve(true)
         } catch (error) {
+            setAddPriceLoading(false)
             reject(false)
         }
     })
     const handleAddBatchPriceOk = () => new Promise(async (resolve, reject) => {
         try {
+            setAddBatchPriceLoading(true)
             await addBatchPriceRef.current?.onSubmit()
             await message.success("成功添加报价...")
+            setAddBatchPriceLoading(false)
             setBatchVisible(false)
             history.go(0)
             resolve(true)
         } catch (error) {
+            setAddBatchPriceLoading(false)
             reject(false)
         }
     })
@@ -136,8 +144,10 @@ export default function Overview(): JSX.Element {
             title={oprationType === "batch_new" ? "批量添加报价" : "批量编辑报价"}
             visible={batchVisible}
             onOk={handleAddBatchPriceOk}
+            confirmLoading={addBatchPriceLoading}
             onCancel={() => {
                 addBatchPriceRef.current?.resetFields()
+                setAddBatchPriceLoading(false)
                 setBatchVisible(false)
             }}>
             <AddBatchPrice
@@ -154,8 +164,10 @@ export default function Overview(): JSX.Element {
             title={oprationType === "new" ? "添加报价" : "编辑报价"}
             visible={visible}
             onOk={handleAddPriceOk}
+            confirmLoading={addPriceLoading}
             onCancel={() => {
                 addPriceRef.current?.resetFields()
+                setAddPriceLoading(false)
                 setVisible(false)
             }}>
             <AddPrice
