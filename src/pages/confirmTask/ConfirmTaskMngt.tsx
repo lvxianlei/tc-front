@@ -174,7 +174,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     >
                         <Button type='link' disabled={record.status !== 4}>退回</Button>
                     </Popconfirm>
-                    <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)} >编辑</Button>
+                    <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
                     <Popconfirm
                         title="确认删除任务?"
                         onConfirm={async () => {
@@ -186,9 +186,9 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.status > 3}
+                        disabled={record.status !== 3}
                     >
-                        <Button type='link' disabled={record.status > 3}>删除</Button>
+                        <Button type='link' disabled={record.status !== 3}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
