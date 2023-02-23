@@ -470,13 +470,13 @@
                         "authority": "tc_erp_sw_stock_auxiliary_material"
                     },
                     {
-                        "label": "辅材出库",
-                        "path": "/auxStock/outputWarehouse",
+                        "label": "辅材领料单",
+                        "path": "/auxStock/pickWarehouse",
                         "authority": "tc_erp_sw_stock_material_out"
                     },
                     {
-                        "label": "辅材领料单",
-                        "path": "/auxStock/pickWarehouse",
+                        "label": "辅材出库",
+                        "path": "/auxStock/outputWarehouse",
                         "authority": "tc_erp_sw_stock_material_out"
                     }
                 ]
