@@ -395,7 +395,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     key="add"
                     ghost
                     style={{ marginRight: 8 }}
-                    disabled={!supplierId}
+                    disabled={!(warehouseId && supplierId)}
                     onClick={() => setVisibleB(true)}>选择库存</Button>:
                 <><Button type='primary'
                     key="add"
@@ -583,7 +583,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         }
                         return item
                     }),
-                    path: `${addMaterialB.path}?supplierId=${supplierId}`
+                    path: `${addMaterialB.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
                 }}
                 value={{
                     id: "",

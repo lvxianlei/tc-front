@@ -375,7 +375,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="入库明细" />
                 <div className='btnWrapper'>
-                    { type === '4'? <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!supplierId} onClick={() => setVisibleB(true)}>选择</Button>
+                    { type === '4'? <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisibleB(true)}>选择</Button>
                     :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>}
                     <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
                 </div>
@@ -477,7 +477,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     <PopTableContent
                         data={{
                             ...addMaterialB as any,
-                            path: `${addMaterialB.path}?supplierId=${supplierId}`,
+                            path: `${addMaterialB.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`,
                             search: addMaterialB.search.map((res: any) => {
                                 if (res.dataIndex === 'materialStandard') {
                                     return ({
