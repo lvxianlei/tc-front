@@ -389,10 +389,6 @@
                 "dataIndex": "totalWeight"
             },
             {
-                "title": "结算重量",
-                "dataIndex": "balanceTotalWeight"
-            },
-            {
                 "title": "含税单价（元/吨）",
                 "dataIndex": "taxPrice"
             },
