@@ -16,6 +16,9 @@ export default function ContractMngt(): JSX.Element {
     const history = useHistory()
     const [editVisible, setEditVisible] = useState<boolean>(false)
     const [overviewVisible, setOverviewVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
+    const [submitLoading, setSubmitLoading] = useState<boolean>(false)
+    const [cancelLoading, setCancelLoading] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [filterValue, setFilterValue] = useState<object>({});
@@ -37,15 +40,24 @@ export default function ContractMngt(): JSX.Element {
 
     const handleEditModalOk = (type: 'save'|'approvalSave'|'cancelSave') => new Promise(async (resove, reject) => {
         try {
+            type==='save'&&setSaveLoading(true)
             type==='save'&&await editRef.current.onSubmit()
+            type==='save'&&setSaveLoading(false)
+            type==='approvalSave'&&setSubmitLoading(true)
             type==='approvalSave'&&await editRef.current.onSubmitApproval()
+            type==='approvalSave'&&setSubmitLoading(false)
+            type==='cancelSave'&&setCancelLoading(true)
             type==='cancelSave'&&await editRef.current.onSubmitCancel()
+            type==='cancelSave'&&setCancelLoading(false)
             // message.success("保存成功...")
             resove(true)
             type==='save'&&history.go(0)
             type==='approvalSave'&&history.go(0)
             type==='cancelSave'&&history.go(0)
         } catch (error) {
+            type==='save'&&setSaveLoading(false)
+            type==='approvalSave'&&setSubmitLoading(false)
+            type==='cancelSave'&&setCancelLoading(false)
             reject(false)
         }
     })
@@ -82,18 +94,23 @@ export default function ContractMngt(): JSX.Element {
                         editRef.current?.resetFields()
                         setDetailId("")
                         setEditVisible(false)
+                        setCancelLoading(false)
+                        setSaveLoading(false)
+                        setSubmitLoading(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')}>保存并发起审批</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')}>撤销审批</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')} loading={cancelLoading}>撤销审批</Button>
                 </Space>:<Space>
                     <Button onClick={() => {
                         editRef.current?.resetFields()
                         setDetailId("")
                         setEditVisible(false)
+                        setSaveLoading(false)
+                        setSubmitLoading(false)
                     }}>取消</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('save')}>保存</Button>
-                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')} loading={saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')} loading={submitLoading}>保存并发起审批</Button>
                 </Space>}
                 onCancel={() => {
                     editRef.current?.resetFields()
