@@ -61,6 +61,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'taskNum'
         },
         {
+            key: 'initiator',
+            title: '发起方',
+            width: 100,
+            dataIndex: 'initiator'
+        },
+        {
             key: 'scTaskNum',
             title: '营销任务编号',
             width: 100,
@@ -78,41 +84,6 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             width: 100,
             dataIndex: 'statusName'
         },
-        // {
-        //     key: 'status',
-        //     title: '任务状态',
-        //     width: 100,
-        //     dataIndex: 'status',
-        //     render: (value: number, record: object): React.ReactNode => {
-        //         const renderEnum: any = [
-        //             {
-        //                 value: 0,
-        //                 label: "已拒绝"
-        //             },
-        //             {
-        //                 value: 1,
-        //                 label: "待确认"
-        //             },
-        //             {
-        //                 value: 2,
-        //                 label: "待指派"
-        //             },
-        //             {
-        //                 value: 3,
-        //                 label: "待完成"
-        //             },
-        //             {
-        //                 value: 4,
-        //                 label: "已完成"
-        //             },
-        //             {
-        //                 value: 5,
-        //                 label: "已提交"
-        //             }
-        //           ]
-        //         return <>{renderEnum.find((item: any) => item.value === value).label}</>
-        //     }
-        // },
         {
             key: 'updateStatusTime',
             title: '最新状态变更时间',
@@ -159,7 +130,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 400,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small">
@@ -202,6 +173,22 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         disabled={record.status !== 4}
                     >
                         <Button type='link' disabled={record.status !== 4}>退回</Button>
+                    </Popconfirm>
+                    <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
+                    <Popconfirm
+                        title="确认删除任务?"
+                        onConfirm={async () => {
+                            await RequestUtil.delete(`/tower-science/drawTask/${record.id}`).then(() => {
+                                message.success('删除成功！');
+                            }).then(() => {
+                                setRefresh(!refresh)
+                            })
+                        }}
+                        okText="确认"
+                        cancelText="取消"
+                        disabled={record.status !== 3}
+                    >
+                        <Button type='link' disabled={record.status !== 3}>删除</Button>
                     </Popconfirm>
                 </Space>
             )
@@ -261,15 +248,18 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             refresh={refresh}
             exportPath="/tower-science/drawTask"
             extraOperation={
-                <Button type="primary" disabled={selectedKeys.length === 0} onClick={async () => {
-                    const rows: number[] = selectedRows.map(res => res.status);
-                    if (rows.findIndex((value) => value === 1) !== -1 || rows.findIndex((value) => value === 4) !== -1 || rows.findIndex((value) => value === 5) !== -1 || rows.findIndex((value) => value === 0) !== -1) {
-                        message.warning('待指派或待完成状态可进行指派！')
-                    } else {
-                        setVisible(true);
-                        setAssignType('batch');
-                    }
-                }} ghost>批量指派</Button>
+                <>
+                    <Button type="primary" onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmTaskNew`)} ghost>创建</Button>
+                    <Button type="primary" disabled={selectedKeys.length === 0} onClick={async () => {
+                        const rows: number[] = selectedRows.map(res => res.status);
+                        if (rows.findIndex((value) => value === 1) !== -1 || rows.findIndex((value) => value === 4) !== -1 || rows.findIndex((value) => value === 5) !== -1 || rows.findIndex((value) => value === 0) !== -1) {
+                            message.warning('待指派或待完成状态可进行指派！')
+                        } else {
+                            setVisible(true);
+                            setAssignType('batch');
+                        }
+                    }} ghost>批量指派</Button>
+                </>
             }
             filterValue={filterValue}
             onFilterSubmit={onFilterSubmit}
@@ -302,7 +292,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                 {
                     name: 'productCategoryName',
                     label: '塔型名称',
-                    children: <Input placeholder='请输入'/>
+                    children: <Input placeholder='请输入' />
                 },
                 {
                     name: 'fuzzyMsg',
