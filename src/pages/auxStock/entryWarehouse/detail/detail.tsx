@@ -102,7 +102,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...baseColumn,
+                    ...baseColumn.map((item:any)=>{
+                        switch (item.dataIndex) {
+                            case "num":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            default:
+                                return item
+                        }
+                    }),
                     {
                         title: '操作',
                         dataIndex: 'key',
