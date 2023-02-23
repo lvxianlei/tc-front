@@ -455,7 +455,7 @@ export default function ReleaseList(): React.ReactNode {
                                     </Radio.Group>
                                 </Form.Item>
                                 </Col>
-                                <Col span={12}><Form.Item label='冲孔' name='code'>
+                                <Col span={12}><Form.Item label='punching' name='code'>
                                     <Radio.Group>
                                         <Radio value={1}>是</Radio>
                                         <Radio value={0}>否</Radio>
