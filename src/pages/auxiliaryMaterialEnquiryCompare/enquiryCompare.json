@@ -206,48 +206,54 @@
     }
   ],
   "addMaterial": {
-    "title": "原材料",
+    "title": "汇总计划",
     "type": "popTable",
-    "path": "/tower-system/material",
+    "path": "/tower-supply/auxiliaryMaterialPurchasePlan/infoList",
     "width": 1011,
     "selectType": "checkbox",
     "dependencies": true,
     "readOnly": true,
     "search": [
       {
-        "title": "查询",
-        "dataIndex": "fuzzyQuery",
-        "placeholder": "输入品名/规格进行查询"
-      }
-    ],
-    "columns": [
-      {
-        "title": "物料编码",
-        "dataIndex": "materialCode"
-      },
-      {
         "title": "品名",
-        "dataIndex": "materialCategoryName"
-      },
-      {
-        "title": "标准",
-        "dataIndex": "materialStandardName"
-      },
-      {
-        "title": "材质",
-        "dataIndex": "structureTexture"
+        "dataIndex": "materialName"
       },
       {
         "title": "规格",
         "dataIndex": "structureSpec"
       },
       {
-        "title": "长度",
-        "dataIndex": "length"
+        "title": "查询",
+        "dataIndex": "fuzzyQuery",
+        "placeholder": "输入汇总计划编号查询查询"
+      }
+    ],
+    "columns": [
+      {
+        "title": "汇总采购计划编号",
+        "dataIndex": "collectPurchasePlanNumber",
+        "width": 150,
+        "type": "string"
       },
       {
-        "title": "宽度",
-        "dataIndex": "width"
+        "title": "品名",
+        "dataIndex": "materialName"
+      },
+      {
+        "title": "规格",
+        "dataIndex": "structureSpec"
+      },
+      {
+        "title": "数量",
+        "dataIndex": "planPurchaseNum"
+      },
+      {
+        "title": "创建日期",
+        "dataIndex": "createTime"
+      },
+      {
+        "title": "制单人",
+        "dataIndex": "createUserName"
       }
     ]
   },
