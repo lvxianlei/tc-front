@@ -17,7 +17,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [form] = Form.useForm();
-    const {loading} = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const {loading, data:any} = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/auxiliaryComparisonPrice/${id}`)
 
@@ -35,6 +35,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
             const comparisonPriceDetailVos = result?.comparisonPriceDetailVos.map((res: any) => {
                 return {
                     ...res,
+                    ids: res.id,
                     structureTexture: res.structureTexture,
                     structureTextureId: res.structureTextureId,
                     materialStandardName: res.materialStandardName,
@@ -85,13 +86,13 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                 ...baseData,
                 supplyIdList: baseData?.supplyIdList.records.map((item: any) => item.id).join(","),
                 // purchasePlanId: purchasePlanId,
-                comparisonPriceDetailDtos: materialList.map((item: any) => {
+                comparisonPriceDetailDtos: materialList.map((item: any,index:number) => {
                     return {
                         ...item,
                         // 新创建的使用 使用id  编辑后台返回的 使用purchaseListId
-                        purchaseListId: item.source ==2 ?item.id:item.purchaseListId,
+                        purchaseListId: item.purchaseListId,
                         num: item.planPurchaseNum  || 1,
-                        // id: '',
+                        id: type === "new"? item.id : item.ids,
                         // structureTexture: item.structureTexture,
                         // structureTextureId: item.structureTextureId,
                         // materialStandard: item.materialStandard,
