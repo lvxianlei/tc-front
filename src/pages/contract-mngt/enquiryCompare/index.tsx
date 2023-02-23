@@ -19,6 +19,7 @@ export default function ContractMngt() {
     const editRef = useRef<EditRef>({ onSubmit: () => { }, resetFields: () => { } })
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({})
     const [visible, setVisible] = useState<boolean>(false)
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false)
     const [oprationVisible, setOprationVisible] = useState<boolean>(false)
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
@@ -58,12 +59,15 @@ export default function ContractMngt() {
 
     const handleAddOk = () => new Promise(async (resove, reject) => {
         try {
+            setConfirmLoading(true)
             await editRef.current?.onSubmit()
+            setConfirmLoading(false)
             message.success("询比价保存成功...")
             setVisible(false)
             resove(true)
             history.go(0)
         } catch (error) {
+            setConfirmLoading(false)
             reject(false)
         }
     })
@@ -84,7 +88,7 @@ export default function ContractMngt() {
             <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
                 setVisible(false)
-            }}>
+            }} confirmLoading={confirmLoading}>
                 <Edit id={detailId} type={oprationType} ref={editRef} />
             </Modal>
             <Modal destroyOnClose title="操作信息" width={1011}
