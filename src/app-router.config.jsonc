@@ -1031,6 +1031,20 @@
       "exact": true,
       "authority": "tc_erp_rd_task_draw_massage"
     },
+    { // 确认任务创建
+      "name": "创建",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmTaskNew",
+      "module": "./pages/confirmTask/ConfirmNew",
+      "exact": true,
+      "authority": "tc_erp_rd_task_draw_massage"
+    },
+    { // 确认任务编辑
+      "name": "编辑",
+      "path": "/taskMngt/ConfirmTaskMngt/ConfirmEdit/:id",
+      "module": "./pages/confirmTask/ConfirmNew",
+      "exact": true,
+      "authority": "tc_erp_rd_task_draw_massage"
+    },
     { // 工作管理-确认列表
       "name": "确认列表",
       "path": "/workMngt/confirmList",
