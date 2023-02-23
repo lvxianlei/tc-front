@@ -105,7 +105,7 @@
         },
         {
             "title": "入库日期",
-            "dataIndex": "warehousingTime",
+            "dataIndex": "entryTime",
             "type": "date",
             "format":"YYYY-MM-DD",
             "width": 100

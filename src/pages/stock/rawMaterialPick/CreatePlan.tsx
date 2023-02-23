@@ -245,6 +245,8 @@ export default function CreatePlan(props: any): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
     }
@@ -399,7 +401,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }, [props.visible])
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const {loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = props.type === "create" ? `/tower-storage/materialPicking` : '/tower-storage/materialPicking'
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
@@ -414,7 +416,7 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const {loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/outStock/saveExcess` 
             const result: { [key: string]: any } = await RequestUtil[ "post" ](path, props.type === "create" ? data : {
@@ -500,7 +502,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
             ]
