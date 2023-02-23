@@ -5,6 +5,7 @@ import { edit } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { productAssist } from "../managementDetailData.json"
+import ContentChange from "./contentChange"
 interface EditProps {
     id: string
     type: 1 | 2 | 3 | 4
@@ -83,8 +84,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
             editForm.setFieldsValue({
                 internalNumber: taskNotice.internalNumber,
                 orderProjectName: taskNotice.orderProjectName,
-                editBaseNum: taskNotice.productNumber,
-                editWeight: taskNotice.totalWeight,
+                editBaseNum: taskNotice.productNumber || "0",
+                editWeight: taskNotice.totalWeight || "0",
                 ascriptionName: taskNotice.ascriptionName,
                 region: taskNotice.region,
                 customerCompany: taskNotice.customerCompany
@@ -101,6 +102,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
             editRemark: postData.editRemark,
             description: postData.description,
             taskNoticeId: postData.taskNoticeId?.id,
+            editBaseNum: postData.productNumber || "0",
+            editWeight: postData.totalWeight || "0",
             editNoticeInfoDTOList: contentFormData?.submit?.map((item: any) => ({
                 description: item.description,
                 editAfter: item.editAfter,
@@ -140,7 +143,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                         if (item.id === result.id) {
                             return ({
                                 ...item,
-                                editBefore: planDataSource[result.field]
+                                editBefore: planDataSource[result.field.value]
                             })
                         }
                         return item
@@ -216,12 +219,14 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref) {
                         }
                     }}
                 />
-                {type === 1 && <EditableTable
-                    form={contentForm}
-                    columns={edit.content}
-                    onChange={handleContentChange}
-                    dataSource={planData?.editNoticeInfoVOList || []}
-                />}
+                {type === 1 && <>
+                    <DetailTitle title="内容变更" />
+                    <ContentChange
+                        form={contentForm}
+                        onChange={handleContentChange}
+                        dataSource={planData?.editNoticeInfoVOList || []}
+                    />
+                </>}
                 {[2, 3, 4].includes(type) && <>
                     <Row>
                         <Button

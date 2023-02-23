@@ -582,31 +582,38 @@
       "exact": true,
       "authority": "tc_erp_sc_project_view"
     },
-    { // 项目管理子项详情
+    { // 合同管理
       "name": "合同管理",
       "path": "/project/contract",
       "module": "./pages/project/contract/index",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract"
     },
-    { // 项目管理子项详情
+    { // 订单管理
       "name": "订单管理",
       "path": "/project/order",
       "module": "./pages/project/order/index",
       "exact": true,
       "authority": "tc_erp_sc_project_view_contract"
     },
-    { // 项目管理子项详情
+    { // 杆塔明细
       "name": "杆塔明细",
       "path": "/project/productGroup",
       "module": "./pages/project/productGroup/index",
       "exact": true,
       "authority": "tc_erp_sc_project_view_product"
     },
-    { // 项目管理子项详情
+    { // 销售计划
       "name": "销售计划",
       "path": "/project/salePlan",
       "module": "./pages/project/salesPlan/index",
+      "exact": true,
+      "authority": "tc_erp_sc_project_view_task_notice"
+    },
+    { // 计划变更
+      "label": "计划变更",
+      "path": "/project/planChange",
+      "module": "./pages/project/planChange/index",
       "exact": true,
       "authority": "tc_erp_sc_project_view_task_notice"
     },

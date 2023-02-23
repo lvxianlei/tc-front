@@ -1,6 +1,6 @@
 import React from "react"
 import { Spin } from "antd"
-import { BaseInfo, CommonTable, DetailContent, DetailTitle, EditableTable } from "../../common"
+import { BaseInfo, CommonTable, DetailContent, DetailTitle } from "../../common"
 import { detail } from "./data.json"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
@@ -28,7 +28,7 @@ export default function Detail({ id, type }: EditProps) {
             />}
             {[2, 3, 4].includes(type) && <>
                 <CommonTable
-                     columns={type === 4 ? detail.revertSuspend : detail.suspend}
+                    columns={type === 4 ? detail.revertSuspend : detail.suspend}
                     dataSource={planData?.editNoticeProductVOList || []} />
             </>}
         </DetailContent>
