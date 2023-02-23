@@ -466,8 +466,7 @@
         {
             "title": "过磅重量(吨)",
             "dataIndex": "weigh",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "业务经理",
