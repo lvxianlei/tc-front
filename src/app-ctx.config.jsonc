@@ -130,6 +130,11 @@
                         "authority": "tc_erp_sc_project_view_task_notice"
                     },
                     {
+                        "label": "计划变更",
+                        "path": "/project/planChange",
+                        "authority": "tc_erp_sc_project_view_task_notice"
+                    },
+                    {
                         "label": "开票申请",
                         "path": "/project/invoicing",
                         "authority": "tc_erp_sc_invoicing"
@@ -804,7 +809,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "资料管理",
                 "icon": "customer",
                 "path": "/dataMngt",
@@ -1264,7 +1269,6 @@
                         "path": "/commCenter/unitMngt",
                         "authority": "tc_erp_sys_log_operation"
                     }
-                   
                 ]
             },
             // {
