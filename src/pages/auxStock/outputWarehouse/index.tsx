@@ -140,7 +140,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }else{
             value.applyStaffId = ''
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
 
