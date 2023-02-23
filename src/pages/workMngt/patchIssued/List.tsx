@@ -4,20 +4,15 @@
  */
 
 import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Form, TablePaginationConfig, Radio, RadioChangeEvent, Row, Col } from 'antd';
+import { Space, Input, DatePicker, Select, Button, message, Popconfirm, Form, Radio, RadioChangeEvent, Row, Col } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './PatchIssued.module.less';
 import { Link, useHistory } from 'react-router-dom';
-import { productTypeOptions, supplyTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import { productTypeOptions, supplyTypeOptions } from '../../../configuration/DictionaryOptions';
 import RequestUtil from '../../../utils/RequestUtil';
-import { useForm } from 'antd/lib/form/Form';
 import useRequest from '@ahooksjs/use-request';
 import { patchEntryColumns } from "./patchIssued.json"
 import { SearchTable } from '../../common';
-
-interface IPatchIssued {
-    supplyBatchEntryVO: any;
-}
 
 export default function List(): React.ReactNode {
     const columns = [
@@ -184,199 +179,168 @@ export default function List(): React.ReactNode {
         }
     ]
 
-    const search = [
-        {
-            name: 'updateStatusTime',
-            label: '最新状态变更时间',
-            children: <DatePicker.RangePicker />
-        },
-        {
-            name: 'supplyType',
-            label: '补件类型',
-            children: <Select placeholder="请选择补件类型">
-                {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
-        },
-        {
-            name: 'productType',
-            label: '产品类型',
-            children: <Select placeholder="请选择产品类型">
-                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
-        },
-        {
-            name: 'batchStatus',
-            label: '补件下达状态',
-            children: <Select style={{ width: '120px' }} placeholder="请选择">
-                <Select.Option value={1} key="1">已下达</Select.Option>
-                <Select.Option value={2} key="2">已取消</Select.Option>
-            </Select>
-        },
-        {
-            name: 'fuzzyMsg',
-            label: '模糊查询项',
-            children: <Input style={{ width: '300px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称/说明" />
-        }
-    ]
-
-    const itemSearch = [
-        {
-            name: 'supplyType',
-            label: '补件类型',
-            children: <Select placeholder="请选择补件类型">
-                {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
-        },
-        {
-            name: 'productType',
-            label: '产品类型',
-            children: <Select placeholder="请选择产品类型">
-                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
-                    return <Select.Option key={index} value={id}>
-                        {name}
-                    </Select.Option>
-                })}
-            </Select>
-        },
-        {
-            name: 'batchStatus',
-            label: '下达状态',
-            children: <Form.Item name="batchStatus">
-                <Select style={{ width: '120px' }} placeholder="请选择">
-                    <Select.Option value={1} key="1">已下达</Select.Option>
-                    <Select.Option value={2} key="2">未下达</Select.Option>
-                </Select>
-            </Form.Item>
-        },
-        {
-            name: 'fuzzyMsg',
-            label: '模糊查询项',
-            children: <Input style={{ width: '200px' }} placeholder="补件编号/计划号/工程名称/塔型名称/说明" />
-        }
-    ]
-
     const history = useHistory();
-    const [searchForm] = useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
-    const [filter, setFilter] = useState<Record<string, any>>();
 
     const [status, setStatus] = useState<number>(1);
-    const [searchFormItems, setSearchFormItems] = useState<any>(search);
 
     const { data: count, run: getCount } = useRequest<any>((filter: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/supplyBatch/count`, { ...filter });
         resole(data);
     }), {})
 
-    const onFinish = (values: Record<string, any>) => {
+    const onFinish = (values: any) => {
         if (status === 1) {
             if (values.updateStatusTime) {
                 const formatDate = values.updateStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';
                 values.updateStatusTimeEnd = formatDate[1] + ' 23:59:59';
             }
-            setFilterValues(values)
-        } else {
-            setFilter(values)
         }
+        setFilterValues(values)
         getCount(values)
+        return values
     }
 
     return <>
-        <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
-            {
-                searchFormItems?.map((res: any) => {
-                    return <Form.Item label={res?.label} name={res?.name}>
-                        {res?.children}
-                    </Form.Item>
-                })
-            }
-            <Form.Item>
-                <Space direction="horizontal">
-                    <Button type="primary" htmlType="submit">搜索</Button>
-                    <Button htmlType="reset">重置</Button>
-
-                </Space>
-            </Form.Item>
-        </Form>
-        <Space>
-            <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
-                setStatus(event.target.value);
-                setSearchFormItems(event.target.value === 1 ? search : itemSearch);
-                if (event.target.value === 1) {
-                    setFilterValues({})
-                } else {
-                    setFilter({})
-                }
-                searchForm.resetFields();
-            }}>
-                <Radio.Button value={1} key="1">补件下达</Radio.Button>
-                <Radio.Button value={2} key="2">补件条目</Radio.Button>
-            </Radio.Group>
-            <Row gutter={12}>
-                <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
-                <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
-                <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
-                <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
-                <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
-                <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
-                <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
-                <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
-            </Row>
-        </Space>
-        {
-            status === 1 ?
-                <SearchTable
-                    path="/tower-science/supplyBatch/batchPage"
-                    exportPath='/tower-science/supplyBatch/batchPage'
-                    columns={columns}
-                    headTabs={[]}
-                    searchFormItems={[]}
-                    filterValue={filterValues}
-                />
+        <SearchTable
+            path={status === 1 ? "/tower-science/supplyBatch/batchPage" : "/tower-science/supplyBatch/getEntryPage"}
+            exportPath={status === 1 ? '/tower-science/supplyBatch/batchPage' : '/tower-science/supplyBatch/getEntryPage'}
+            columns={status === 1 ?
+                columns
                 :
-                <SearchTable
-                    path="/tower-science/supplyBatch/getEntryPage"
-                    exportPath='/tower-science/supplyBatch/getEntryPage'
-                    columns={[
+                [{
+                    key: 'index',
+                    title: '序号',
+                    dataIndex: 'index',
+                    width: 50,
+                    fixed: 'left' as FixedType,
+                    render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                },
+                ...patchEntryColumns,
+                {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
+                    fixed: 'right' as FixedType,
+                    width: 50,
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Link to={`/workMngt/patchIssuedList/patchIssued/${record?.id}/${record?.supplyNumber}`}>
+                            <Button type='link' disabled={record?.batchStatus === 1}>选择</Button>
+                        </Link>
+                    )
+                }]
+            }
+            headTabs={[]}
+            searchFormItems={
+                status === 1 ? [
+                    {
+                        name: 'updateStatusTime',
+                        label: '最新状态变更时间',
+                        children: <DatePicker.RangePicker />
+                    },
+                    {
+                        name: 'supplyType',
+                        label: '补件类型',
+                        children: <Select placeholder="请选择补件类型">
+                            {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    },
+                    {
+                        name: 'productType',
+                        label: '产品类型',
+                        children: <Select placeholder="请选择产品类型">
+                            {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                return <Select.Option key={index} value={id}>
+                                    {name}
+                                </Select.Option>
+                            })}
+                        </Select>
+                    },
+                    {
+                        name: 'batchStatus',
+                        label: '补件下达状态',
+                        children: <Select style={{ width: '120px' }} placeholder="请选择">
+                            <Select.Option value={1} key="1">已下达</Select.Option>
+                            <Select.Option value={2} key="2">已取消</Select.Option>
+                        </Select>
+                    },
+                    {
+                        name: 'fuzzyMsg',
+                        label: '模糊查询项',
+                        children: <Input style={{ width: '300px' }} placeholder="补件下达编号/补件编号/计划号/塔型/工程名称/说明" />
+                    }
+                ]
+                    :
+                    [
                         {
-                            key: 'index',
-                            title: '序号',
-                            dataIndex: 'index',
-                            width: 50,
-                            fixed: 'left' as FixedType,
-                            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
+                            name: 'supplyType',
+                            label: '补件类型',
+                            children: <Select placeholder="请选择补件类型">
+                                {supplyTypeOptions && supplyTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
                         },
-                        ...patchEntryColumns,
                         {
-                            key: 'operation',
-                            title: '操作',
-                            dataIndex: 'operation',
-                            fixed: 'right' as FixedType,
-                            width: 50,
-                            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                                <Link to={`/workMngt/patchIssuedList/patchIssued/${record?.id}/${record?.supplyNumber}`}>
-                                    <Button type='link' disabled={record?.batchStatus === 1}>选择</Button>
-                                </Link>
-                            )
-                        }]}
-                    headTabs={[]}
-                    searchFormItems={[]}
-                    filterValue={filter}
-                />
-        }
-
+                            name: 'productType',
+                            label: '产品类型',
+                            children: <Select placeholder="请选择产品类型">
+                                {productTypeOptions && productTypeOptions.map(({ id, name }, index) => {
+                                    return <Select.Option key={index} value={id}>
+                                        {name}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        },
+                        {
+                            name: 'batchStatus',
+                            label: '下达状态',
+                            children: <Form.Item name="batchStatus">
+                                <Select style={{ width: '120px' }} placeholder="请选择">
+                                    <Select.Option value={1} key="1">已下达</Select.Option>
+                                    <Select.Option value={2} key="2">未下达</Select.Option>
+                                </Select>
+                            </Form.Item>
+                        },
+                        {
+                            name: 'fuzzyMsg',
+                            label: '模糊查询项',
+                            children: <Input style={{ width: '200px' }} placeholder="补件编号/计划号/工程名称/塔型名称/说明" />
+                        }
+                    ]
+            }
+            onFilterSubmit={onFinish}
+            filterValue={filterValues}
+            extraOperation={
+                <Space>
+                    <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
+                        setStatus(event.target.value);
+                        setFilterValues({
+                            status: event.target.value
+                        })
+                    }}>
+                        <Radio.Button value={1} key="1">补件下达</Radio.Button>
+                        <Radio.Button value={2} key="2">补件条目</Radio.Button>
+                    </Radio.Group>
+                    <Row gutter={12}>
+                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
+                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
+                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
+                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
+                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
+                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
+                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
+                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
+                    </Row>
+                </Space>
+            }
+        />
     </>
 }
