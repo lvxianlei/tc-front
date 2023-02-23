@@ -57,7 +57,7 @@ export default function Invoice() {
             value.updateStartTime = formatDate[0] + " 00:00:00"
             value.updateEndTime = formatDate[1] + " 23:59:59"
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
 
