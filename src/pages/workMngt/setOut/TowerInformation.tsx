@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
-import { IntgSelect, Page, SearchTable } from '../../common';
+import { IntgSelect, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -19,7 +19,6 @@ import { useForm } from 'antd/es/form/Form';
 import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
 import { DownOutlined } from '@ant-design/icons';
-import SelectUser from '../../common/SelectUser';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -43,7 +42,7 @@ export default function TowerInformation(): React.ReactNode {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${productType}`);
         resole(result?.records || [])
     }), { manual: true })
-    
+
     const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.post(`/tower-science/productSegment/structure/statistics`, {
             ...filter,
@@ -646,7 +645,7 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        <Space size="large" style={{padding: "16px"}}>
+        <Space size="large" style={{ padding: "16px" }}>
             <span>塔型：{detail?.productCategoryName}</span>
             <span>计划号：{detail?.planNumber}</span>
             <span>模式：{count?.patternName}</span>
