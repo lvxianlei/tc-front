@@ -80,8 +80,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.updateTime
         }
-        if (value.createUser) {
-            value.createUser = value.createUser.value
+        if (value.outStockUser) {
+            value.outStockUser = value.outStockUser.value
+        }else{
+            value.outStockUser = ''
         }
         setFilterValue({...value, id: params.id  })
         return value
@@ -179,7 +181,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'createUser',
+                        name: 'outStockUser',
                         label: '出库人',
                         children: <IntgSelect width={200} />
                     },
