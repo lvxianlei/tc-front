@@ -38,7 +38,7 @@ export default function MargePurchasePlan() {
         }else{
             value.purchaserId = null
         }
-        setFilterValue({...filterValue,...value})
+        // setFilterValue({...filterValue,...value})
         return value
     }
     return (
