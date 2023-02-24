@@ -172,12 +172,6 @@
             "title": "确认方",
             "type": "select",
             "placeholder": "请选择确认方",
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择确认方"
-                }
-            ],
             "enum": [
                 {
                     "value": "营销部",

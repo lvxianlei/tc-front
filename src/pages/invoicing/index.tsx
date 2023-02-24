@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { SearchTable } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Invoicing() {
@@ -15,7 +15,7 @@ export default function Invoicing() {
         return value
     }
 
-    return <Page
+    return <SearchTable
         path="/tower-finance/invoicing"
         columns={[
             ...invoicingListHead.map((item: any) => {
