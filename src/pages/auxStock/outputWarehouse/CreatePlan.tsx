@@ -110,18 +110,27 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             setType(fields.outType)
             setPopDataList([])
             setMaterialList([])
+            form.setFieldsValue({
+                list:[]
+            })
             return;
         }
         if (fields.outType===0) {
             setType(fields.outType)
             setPopDataList([])
             setMaterialList([])
+            form.setFieldsValue({
+                list:[]
+            })
             return;
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
             setPopDataList([])
             setMaterialList([])
+            form.setFieldsValue({
+                list:[]
+            })
             return;
         }
         if (fields.pickingUserId) {
