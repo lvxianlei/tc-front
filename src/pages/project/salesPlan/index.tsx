@@ -143,13 +143,15 @@ export default function Index() {
                             ...item,
                             render: (_: any, record: any) => {
                                 return <span>
-                                    {record.taskReviewStatus === 0 ?
-                                        "审批中" :
-                                        record.taskReviewStatus === 1 ?
-                                            "审批通过" :
-                                            record.taskReviewStatus === 2 ?
-                                                "审批驳回" : record.taskReviewStatus === 3 ?
-                                                    "已撤销" : "-"}
+                                    {record.taskReviewStatus === -1 ?
+                                        "待发起" :
+                                        record.taskReviewStatus === 0 ?
+                                            "审批中" :
+                                            record.taskReviewStatus === 1 ?
+                                                "审批通过" :
+                                                record.taskReviewStatus === 2 ?
+                                                    "审批驳回" : record.taskReviewStatus === 3 ?
+                                                        "已撤销" : "-"}
                                 </span>;
                             }
                         });
@@ -182,14 +184,14 @@ export default function Index() {
                                 type="link"
                                 size="small"
                                 className='btn-operation-link'
-                                disabled={commonDisable}
+                                disabled={record.taskReviewStatus !== -1}
                                 loading={noticeLoading}
                                 onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                             <Button
                                 type="link"
                                 size="small"
                                 className='btn-operation-link'
-                                disabled={commonDisable}
+                                disabled={record.taskReviewStatus !== 0}
                                 onClick={() => recallSaleOrderItem(record.id)}
                             >撤销</Button>
                         </>;
