@@ -1382,7 +1382,7 @@
       "authority": "tc_erp_sw_auxiliary_purchase_plan_purchse_list"
     },
     { //辅材采购管理-辅材采购汇总
-      "name": "辅材采购计划",
+      "name": "辅材采购汇总",
       "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "module": "./pages/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "exact": true,
