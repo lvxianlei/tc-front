@@ -639,6 +639,12 @@ export default function CreatePlan(props: any): JSX.Element {
                                 }))
                             })
                         }
+                        if (item.dataIndex === "outStockType") {
+                            return ({
+                                ...item, 
+                                disabled: props.type === 'edit'
+                            })
+                        }
                         return item
                     })}
                     onChange={performanceBondChange}
