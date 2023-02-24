@@ -506,7 +506,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
         }
     }
 
-    const { run: stockTakingRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: finishLoading ,run: stockTakingRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/stockTaking/finish`, data)
             message.success("完成盘点！");
@@ -518,7 +518,7 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
     }), { manual: true })
 
     // 保存
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil[props.isEdit ? "put" : "post"](`/tower-storage/stockTaking`, data)
             message.success(props.isEdit ? "编辑成功！" : "创建成功！");
@@ -674,10 +674,10 @@ export default function CreatePlan(props: CreateInterface): JSX.Element {
                 }}>
                     关闭
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleSuccessClick()}>
+                <Button key="create" type="primary" onClick={() => handleSuccessClick()} loading={finishLoading}>
                     完成盘点
                 </Button>,
-                <Button key="save" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="save" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     保存
                 </Button>
             ]}

@@ -17,8 +17,6 @@ export default function PickTowerDetail(): React.ReactNode {
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [visible, setVisible] = useState(false)
-    const [loaded, setLoaded] = useState(false)
-    const [loadedR, setLoadedR] = useState(false)
     const [url, setUrl] = useState<string>('');
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
@@ -146,6 +144,30 @@ export default function PickTowerDetail(): React.ReactNode {
         })
         setMaterialDataSource(list.slice(0));
     }
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/material`,{
+                    projectMaterialList: tableDataSource,
+                    purchaseTaskId: params.id
+            })
+            message.success(`保存成功！`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    const { loading: finishLoading, run: finishRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-supply/materialPurchaseTask/material/finish`,{
+                projectMaterialList: tableDataSource,
+                purchaseTaskId: params.id
+            })
+            message.success(`汇总完成！`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     return <>
         <Spin spinning={loading}>
             <DetailContent operation={[
@@ -201,25 +223,13 @@ export default function PickTowerDetail(): React.ReactNode {
                             setVisible(true)
                         }}>扣减库存</Button>
                         <Button type="primary" onClick={async () => {
-                            setLoaded(true)
-                            await RequestUtil.put(`/tower-supply/materialPurchaseTask/material`,{
-                                projectMaterialList: tableDataSource,
-                                purchaseTaskId: params.id
-                            })
-                            message.success(`保存成功！`)
-                            setLoaded(false)
+                            await saveRun()
                             history.go(0)
-                        }} loading={loaded}>保存</Button>
+                        }} loading={saveLoading}>保存</Button>
                         <Button type="primary" onClick={async () => {
-                            setLoadedR(true)
-                            await RequestUtil.put(`/tower-supply/materialPurchaseTask/material/finish`,{
-                                projectMaterialList: tableDataSource,
-                                purchaseTaskId: params.id
-                            })
-                            message.success(`汇总完成！`)
-                            setLoadedR(false)
+                            await finishRun()
                             history.go(-1)
-                        }} loading={loadedR}>完成汇总</Button>
+                        }} loading={finishLoading}>完成汇总</Button>
                     </Space>}
                 </div>
                 

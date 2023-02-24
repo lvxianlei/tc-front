@@ -59,7 +59,7 @@ export default function EnquiryCompare() {
         }else{
             value.comparisonPersonId = null
         }
-        setFilterValue({ ...value })
+        // setFilterValue({ ...value })
         return ({ ...value })
     }
 

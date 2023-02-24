@@ -145,7 +145,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         if (value.supplierName) {
             value.supplierName = value.supplierName?.value;
         }
-        setFilterValue({ ...value })
+        // setFilterValue({ ...value })
         run({...value})
         return value
     }
