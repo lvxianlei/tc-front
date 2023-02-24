@@ -139,7 +139,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             领料班组：{baseData?.pickingTeamName} 
                         </span>
                         <span style={{ marginLeft: "10px" }}>
-                            总数量：{weightData?.toBePickingTotalNum || "0.00"} 
+                            总数量：{weightData?.totalNum || "0.00"} 
                         </span>
                     </>
                 }}
