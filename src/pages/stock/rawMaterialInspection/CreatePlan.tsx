@@ -229,7 +229,7 @@ export default function CreatePlan(props: any): JSX.Element {
             })
         }
     }, [props.visible])
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/qualityInspection`
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
@@ -245,7 +245,7 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    const { run: submitRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
+    const { loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
         try {
             const path =  '/tower-storage/qualityInspection'
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
@@ -314,15 +314,15 @@ export default function CreatePlan(props: any): JSX.Element {
             footer={[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
-                    setPopDataList([]);
+                    setPopDataList([]); 
                     props?.handleCreate({code:1});
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('save')}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
                     保存
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('submit')}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick('submit')} loading={submitLoading}>
                     保存并提交
                 </Button>
             ]}
