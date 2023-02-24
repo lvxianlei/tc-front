@@ -7,7 +7,7 @@ import moment from 'moment';
 import useRequest from '@ahooksjs/use-request'
 import { useHistory } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
-import { Page } from '../common';
+import { SearchTable } from '../common';
 import { collectionListHead, approvalStatus } from "./applicationColunm.json";
 // 引入填写保函信息的弹框
 import FillGuaranteeInformation from './fillGuaranteeInformation';
@@ -22,7 +22,7 @@ import OverView from "./OverView";
 export default function ApplicationColunm(): React.ReactNode {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
-    const [ clearSearch, setClearSearch ] = useState<boolean>(false);
+    const [clearSearch, setClearSearch] = useState<boolean>(false);
     const [acceptStatus, setAcceptStatus] = useState<number>(1);
     const [visible, setVisible] = useState<boolean>(false);
     const [visibleRecovery, setVisibleRecovery] = useState<boolean>(false);
@@ -123,7 +123,7 @@ export default function ApplicationColunm(): React.ReactNode {
 
     return (
         <>
-            <Page
+            <SearchTable
                 path="/tower-finance/guarantee"
                 columns={[
                     {
@@ -145,15 +145,16 @@ export default function ApplicationColunm(): React.ReactNode {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => (
                                     <span
-                                        style={{ color: (
-                                            acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0)
-                                                ? 
-                                                    'red'
-                                                :   '' 
-                                            }}
+                                        style={{
+                                            color: (
+                                                acceptStatus === 2 && moment(record.requiredReturnTime).diff(moment(moment(new Date()).format("YYYY-MM-DD")), 'days') < 0)
+                                                ?
+                                                'red'
+                                                : ''
+                                        }}
                                     >
                                         {record.requiredReturnTime ? record.requiredReturnTime : ''}
                                     </span>
@@ -164,7 +165,7 @@ export default function ApplicationColunm(): React.ReactNode {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => {
                                     return (
                                         <span>
@@ -179,7 +180,7 @@ export default function ApplicationColunm(): React.ReactNode {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 140,
                         render: (_: any, record: any) => {
                             return (
                                 <>
@@ -225,20 +226,19 @@ export default function ApplicationColunm(): React.ReactNode {
                         <Radio.Group
                             defaultValue={acceptStatus}
                             onChange={operationChange}>
-                                {
-                                    approvalStatus.map((item: any, index: number) => 
-                                    {
-                                        return <Radio.Button
-                                            value={item.value}
-                                            key={`${index}_${item.value}`}>{item.label}
-                                        </Radio.Button>
-                                    })
-                                }
+                            {
+                                approvalStatus.map((item: any, index: number) => {
+                                    return <Radio.Button
+                                        value={item.value}
+                                        key={`${index}_${item.value}`}>{item.label}
+                                    </Radio.Button>
+                                })
+                            }
                         </Radio.Group>
                     </>
                 }
                 onFilterSubmit={onFilterSubmit}
-                filterValue={{acceptStatus: acceptStatus}}
+                filterValue={{ acceptStatus: acceptStatus }}
                 searchFormItems={[
                     {
                         name: 'startRefundTime',
