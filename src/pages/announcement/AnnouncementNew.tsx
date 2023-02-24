@@ -7,7 +7,6 @@ import useRequest from '@ahooksjs/use-request';
 import styles from './AnnouncementMngt.module.less';
 import { IAnnouncement, IStaffList } from './AnnouncementMngt';
 import SelectUserTransfer from './SelectUserTransfer';
-import { IStaff } from '../dept/staff/StaffMngt';
 import BraftEditor from 'braft-editor'
 import 'braft-editor/dist/index.css'
 import SelectGroup from './SelectGroup';

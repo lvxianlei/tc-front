@@ -9,6 +9,14 @@
             "dataIndex": "projectName"
         },
         {
+            "title": "合同编号",
+            "dataIndex": "contractNumber"
+        },
+        {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber"
+        },
+        {
             "title": "预估总重（吨）",
             "dataIndex": "contractWeight"
         },
