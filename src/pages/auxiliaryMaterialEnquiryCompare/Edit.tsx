@@ -92,7 +92,7 @@ export default forwardRef(function ({id, type}: EditProps, ref): JSX.Element {
                         // 新创建的使用 使用id  编辑后台返回的 使用purchaseListId
                         purchaseListId: item.purchaseListId,
                         num: item.planPurchaseNum  || 1,
-                        id: type === "new"? item.id : item.ids,
+                        id: type === "new"? '' : item.ids,
                         // structureTexture: item.structureTexture,
                         // structureTextureId: item.structureTextureId,
                         // materialStandard: item.materialStandard,
