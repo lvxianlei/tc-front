@@ -148,7 +148,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         }} >撤销审批</Button>
                         <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
-                        <div>已收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveTaxPrice}</span> 待收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitPrice}</span></div>
+                        <div>已收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveTaxPrice}</span> 待收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitTaxPrice}</span></div>
                     </>
                 }
                 filterValue={filterValue}
