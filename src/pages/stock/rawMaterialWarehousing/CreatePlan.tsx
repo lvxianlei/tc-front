@@ -119,8 +119,12 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     num: value,
-                    totalTaxPrice: (Number(item.taxPrice || 0) * value ).toFixed(2),
-                    totalPrice: (Number(item.price || 0) * value ).toFixed(2),
+                    totalTaxPrice: type===4||type==='4'?(Number(item.taxPrice || 0) * (item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000)
+                        : (Number(item?.proportion || 1) * value / 1000)) ).toFixed(2):(Number(item.taxPrice || 0) * value ).toFixed(2),
+                    totalPrice: type===4||type==='4'?(Number(item.taxPrice || 0) *  (item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000)
+                        : (Number(item?.proportion || 1) * value / 1000)) ).toFixed(2):(Number(item.price || 0) * value ).toFixed(2),
                     weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                         : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                             : (Number(item?.proportion || 1) / 1000).toFixed(5),
