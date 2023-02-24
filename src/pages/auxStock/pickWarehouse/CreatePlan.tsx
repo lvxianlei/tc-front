@@ -23,6 +23,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [visibleB, setVisibleB] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
+    const [detail, setDetail] = useState<any>({})
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [type, setType] = useState<number>(0);
     const handleAddModalOk = () => {
@@ -134,44 +135,145 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         }
     }
 
-    const handleCreateClick = () => new Promise(async (resove, reject) => {
+    // const handleCreateClick = () => new Promise(async (resove, reject) => {
+    //     try {
+    //         const baseInfo = await addCollectionForm.validateFields();
+    //         if (materialList.length < 1) {
+    //             message.error("请您选择出库明细!");
+    //             return false;
+    //         }
+    //         // 添加对长度以及数量的拦截
+    //         let flag = false;
+    //         for (let i = 0; i < materialList.length; i += 1) {
+    //             if (!(materialList[i].num)) {
+    //                 flag = true;
+    //             }
+    //         }
+    //         if (flag) {
+    //             message.error("请您填写数量！");
+    //             throw Error('请您填写数量！')
+    //         }
+    //         await saveRun({
+    //             materialPickingDetailDTOS: materialList,
+    //             // ...baseInfo,
+    //             isApproval: 0,
+    //             pickingTeamName: baseInfo?.dept.value,
+    //             pickingTeamId: baseInfo?.dept.id,
+    //             pickingTime: baseInfo.pickingTime+" 23:59:59",
+    //             pickingUser: baseInfo?.pickingUserId.id,
+    //             deptId: baseInfo?.departmentName?.id,
+    //             deptName: baseInfo?.departmentName?.value,
+    //             warehouseId: baseInfo?.warehouseId
+    //         });
+    //         resove(true)
+    //     } catch (error) {
+    //         console.log(error);
+    //         reject(false)
+    //     }
+    // })
+    const onSubmit = () => new Promise(async (resove, reject) => {
         try {
-            const baseInfo = await addCollectionForm.validateFields();
-            if (materialList.length < 1) {
-                message.error("请您选择出库明细!");
-                return false;
-            }
-            // 添加对长度以及数量的拦截
-            let flag = false;
-            for (let i = 0; i < materialList.length; i += 1) {
-                if (!(materialList[i].num)) {
-                    flag = true;
+                if([undefined, 0,'0',3,'3',4,'4'].includes(detail?.approval)){
+                    const baseInfo = await addCollectionForm.validateFields();
+                if (materialList.length < 1) {
+                    message.error("请您选择出库明细!");
+                    return false;
                 }
+                // 添加对长度以及数量的拦截
+                let flag = false;
+                for (let i = 0; i < materialList.length; i += 1) {
+                    if (!(materialList[i].num)) {
+                        flag = true;
+                    }
+                }
+                if (flag) {
+                    message.error("请您填写数量！");
+                    throw Error('请您填写数量！')
+                }
+                await saveRun({
+                    materialPickingDetailDTOS: materialList,
+                    // ...baseInfo,
+                    isApproval: 0,
+                    pickingTeamName: baseInfo?.dept.value,
+                    pickingTeamId: baseInfo?.dept.id,
+                    pickingTime: baseInfo.pickingTime+" 23:59:59",
+                    pickingUser: baseInfo?.pickingUserId.id,
+                    deptId: baseInfo?.departmentName?.id,
+                    deptName: baseInfo?.departmentName?.value,
+                    warehouseId: baseInfo?.warehouseId
+                });
+                message.success("保存成功...")
+                resove(true)
+            }else if([2,'2'].includes(detail?.approval)){
+                message.error("当前数据已审批，修改后请重新发起审批！")
+                throw new Error('审批通过数据，修改后只能重新发起审批！！')
+            }else{
+                message.error("当前正在审批中，请撤销审批后再进行修改！")
+                throw new Error('当前正在审批，不可修改！')
             }
-            if (flag) {
-                message.error("请您填写数量！");
-                throw Error('请您填写数量！')
-            }
-            await saveRun({
-                materialPickingDetailDTOS: materialList,
-                // ...baseInfo,
-                isApproval: 0,
-                pickingTeamName: baseInfo?.dept.value,
-                pickingTeamId: baseInfo?.dept.id,
-                pickingTime: baseInfo.pickingTime+" 23:59:59",
-                pickingUser: baseInfo?.pickingUserId.id,
-                deptId: baseInfo?.departmentName?.id,
-                deptName: baseInfo?.departmentName?.value,
-                warehouseId: baseInfo?.warehouseId
-            });
-            resove(true)
         } catch (error) {
-            console.log(error);
+            console.log(error)
             reject(false)
         }
     })
-
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
+    const onSubmitApproval = () => new Promise(async (resove, reject) => {
+        try {
+            if([undefined,0,'0',2,'2',3,'3',4,'4'].includes(detail?.approval)){
+                const baseInfo = await addCollectionForm.validateFields();
+                if (materialList.length < 1) {
+                    message.error("请您选择出库明细!");
+                    return false;
+                }
+                // 添加对长度以及数量的拦截
+                let flag = false;
+                for (let i = 0; i < materialList.length; i += 1) {
+                    if (!(materialList[i].num)) {
+                        flag = true;
+                    }
+                }
+                if (flag) {
+                    message.error("请您填写数量！");
+                    throw Error('请您填写数量！')
+                }
+                await submitRun({
+                    materialPickingDetailDTOS: materialList,
+                    // ...baseInfo,
+                    isApproval: 1,
+                    pickingTeamName: baseInfo?.dept.value,
+                    pickingTeamId: baseInfo?.dept.id,
+                    pickingTime: baseInfo.pickingTime+" 23:59:59",
+                    pickingUser: baseInfo?.pickingUserId.id,
+                    deptId: baseInfo?.departmentName?.id,
+                    deptName: baseInfo?.departmentName?.value,
+                    warehouseId: baseInfo?.warehouseId
+                });
+                message.success("审批发起成功...")
+                resove(true)
+            }else{
+                message.error("当前不可发起审批！")
+                throw new Error('当前不可发起审批！')
+            }
+        } catch (error) {
+            console.log(error)
+            reject(false)
+        }
+    })
+    const onSubmitCancel = () => new Promise(async (resove, reject) => {
+        try {
+            if([1,'1'].includes(detail?.approval)){
+                await cancelRun(detail?.id)
+                message.success("撤销成功...")
+                resove(true)
+            }
+            else{
+                await message.error("不可撤销...")
+                throw new Error('不可撤销')
+            }
+        } catch (error) {
+            reject(false)
+        }
+    })
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/auxiliaryMaterialPicking` 
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? {
@@ -186,12 +288,36 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-
+    const { loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
+        try {
+            const path = `/tower-storage/auxiliaryMaterialPicking` 
+            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? {
+                ...requestData,
+            } : {
+                ...requestData,
+                id: props.id,
+                pickingStatus: data?.pickingStatus
+            })
+            resove(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    const { loading: cancelLoading, run: cancelRun } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
+        try {
+            const path = `/tower-storage/auxiliaryMaterialPicking/workflow/cancel/${requestData}` 
+            const result: { [key: string]: any } = await RequestUtil.get(path)
+            resove(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-storage/auxiliaryMaterialPicking/${props.id}`
             )
+            setDetail(result)
             setPopDataList(result?.materialPickingDetailVOS)
             setMaterialList(result?.materialPickingDetailVOS)
             setWarehouseId(result?.warehouseId)
@@ -258,9 +384,14 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }
 
     useImperativeHandle(ref, () => ({
-        onSubmit: handleCreateClick,
+        onSubmit: onSubmit,
+        onSubmitApproval: onSubmitApproval,
+        onSubmitCancel: onSubmitCancel,
+        saveLoading: saveLoading,
+        submitLoading: submitLoading,
+        cancelLoading: cancelLoading,
         resetFields
-    }), [ref, handleCreateClick, resetFields])
+    }), [ref, onSubmit, onSubmitApproval, onSubmitCancel,saveLoading,submitLoading, cancelLoading,resetFields])
 
     useEffect(() => {
         if (props.visible) {
