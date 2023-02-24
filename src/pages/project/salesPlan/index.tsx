@@ -162,9 +162,9 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 200,
+                    width: 240,
                     render: (_: any, record: any) => {
-                        const commonDisable: boolean = ![2, -1].includes(record.taskReviewStatus)
+                        const commonDisable: boolean = ![2, -1, 3].includes(record.taskReviewStatus)
                         return <>
                             <Button
                                 type="link" size="small" className='btn-operation-link'
@@ -184,7 +184,7 @@ export default function Index() {
                                 type="link"
                                 size="small"
                                 className='btn-operation-link'
-                                disabled={record.taskReviewStatus !== -1}
+                                disabled={![-1, 2, 3].includes(record.taskReviewStatus)}
                                 loading={noticeLoading}
                                 onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                             <Button
