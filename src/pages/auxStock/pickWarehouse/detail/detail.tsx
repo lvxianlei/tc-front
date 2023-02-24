@@ -130,7 +130,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         {/* <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button> */}
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <span style={{ marginLeft: "20px" }}>
-                            申请人： {baseData?.pickUserName } 
+                            申请人： {baseData?.createUserName } 
                         </span>
                         <span style={{ marginLeft: "10px" }}>
                             领料车间：{baseData?.deptName} 
