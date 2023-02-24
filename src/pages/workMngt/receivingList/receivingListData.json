@@ -597,8 +597,8 @@
             "title": "结算重量（吨）",
             "dataIndex": "balanceTotalWeight",
             "type": "number",
-            "precision": 5,
-            "max": 99999.99999,
+            "precision": 3,
+            "max": 99999.999,
             "required": true,
             "width":120
         },
