@@ -92,7 +92,6 @@ export default () => {
         <Modal visible={isAdd} title={title + "费用"} width='40%' onOk={async () => {
             await form.validateFields()
             const value = form.getFieldsValue(true)
-            console.log(value)
             if (value?.cost) {
                 value.type = value?.cost.split(',')[0]
                 value.typeName = value?.cost.split(',')[1]
@@ -195,7 +194,7 @@ export default () => {
             </Form>
             <Attachment
                 ref={attachRef}
-                dataSource={detailData.attachInfoVos}
+                dataSource={detailData.attachVos}
                 edit
                 accept="image/png,image/jpeg"
                 multiple
