@@ -42,6 +42,7 @@ export default function BaseInfoEdit(): JSX.Element {
             setAddress(result.address)
             resole({
                 ...result,
+                projectName: { value: result.projectName, id: result.nicheId },
                 projectLeader: { value: result.projectLeader, id: result.projectLeaderId },
                 biddingPerson: { value: result.biddingPerson, id: result?.biddingPersonId },
                 address: `${["null", null].includes(result.bigRegion) ? "" : result.bigRegion}-${["null", null].includes(result.address) ? "" : result.address}`
@@ -74,6 +75,8 @@ export default function BaseInfoEdit(): JSX.Element {
             const result = await run({
                 ...baseInfoData,
                 id: data?.id,
+                nicheId: baseInfoData.projectName?.id,
+                projectName: baseInfoData.projectName?.value || baseInfoData.projectName,
                 address,
                 bigRegion,
                 fileIds: attchsRef.current?.getDataSource().map(item => item.id),
@@ -95,12 +98,37 @@ export default function BaseInfoEdit(): JSX.Element {
     }
 
     const handleBaseInfoChange = (fields: any) => {
+        const rowData = fields.projectName.records?.[0]
         if (fields.address) {
             setAddress(fields.address);
             //address 不是其他-国外 country 置空
             if (fields.address != '其他-国外') {
                 baseInfoForm.setFieldsValue({ country: "" })
             }
+        }
+        if (fields.projectName && rowData) {
+            baseInfoForm.setFieldsValue({
+                projectNumber: rowData.projectNumber,
+                bidBatch: rowData.batchSn,
+                bidBuyEndTime: rowData.bidBuyEndTime,
+                biddingEndTime: rowData.biddingEndTime,
+                releaseDate: rowData.releaseDate,
+                projectLeader: {
+                    id: rowData.salesmanId,
+                    value: rowData.salesmanName,
+                    records: [{ id: rowData.salesmanId }]
+                },
+                biddingPerson: {
+                    id: rowData.bidCompanyId,
+                    value: rowData.bidCompanyName,
+                    records: [{ id: rowData.bidCompanyId }]
+                },
+                biddingAgency: {
+                    id: rowData.bidAgencyId,
+                    value: rowData.bidAgencyName,
+                    records: [{ id: rowData.bidAgencyId }]
+                }
+            })
         }
     }
 

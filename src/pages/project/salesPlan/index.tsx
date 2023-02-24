@@ -11,7 +11,10 @@ export default function Index() {
     const history = useHistory()
     const location: any = useLocation()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({ taskReviewStatus: location.state?.taskReviewStatus || '' });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({
+        taskReviewStatus: location.state?.taskReviewStatus || '',
+        projectId: params.id
+    });
     const entryPath = params.id ? "management" : "salePlan"
 
     const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -32,6 +35,15 @@ export default function Index() {
         }
     }), { manual: true })
 
+    const { run: recallNoticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-market/taskNotice/recall/${id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const deleteSaleOrderItem = (id: string) => {
         Modal.confirm({
             title: "删除",
@@ -39,6 +51,22 @@ export default function Index() {
             onOk: () => new Promise(async (resove, reject) => {
                 try {
                     await deleteNoticeRun(id)
+                    resove("")
+                    history.go(0)
+                } catch (error) {
+                    reject(error)
+                }
+            })
+        })
+    }
+
+    const recallSaleOrderItem = (id: string) => {
+        Modal.confirm({
+            title: "撤销",
+            content: "确定撤销此数据吗？",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await recallNoticeRun(id)
                     resove("")
                     history.go(0)
                 } catch (error) {
@@ -77,8 +105,8 @@ export default function Index() {
 
     return <DetailContent style={{ paddingTop: 14 }}>
         <SearchTable
-            path={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
-            exportPath={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
+            path={`/tower-market/taskNotice`}
+            exportPath={`/tower-market/taskNotice`}
             filterValue={filterValue}
             extraOperation={<>
                 <Radio.Group
@@ -115,12 +143,15 @@ export default function Index() {
                             ...item,
                             render: (_: any, record: any) => {
                                 return <span>
-                                    {record.taskReviewStatus === 0 ?
-                                        "审批中" :
-                                        record.taskReviewStatus === 1 ?
-                                            "审批通过" :
-                                            record.taskReviewStatus === 2 ?
-                                                "审批驳回" : "-"}
+                                    {record.taskReviewStatus === -1 ?
+                                        "待发起" :
+                                        record.taskReviewStatus === 0 ?
+                                            "审批中" :
+                                            record.taskReviewStatus === 1 ?
+                                                "审批通过" :
+                                                record.taskReviewStatus === 2 ?
+                                                    "审批驳回" : record.taskReviewStatus === 3 ?
+                                                        "已撤销" : "-"}
                                 </span>;
                             }
                         });
@@ -131,14 +162,38 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
+                    width: 240,
                     render: (_: any, record: any) => {
+                        const commonDisable: boolean = ![2, -1, 3].includes(record.taskReviewStatus)
                         return <>
-                            <Button type="link" size="small" className='btn-operation-link' onClick={() => history.push(`/project/${entryPath}/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
-                            {[2, -1].includes(record.taskReviewStatus) && <>
-                                <Button type="link" size="small" className='btn-operation-link'><Link to={`/project/${entryPath}/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
-                                <Button type="link" size="small" className='btn-operation-link' onClick={() => deleteSaleOrderItem(record.id)}>删除</Button>
-                                <Button type="link" size="small" className='btn-operation-link' loading={noticeLoading} onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
-                            </>}
+                            <Button
+                                type="link" size="small" className='btn-operation-link'
+                                onClick={() => history.push(`/project/${entryPath}/cat/salesPlan/${params.id}/${record.id}`)}>查看</Button>
+                            <Button
+                                type="link" size="small" className='btn-operation-link'
+                                disabled={commonDisable}
+                            ><Link to={`/project/${entryPath}/edit/salesPlan/${params.id}/${record.id}`}>编辑</Link></Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={commonDisable}
+                                onClick={() => deleteSaleOrderItem(record.id)}
+                            >删除</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={![-1, 2, 3].includes(record.taskReviewStatus)}
+                                loading={noticeLoading}
+                                onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
+                            <Button
+                                type="link"
+                                size="small"
+                                className='btn-operation-link'
+                                disabled={record.taskReviewStatus !== 0}
+                                onClick={() => recallSaleOrderItem(record.id)}
+                            >撤销</Button>
                         </>;
                     }
                 }
