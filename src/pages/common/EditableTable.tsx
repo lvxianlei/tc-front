@@ -58,7 +58,7 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
     })
     haveIndex && newColumns.unshift({
         title: '序号',
-        width: "60px",
+        width: 40,
         fixed: "left",
         dataIndex: 'index',
         render: (_: any, $: any, index: number): React.ReactNode => index + 1

@@ -1,11 +1,11 @@
 import React from "react"
 import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
-import { baseInfoHead, invoiceHead, billingHeader } from "./InvoicingData.json"
+import { DetailContent, DetailTitle, BaseInfo, Attachment, EditableTable, CommonTable } from '../common'
+import { baseInfoHead, invoiceHead, billingHeader, saleInvoice } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
-import { productTypeOptions } from "../../configuration/DictionaryOptions"
+import { currencyTypeOptions, productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ invoicingId: string }>()
@@ -47,6 +47,23 @@ export default function Overview() {
 
             <DetailTitle title="开票明细" />
             <CommonTable columns={billingHeader} dataSource={data?.invoicingDetailVos || []} />
+
+            <DetailTitle title="销售发票" />
+            <EditableTable
+                columns={saleInvoice.map((item: any) => {
+                    if (item.dataIndex === "currencyType") {
+                        return ({
+                            ...item,
+                            type: "select",
+                            enum: currencyTypeOptions?.map((product: any) => ({
+                                value: product.id,
+                                label: product.name
+                            }))
+                        })
+                    }
+                    return item
+                })} dataSource={data?.invoicingDetailVos || []} />
+
             <Attachment dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
