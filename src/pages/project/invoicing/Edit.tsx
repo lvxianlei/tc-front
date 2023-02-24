@@ -296,8 +296,10 @@ export default function Edit() {
     const handleInvoiceChange = (fields: any) => {
         if (fields.name && (fields.name.value === fields.name.records?.[0].name)) {
             invoiceForm.setFieldsValue({
-                address: fields.name.records?.[0].address,
-                phone: fields.name.records?.[0].phone
+                bankCode: fields.name.records?.[0].bankAccount,
+                taxCode: fields.name.records?.[0].taxpayerNumber,
+                address: fields.name.records?.[0].positionAddress,
+                phone: fields.name.records?.[0].contactManTel
             })
         }
     }
