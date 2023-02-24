@@ -510,6 +510,8 @@ export default function CreatePlan(props: any): JSX.Element {
                                     ...item,
                                     price: item?.price?item?.price:item?.unTaxPrice,
                                     totalPrice: item?.totalPrice?item?.totalPrice:item?.totalUnTaxPrice,
+                                    reservoirArea: item?.reservoirName,
+                                    location: item?.locatorName,
                                 })
                             }) || [])
                         }}
