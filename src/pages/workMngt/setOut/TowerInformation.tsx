@@ -4,7 +4,7 @@
  * @description 工作管理-放样列表-工作目录
 */
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
 import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
@@ -20,6 +20,8 @@ import { ColumnType } from 'antd/lib/table';
 import ChooseMaterials from './ChooseMaterials';
 import { DownOutlined } from '@ant-design/icons';
 import SelectUser from '../../common/SelectUser';
+import { modalProps } from './ISetOut';
+import BatchEdit from './BatchEdit';
 
 interface Column extends ColumnType<object> {
     editable?: boolean;
@@ -28,6 +30,7 @@ interface Column extends ColumnType<object> {
 export default function TowerInformation(): React.ReactNode {
     const [optionalList, setOptionalList] = useState<any>();
     const [loftingUser, setLoftingUser] = useState<string>();
+    const [editVisible, setEditVisible] = useState<boolean>(false)
 
     const { data: detail } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -43,7 +46,7 @@ export default function TowerInformation(): React.ReactNode {
         const result = await RequestUtil.get<any>(`/tower-science/projectPrice/list?current=1&size=1000&category=1&productType=${productType}`);
         resole(result?.records || [])
     }), { manual: true })
-    
+
     const { data: count, run: getCount } = useRequest<any>((filter: any, ids: any) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.post(`/tower-science/productSegment/structure/statistics`, {
             ...filter,
@@ -524,6 +527,7 @@ export default function TowerInformation(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const editRef = useRef<modalProps>();
 
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         getCount(filterValue, selectedRowKeys)
@@ -599,7 +603,32 @@ export default function TowerInformation(): React.ReactNode {
         })
     }
 
+    const batchEditSave = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('批量编辑成功！');
+            setEditVisible(false);
+            history.go(0);
+            editRef.current?.resetFields();
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <>
+        <Modal
+            destroyOnClose
+            key='BatchEdit'
+            visible={editVisible}
+            width="80%"
+            title="批量编辑"
+            onOk={batchEditSave}
+            onCancel={() => {
+                setEditVisible(false);
+            }}>
+            <BatchEdit datas={selectedRows} optionalList={optionalList} productType={detail?.productType} ref={editRef} />
+        </Modal>
         <Modal
             destroyOnClose
             key='DetailsQuestionnaire'
@@ -646,7 +675,7 @@ export default function TowerInformation(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form>
-        <Space size="large" style={{padding: "16px"}}>
+        <Space size="large" style={{ padding: "16px" }}>
             <span>塔型：{detail?.productCategoryName}</span>
             <span>计划号：{detail?.planNumber}</span>
             <span>模式：{count?.patternName}</span>
@@ -668,6 +697,9 @@ export default function TowerInformation(): React.ReactNode {
                 extraOperation={
                     <>
                         <Space direction="horizontal" size="small">
+                            <Button type="primary" disabled={selectedKeys.length<=0} onClick={() => {
+                                setEditVisible(true)
+                            }} ghost>批量编辑</Button>
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
                             <Dropdown trigger={['click']} overlay={
