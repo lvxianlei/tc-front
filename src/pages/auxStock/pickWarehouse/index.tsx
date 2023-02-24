@@ -3,7 +3,7 @@
  * 时间：2023/01/16
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber, Modal } from 'antd';
+import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber, Modal, Space } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -63,7 +63,16 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     ]
     const history = useHistory()
-    const editRef = useRef<{ onSubmit: () => Promise<boolean>, resetFields: () => void }>()
+    const editRef = useRef<{ 
+        onSubmit: () => void, 
+        onSubmitApproval: ()=>void, 
+        onSubmitCancel: ()=>void, 
+        resetFields: () => void,
+        saveLoading: boolean,
+        submitLoading: boolean,
+        cancelLoading: boolean,
+        setCanEditBaseInfo:()=>void
+    }>({ onSubmit: () => { }, saveLoading: false , submitLoading: false, cancelLoading: false ,onSubmitApproval: () => { }, resetFields: () => { }, setCanEditBaseInfo:()=>{}, onSubmitCancel: ()=>{} })
     const [editId, setEditId] = useState<string>();
     const [oprationType, setOperationType] = useState<"create" | "edit">("create")
     const [pagePath, setPagePath] = useState<string>("/tower-storage/auxiliaryMaterialPicking")
@@ -71,7 +80,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [num, setNum] = useState<any>({});
     const [visible, setVisible] = useState<boolean>(false)
-    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    // const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
         // selectName: "",
         // status: "",
@@ -145,18 +154,30 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         getBatchingStrategy()
         resole(data)
     }))
-    const handleModalOk = () => new Promise(async (resove, reject) => {
-        setConfirmLoading(true)
+    // const handleModalOk = () => new Promise(async (resove, reject) => {
+    //     setConfirmLoading(true)
+    //     try {
+    //         const isClose = await editRef.current?.onSubmit()
+    //         if (isClose) {
+    //             await message.success("操作成功...");
+    //             setVisible(false)
+    //             setConfirmLoading(false)
+    //             history.go(0)
+    //         }
+    //     } catch (error) {
+    //         setConfirmLoading(false)
+    //         reject(false)
+    //     }
+    // })
+    const handleEditModalOk = (type: 'save'|'approvalSave'|'cancelSave') => new Promise(async (resove, reject) => {
         try {
-            const isClose = await editRef.current?.onSubmit()
-            if (isClose) {
-                await message.success("操作成功...");
-                setVisible(false)
-                setConfirmLoading(false)
-                history.go(0)
-            }
+            type==='save'&&await editRef.current.onSubmit()
+            type==='approvalSave'&&await editRef.current.onSubmitApproval()
+            type==='cancelSave'&&await editRef.current.onSubmitCancel()
+            // message.success("保存成功...")
+            resove(true)
+            history.go(0)
         } catch (error) {
-            setConfirmLoading(false)
             reject(false)
         }
     })
@@ -265,12 +286,31 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 destroyOnClose
                 visible={visible}
                 width={1011}
-                confirmLoading={confirmLoading}
+                // confirmLoading={confirmLoading}
                 title={oprationType === "create" ? '创建领料单' : "编辑领料单"}
-                onOk={handleModalOk}
+                // onOk={handleModalOk}
+                footer={oprationType==='edit'?<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setEditId("")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')} loading={editRef.current?.saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')} loading={editRef.current?.submitLoading}>保存并发起审批</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('cancelSave')} loading={editRef.current?.cancelLoading}>撤销审批</Button>
+                </Space>:<Space>
+                    <Button onClick={() => {
+                        editRef.current?.resetFields()
+                        setEditId("")
+                        setVisible(false)
+                    }}>取消</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('save')} loading={editRef.current.saveLoading}>保存</Button>
+                    <Button type='primary' onClick={()=>handleEditModalOk('approvalSave')} loading={editRef.current.submitLoading}>保存并发起审批</Button>
+                </Space>}
                 onCancel={() => {
-                    setVisible(false)
                     editRef.current?.resetFields()
+                    setEditId("")
+                    setVisible(false)
                 }}>
                 <CreatePlan
                     ref={editRef}
