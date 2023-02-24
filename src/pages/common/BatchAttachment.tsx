@@ -82,10 +82,8 @@ async function putFilePromise(urls: any[], fileList: any[], progressCallback: Fu
             try {
                 const result = await Promise.all(urls.slice(0, 500).map((item: any) => new Promise(async (resolve, reject) => {
                     try {
-                        const fileForm = new FormData()
                         const file: any = fileList.find((fileItem: any) => fileItem.name === item.originalName)
-                        fileForm.append("file", file)
-                        const result: URLProps = await RequestUtil.putFile(item.pushUrl, fileForm)
+                        const result: URLProps = await RequestUtil.putFile(item.pushUrl, file)
                         successCount++
                         progressCallback(successCount, failCount)
                         resolve(result)
