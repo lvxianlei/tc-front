@@ -119,17 +119,26 @@ export default function SampleDraw(): React.ReactNode {
 
     const switchImg = (direction: string) => {
         if (direction === 'left') {
-            const index = idList?.indexOf(rowId)
-            setRowId(idList[index - 1])
-            const codeIndex = codeList?.indexOf(code)
-            setCode(codeList[codeIndex - 1])
-            show(idList[index - 1])
+            if (idList?.indexOf(rowId) === 0) {
+                message.warning('已经是第一张了！')
+            } else {
+                const index = idList?.indexOf(rowId)
+                setRowId(idList[index - 1])
+                const codeIndex = codeList?.indexOf(code)
+                setCode(codeList[codeIndex - 1])
+                show(idList[index - 1])
+            }
         } else {
-            const index = idList?.indexOf(rowId)
-            setRowId(idList[index + 1])
-            const codeIndex = codeList?.indexOf(code)
-            setCode(codeList[codeIndex + 1])
-            show(idList[index + 1])
+            if (idList?.indexOf(rowId) === idList?.length - 1) {
+                message.warning('已经是最后一张了！')
+            } else {
+                const index = idList?.indexOf(rowId)
+                setRowId(idList[index + 1])
+                const codeIndex = codeList?.indexOf(code)
+                setCode(codeList[codeIndex + 1])
+                show(idList[index + 1])
+            }
+
         }
     }
 
