@@ -98,7 +98,6 @@ export default function BaseInfoEdit(): JSX.Element {
     }
 
     const handleBaseInfoChange = (fields: any) => {
-        const rowData = fields.projectName.records?.[0]
         if (fields.address) {
             setAddress(fields.address);
             //address 不是其他-国外 country 置空
@@ -106,7 +105,8 @@ export default function BaseInfoEdit(): JSX.Element {
                 baseInfoForm.setFieldsValue({ country: "" })
             }
         }
-        if (fields.projectName && rowData) {
+        if (fields.projectName && fields.projectName.records?.[0]) {
+            const rowData = fields.projectName.records?.[0]
             baseInfoForm.setFieldsValue({
                 projectNumber: rowData.projectNumber,
                 bidBatch: rowData.batchSn,
