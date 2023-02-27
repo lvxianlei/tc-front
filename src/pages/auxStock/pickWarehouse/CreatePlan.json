@@ -126,7 +126,8 @@
         {
             "title": "用途",
             "dataIndex": "remark",
-            "type": "textarea"
+            "type": "textarea",
+            "required": true
         }
     ],
     "material": [
