@@ -45,12 +45,38 @@
             "dataIndex": "confirmer"
         },
         {
+            "title": "确认人",
+            "dataIndex": "confirmUserName"
+        },
+        {
+            "title": "确认时间",
+            "dataIndex": "confirmTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
+            "title": "导入人",
+            "dataIndex": "createUserName"
+        },
+        {
+            "title": "导入时间",
+            "dataIndex": "createTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        },
+        {
             "title": "确认状态",
             "dataIndex": "confirmStatus",
             "type": "select",
             "enum": [
-                { "value": 1, "label": "待确认" },
-                { "value": 2, "label": "已确认" }
+                {
+                    "value": 1,
+                    "label": "待确认"
+                },
+                {
+                    "value": 2,
+                    "label": "已确认"
+                }
             ]
         },
         {

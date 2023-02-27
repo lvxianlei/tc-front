@@ -22,6 +22,7 @@ export default function CollectionInfomation(): React.ReactNode {
     const [clearSearch, setClearSearch] = useState<boolean>(false);
     const [confirmStatus, setConfirmStatus] = useState<number>(1);
     const [visible, setVisible] = useState(false);
+    const [editId, setEditId] = useState("new")
     const [visibleOverView, setVisibleOverView] = useState<boolean>(false);
     const [contractList, setContractList] = useState<Contract[]>([]);
     const addRef = useRef<EditRefProps>()
@@ -144,7 +145,7 @@ export default function CollectionInfomation(): React.ReactNode {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 140,
                         render: (_: any, record: any) => {
                             return (
                                 <>
@@ -153,6 +154,15 @@ export default function CollectionInfomation(): React.ReactNode {
                                         className="btn-operation-link"
                                         onClick={() => getUser(record.id)}
                                     >查看</Button>
+                                    <Button
+                                        type="link"
+                                        className="btn-operation-link"
+                                        disabled={record.confirmStatus === 2}
+                                        onClick={() => {
+                                            setEditId(record.id)
+                                            setVisible(true)
+                                        }}
+                                    >编辑</Button>
                                     {record.confirmStatus === 1 && (
                                         <Popconfirm
                                             title="您确定删除该条回款信息?"
@@ -194,7 +204,10 @@ export default function CollectionInfomation(): React.ReactNode {
                                     <Button
                                         type="primary"
                                         style={{ marginRight: 12 }}
-                                        onClick={() => setVisible(true)}
+                                        onClick={() => {
+                                            setEditId("new")
+                                            setVisible(true)
+                                        }}
                                     >新增</Button>
                                     <Upload
                                         accept=".xls,.xlsx"
@@ -252,19 +265,35 @@ export default function CollectionInfomation(): React.ReactNode {
                         )
                     },
                     {
+                        name: 'startCreateTime',
+                        label: '创建时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'createUserName',
+                        label: '导入人',
+                        children: <Input placeholder="请输入导入人" />
+                    },
+                    {
+                        name: 'confirmUserName',
+                        label: '确认人',
+                        children: <Input placeholder="请输入确认人" />
+                    },
+                    {
                         name: 'startRefundTime',
                         label: '来款日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
                         name: 'payCompany',
+                        label: '查询',
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
                     },
                 ]}
             />
             {/* 新增 */}
             <Modal
-                title={'新增回款信息'}
+                title={`${editId === "new" ? "新增" : "编辑"}回款信息`}
                 visible={visible}
                 width={1000}
                 maskClosable={false}
@@ -288,7 +317,7 @@ export default function CollectionInfomation(): React.ReactNode {
                     </Button>
                 ]}
             >
-                <AddModal ref={addRef} />
+                <AddModal ref={addRef} editId={editId} />
             </Modal>
             {/* 查看 */}
             <OverView

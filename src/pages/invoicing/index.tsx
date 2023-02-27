@@ -34,7 +34,7 @@ export default function Invoicing() {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                width: 100,
+                width: 200,
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/taskInfo/${record.id}`)}>查看任务信息</Button>
