@@ -10,7 +10,8 @@ import {
     voltageGradeOptions,
     saleTypeOptions,
     contractPlanStatusOptions,
-    currencyTypeOptions
+    currencyTypeOptions,
+    bankTypeOptions
 } from "../../../configuration/DictionaryOptions"
 
 export default function Edit() {
@@ -304,6 +305,7 @@ export default function Edit() {
     const handleInvoiceChange = (fields: any) => {
         if (fields.name && (fields.name.value === fields.name.records?.[0].name)) {
             invoiceForm.setFieldsValue({
+                openBankName: fields.name.records?.[0].openBankName,
                 bankCode: fields.name.records?.[0].bankAccount,
                 taxCode: fields.name.records?.[0].taxpayerNumber,
                 address: fields.name.records?.[0].positionAddress,
@@ -495,7 +497,18 @@ export default function Edit() {
             <DetailTitle title="发票信息" />
             <BaseInfo
                 form={invoiceForm}
-                columns={invoiceHead}
+                columns={invoiceHead.map((item: any) => {
+                    if (item.dataIndex === "openBankName") {
+                        return ({
+                            ...item,
+                            enum: bankTypeOptions?.map(item => ({
+                                value: item.name,
+                                label: item.name
+                            }))
+                        })
+                    }
+                    return item
+                })}
                 onChange={handleInvoiceChange}
                 dataSource={data?.invoicingInfoVo || {}} edit />
             <DetailTitle title="移交信息" />
