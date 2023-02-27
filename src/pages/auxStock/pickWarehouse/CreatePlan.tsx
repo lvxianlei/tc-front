@@ -200,7 +200,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     pickingUser: baseInfo?.pickingUserId.id,
                     deptId: baseInfo?.departmentName?.id,
                     deptName: baseInfo?.departmentName?.value,
-                    warehouseId: baseInfo?.warehouseId
+                    warehouseId: baseInfo?.warehouseId,
+                    remark: baseInfo?.remark
                 });
                 message.success("保存成功...")
                 resove(true)
@@ -245,7 +246,8 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     pickingUser: baseInfo?.pickingUserId.id,
                     deptId: baseInfo?.departmentName?.id,
                     deptName: baseInfo?.departmentName?.value,
-                    warehouseId: baseInfo?.warehouseId
+                    warehouseId: baseInfo?.warehouseId,
+                    remark: baseInfo?.remark
                 });
                 message.success("审批发起成功...")
                 resove(true)
