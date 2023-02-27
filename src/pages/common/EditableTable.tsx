@@ -123,7 +123,7 @@ export default function EditableTable({
             form && await form.validateFields();
             const editableDataSource = form?.getFieldsValue()
             const newRowData = {
-                id: (Math.random() * 1000000).toFixed(0),
+                id: `create-${(Math.random() * 1000000).toFixed(0)}`,
                 ...(typeof addData === "function" ? addData(editableDataSource?.submit || []) : addData)
             }
             const addedEditDataSource = [newRowData, ...editableDataSource?.submit || []]
