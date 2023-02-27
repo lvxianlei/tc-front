@@ -36,6 +36,11 @@ export default function SampleDraw(): React.ReactNode {
         resole(data)
     }), {})
 
+    const { data: materialNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/productStructure/structure/material/${params.id}`);
+        resole(data)
+    }), {})
+
     const onKeyUp = (e: any) => {
         switch (e.keyCode) {
             case 37:
@@ -148,6 +153,18 @@ export default function SampleDraw(): React.ReactNode {
             children: <DatePicker.RangePicker format="YYYY-MM-DD" />
         },
         {
+            name: 'materialName',
+            label: '材料名称',
+            children: <Select style={{ width: "100px" }} defaultValue={''}>
+                <Select.Option value={''} key={''}>全部</Select.Option>
+                {materialNames && materialNames.map((item: any) => {
+                    return <Select.Option key={item} value={item}>
+                        {item}
+                    </Select.Option>
+                })}
+            </Select>
+        },
+        {
             name: 'uploadStatus',
             label: '上传状态',
             // 0是未上传1已上传
@@ -222,11 +239,22 @@ export default function SampleDraw(): React.ReactNode {
                 <Button type="primary" onClick={() => {
                     history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
                 }} ghost>下载样图</Button>
+                <Popconfirm
+                    title="确认删除全部小样图?"
+                    onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/all/sampleDelete/${params.id}`).then(() => {
+                        message.success('删除成功！');
+                        history?.go(0)
+                    })}
+                    okText="确认"
+                    cancelText="取消"
+                >
+                    <Button type="primary">删除全部</Button>
+                </Popconfirm>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span>小样图数：<span style={{ color: '#FF8C00' }}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
             </Space>
-            <Row gutter={12}>
-                <Col span={8}>
+            <div style={{ display: 'flex' }}>
+                <div style={{ width: '40%' }}>
                     <SearchTable
                         path="/tower-science/smallSample/sampleList"
                         columns={params.status === '1'
@@ -264,6 +292,7 @@ export default function SampleDraw(): React.ReactNode {
                         }
                         refresh={refresh}
                         filterValue={{ ...filterValue, productCategoryId: params.id }}
+                        style={{ height: '600px' }}
                         tableProps={{
                             rowSelection: {
                                 selectedRowKeys: selectedKeys,
@@ -288,12 +317,12 @@ export default function SampleDraw(): React.ReactNode {
                                     setCode(record?.code)
                                     show(record?.id)
                                 },
-                                className: record?.id === rowId ? styles.highLight : undefined
+                                className: record?.id === rowId ? styles.highLight : !(record?.uploadTime) ? styles.selectHighLight : undefined
                             })
                         }}
                     />
-                </Col>
-                <Col span={16}>
+                </div>
+                <div style={{ width: '60%' }}>
                     <Spin spinning={imgLoading}>
                         <div style={{ padding: '16px' }}>
                             <Row gutter={12}>
@@ -354,9 +383,8 @@ export default function SampleDraw(): React.ReactNode {
                             </div>
                         </div>
                     </Spin>
-                </Col>
-            </Row>
-
+                </div>
+            </div>
         </div>
     )
 }
