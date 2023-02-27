@@ -39,7 +39,9 @@ export default function Overview() {
         await saveRun({
             ...transferData,
             invoicingSaleDTOS: saleInvoiceData?.submit?.map((item: any) => {
-                delete item.id
+                if (item.id.includes("create-")) {
+                    delete item.id
+                }
                 return ({
                     ...item,
                     currencyType: item.currencyType?.value,
