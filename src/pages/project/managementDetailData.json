@@ -194,7 +194,10 @@
             "title": "制单时间",
             "dataIndex": "createTime",
             "type": "date",
-            "format": "YYYY-MM-DD"
+            "format": "YYYY-MM-DD",
+            "features": {
+                "sortable": true
+            }
         }
     ],
     "enclosure": [
