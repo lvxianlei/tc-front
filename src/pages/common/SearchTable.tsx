@@ -142,7 +142,7 @@ export default function SearchTable({
             onReset={async () => {
                 form.resetFields()
                 const formValue = await form.getFieldsValue()
-                history.replace(`${location.pathname}?${stringify({...formValue})}`)
+                history.replace(`${location.pathname}?${stringify({ ...formValue })}`)
             }}
         >
             <Row gutter={[8, 8]}>
