@@ -57,7 +57,7 @@
         },
         {
             "title": "货币类型",
-            "dataIndex": "currencyType"
+            "dataIndex": "currencyName"
         },
         {
             "title": "开票合计金额",
@@ -554,7 +554,13 @@
             "dataIndex": "phone"
         },
         {
-            "title": "开户行及账号",
+            "title": "开户行",
+            "dataIndex": "openBankName",
+            "type": "select",
+            "enum": []
+        },
+        {
+            "title": "开户账号",
             "dataIndex": "bankCode"
         },
         {
