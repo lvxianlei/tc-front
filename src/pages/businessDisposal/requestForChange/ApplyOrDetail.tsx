@@ -172,6 +172,36 @@ export default forwardRef(function ApplyOrDetail({ id }: modalProps, ref) {
             render: (_: any, record: Record<string, any>): React.ReactNode => (
                 _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
             )
+        },
+        {
+            "key": "monomerWeight",
+            "title": "单重（修改前）",
+            width: 80,
+            dataIndex: "monomerWeight"
+        },
+        {
+            "key": "changeMonomerWeight",
+            "title": "单重（修改后）",
+            width: 80,
+            dataIndex: "changeMonomerWeight",
+            render: (_: any, record: Record<string, any>): React.ReactNode => (
+                _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+            )
+        },
+        {
+            "key": "productDescription",
+            "title": "备注（修改前）",
+            width: 80,
+            dataIndex: "productDescription"
+        },
+        {
+            "key": "changeProductDescription",
+            "title": "备注（修改后）",
+            width: 80,
+            dataIndex: "changeProductDescription",
+            render: (_: any, record: Record<string, any>): React.ReactNode => (
+                _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+            )
         }
     ]
 
