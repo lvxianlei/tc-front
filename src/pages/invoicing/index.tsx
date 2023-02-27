@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { SearchTable } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Invoicing() {
@@ -15,7 +15,7 @@ export default function Invoicing() {
         return value
     }
 
-    return <Page
+    return <SearchTable
         path="/tower-finance/invoicing"
         columns={[
             ...invoicingListHead.map((item: any) => {
@@ -34,7 +34,7 @@ export default function Invoicing() {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                width: 100,
+                width: 200,
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/taskInfo/${record.id}`)}>查看任务信息</Button>

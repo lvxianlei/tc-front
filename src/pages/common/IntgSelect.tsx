@@ -52,6 +52,7 @@ export default function IntgSelect({ onChange, width, value = { value: "", label
         onSearch={handleSearch}
         onChange={handleChange}
         placeholder={props.placeholder || "请输入"}
+        value={IValue}
         {...props} >
         {userData?.records?.map((item: any) => <Select.Option key={item.userId} value={item.userId}>{item.name}</Select.Option>)}
     </Select>

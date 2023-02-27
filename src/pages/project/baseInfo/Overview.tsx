@@ -25,7 +25,7 @@ export default function Overview({ id }: OverviewProps) {
     return <DetailContent operation={[
         <Button key="edit" style={{ marginRight: '16px' }}
             type="primary" onClick={() => history.push(`/project/management/edit/base/${id}`)}>编辑</Button>,
-        <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
+        <Button key="goback" onClick={() => history.go(-1)}>返回</Button>
     ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" style={{ padding: "0 0 8px 0", }} />

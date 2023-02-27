@@ -18,6 +18,7 @@ export interface OverViewProps {
 
 export interface EditProps {
     ref?: React.RefObject<{ onSubmit: () => Promise<any> }>
+    editId?: string
 }
 
 export interface Contract {

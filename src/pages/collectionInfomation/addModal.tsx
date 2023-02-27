@@ -10,11 +10,20 @@ import RequestUtil from '../../utils/RequestUtil';
 import { EditProps } from './collection';
 import { currencyTypeOptions, payCategoryOptions, refundModeOptions } from '../../configuration/DictionaryOptions';
 
-export default forwardRef(function AddModal({}: EditProps, ref) {
-    const [ addCollectionForm ] = Form.useForm();
-    const [ columns, setColumns ] = useState(baseColums);
-    const [ status, setStatus ] = useState<boolean>(true);
-
+export default forwardRef(function AddModal({ editId }: EditProps, ref) {
+    const [addCollectionForm] = Form.useForm();
+    const [columns, setColumns] = useState(baseColums);
+    const [status, setStatus] = useState<boolean>(true);
+    const { loading: getting, data } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/backMoney/${editId}`)
+            resole({
+                ...result,
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: editId === "new" })
     // 币种
     const currencyEnum = (currencyTypeOptions || []).map((item: { id: string, name: string }) => ({
         value: item.id,
@@ -30,10 +39,10 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
         value: item.id,
         label: item.name
     }))
-    
+
     // 定义取消以及确认的时候禁用取消
     const handleDisbled = () => {
-        const result:any = [];
+        const result: any = [];
         baseColums.map((item: any) => {
             if (item.dataIndex === "exchangeRate" || item.dataIndex === "abroadMoney") {
                 const list = {
@@ -58,8 +67,8 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
         arg = arg.replace(/\.{2,}/g, "."); // 只保留第一个. 清除多余的
         arg = arg.replace(".", "$#$").replace(/\./g, "").replace("$#$", ".");
         arg = num === 2 ?
-          arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
-          : arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
+            arg.replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+            : arg.replace(/^(\-)*(\d+)\.(\d\d\d\d).*$/, '$1$2.$3');
         return arg
     }
 
@@ -113,19 +122,19 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
         });
         // 输入对来款金额的处理
         if (results && results[0].label !== 'RMB人民币') {
-            const exchangeRate = addCollectionForm.getFieldValue("exchangeRate") ? 
-                  processingNumber(addCollectionForm.getFieldValue("exchangeRate") + "", 4)
+            const exchangeRate = addCollectionForm.getFieldValue("exchangeRate") ?
+                processingNumber(addCollectionForm.getFieldValue("exchangeRate") + "", 4)
                 : 0,
-            abroadMoney = addCollectionForm.getFieldValue("abroadMoney") ?
-                  processingNumber(addCollectionForm.getFieldValue("abroadMoney") + "", 2)
-                : 0,
-            payMoney = (exchangeRate * abroadMoney + '').indexOf(".") === -1 ? (exchangeRate * abroadMoney) : ((exchangeRate * abroadMoney * 1).toFixed(2));
-            addCollectionForm.setFieldsValue({payMoney: payMoney == 0 ? "" : payMoney, exchangeRate: exchangeRate * 1 === 0 ? "" : exchangeRate, abroadMoney: abroadMoney * 1 === 0 ? "" : abroadMoney})
+                abroadMoney = addCollectionForm.getFieldValue("abroadMoney") ?
+                    processingNumber(addCollectionForm.getFieldValue("abroadMoney") + "", 2)
+                    : 0,
+                payMoney = (exchangeRate * abroadMoney + '').indexOf(".") === -1 ? (exchangeRate * abroadMoney) : ((exchangeRate * abroadMoney * 1).toFixed(2));
+            addCollectionForm.setFieldsValue({ payMoney: payMoney == 0 ? "" : payMoney, exchangeRate: exchangeRate * 1 === 0 ? "" : exchangeRate, abroadMoney: abroadMoney * 1 === 0 ? "" : abroadMoney })
         } else {
             const payMoney = addCollectionForm.getFieldValue("payMoney") ?
-                  processingNumber(addCollectionForm.getFieldValue("payMoney") + "", 2)
+                processingNumber(addCollectionForm.getFieldValue("payMoney") + "", 2)
                 : 0;
-            addCollectionForm.setFieldsValue({payMoney: payMoney * 1 === 0 ? "" : payMoney})
+            addCollectionForm.setFieldsValue({ payMoney: payMoney * 1 === 0 ? "" : payMoney })
         }
         setColumns(result);
         setStatus(false);
@@ -140,7 +149,7 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
 
     const { loading, run } = useRequest((postData: { path: string, data: {} }) => new Promise(async (resolve, reject) => {
         try {
-            const result = await RequestUtil.post(postData.path, postData.data)
+            const result = await RequestUtil[editId === "new" ? "post" : "put"](postData.path, postData.data)
             resolve(result)
         } catch (error) {
             reject(error)
@@ -150,37 +159,40 @@ export default forwardRef(function AddModal({}: EditProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             const baseData = await addCollectionForm.validateFields()
-            await run({path: "/tower-finance/backMoney", data: baseData})
+            await run({
+                path: "/tower-finance/backMoney", data: editId === "new" ? baseData : {
+                    ...baseData,
+                    id: editId
+                }
+            })
             addCollectionForm.resetFields();
             const result: any = handleDisbled();
             setColumns(result);
             resolve(true)
         } catch (error) {
-            console.log(error, "=========")
             reject(false)
         }
     })
     useImperativeHandle(ref, () => ({ onSubmit, resetFields }), [ref, onSubmit])
     return (
         <Spin spinning={loading}>
-            <BaseInfo form={addCollectionForm} dataSource={
-                currencyEnum.map((item: any) => {
-                    if (item.label === "RMB人民币" && status) {
-                        addCollectionForm.setFieldsValue({
-                            currencyType: item.value
-                        })
+            <BaseInfo
+                form={addCollectionForm}
+                dataSource={
+                    {
+                        currencyType: currencyEnum.find((item: any) => item.label === "RMB人民币")?.value,
+                        ...data
                     }
-                })
-            } col={ 2 } edit
-                columns={ columns.map((item: any) => {
+                } col={2} edit
+                columns={columns.map((item: any) => {
                     if (item.dataIndex === 'currencyType') {
-                        return ({...item, enum: currencyEnum})
+                        return ({ ...item, enum: currencyEnum })
                     }
                     if (item.dataIndex === 'payType') {
-                        return ({...item, enum: payTypeEnum})
+                        return ({ ...item, enum: payTypeEnum })
                     }
                     if (item.dataIndex === 'payCategory') {
-                        return ({...item, enum: payCategoryEnum})
+                        return ({ ...item, enum: payCategoryEnum })
                     }
                     return item;
                 })}
