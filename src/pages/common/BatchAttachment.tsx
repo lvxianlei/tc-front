@@ -1,5 +1,5 @@
 import React, { useState, useImperativeHandle, forwardRef, useCallback, useEffect, ReactNode } from 'react'
-import { Button, Upload, Modal, Image, message, Row, Col, Spin, Empty, Checkbox, Space } from 'antd'
+import { Button, Upload, Modal, Image, message, Row, Col, Spin, Empty, Checkbox, Space, Progress } from 'antd'
 import { DetailTitle } from "../common"
 import RequestUtil from "../../utils/RequestUtil"
 import useRequest from '@ahooksjs/use-request'
@@ -74,15 +74,45 @@ interface URLProps {
     uid?: string
 }
 
+async function putFilePromise(urls: any[], fileList: any[], progressCallback: Function): Promise<any> {
+    let successCount: number = 0
+    let failCount: number = 0
+    async function putFile(urls: any[], fileList: any[], progressCallback: Function): Promise<any> {
+        return new Promise(async (resove, reject) => {
+            try {
+                const result = await Promise.all(urls.slice(0, 500).map((item: any) => new Promise(async (resolve, reject) => {
+                    try {
+                        const file: any = fileList.find((fileItem: any) => fileItem.name === item.originalName)
+                        const result: URLProps = await RequestUtil.putFile(item.pushUrl, file)
+                        successCount++
+                        progressCallback(successCount, failCount)
+                        resolve(result)
+                    } catch (error) {
+                        failCount++
+                        reject(false)
+                    }
+                })))
+                if (urls.length <= 500) {
+                    resove(result)
+                } else {
+                    const saveUrls = urls.slice(500)
+                    resove([...result, ...await putFile(saveUrls, fileList.slice(500), progressCallback)])
+                }
+            } catch (error) {
+                reject(error)
+            }
+        })
+    }
+    return putFile(urls, fileList, progressCallback)
+}
+
 export default forwardRef(function ({
     dataSource = [],
-    multiple = false,
     isTable = true,
     title = "相关附件",
     accept = undefined,
     renderActions,
     children = <Button key="enclosure" type="primary" ghost>上传</Button>,
-    maxCount = 5,
     edit = false,
     marginTop = true,
     onDoneChange = () => { },
@@ -92,18 +122,17 @@ export default forwardRef(function ({
     const inputAccepts = accept ? ({ accept }) : ({})
     const [attchs, setAttachs] = useState<FileProps[]>(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || [])
     const [visible, setVisible] = useState<boolean>(false)
-    const [uploadOSSUrlInfo, setUploadOSSUrlInfo] = useState<URLProps>({
-        pushUrl: "http://www."
-    })
-    const [uploadOSSUrlList, setUploadOSSUrlList] = useState<any>([])
+    const [batchStart, setBatchStart] = useState<boolean>(false)
+    const [batchProgress, setBatchProgress] = useState<number>(0)
     const [picInfo, setPicInfo] = useState<{ [key: string]: any }>({
         url: "",
         title: "",
         fileSuffix: ""
     })
-    const { run: saveFile } = useRequest<URLProps>((data: any) => new Promise(async (resole, reject) => {
+    let currentFile: any = { uid: "" }
+    const { run: saveFile } = useRequest<URLProps[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: URLProps = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-upload-url`, data)
+            const result: URLProps[] = await RequestUtil.post(`/sinzetech-resource/oss/endpoint/get-batch-upload-url`, data)
             resole(result)
         } catch (error) {
             reject(error)
@@ -121,83 +150,59 @@ export default forwardRef(function ({
 
     useEffect(() => setAttachs(dataSource?.map(item => ({ ...item, uid: item.id, loading: false })) || []), [JSON.stringify(dataSource)])
 
-    useEffect(() => setUploadOSSUrlList([...uploadOSSUrlList]), [JSON.stringify([...uploadOSSUrlList])])
-
     const deleteAttachData = useCallback((uid: string) => setAttachs(attchs.filter((item: any) => item.uid ? item.uid !== uid : item.id !== uid)), [setAttachs, attchs])
 
-    const handleBeforeUpload = useCallback((event: File): Promise<boolean> => new Promise(async (resove, reject) => {
-        try {
-            if (attchs.length === maxCount) {
-                message.warn(`最多可上传${maxCount}个文件...`)
-                return
-            }
-            setAttachs([...attchs, {
-                uid: (event as any).uid,
-                originalName: event.name || "",
-                loading: true
-            }])
-            const result: URLProps = await saveFile({
-                fileName: event.name,
-                fileSize: event.size,
-                isAutoClear: true
-            })
-            setUploadOSSUrlInfo(result)
-            if (multiple) {
-                uploadOSSUrlList.push(result)
-                setUploadOSSUrlList([...uploadOSSUrlList])
-            }
-            resove(true)
-        } catch (error) {
-            reject(false)
-        }
-        return false
-    }), [attchs, setAttachs, setUploadOSSUrlInfo])
-
-    const uploadChange = useCallback((event: any) => {
-        if (event.file.status === "done") {
-            if (event.file.xhr.status === 200) {
-                setAttachs(attchs.map(item => {
-                    if (item.uid === event.file.uid) {
-                        return ({
-                            ...item,
-                            loading: false,
-                            filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                            originalName: uploadOSSUrlInfo?.originalName || "",
-                            fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                            fileSize: uploadOSSUrlInfo?.fileSize || "",
-                            downloadUrl: uploadOSSUrlInfo?.downloadUrl || "",
-                            id: uploadOSSUrlInfo?.id || "",
-                        })
-                    }
-                    return item
-                }))
-                if (multiple) {
-                    const list = uploadOSSUrlList.map((res: any) => {
-                        return {
-                            id: res?.id || "",
-                            uid: event.file.uid,
-                            filePath: res?.downloadUrl || "",
-                            originalName: res?.originalName || "",
-                            fileSuffix: res?.fileSuffix || "",
-                            fileSize: res?.fileSize || "",
-                            downloadUrl: res?.downloadUrl || ""
-                        }
+    const handleBeforeUpload = useCallback((file, fileList): Promise<boolean> => {
+        const isExists: boolean = !fileList.some((item: any) => item.uid === currentFile.uid)
+        currentFile = file
+        return new Promise(async (resove, reject) => {
+            if (isExists) {
+                setAttachs([...attchs, ...fileList.map((item: any) => ({
+                    fileName: item.name,
+                    fileSize: item.size,
+                    isAutoClear: true,
+                    loading: true
+                }))])
+                setBatchStart(true)
+                setBatchProgress(0)
+                if (!isTable) {
+                    message.warning({
+                        content: <div>
+                            <div>文件已开始上传，请勿进行任何操作等待上传完成!!!</div>
+                            <Progress size="small" percent={batchProgress} />
+                        </div>,
+                        duration: 0,
+                        key: "batchProgress"
                     })
-                    onDoneChange([...list])
-                } else {
-                    onDoneChange([{
-                        id: uploadOSSUrlInfo?.id || "",
-                        uid: event.file.uid,
-                        filePath: uploadOSSUrlInfo?.downloadUrl || "",
-                        originalName: uploadOSSUrlInfo?.originalName || "",
-                        fileSuffix: uploadOSSUrlInfo?.fileSuffix || "",
-                        fileSize: uploadOSSUrlInfo?.fileSize || "",
-                        downloadUrl: uploadOSSUrlInfo?.downloadUrl || ""
-                    }])
                 }
+                const saveUrls = await saveFile(fileList.map((item: any) => ({
+                    fileName: item.name,
+                    fileSize: item.size,
+                    isAutoClear: true
+                })))
+                await putFilePromise(saveUrls, fileList, (successCount: number, failCount: number) => {
+                    setBatchProgress(parseFloat((successCount / saveUrls.length).toFixed(2)) * 100)
+                    message.open({
+                        type: "warning",
+                        content: <div>
+                            <div>文件已开始上传，请勿进行任何操作等待上传完成!!!</div>
+                            <Progress size="small" percent={Number((parseFloat((successCount / saveUrls.length).toFixed(2)) * 100).toFixed(0))} />
+                        </div>,
+                        duration: 0,
+                        key: "batchProgress"
+                    })
+                })
+                setAttachs([...attchs, ...saveUrls.map((item: any) => ({
+                    ...item,
+                    loading: false
+                }))])
+                message.destroy("batchProgress")
+                setBatchStart(false)
+                onDoneChange(saveUrls)
             }
-        }
-    }, [setAttachs, attchs, setUploadOSSUrlInfo, onDoneChange, uploadOSSUrlInfo, uploadOSSUrlList])
+            reject(false)
+        })
+    }, [attchs, setAttachs])
 
     const getDataSource = useCallback(() => attchs, [attchs])
 
@@ -293,25 +298,10 @@ export default forwardRef(function ({
                         <Upload
                             key="sub"
                             name="file"
-                            multiple={multiple}
+                            multiple
                             {...inputAccepts}
-                            maxCount={maxCount}
-                            action={`${uploadOSSUrlInfo?.pushUrl}`}
-                            headers={{
-                                "Content-Type": "application/octet-stream",
-                                expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
-                            }}
-                            method="put"
-                            showUploadList={false}
-                            customRequest={async (options: any) => {
-                                const file: any = options.file
-                                const result: any = await uploadRun(options.action, options.file)
-                                file.status = "done"
-                                file.xhr = { status: 200, response: result }
-                                uploadChange({ file })
-                            }}
                             beforeUpload={handleBeforeUpload}
-                            onChange={uploadChange}
+                            showUploadList={false}
                         >
                             <Button key="enclosure" type="primary" ghost>上传附件</Button>
                         </Upload>
@@ -319,33 +309,20 @@ export default forwardRef(function ({
                     </Space>
                 ]
             } : {}} />}
-        {!isTable && <Upload
-            key="sub"
-            name="file"
-            multiple={multiple}
-            {...inputAccepts}
-            maxCount={maxCount}
-            action={`${uploadOSSUrlInfo?.pushUrl}`}
-            headers={{
-                "Content-Type": "application/octet-stream",
-                expires: new URL(uploadOSSUrlInfo?.pushUrl).searchParams.get("Expires") || ""
-            }}
-            method="put"
-            showUploadList={false}
-            customRequest={async (options: any) => {
-                const file: any = options.file
-                const result: any = await uploadRun(options.action, options.file)
-                file.status = "done"
-                file.xhr = { status: 200, response: result }
-                uploadChange({ file })
-            }}
-            beforeUpload={handleBeforeUpload}
-            onChange={uploadChange}
-        >
-            {children}
-        </Upload>
-        }
+        {!isTable && <Spin spinning={batchStart}>
+            <Upload
+                key="sub"
+                name="file"
+                multiple
+                {...inputAccepts}
+                showUploadList={false}
+                beforeUpload={handleBeforeUpload}
+            >
+                {children}
+            </Upload>
+        </Spin>
 
+        }
         {isTable && <div style={{ border: "1px solid #eee", margin: "0px 0px 24px 0px", ...props?.style }}>
             <Row style={{ backgroundColor: "#fafafa", padding: 8, }}>
                 {isBatchDel ? <Col span={4}><Checkbox indeterminate={indeterminate} onChange={onCheckAllChange} checked={checkAll} /></Col> : null}

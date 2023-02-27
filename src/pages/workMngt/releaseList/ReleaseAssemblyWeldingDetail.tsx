@@ -266,6 +266,8 @@ export default function ReleaseList(): React.ReactNode {
                         pagination={{
                             current: pages?.current,
                             pageSize: pages?.size,
+                            total: pages?.total,
+                            showSizeChanger: true,
                             onChange: handleCHange
                         }}
                         onRow={(record: any) => ({
