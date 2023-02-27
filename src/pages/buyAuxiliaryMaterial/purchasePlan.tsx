@@ -112,8 +112,8 @@ export default function PurchasePlan() {
             value.startCreateTime = null
             value.endCreateTime = null
         }
-        if (value.applyName) {
-            value.purchaserId = value.applyName.value
+        if (value.purchaserId) {
+            value.purchaserId = value.purchaserId.value
         } else {
             value.purchaserId = null
         }
