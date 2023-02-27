@@ -157,6 +157,7 @@ export default function CollectionInfomation(): React.ReactNode {
                                     <Button
                                         type="link"
                                         className="btn-operation-link"
+                                        disabled={record.confirmStatus === 2}
                                         onClick={() => {
                                             setEditId(record.id)
                                             setVisible(true)
@@ -264,12 +265,28 @@ export default function CollectionInfomation(): React.ReactNode {
                         )
                     },
                     {
+                        name: 'startCreateTime',
+                        label: '创建时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                    },
+                    {
+                        name: 'createUserName',
+                        label: '导入人',
+                        children: <Input placeholder="请输入导入人" />
+                    },
+                    {
+                        name: 'confirmUserName',
+                        label: '确认人',
+                        children: <Input placeholder="请输入确认人" />
+                    },
+                    {
                         name: 'startRefundTime',
                         label: '来款日期',
                         children: <DatePicker.RangePicker format="YYYY-MM-DD" />
                     },
                     {
                         name: 'payCompany',
+                        label: '查询',
                         children: <Input placeholder="请输入来款单位进行查询" style={{ width: 300 }} />
                     },
                 ]}
