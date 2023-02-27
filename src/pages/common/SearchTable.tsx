@@ -88,7 +88,7 @@ export default function SearchTable({
                 params.size = uriSearch.pageSize || pageSize
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
-            const paramsOptions = stringify({ ...filterValue, ...params, ...search })
+            const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -142,7 +142,7 @@ export default function SearchTable({
             onReset={async () => {
                 form.resetFields()
                 const formValue = await form.getFieldsValue()
-                history.replace(`${location.pathname}?${stringify({...formValue})}`)
+                history.replace(`${location.pathname}?${stringify({ ...formValue })}`)
             }}
         >
             <Row gutter={[8, 8]}>
