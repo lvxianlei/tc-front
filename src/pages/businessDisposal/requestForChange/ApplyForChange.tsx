@@ -351,7 +351,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         getLoading(true)
                         await submitRun({
                             ...value,
-                            productChangeDetailList: values
+                            productChangeDetailList: values,
+                            fileIds: attachRef.current?.getDataSource().map(item => item.id),
                         })
                         resolve(true);
                     })
