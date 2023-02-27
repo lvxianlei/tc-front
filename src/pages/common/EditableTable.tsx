@@ -76,17 +76,27 @@ const formatColunms = (columns: any[], haveIndex: boolean) => {
                     <FormItemType data={{ title: "", dataIndex: "id" }} type="text" />
                 </Form.Item>
             }
-        }]
+        },
+        {
+            title: "",
+            code: "key",
+            width: 0,
+            render: (_value: any, _record: any, index: number) => {
+                return <Form.Item
+                    hidden
+                    name={['submit', index, "key"]}>
+                    <FormItemType data={{ title: "", dataIndex: "key" }} type="text" />
+                </Form.Item>
+            }
+        },
+    ]
 }
 
 export default function EditableTable({
     columns, dataSource = [], onChange, form, haveNewButton = true, addData = {},
     newButtonTitle = "新增一行", haveOpration = true, haveIndex = true, opration, rowKey, ...props
 }: EditableTableProps): JSX.Element {
-    const [editableDataSource, setEditableDataSource] = useState<any[]>(dataSource.map(item => ({
-        ...item,
-        id: item.id || (Math.random() * 1000000).toFixed(0)
-    })))
+    const [editableDataSource, setEditableDataSource] = useState<any[]>([])
 
     const [eidtableColumns, setEditableColumns] = useState<any[]>(formatColunms(columns, haveIndex))
 
@@ -95,16 +105,16 @@ export default function EditableTable({
     }, [JSON.stringify(columns)])
 
     useEffect(() => {
-        const newDataSource = dataSource.map(item => ({ ...item, id: item.id || (Math.random() * 1000000).toFixed(0) }))
+        const newDataSource = dataSource.map(item => ({ ...item, key: (Math.random() * 1000000).toFixed(0) }))
         setEditableDataSource(newDataSource)
         form && form.setFieldsValue({ submit: newDataSource })
     }, [JSON.stringify(dataSource)])
 
-    const removeItem = useCallback((id: string) => {
-        const removedDataSource = editableDataSource.filter(item => item.id !== id);
+    const removeItem = useCallback((key: string) => {
+        const removedDataSource = editableDataSource.filter(item => item.key !== key);
         form && form.setFieldsValue({ submit: removedDataSource })
         onFormChange && onFormChange({
-            submit: [editableDataSource.find((item: any) => item.id === id)],
+            submit: [editableDataSource.find((item: any) => item.key === key)],
             type: "remove"
         }, { submit: removedDataSource })
         setEditableDataSource(removedDataSource)
@@ -121,9 +131,9 @@ export default function EditableTable({
     const handleNewButtonClick = async () => {
         try {
             form && await form.validateFields();
-            const editableDataSource = form?.getFieldsValue()
+            const editableDataSource = form?.getFieldsValue(true)
             const newRowData = {
-                id: `create-${(Math.random() * 1000000).toFixed(0)}`,
+                key: (Math.random() * 1000000).toFixed(0),
                 ...(typeof addData === "function" ? addData(editableDataSource?.submit || []) : addData)
             }
             const addedEditDataSource = [newRowData, ...editableDataSource?.submit || []]
@@ -148,7 +158,7 @@ export default function EditableTable({
         <CommonAliTable
             size="small"
             className="edit"
-            primaryKey={rowKey || "id"}
+            primaryKey="key"
             style={{ overflow: 'auto', paddingBottom: 20 }}
             defaultColumnWidth={150}
             columns={haveOpration ? [
@@ -158,7 +168,12 @@ export default function EditableTable({
                     lock: true,
                     width: 40,
                     code: "opration",
-                    render: (_: undefined, record: any) => <Button style={{ paddingLeft: 0 }} size="small" type="link" onClick={() => removeItem(record.id)}>删除</Button>
+                    render: (_: undefined, record: any) => <Button
+                        style={{ paddingLeft: 0 }}
+                        size="small"
+                        type="link"
+                        onClick={() => removeItem(record.key)}
+                    >删除</Button>
                 }
             ] : eidtableColumns}
             dataSource={editableDataSource}

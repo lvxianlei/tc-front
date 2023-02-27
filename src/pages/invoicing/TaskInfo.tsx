@@ -38,16 +38,11 @@ export default function Overview() {
         const saleInvoiceData = await saleInvoiceForm.validateFields()
         await saveRun({
             ...transferData,
-            invoicingSaleDTOS: saleInvoiceData?.submit?.map((item: any) => {
-                if (item.id.includes("create-")) {
-                    delete item.id
-                }
-                return ({
-                    ...item,
-                    currencyType: item.currencyType?.value,
-                    currencyName: item.currencyType?.label,
-                })
-            })
+            invoicingSaleDTOS: saleInvoiceData?.submit?.map((item: any) => ({
+                ...item,
+                currencyType: item.currencyType?.value,
+                currencyName: item.currencyType?.label,
+            }))
         })
         await message.success("保存成功")
         history.goBack()
