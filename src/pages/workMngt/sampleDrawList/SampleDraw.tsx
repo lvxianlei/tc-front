@@ -98,7 +98,7 @@ export default function SampleDraw(): React.ReactNode {
 
     const del = () => {
         if (selectedKeys.length > 0) {
-            RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${selectedKeys.join(',')}`).then(res => {
+            RequestUtil.post(`/tower-science/smallSample/sampleDelete`, { productStructureIdList: selectedKeys }).then(res => {
                 message.success('删除成功');
                 history.go(0);
             })
@@ -128,8 +128,7 @@ export default function SampleDraw(): React.ReactNode {
             } else {
                 const index = idList?.indexOf(rowId)
                 setRowId(idList[index - 1])
-                const codeIndex = codeList?.indexOf(code)
-                setCode(codeList[codeIndex - 1])
+                setCode(codeList[index - 1])
                 show(idList[index - 1])
             }
         } else {
@@ -138,8 +137,7 @@ export default function SampleDraw(): React.ReactNode {
             } else {
                 const index = idList?.indexOf(rowId)
                 setRowId(idList[index + 1])
-                const codeIndex = codeList?.indexOf(code)
-                setCode(codeList[codeIndex + 1])
+                setCode(codeList[index + 1])
                 show(idList[index + 1])
             }
 
@@ -254,7 +252,7 @@ export default function SampleDraw(): React.ReactNode {
                 <span>小样图数：<span style={{ color: '#FF8C00' }}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
             </Space>
             <div style={{ display: 'flex' }}>
-                <div style={{ width: '40%' }}>
+                <div className={styles.tableScroll}>
                     <SearchTable
                         path="/tower-science/smallSample/sampleList"
                         columns={params.status === '1'
