@@ -34,7 +34,7 @@ export default function Invoicing() {
         if (value.purchaserId) {
             value.purchaserId = value.purchaserId.value
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
 

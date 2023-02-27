@@ -1361,7 +1361,7 @@
       "authority": "tc_erp_sw_auxiliary_purchase_plan_purchse_list"
     },
     { //辅材采购管理-辅材采购汇总
-      "name": "辅材采购计划",
+      "name": "辅材采购汇总",
       "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "module": "./pages/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "exact": true,
@@ -3504,6 +3504,20 @@
       "name": "原材料领料单详情",
       "path": "/stock/pick/detail/:id/:approval",
       "module": "./pages/stock/rawMaterialPick/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_info"
+    },
+    { // 辅材库存-辅材领料单
+      "name": "辅材领料单",
+      "path": "/auxStock/pickWarehouse",
+      "module": "./pages/auxStock/pickWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out_list"
+    },
+    { // 辅材库存-辅材领料单-详情
+      "name": "辅材领料单详情",
+      "path": "/auxStock/pickWarehouse/detail/:id/:approval",
+      "module": "./pages/auxStock/pickWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     }

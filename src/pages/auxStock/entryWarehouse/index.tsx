@@ -147,7 +147,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(tabs === 1 ? baseColumn : baseDetail) as any,
+                    ...(tabs === 1 ? baseColumn : baseDetail.map((item)=>{
+                        switch (item.dataIndex) {
+                            case "num":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalTaxPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                }) 
+                            default:
+                                return item
+                        }
+                    })) as any,
                     {
                         title: '操作',
                         dataIndex: 'key',
@@ -236,6 +262,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">采购入库</Select.Option>
                                 <Select.Option value="2">盘点入库</Select.Option>
+                                <Select.Option value="4">退货出库</Select.Option>
                             </Select>
                         )
                     },
@@ -294,7 +321,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     setVisible(false)
                     editRef.current?.resetFields()
                 }}>
-                <CreatePlan ref={editRef} id={editId} type={oprationType} />
+                <CreatePlan ref={editRef} id={editId} type={oprationType} visible={visible}/>
             </Modal>
         </>
     )

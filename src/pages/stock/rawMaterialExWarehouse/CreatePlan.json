@@ -156,6 +156,10 @@
     ],
     "material": [
         {
+            "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber"
+        },
+        {
             "title": "收货标识码",
             "dataIndex": "receiveBatchNumber"
         },
@@ -252,6 +256,10 @@
             }
         ],
         "columns": [
+            {
+                "title": "收货批次",
+                "dataIndex": "realReceiveBatchNumber"
+            },
             {
                 "title": "收货标识码",
                 "dataIndex": "receiveBatchNumber"
@@ -592,7 +600,7 @@
         "columns": [
             {
                 "title": "领料单号",
-                "dataIndex": "receiveBatchNumber"
+                "dataIndex": "materialPickingNumber"
             },
             {
                 "title": "收货标识码",

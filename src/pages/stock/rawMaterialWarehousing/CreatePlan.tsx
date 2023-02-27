@@ -2,26 +2,32 @@
  * 创建计划列表
  */
 import React, { useEffect, useState } from 'react';
-import { Modal, Form, Button, message, Spin } from 'antd';
+import { Modal, Form, Button, message, Spin, InputNumber } from 'antd';
 import { BaseInfo, CommonTable, DetailTitle, PopTableContent } from '../../common';
 import {
     material,
     baseInfoColumn,
-    addMaterial
+    addMaterial,
+    addMaterialB
 } from "./CreatePlan.json";
-import { qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
+import { materialStandardOptions, materialTextureOptions, qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
 import "./CreatePlan.less";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import moment from 'moment';
 
 export default function CreatePlan(props: any): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [visibleB, setVisibleB] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [supplierId, setSupplierId] = useState<any>("");
+    const [type, setType] = useState<any>('1');
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
+    const structureTextureEnum:any = materialTextureOptions?.map((item: { id: string, name: string }) => ({ value: item.name, label: item.name }))
+    const materialStandardEnum:any = materialStandardOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
 
     let [count, setCount] = useState<number>(1);
 
@@ -52,6 +58,33 @@ export default function CreatePlan(props: any): JSX.Element {
         })])
         setVisible(false)
     }
+    const handleAddModalOkB = () => {
+        const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
+        for (let i = 0; i < popDataList.length; i += 1) {
+            for (let p = 0; p < materialList.length; p += 1) {
+                if (popDataList[i].id === materialList[p].id) {
+                    materialList[p].structureTexture = popDataList[i].structureTexture;
+                    materialList[p].materialTexture = popDataList[i].materialTexture;
+                }
+            }
+        }
+        setMaterialList([...materialList, ...newMaterialList.map((item: any) => {
+            return ({
+                ...item,
+                price: item?.unTaxPrice,
+                totalPrice: item?.totalUnTaxPrice
+            })
+        })])
+        setPopDataList([...materialList, ...newMaterialList.map((item: any, index: number) => {
+            return ({
+                ...item,
+                price: item?.unTaxPrice,
+                totalPrice: item?.totalUnTaxPrice,
+                key: `${item.id}-${index}-${Math.random()}-${new Date().getTime()}`
+            })
+        })])
+        setVisibleB(false)
+    }
 
     // 移除
     const handleRemove = (index: number) => {
@@ -80,14 +113,50 @@ export default function CreatePlan(props: any): JSX.Element {
             result
         ])
     }
+    const handleNumChange = (value: number, id: string) => {
+        const list = popDataList.map((item: any) => {
+            if (item.id === id) {
+                return ({
+                    ...item,
+                    num: value,
+                    totalTaxPrice: type===4||type==='4'?(Number(item.taxPrice || 0) * (item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000)
+                        : (Number(item?.proportion || 1) * value / 1000)) ).toFixed(2):(Number(item.taxPrice || 0) * value ).toFixed(2),
+                    totalPrice: type===4||type==='4'?(Number(item.price || 0) *  (item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000)
+                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000)
+                        : (Number(item?.proportion || 1) * value / 1000)) ).toFixed(2):(Number(item.price || 0) * value ).toFixed(2),
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * value / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * value / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * value / 1000).toFixed(5)
+                })
+            }
+            return item
+        })
+        setMaterialList(list.slice(0));
+        setPopDataList(list.slice(0))
+    }
 
     const performanceBondChange = (fields: { [key: string]: any }, allFields: { [key: string]: any }) => {
+        if (fields.warehousingType) {
+            console.log(fields.warehousingType)
+            setType(fields.warehousingType)
+            setPopDataList([])
+            setMaterialList([])
+            return;
+        }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
         if (fields.supplierId) {
             setSupplierId(fields.supplierId?.id);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
     }
@@ -112,8 +181,19 @@ export default function CreatePlan(props: any): JSX.Element {
             //     return false;
             // }
             saveRun({
-                warehousingEntryDetailList: materialList,
+                warehousingEntryDetailList: materialList.map((item:any)=>{
+                    return {
+                        ...item,
+                        materialStockId: type==='4'||type === 4 ? item.materialStockId ? item.materialStockId : item.id : '', 
+                        num: type==='4' ||type === 4? 0 - item.num : item.num, 
+                        totalTaxPrice: type==='4'||type === 4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                        totalPrice:type==='4'||type === 4 ? 0 - item.totalPrice : item.totalPrice,
+                        totalWeight: type==='4'||type === 4 ? 0 - item.totalWeight : item.totalWeight,
+                        id: props.type === 'create' ? '': item.id 
+                    }
+                }),
                 ...baseInfo,
+                
                 contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
                 contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
                 supplierId: baseInfo.supplierId?.records[0]?.id,
@@ -131,7 +211,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 warehousingType: "1",
                 warehouseId:'',
                 warehousingEntryNumber:'',
-                supplierId:''
+                supplierId:'',
+                warehousingEntryTime: moment().format('YYYY-MM-DD')
             })
         }
     }, [props.visible])
@@ -140,12 +221,30 @@ export default function CreatePlan(props: any): JSX.Element {
         try {
             if(props.type === "edit"){
                 const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/warehousingEntry/${props.id}`)
-                setPopDataList(result?.warehousingEntryDetailList)
-                setMaterialList(result?.warehousingEntryDetailList)
+                setPopDataList(result?.warehousingEntryDetailList.map((item:any)=>{
+                    return {
+                        ...item,
+                        num: result?.warehousingType==='4'|| result?.warehousingType===4? 0 - item.num : item.num, 
+                        totalTaxPrice: result?.warehousingType==='4'|| result?.warehousingType===4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                        totalPrice: result?.warehousingType==='4'|| result?.warehousingType===4? 0 - item.totalPrice : item.totalPrice,
+                        totalWeight: result?.warehousingType==='4'|| result?.warehousingType===4 ? 0 - item.totalWeight : item.totalWeight,
+                    }
+                }))
+                setMaterialList(result?.warehousingEntryDetailList.map((item:any)=>{
+                    return {
+                        ...item,
+                        num: result?.warehousingType==='4'|| result?.warehousingType===4 ? 0 - item.num : item.num, 
+                        totalTaxPrice: result?.warehousingType==='4'|| result?.warehousingType===4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                        totalPrice: result?.warehousingType==='4' || result?.warehousingType===4? 0 - item.totalPrice : item.totalPrice,
+                        totalWeight: result?.warehousingType==='4'|| result?.warehousingType===4 ? 0 - item.totalWeight : item.totalWeight,
+                    }
+                }))
+                setType(result?.warehousingType)
                 result?.warehouseId && result?.warehouseId!==null&& setWarehouseId(result?.warehouseId)
                 result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
                 addCollectionForm.setFieldsValue({
                     ...result,
+                    warehousingEntryTime: moment(result.warehousingEntryTime),
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
                     supplierId: {
                         id: result?.supplierId,
@@ -162,6 +261,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 })
                 resole({
                     ...result,
+                    warehousingEntryTime: moment(result.warehousingEntryTime),
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
                     supplierId: {
                         id: result?.supplierId,
@@ -196,7 +296,7 @@ export default function CreatePlan(props: any): JSX.Element {
     }), { manual: true })
 
     
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/warehousingEntry`
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
@@ -233,7 +333,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
             ]}
@@ -283,7 +383,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="入库明细" />
                 <div className='btnWrapper'>
-                    <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>
+                    { type === '4'? <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisibleB(true)}>选择</Button>
+                    :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>}
                     <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
                 </div>
                 <CommonTable
@@ -304,7 +405,32 @@ export default function CreatePlan(props: any): JSX.Element {
                                 )
                             }
                         },
-                        ...material,
+                        ...material.map((item: any) => {
+                            if (["num"].includes(item.dataIndex)&&(type==='4'||type === 4)) {
+                                return ({
+                                    ...item,
+                                    render: (value: number, records: any, key: number) => {return  <InputNumber value={ value || undefined} min={0} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  />
+
+                                    // <Form.Item 
+                                    //     name={['list', key, 'num']}
+                                    //     initialValue={value||undefined}
+                                    //     rules={[{
+                                    //         validator: async (rule: any, value: any, callback: (error?: string) => void) => {
+                                    //             console.log(records?.rawStockId)
+                                    //             const resData:any = await RequestUtil.get(`/tower-storage/materialStock/outDetails?warehouseId=${warehouseId}&current=1&size=10&rawStockId=${records?.rawStockId}`);
+                                    //             if(resData.records[0]?.num < value)
+                                    //             return Promise.reject(`数量不可大于${resData.records[0]?.num}`);
+                                    //             else return Promise.resolve('数量可用');
+                                    //         }
+                                    //     }]}
+                                    //     >
+                                    //         <InputNumber  onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0} />
+                                    //     </Form.Item>
+                                    // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
+                                }})
+                            }
+                            return item;
+                        }),
                         {
                             title: "操作",
                             fixed: "right",
@@ -344,6 +470,52 @@ export default function CreatePlan(props: any): JSX.Element {
                                     ...item,
                                     price: item?.price?item?.price:item?.unTaxPrice,
                                     totalPrice: item?.totalPrice?item?.totalPrice:item?.totalUnTaxPrice,
+                                })
+                            }) || [])
+                        }}
+                    />
+                </Modal>
+                <Modal width={1100} title={`选择库存`} destroyOnClose
+                    visible={visibleB}
+                    onOk={handleAddModalOkB}
+                    onCancel={() => {
+                        setVisibleB(false);
+                    }}
+                >
+                    <PopTableContent
+                        data={{
+                            ...addMaterialB as any,
+                            path: `${addMaterialB.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`,
+                            search: addMaterialB.search.map((res: any) => {
+                                if (res.dataIndex === 'materialStandard') {
+                                    return ({
+                                        ...res,
+                                        enum: [{value:'',label:'全部'},...materialStandardEnum]
+                                    })
+                                }
+                                if (res.dataIndex === 'structureTexture') {
+                                    return ({
+                                        ...res,
+                                        enum: [{value:'',label:'全部'},...structureTextureEnum]
+                                    })
+                                }
+                                return res
+                            }),
+                        }}
+                        value={{
+                            id: "",
+                            records: popDataList,
+                            value: ""
+                        }}
+                        onChange={(fields: any[]) => {
+                            console.log(fields)
+                            setMaterialList(fields.map((item: any, index: number) => {
+                                return ({
+                                    ...item,
+                                    price: item?.price?item?.price:item?.unTaxPrice,
+                                    totalPrice: item?.totalPrice?item?.totalPrice:item?.totalUnTaxPrice,
+                                    reservoirArea: item?.reservoirName,
+                                    location: item?.locatorName,
                                 })
                             }) || [])
                         }}
