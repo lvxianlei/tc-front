@@ -176,10 +176,10 @@ export default function SampleDrawList(): React.ReactNode {
                     label: '优先级',
                     children: <Select style={{ width: "100px" }}>
                         <Select.Option value={''} key={''}>全部</Select.Option>
-                        <Select.Option value={0} key={0}>紧急</Select.Option>
-                        <Select.Option value={1} key={1}>高</Select.Option>
-                        <Select.Option value={2} key={2}>中</Select.Option>
-                        <Select.Option value={3} key={3}>低</Select.Option>
+                        <Select.Option value={1} key={1}>紧急</Select.Option>
+                        <Select.Option value={2} key={2}>高</Select.Option>
+                        <Select.Option value={3} key={3}>中</Select.Option>
+                        <Select.Option value={4} key={4}>低</Select.Option>
                     </Select>
                 },
                 {

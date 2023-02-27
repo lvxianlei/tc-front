@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
-import { Button, Form, Input, Select, Modal, Spin, message } from "antd";
+import { Button, Form, Input, Select, Modal, Spin, message, InputNumber } from "antd";
 import { Attachment, AttachmentRef, BaseInfo, CommonTable, DetailContent } from "../../common";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
@@ -133,6 +133,30 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             "title": "产品类型（修改后）",
             "width": 80,
             "dataIndex": "changeProductType"
+        },
+        {
+            "key": "monomerWeight",
+            "title": "单重（修改前）",
+            "width": 80,
+            "dataIndex": "monomerWeight"
+        },
+        {
+            "key": "changeMonomerWeight",
+            "title": "单重（修改后）",
+            "width": 80,
+            "dataIndex": "changeMonomerWeight"
+        },
+        {
+            "key": "productDescription",
+            "title": "备注（修改前）",
+            "width": 80,
+            "dataIndex": "productDescription"
+        },
+        {
+            "key": "changeProductDescription",
+            "title": "备注（修改后）",
+            "width": 80,
+            "dataIndex": "changeProductDescription"
         },
         {
             "key": "operation",
@@ -570,6 +594,26 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                                 )
                                             }
                                         </Select>
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeMonomerWeight") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeMonomerWeight"]}>
+                                        <InputNumber min={0} max={9999999.99} precision={2}/>
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeProductDescription") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeProductDescription"]}>
+                                        <Input maxLength={800}/>
                                     </Form.Item>
                                 )
                             })

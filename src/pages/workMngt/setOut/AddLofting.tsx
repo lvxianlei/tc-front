@@ -551,7 +551,7 @@ export default forwardRef(function AddLofting({ id, productSegmentId, type, rowD
             dataIndex: 'slottedForm',
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
                 <Form.Item name={['data', index, "slottedForm"]} initialValue={_}>
-                    <InputNumber size="small" min={1} max={1} />
+                    <InputNumber size="small" min={1} precision={1}/>
                 </Form.Item>
             )
         },
