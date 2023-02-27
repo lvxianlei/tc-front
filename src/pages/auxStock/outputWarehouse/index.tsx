@@ -140,6 +140,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }else{
             value.applyStaffId = ''
         }
+        getWeight({...value})
         // setFilterValue({ ...filterValue, ...value })
         return value
     }
@@ -227,6 +228,17 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(error)
         }
     }))
+    // 获取统计的数据
+    const { run: getWeight, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/detail/statistics`, {
+                ...filterValue
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
     return (
         <>
             <Page
@@ -248,6 +260,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Radio.Button value="b">出库明细</Radio.Button>
                             </Radio.Group>
                         </div>
+                        <span>
+                            <span >总数量：<span style={{ marginRight: 12, color: "#FF8C00" }}>{weightData?.totalNum||0.00}</span></span>
+                            <span >含税金额合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{weightData?.totalTaxPrice||0.00}</span></span>
+                            <span >不含税金额合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{weightData?.totalUnTaxPrice||0.00}</span></span>
+                        </span>
                     </>
                 }
                 searchFormItems={[
