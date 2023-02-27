@@ -600,7 +600,7 @@
         "columns": [
             {
                 "title": "领料单号",
-                "dataIndex": "receiveBatchNumber"
+                "dataIndex": "pickingNumber"
             },
             {
                 "title": "收货标识码",
