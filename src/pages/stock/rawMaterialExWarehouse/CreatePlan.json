@@ -600,7 +600,7 @@
         "columns": [
             {
                 "title": "领料单号",
-                "dataIndex": "pickingNumber"
+                "dataIndex": "materialPickingNumber"
             },
             {
                 "title": "收货标识码",
