@@ -15,12 +15,13 @@ export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
-    const [visible, setVisible] = useState<boolean>(false);
     const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<any>();
     const [form] = Form.useForm();
     const [searchForm] = useForm();
-    const [rowId, setRowId] = useState<string>('')
+    const [rowId, setRowId] = useState<string>('');
+    const [code, setCode] = useState<string>('');
+    const [codeList, setCodeList] = useState<any>()
     const [idList, setIdList] = useState<any>()
     const [headerName, setHeaderName] = useState({
         uploadSmallSampleCount: 0,
@@ -48,13 +49,6 @@ export default function SampleDraw(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
             key: 'segmentName',
             title: '段名',
             width: 50,
@@ -73,52 +67,13 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'materialName'
         },
         {
-            key: 'smallSample',
-            title: '小样图名称',
-            width: 100,
-            dataIndex: 'smallSample'
-        },
-        {
             key: 'uploadTime',
             title: '上传时间',
             width: 200,
             dataIndex: 'uploadTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            width: 100,
-            fixed: 'right' as FixedType,
-            render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {params.status === '1' ? <Popconfirm
-                        title="要删除该条数据吗？"
-                        okText="确认"
-                        cancelText="取消"
-                        onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${record.id}`).then(() => {
-                            message.success('删除成功！');
-                        }).then(async () => {
-                            const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
-                            setHeaderName(data);
-                            setRefresh(!refresh)
-                        })}
-                        disabled={!record.smallSample}
-                    >
-                        <Button type="link" disabled={!record.smallSample}>
-                            删除
-                        </Button>
-                    </Popconfirm> : null}
-                    <Button type='link' onClick={() => {
-                        show(record.id);
-                        setVisible(true)
-                    }}>查看</Button>
-                </Space>
-            )
         }
     ]
 
-    const handleModalCancel = () => { setVisible(false); setUrl(''); };
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const onFilterSubmit = (value: any) => {
         if (value.upLoadTime) {
@@ -163,13 +118,26 @@ export default function SampleDraw(): React.ReactNode {
 
     const switchImg = (direction: string) => {
         if (direction === 'left') {
-            const index = idList?.indexOf(rowId)
-            setRowId(idList[index - 1])
-            show(idList[index - 1])
+            if (idList?.indexOf(rowId) === 0) {
+                message.warning('已经是第一张了！')
+            } else {
+                const index = idList?.indexOf(rowId)
+                setRowId(idList[index - 1])
+                const codeIndex = codeList?.indexOf(code)
+                setCode(codeList[codeIndex - 1])
+                show(idList[index - 1])
+            }
         } else {
-            const index = idList?.indexOf(rowId)
-            setRowId(idList[index + 1])
-            show(idList[index + 1])
+            if (idList?.indexOf(rowId) === idList?.length - 1) {
+                message.warning('已经是最后一张了！')
+            } else {
+                const index = idList?.indexOf(rowId)
+                setRowId(idList[index + 1])
+                const codeIndex = codeList?.indexOf(code)
+                setCode(codeList[codeIndex + 1])
+                show(idList[index + 1])
+            }
+
         }
     }
 
@@ -198,43 +166,6 @@ export default function SampleDraw(): React.ReactNode {
 
     return (
         <div onKeyUp={onKeyUp} id="SampleDraw">
-            <Modal
-                visible={visible}
-                title="预览"
-                footer={false}
-                onCancel={handleModalCancel}
-                destroyOnClose
-                centered
-                width="80%">
-                {
-                    url?.fileSuffix === "dxf" ? <>
-                        <iframe
-                            src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
-                            // src={`http://localhost:4000/#/dxfPreview?url=${encodeURIComponent(url?.downloadUrl)}`}
-                            style={{
-                                border: "none",
-                                width: "100%",
-                                minHeight: 400,
-                                maxHeight: 1200,
-                                padding: 10
-                            }}
-                        />
-                    </> : url?.fileSuffix === "pdf" ? <>
-                        <iframe
-                            src={`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(url?.originalName as string)}&url=${encodeURIComponent(url?.downloadUrl as string)}`}
-                            style={{
-                                border: "none",
-                                width: "100%",
-                                minHeight: 400,
-                                maxHeight: 1200,
-                                padding: 10
-                            }}
-                        />
-                    </> : <Image
-                        src={url?.downloadUrl}
-                    />
-                }
-            </Modal>
             <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFilterSubmit}>
                 {
                     searchFormItems?.map((res: any) => {
@@ -298,26 +229,63 @@ export default function SampleDraw(): React.ReactNode {
                 <Col span={8}>
                     <SearchTable
                         path="/tower-science/smallSample/sampleList"
-                        columns={columns}
+                        columns={params.status === '1'
+                            ?
+                            [...columns,
+                            {
+                                key: 'operation',
+                                title: '操作',
+                                dataIndex: 'operation',
+                                width: 80,
+                                fixed: 'right' as FixedType,
+                                render: (_: undefined, record: any): React.ReactNode => (
+                                    <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                                        <Popconfirm
+                                            title="要删除该条数据吗？"
+                                            okText="确认"
+                                            cancelText="取消"
+                                            onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${record.id}`).then(() => {
+                                                message.success('删除成功！');
+                                            }).then(async () => {
+                                                const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
+                                                setHeaderName(data);
+                                                history.go(0);
+                                            })}
+                                            disabled={!record.smallSample}
+                                        >
+                                            <Button type="link" disabled={!record.smallSample}>
+                                                删除
+                                            </Button>
+                                        </Popconfirm>
+                                    </Space>
+                                )
+                            }]
+                            : columns
+                        }
                         refresh={refresh}
                         filterValue={{ ...filterValue, productCategoryId: params.id }}
                         tableProps={{
                             rowSelection: {
                                 selectedRowKeys: selectedKeys,
                                 onChange: SelectChange
-                            }
+                            },
+                            pageSizeOptions: [10, 20, 50, 100, 1000]
                         }}
-                        pageSize={20}
+                        pageSize={1000}
                         searchFormItems={[]}
                         getDataSource={(data: any) => {
-                            setRowId(data?.records[0]?.id)
-                            show(data?.records[0]?.id)
-                            setIdList(data?.records?.map((res: any) => res?.id))
+                            console.log(data?.records[0])
+                            data?.records[0] && setRowId(data?.records[0]?.id)
+                            data?.records[0] && show(data?.records[0]?.id)
+                            data?.records[0] && setCodeList(data?.records?.map((res: any) => res?.code))
+                            data?.records[0] && setCode(data?.records[0]?.code)
+                            data?.records[0] && setIdList(data?.records?.map((res: any) => res?.id))
                         }}
                         getRowProps={(record: Record<string, any>) => {
                             return ({
                                 onClick: () => {
                                     setRowId(record?.id)
+                                    setCode(record?.code)
                                     show(record?.id)
                                 },
                                 className: record?.id === rowId ? styles.highLight : undefined
@@ -329,11 +297,14 @@ export default function SampleDraw(): React.ReactNode {
                     <Spin spinning={imgLoading}>
                         <div style={{ padding: '16px' }}>
                             <Row gutter={12}>
-                                <Col span={12}>
-                                    <Button value="left" disabled={idList?.indexOf(rowId) === 0} onClick={() => switchImg("left")} block><LeftOutlined /></Button>
+                                <Col span={8}>
+                                    <Button value="left" disabled={idList?.indexOf(rowId) === 0} onClick={() => switchImg("left")} block>上一张</Button>
                                 </Col>
-                                <Col span={12}>
-                                    <Button value="right" disabled={idList?.indexOf(rowId) === idList?.length - 1} onClick={() => switchImg("right")} block><RightOutlined /></Button>
+                                <Col span={8} style={{ textAlign: 'center' }}>
+                                    <span>构件编号：{code}</span>
+                                </Col>
+                                <Col span={8}>
+                                    <Button value="right" disabled={idList?.indexOf(rowId) === idList?.length - 1} onClick={() => switchImg("right")} block>下一张</Button>
                                 </Col>
                             </Row>
                             <div style={{
@@ -344,11 +315,12 @@ export default function SampleDraw(): React.ReactNode {
                                     url?.fileSuffix === "dxf" ?
                                         <>
                                             <iframe
+                                                key={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
                                                 src={`${process.env.DXF_PREVIEW}?url=${encodeURIComponent(url?.downloadUrl)}`}
                                                 style={{
                                                     border: "none",
                                                     width: "100%",
-                                                    minHeight: 800,
+                                                    minHeight: 700,
                                                     padding: 10
                                                 }}
                                             />
@@ -356,21 +328,24 @@ export default function SampleDraw(): React.ReactNode {
                                         : url?.fileSuffix === "pdf" ?
                                             <>
                                                 <iframe
+                                                    key={`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(url?.originalName as string)}&url=${encodeURIComponent(url?.downloadUrl as string)}`}
                                                     src={`${process.env.PDF_PREVIEW}?fileName=${encodeURIComponent(url?.originalName as string)}&url=${encodeURIComponent(url?.downloadUrl as string)}`}
                                                     style={{
                                                         border: "none",
                                                         width: "100%",
-                                                        minHeight: 800,
+                                                        minHeight: 700,
                                                         padding: 10
                                                     }}
                                                 />
                                             </>
                                             : url?.fileSuffix === "error" ?
                                                 <Result
+                                                    key={url?.id}
                                                     icon={<FileUnknownOutlined />}
                                                     title="暂无数据，请进行导入！"
                                                 />
                                                 : <Image
+                                                    key={url?.downloadUrl}
                                                     style={{ width: '100%', height: "100%", minHeight: '400px', maxHeight: "700px" }}
                                                     src={url?.downloadUrl}
                                                 />
