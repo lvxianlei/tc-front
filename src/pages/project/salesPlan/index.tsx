@@ -11,7 +11,10 @@ export default function Index() {
     const history = useHistory()
     const location: any = useLocation()
     const params = useParams<{ id: string, tab?: TabTypes }>()
-    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({ taskReviewStatus: location.state?.taskReviewStatus || '' });
+    const [filterValue, setFilterValue] = useState<{ [key: string]: string }>({
+        taskReviewStatus: location.state?.taskReviewStatus || '',
+        projectId: params.id
+    });
     const entryPath = params.id ? "management" : "salePlan"
 
     const { loading: noticeLoading, run: noticeRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
@@ -102,8 +105,8 @@ export default function Index() {
 
     return <DetailContent style={{ paddingTop: 14 }}>
         <SearchTable
-            path={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
-            exportPath={`/tower-market/taskNotice?${params.id && params.id !== "undefined" ? `projectId=${params.id}` : ""}`}
+            path={`/tower-market/taskNotice`}
+            exportPath={`/tower-market/taskNotice`}
             filterValue={filterValue}
             extraOperation={<>
                 <Radio.Group
@@ -140,13 +143,15 @@ export default function Index() {
                             ...item,
                             render: (_: any, record: any) => {
                                 return <span>
-                                    {record.taskReviewStatus === 0 ?
-                                        "审批中" :
-                                        record.taskReviewStatus === 1 ?
-                                            "审批通过" :
-                                            record.taskReviewStatus === 2 ?
-                                                "审批驳回" : record.taskReviewStatus === 3 ?
-                                                    "已撤销" : "-"}
+                                    {record.taskReviewStatus === -1 ?
+                                        "待发起" :
+                                        record.taskReviewStatus === 0 ?
+                                            "审批中" :
+                                            record.taskReviewStatus === 1 ?
+                                                "审批通过" :
+                                                record.taskReviewStatus === 2 ?
+                                                    "审批驳回" : record.taskReviewStatus === 3 ?
+                                                        "已撤销" : "-"}
                                 </span>;
                             }
                         });
@@ -157,9 +162,9 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 200,
+                    width: 240,
                     render: (_: any, record: any) => {
-                        const commonDisable: boolean = ![2, -1].includes(record.taskReviewStatus)
+                        const commonDisable: boolean = ![2, -1, 3].includes(record.taskReviewStatus)
                         return <>
                             <Button
                                 type="link" size="small" className='btn-operation-link'
@@ -179,14 +184,14 @@ export default function Index() {
                                 type="link"
                                 size="small"
                                 className='btn-operation-link'
-                                disabled={commonDisable}
+                                disabled={![-1, 2, 3].includes(record.taskReviewStatus)}
                                 loading={noticeLoading}
                                 onClick={() => handleSubmitAudit(record.id)}>提交审批</Button>
                             <Button
                                 type="link"
                                 size="small"
                                 className='btn-operation-link'
-                                disabled={commonDisable}
+                                disabled={record.taskReviewStatus !== 0}
                                 onClick={() => recallSaleOrderItem(record.id)}
                             >撤销</Button>
                         </>;

@@ -57,7 +57,7 @@
         },
         {
             "title": "货币类型",
-            "dataIndex": "currencyType"
+            "dataIndex": "currencyName"
         },
         {
             "title": "开票合计金额",
@@ -466,8 +466,7 @@
         {
             "title": "过磅重量(吨)",
             "dataIndex": "weigh",
-            "type": "number",
-            "disabled": true
+            "type": "number"
         },
         {
             "title": "业务经理",
