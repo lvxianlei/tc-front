@@ -23,6 +23,11 @@
             "width": 120
         },
         {
+            "title": "用途",
+            "dataIndex": "remark",
+            "width": 100
+        },
+        {
             "title": "申请人",
             "dataIndex": "createUserName",
             "width": 80

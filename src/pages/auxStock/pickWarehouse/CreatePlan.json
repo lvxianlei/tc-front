@@ -122,6 +122,11 @@
                     "message": "请选择领料仓库"
                 }
             ]
+        },
+        {
+            "title": "用途",
+            "dataIndex": "remark",
+            "type": "textarea"
         }
     ],
     "material": [

@@ -412,7 +412,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 edit
                 dataSource={data||{}}
                 col={2}
-                classStyle={styles.baseInfo}
+                // classStyle={styles.baseInfo}
                 columns={baseInfoColumn.map((item: any) => {
                     if (item.dataIndex === "warehouseId") {
                         return ({
