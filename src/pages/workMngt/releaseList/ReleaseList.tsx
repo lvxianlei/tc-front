@@ -44,6 +44,12 @@ export default function ReleaseList(): React.ReactNode {
             render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
+            key: 'projectName',
+            title: '工程名称',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
             key: 'name',
             title: '塔型',
             width: 100,
@@ -175,6 +181,18 @@ export default function ReleaseList(): React.ReactNode {
             // render:(text:number)=>{
             //     return text===1?'已下达':text===2?'已取消':'-'
             // }
+        },
+        {
+            key: 'projectName',
+            title: '工程名称',
+            width: 100,
+            dataIndex: 'projectName'
+        },
+        {
+            key: 'productNum',
+            title: '基数',
+            width: 100,
+            dataIndex: 'productNum'
         },
         {
             key: 'productTypeName',
@@ -529,7 +547,7 @@ export default function ReleaseList(): React.ReactNode {
                     {
                         name: 'batchFuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="" maxLength={200} />
+                        children: <Input placeholder="工程名称" maxLength={200} />
                     }
                 ]}
             />
@@ -614,7 +632,7 @@ export default function ReleaseList(): React.ReactNode {
                     {
                         name: 'fuzzyMsg',
                         label: '模糊查询项',
-                        children: <Input placeholder="" maxLength={200} />
+                        children: <Input placeholder="工程名称" maxLength={200} />
                     }
                 ]}
             />
