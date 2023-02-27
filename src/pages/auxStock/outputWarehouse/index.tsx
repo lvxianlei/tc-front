@@ -140,7 +140,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }else{
             value.applyStaffId = ''
         }
-        getWeight({...value})
+        getWeight({...filterValue, ...value})
         // setFilterValue({ ...filterValue, ...value })
         return value
     }
@@ -229,10 +229,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
     }))
     // 获取统计的数据
-    const { run: getWeight, data: weightData } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
+    const { run: getWeight, data: weightData } = useRequest<{ [key: string]: any }>((value: Record<string, any>) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/detail/statistics`, {
-                ...filterValue
+                ...filterValue, ...value
             })
             resole(result)
         } catch (error) {
