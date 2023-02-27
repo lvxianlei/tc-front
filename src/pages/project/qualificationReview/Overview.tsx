@@ -26,7 +26,7 @@ export default function Overview({ id }: OverviewProps) {
         operation={[
             <Button key="edit" type="primary" style={{ marginRight: 16 }}
                 onClick={() => history.push(`/project/management/edit/qualificationReview/${id}`)} >编辑</Button>,
-            <Button key="goback" onClick={() => history.replace("/project/management")}>返回</Button>
+            <Button key="goback" onClick={() => history.goBack()}>返回</Button>
         ]}>
         <Spin spinning={loading}>
             <DetailTitle title="标书制作记录表" style={{ padding: "0 0 8px 0", }} />

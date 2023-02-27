@@ -6,9 +6,9 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Button, Popconfirm, message, Spin, Select } from 'antd';
-import { Attachment, Page } from '../../common';
+import { BatchAttachment, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
-import { useHistory, useParams, useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { downloadTemplate } from './downloadTemplate';
@@ -102,7 +102,7 @@ export default function NCProgram(): React.ReactNode {
         </Spin>
     }
 
-    return <Page
+    return <SearchTable
         path="/tower-science/productNc"
         requestData={{ id: params.productSegmentId, productCategoryId: params.id }}
         columns={columns}
@@ -111,23 +111,27 @@ export default function NCProgram(): React.ReactNode {
         extraOperation={<Space direction="horizontal" size="small">
             <Button type="primary" ghost onClick={() => downloadTemplate(`/tower-science/productNc/downloadSummary?productCategoryId=${params.id}`, "NC文件汇总", {}, true)}>下载</Button>
             <p>NC程序数 {detailData?.ncCount || 0}/{detailData?.structureCount || 0}</p>
-            <Attachment multiple maxCount={99} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                RequestUtil.post(`/tower-science/productNc/importProductNc`, {
-                    fileVOList: [...dataInfo],
-                    productCategoryId: params.id
-                }).then(res => {
-                    if (res) {
-                        message.success('上传成功');
-                        history.go(0);
-                        getData();
-                    }
-                }).catch(error => {
-                    setTimeout(() => {
-                        history.go(0);
-                    }, 1500)
+            <BatchAttachment
+                ref={attachRef}
+                isTable={false}
+                dataSource={[]}
+                onDoneChange={(dataInfo: FileProps[]) => {
+                    RequestUtil.post(`/tower-science/productNc/importProductNc`, {
+                        fileVOList: [...dataInfo],
+                        productCategoryId: params.id
+                    }).then(res => {
+                        if (res) {
+                            message.success('上传成功');
+                            history.go(0);
+                            getData();
+                        }
+                    }).catch(error => {
+                        setTimeout(() => {
+                            history.go(0);
+                        }, 1500)
 
-                })
-            }}><Button type="primary" ghost>批量上传</Button></Attachment>
+                    })
+                }}><Button type="primary" ghost>批量上传</Button></BatchAttachment>
             <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
         </Space>}
         searchFormItems={[
@@ -151,7 +155,7 @@ export default function NCProgram(): React.ReactNode {
                 children: <Input placeholder="NC程序名/构件编号" />
             }
         ]}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.createTime) {
                 const formatDate = values.createTime.map((item: any) => item.format("YYYY-MM-DD"));
                 values.createTimeStart = formatDate[0] + ' 00:00:00';
