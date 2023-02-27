@@ -49,13 +49,6 @@ export default function SampleDraw(): React.ReactNode {
 
     const columns = [
         {
-            key: 'index',
-            title: '序号',
-            dataIndex: 'index',
-            width: 50,
-            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
-        },
-        {
             key: 'segmentName',
             title: '段名',
             width: 50,
@@ -66,6 +59,12 @@ export default function SampleDraw(): React.ReactNode {
             title: '构件编号',
             width: 100,
             dataIndex: 'code'
+        },
+        {
+            key: 'materialName',
+            title: '材料名称',
+            width: 100,
+            dataIndex: 'materialName'
         },
         {
             key: 'uploadTime',
@@ -269,9 +268,10 @@ export default function SampleDraw(): React.ReactNode {
                             rowSelection: {
                                 selectedRowKeys: selectedKeys,
                                 onChange: SelectChange
-                            }
+                            },
+                            pageSizeOptions: [10, 20, 50, 100, 1000]
                         }}
-                        pageSize={20}
+                        pageSize={1000}
                         searchFormItems={[]}
                         getDataSource={(data: any) => {
                             console.log(data?.records[0])
