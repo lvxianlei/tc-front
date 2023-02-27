@@ -128,8 +128,7 @@ export default function SampleDraw(): React.ReactNode {
             } else {
                 const index = idList?.indexOf(rowId)
                 setRowId(idList[index - 1])
-                const codeIndex = codeList?.indexOf(code)
-                setCode(codeList[codeIndex - 1])
+                setCode(codeList[index - 1])
                 show(idList[index - 1])
             }
         } else {
@@ -138,8 +137,7 @@ export default function SampleDraw(): React.ReactNode {
             } else {
                 const index = idList?.indexOf(rowId)
                 setRowId(idList[index + 1])
-                const codeIndex = codeList?.indexOf(code)
-                setCode(codeList[codeIndex + 1])
+                setCode(codeList[index + 1])
                 show(idList[index + 1])
             }
 
