@@ -1,14 +1,16 @@
 import React from "react"
-import { Button, Spin } from 'antd'
+import { Button, Form, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, Attachment, EditableTable, CommonTable } from '../common'
-import { baseInfoHead, invoiceHead, billingHeader, saleInvoice } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeader, saleInvoice, transferHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { currencyTypeOptions, productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Overview() {
     const history = useHistory()
     const params = useParams<{ invoicingId: string }>()
+    const [transferForm] = Form.useForm()
+    const [saleInvoiceForm] = Form.useForm()
     const productType: any = productTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
@@ -19,7 +21,32 @@ export default function Overview() {
         }
     }))
 
-    return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
+    const { loading: saving, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-finance/backMoney`, {
+                ...data,
+                id: params.invoicingId
+            })
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleSubmit = async () => {
+        const transferData = await transferForm.validateFields()
+        const saleInvoiceData = await saleInvoiceForm.validateFields()
+        await saveRun({
+            ...transferData,
+            invoicingSaleDTOS: saleInvoiceData?.submit
+        })
+    }
+
+    return <DetailContent
+        operation={[
+            <Button key="save" onClick={handleSubmit}>保存</Button>,
+            <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
+        ]}>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
             <BaseInfo columns={baseInfoHead.map((item: any) => {
@@ -48,13 +75,21 @@ export default function Overview() {
             <DetailTitle title="开票明细" />
             <CommonTable columns={billingHeader} dataSource={data?.invoicingDetailVos || []} />
 
+            <DetailTitle title="移交信息" />
+            <BaseInfo
+                form={transferForm}
+                columns={transferHead}
+                dataSource={data || {}} edit />
+
             <DetailTitle title="销售发票" />
             <EditableTable
+                form={saleInvoiceForm}
                 columns={saleInvoice.map((item: any) => {
                     if (item.dataIndex === "currencyType") {
                         return ({
                             ...item,
                             type: "select",
+                            labelInValue: true,
                             enum: currencyTypeOptions?.map((product: any) => ({
                                 value: product.id,
                                 label: product.name

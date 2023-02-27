@@ -696,6 +696,18 @@
             "width": 200
         }
     ],
+    "transferHead": [
+        {
+            "title": "移交人",
+            "dataIndex": "transferUser"
+        },
+        {
+            "title": "移交时间",
+            "dataIndex": "transferTime",
+            "type": "date",
+            "format": "YYYY-MM-DD"
+        }
+    ],
     "editInvoicingHead": [
         {
             "title": "发票号码",
