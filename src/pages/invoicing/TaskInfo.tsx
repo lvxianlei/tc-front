@@ -1,5 +1,5 @@
 import React from "react"
-import { Button, Form, Spin } from 'antd'
+import { Button, Form, message, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, Attachment, EditableTable, CommonTable } from '../common'
 import { baseInfoHead, invoiceHead, billingHeader, saleInvoice, transferHead } from "./InvoicingData.json"
@@ -23,7 +23,7 @@ export default function Overview() {
 
     const { loading: saving, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.put(`/tower-finance/backMoney`, {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-finance/invoicing/sale`, {
                 ...data,
                 id: params.invoicingId
             })
@@ -38,13 +38,28 @@ export default function Overview() {
         const saleInvoiceData = await saleInvoiceForm.validateFields()
         await saveRun({
             ...transferData,
-            invoicingSaleDTOS: saleInvoiceData?.submit
+            invoicingSaleDTOS: saleInvoiceData?.submit?.map((item: any) => {
+                delete item.id
+                return ({
+                    ...item,
+                    currencyType: item.currencyType?.value,
+                    currencyName: item.currencyType?.label,
+                })
+            })
         })
+        await message.success("保存成功")
+        history.goBack()
     }
 
     return <DetailContent
         operation={[
-            <Button key="save" onClick={handleSubmit}>保存</Button>,
+            <Button
+                loading={saving}
+                key="save"
+                onClick={handleSubmit}
+                type="primary"
+                style={{ marginRight: 16 }}
+            >保存</Button>,
             <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
         <Spin spinning={loading}>
@@ -84,6 +99,7 @@ export default function Overview() {
             <DetailTitle title="销售发票" />
             <EditableTable
                 form={saleInvoiceForm}
+                addData={{ ticketType: data?.ticketType }}
                 columns={saleInvoice.map((item: any) => {
                     if (item.dataIndex === "currencyType") {
                         return ({
@@ -97,7 +113,11 @@ export default function Overview() {
                         })
                     }
                     return item
-                })} dataSource={data?.invoicingDetailVos || []} />
+                })} dataSource={data?.invoicingSaleVos?.map((item: any) => ({
+                    ...item,
+                    ticketType: data?.ticketType,
+                    currencyType: { label: item.currencyName, value: item.currencyType }
+                })) || []} />
 
             <Attachment dataSource={data?.attachInfoVos} />
         </Spin>
