@@ -1,53 +1,33 @@
 import React, { useState, useRef } from 'react';
 import { Modal, Button, DatePicker, Select, Input, message, Space } from 'antd';
-import {Attachment, BaseInfo, DetailTitle, IntgSelect, OperationRecord, SearchTable as Page} from '../common'
-import {Link, useHistory, useLocation, useRouteMatch} from 'react-router-dom';
+import { IntgSelect, SearchTable as Page } from '../common'
+import { Link, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import RequestUtil from '../../utils/RequestUtil';
 import { purchasePlan } from './purchasePlan.json'
 import useRequest from '@ahooksjs/use-request';
-import {materialColumns} from "../contract-mngt/enquiryCompare/enquiry.json";
-import ExportList from "../../components/export/list";
 import Edit from "./edit";
 interface TaskAssignRef {
     onSubmit: () => void
     resetFields: () => void
     onSubmitApproval: () => void
-    onSubmitCancel: ()=>void
+    onSubmitCancel: () => void
 }
 export default function PurchasePlan() {
     const history = useHistory();
     const [refresh, setRefresh] = useState<boolean>(false);
     const [id, setId] = useState<string>("")
     const [type, setType] = useState<"new" | "edit">("new")
-    const location = useLocation<{ state: {} }>();
-    const match = useRouteMatch()
-    // 导出模态框
-    const [isExport, setIsExportStoreList] = useState(false)
     // 选中数据列表
     const [generateIds, setGenerateIds] = useState<string[]>([])
-    const [dataSource, setDataSource] = useState<object[]>([])
     // 筛选组
     const [filterValue, setFilterValue] = useState<object>({
         ...history.location.state as object,
         inquirer: history.location.state ? sessionStorage.getItem('USER_ID') : "",
-        purchaseType:1
+        purchaseType: 1
     })
-    const editRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { }, onSubmitApproval: () => { }, onSubmitCancel: () => { }})
+    const editRef = useRef<TaskAssignRef>({ onSubmit: () => { }, resetFields: () => { }, onSubmitApproval: () => { }, onSubmitCancel: () => { } })
     // 模态窗
     const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-    // 聚焦采购任务
-    // const [id, setId] = useState<string>("");//采购任务id
-    const [obj, setObj] = useState<any>({});
-    const [rejectionDescription, setRejectionDescription] = useState("");
-    // getlist
-    const { run: generaterRun } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const data = await RequestUtil.get(`/tower-supply/initData/materialPurchaseTask`);
-            resole(data)
-        } catch (error) {
-            reject(false)
-        }
-    }), { manual: true })
 
     const handleCancel = () => {
         // setType('new')
@@ -59,14 +39,12 @@ export default function PurchasePlan() {
 
     // 汇总request
     const selectMerge = async () => {
-        const result: { [key: string]: any } = await RequestUtil.post('/tower-supply/auxiliaryMaterialPurchasePlan/collect',generateIds)
+        const result: { [key: string]: any } = await RequestUtil.post('/tower-supply/auxiliaryMaterialPurchasePlan/collect', generateIds)
     }
-
-
 
     const buttons: {} | null | undefined = [
         <Button onClick={() => handleCancel()} key='close'>关闭</Button>,
-        <Button type="primary"  onClick={async () =>{
+        <Button type="primary" onClick={async () => {
             console.log(generateIds)
             if (!editRef.current) {
                 message.warning("请先选择辅材...")
@@ -79,7 +57,7 @@ export default function PurchasePlan() {
             setIsModalVisible(false);
             history.go(0)
         }} key='submit'>提交</Button>,
-        <Button type="primary"  onClick={async () =>{
+        <Button type="primary" onClick={async () => {
             console.log(generateIds)
             if (!editRef.current) {
                 message.warning("请先选择辅材...")
@@ -95,7 +73,7 @@ export default function PurchasePlan() {
     ]
     const buttonsEdit: {} | null | undefined = [
         <Button onClick={() => handleCancel()} key='close'>关闭</Button>,
-        <Button type="primary"  onClick={async () =>{
+        <Button type="primary" onClick={async () => {
             console.log(generateIds)
             if (!editRef.current) {
                 message.warning("请先选择辅材...")
@@ -108,7 +86,7 @@ export default function PurchasePlan() {
             setIsModalVisible(false);
             history.go(0)
         }} key='submit'>提交</Button>,
-        <Button type="primary"  onClick={async () =>{
+        <Button type="primary" onClick={async () => {
             console.log(generateIds)
             if (!editRef.current) {
                 message.warning("请先选择辅材...")
@@ -118,33 +96,28 @@ export default function PurchasePlan() {
             setIsModalVisible(false);
             history.go(0)
         }} key='submit'>保存并提交审批</Button>,
-        <Button type="primary"  onClick={async () =>{
-            console.log(generateIds)
-
-            // planPurchaseNum
-
+        <Button type="primary" onClick={async () => {
             await editRef.current?.onSubmitCancel();
             setIsModalVisible(false);
             history.go(0)
         }} key='submit'>撤销审批</Button>
     ]
     const onFilterSubmit = (value: any) => {
-        console.log(value)
         if (value.createTime) {
             const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
             delete value.createTime
             value.startCreateTime = formatDate[0] + ' 00:00:00';
             value.endCreateTime = formatDate[1] + ' 23:59:59';
-        }else{
+        } else {
             value.startCreateTime = null
             value.endCreateTime = null
         }
         if (value.applyName) {
             value.purchaserId = value.applyName.value
-        }else{
+        } else {
             value.purchaserId = null
         }
-        setFilterValue({...filterValue,...value})
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
     return (
@@ -152,7 +125,7 @@ export default function PurchasePlan() {
             <Page
                 path="/tower-supply/auxiliaryMaterialPurchasePlan"
                 exportPath="/tower-supply/auxiliaryMaterialPurchasePlan"
-                refresh={ refresh }
+                refresh={refresh}
                 columns={[
                     {
                         title: "序号",
@@ -162,7 +135,7 @@ export default function PurchasePlan() {
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...purchasePlan.map((item: any) => {
-                        return ({ ...item})
+                        return ({ ...item })
                     }),
                     {
                         title: "操作",
@@ -171,14 +144,14 @@ export default function PurchasePlan() {
                         width: 120,
                         render: (_: any, records: any) => <Space>
                             <Button type="link" className="btn-operation-link" onClick={
-                                ()=>{setId(records.id)}
+                                () => { setId(records.id) }
                             }>
                                 <Link className="btn-operation-link" to={{
                                     pathname: `/buyAuxiliaryMaterial/purchasePlan/${records.id}`,
-                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '': records.repurchaseTime},${records.purchasePlanStatus},${records.collectPurchasePlanNumber?1:0}`
+                                    search: `${records.purchasePlanNumber || records.collectPurchasePlanNumber},${records.repurchaseTime == null ? '' : records.repurchaseTime},${records.purchasePlanStatus},${records.collectPurchasePlanNumber ? 1 : 0}`
                                 }}>采购清单</Link>
                             </Button>
-                            <Button type="link" className="btn-operation-link" onClick={()=>{
+                            <Button type="link" className="btn-operation-link" onClick={() => {
                                 setType('edit')
                                 console.log(records.id)
                                 setId(records.id)
@@ -198,7 +171,7 @@ export default function PurchasePlan() {
                         setIsModalVisible(true)
                     }}>创建采购计划</Button>
                     <Button type="primary" ghost onClick={() => {
-                        if(!generateIds.length){
+                        if (!generateIds.length) {
                             return message.warn('请选择采购计划')
                         }
                         Modal.confirm({
@@ -277,10 +250,10 @@ export default function PurchasePlan() {
                     }
                 }}
             />
-            <Modal width={1011} title={type==='new'?"创建采购计划":'编辑采购计划'} visible={isModalVisible} footer={type==='new'?buttons:buttonsEdit} onCancel={handleCancel}
-             onOk={()=>{}}
+            <Modal width={1011} title={type === 'new' ? "创建采购计划" : '编辑采购计划'} visible={isModalVisible} footer={type === 'new' ? buttons : buttonsEdit} onCancel={handleCancel}
+                onOk={() => { }}
             >
-                <Edit ref={editRef} id={id} type={type} visibleP={isModalVisible}/>
+                <Edit ref={editRef} id={id} type={type} visibleP={isModalVisible} />
             </Modal>
         </>
     )

@@ -215,7 +215,7 @@ export default function PickTower(): React.ReactNode {
                             setWithSectionVisible(true);
                             setProductId('');
                         }}>批量配段</Button>
-                        <Button type="ghost" onClick={() => history.push('/workMngt/pickList')}>返回</Button>
+                        <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                     </Space>
                 }
                 searchFormItems={[
