@@ -60,6 +60,11 @@ export default function Invoicing() {
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
             },
             {
+                name: 'internalNumber',
+                label: '内部合同号',
+                children: <Input placeholder="请输入内部合同号" width={140} />
+            },
+            {
                 name: 'fuzzyQuery',
                 label: "模糊查询项",
                 children: <Input placeholder="工程名称/票面单位/业务经理" style={{ width: 300 }} />

@@ -33,6 +33,18 @@ export default function Overview() {
         }
     }), { manual: true })
 
+    const invoiceTableChange = async (fields: any, allFields: any) => {
+        if (fields.submit.length - 1 >= 0) {
+            saleInvoiceForm.setFieldsValue({
+                submit: allFields.submit?.map((el: any) => ({
+                    ...el,
+                    taxAmount: (parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2),
+                    untaxPrice: (parseFloat(el.moneyCount) - parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2)
+                }))
+            })
+        }
+    }
+
     const handleSubmit = async (saveType: 1 | 2) => {
         const transferData = await transferForm.validateFields()
         const saleInvoiceData = await saleInvoiceForm.validateFields()
@@ -48,7 +60,7 @@ export default function Overview() {
         await message.success(`${saveType === 1 ? "保存" : "保存并提交"}成功...`)
         history.goBack()
     }
-    
+
     return <DetailContent
         operation={[
             <Button
@@ -105,6 +117,7 @@ export default function Overview() {
             <EditableTable
                 form={saleInvoiceForm}
                 addData={{ ticketType: data?.ticketType }}
+                onChange={invoiceTableChange}
                 columns={saleInvoice.map((item: any) => {
                     if (item.dataIndex === "currencyType") {
                         return ({
@@ -118,7 +131,8 @@ export default function Overview() {
                         })
                     }
                     return item
-                })} dataSource={data?.invoicingSaleVos?.map((item: any) => ({
+                })}
+                dataSource={data?.invoicingSaleVos?.map((item: any) => ({
                     ...item,
                     ticketType: data?.ticketType,
                     currencyType: { label: item.currencyName, value: item.currencyType }
