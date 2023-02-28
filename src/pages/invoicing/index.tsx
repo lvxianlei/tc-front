@@ -34,12 +34,12 @@ export default function Invoicing() {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                width: 200,
+                width: 140,
                 render: (_: any, record: any) => {
                     return <>
                         <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/taskInfo/${record.id}`)}>查看任务信息</Button>
-                        {record.taskType === 1 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/edit/${record.id}`)}>填写开票信息</Button>}
-                        {record.taskType === 2 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>}
+                        {/* {record.taskType === 1 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/edit/${record.id}`)}>填写开票信息</Button>}
+                        {record.taskType === 2 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>} */}
                     </>
                 }
             }]}
