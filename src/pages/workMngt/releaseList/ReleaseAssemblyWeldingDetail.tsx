@@ -22,7 +22,7 @@ export default function ReleaseList(): React.ReactNode {
     })
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
-            const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId: params.weldingId, fuzzyMsg: data?.fuzzyMsg, id: params.id })
+            const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId: params.weldingId, ...data, id: params.id })
             const dataSource: any = result?.records?.length > 0 ? await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeldStructure`, { segmentId: result?.records[0]?.id }) : [];
             setSegmentDataSource([...dataSource]);
             setPages({
@@ -54,7 +54,7 @@ export default function ReleaseList(): React.ReactNode {
             size: pageSize,
             current: page
         })
-        run({...filterValue})
+        run({ ...filterValue, current: page, size: pageSize })
     }
 
     const columns = [
