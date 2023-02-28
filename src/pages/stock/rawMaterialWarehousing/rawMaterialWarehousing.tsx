@@ -171,7 +171,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const handleRadioChange = (event: any) => {
         if (event.target.value === "b") {
             setPagePath("/tower-storage/warehousingEntry/warehousingEntryDetail")
-            setColumns(inStock)
+            setColumns(inStock.map((item:any)=>{
+                switch (item.dataIndex) {
+                    case "num":
+                        return ({
+                            ...item,
+                            render: (value: any, records: any, key: number) => {
+                                    return <span>{value}</span>
+                            }
+                        })
+                    default:
+                        return item
+                }
+            }))
             run({...filterValue})
             return
         }

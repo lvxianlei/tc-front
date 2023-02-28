@@ -297,7 +297,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     useEffect(() => {
         if (props.visible) {
             addCollectionForm.setFieldsValue({
-                type:0,
+                outType:0,
                 pickingTime: moment(new Date()).format("YYYY-MM-DD"),
                 dept:{
                     id:'',
