@@ -33,7 +33,7 @@ export default function Overview() {
         }
     }), { manual: true })
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (saveType: 1 | 2) => {
         const transferData = await transferForm.validateFields()
         const saleInvoiceData = await saleInvoiceForm.validateFields()
         await saveRun({
@@ -42,21 +42,29 @@ export default function Overview() {
                 ...item,
                 currencyType: item.currencyType?.value,
                 currencyName: item.currencyType?.label,
-            }))
+            })),
+            saveType
         })
-        await message.success("保存成功")
+        await message.success(`${saveType === 1 ? "保存" : "保存并提交"}成功...`)
         history.goBack()
     }
-
+    
     return <DetailContent
         operation={[
             <Button
                 loading={saving}
                 key="save"
-                onClick={handleSubmit}
+                onClick={() => handleSubmit(1)}
                 type="primary"
                 style={{ marginRight: 16 }}
             >保存</Button>,
+            <Button
+                loading={saving}
+                key="saveAndSubmit"
+                onClick={() => handleSubmit(2)}
+                type="primary"
+                style={{ marginRight: 16 }}
+            >保存并提交</Button>,
             <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
         ]}>
         <Spin spinning={loading}>
