@@ -547,7 +547,7 @@
       },
       {
         "title": "数量",
-        "dataIndex": "num"
+        "dataIndex": "availableNum"
       },
       {
         "title": "单位",
