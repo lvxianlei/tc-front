@@ -165,7 +165,7 @@
         },
         {
             "title": "出库时间",
-            "dataIndex": "outStockTime",
+            "dataIndex": "pickingTime",
             "width": 100
         },
         {
