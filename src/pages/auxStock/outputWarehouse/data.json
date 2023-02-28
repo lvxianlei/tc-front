@@ -28,6 +28,12 @@
             "width": 80
         },
         {
+            "title": "领料日期",
+            "dataIndex": "pickingTime",
+            "type": "date",
+            "width": 100
+        },
+        {
             "title": "创建日期",
             "dataIndex": "createTime",
             "type": "date",
@@ -149,12 +155,17 @@
         },
         {
             "title": "出库类型",
-            "dataIndex": "outStockTypeName",
+            "dataIndex": "outTypeName",
             "width": 100
         },
         {
             "title": "出库人",
             "dataIndex": "outStockUserName",
+            "width": 100
+        },
+        {
+            "title": "出库时间",
+            "dataIndex": "outStockTime",
             "width": 100
         },
         {

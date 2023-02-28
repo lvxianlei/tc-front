@@ -21,6 +21,7 @@ export default function EnquiryCompare() {
     const [visible, setVisible] = useState<boolean>(false)
     const [oprationVisible, setOprationVisible] = useState<boolean>(false)
     const [cancelVisible, setCancelVisible] = useState<boolean>(false)
+    const [saveLoading, setSaveLoading] = useState<boolean>(false)
     const [detailId, setDetailId] = useState<string>("")
     const [oprationType, setOprationType] = useState<"new" | "edit">("new")
     const [form] = Form.useForm()
@@ -48,22 +49,31 @@ export default function EnquiryCompare() {
             const formatDate = value.createTimeOrder.map((item: any) => item.format("YYYY-MM-DD"))
             value.createStartTime = formatDate[0] + " 00:00:00"
             value.createEndTime = formatDate[1] + " 23:59:59"
+            delete value.createTimeOrder
+        }else{
+            value.createStartTime = ''
+            value.createEndTime = ''
         }
         if (value.comparisonPersonId) {
             value.comparisonPersonId = value.comparisonPersonId.value
+        }else{
+            value.comparisonPersonId = null
         }
-        setFilterValue({ ...value })
+        // setFilterValue({ ...value })
         return ({ ...value })
     }
 
     const handleAddOk = () => new Promise(async (resove, reject) => {
         try {
+            setSaveLoading(true)
             await editRef.current?.onSubmit()
             message.success("询比价保存成功...")
+            setSaveLoading(false)
             setVisible(false)
             resove(true)
             history.go(0)
         } catch (error) {
+            setSaveLoading(false)
             reject(false)
         }
     })
@@ -83,8 +93,9 @@ export default function EnquiryCompare() {
         <div className='enquiryComareWrapper'>
             <Modal destroyOnClose title={oprationType === "new" ? "创建" : "编辑"} width={1011} visible={visible} onOk={handleAddOk} onCancel={() => {
                 editRef.current?.resetFields()
+                setSaveLoading(false)
                 setVisible(false)
-            }}>
+            }} confirmLoading={saveLoading}>
                 <Edit id={detailId} type={oprationType} ref={editRef}/>
             </Modal>
             <Modal destroyOnClose title="操作信息" width={1011}

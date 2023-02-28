@@ -19,6 +19,8 @@ import AuthUtil from '@utils/AuthUtil';
  export default function CreatePlan(props: any): JSX.Element {
      const [addCollectionForm] = Form.useForm();
      const [visible, setVisible] = useState<boolean>(false)
+     const [saveLoading, setSaveLoading] = useState<boolean>(false)
+     const [submitLoading, setSubmitLoading] = useState<boolean>(false)
      const [type, setType] = useState<number>(0);
      const [materialList, setMaterialList] = useState<any[]>([])
      const [popDataList, setPopDataList] = useState<any[]>([])
@@ -145,11 +147,33 @@ import AuthUtil from '@utils/AuthUtil';
          
          if (fields.allocationWarehouseOut) {
              setWarehouseId(fields.allocationWarehouseOut);
+             setMaterialList([])
+             setPopDataList([])
              return;
          }
          if (fields.allocationWarehouseIn) {
-            setInWarehouseId(fields.allocationWarehouseIn);
-            return;
+             setInWarehouseId(fields.allocationWarehouseIn);
+             getInWarehousing(fields.allocationWarehouseIn,1)
+             setMaterialList(popDataList.map((item:any)=>{
+                return {
+                    ...item,
+                    allocationLocatorIn:'',
+                    allocationLocatorInName:'',
+                    allocationReservoirIn:'',
+                    allocationReservoirInName:''
+                }
+             }))
+             setPopDataList(popDataList.map((item:any)=>{
+                return {
+                    ...item,
+                    allocationLocatorIn:'',
+                    allocationLocatorInName:'',
+                    allocationReservoirIn:'',
+                    allocationReservoirInName:''
+                }
+             }))
+             setInLocation([])
+             return;
         }
      }
  
@@ -217,6 +241,7 @@ import AuthUtil from '@utils/AuthUtil';
                  message.error("请您填写数量！");
                  return false;
              }
+             type==='save'&&setSaveLoading(true)
              type==='save'&&saveRun({
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
@@ -230,6 +255,7 @@ import AuthUtil from '@utils/AuthUtil';
                  commit: 0,
                  allocationUser: baseInfo?.allocationUser.id
              });
+             type==='submit'&&setSubmitLoading(true)
              type==='submit'&&submitRun({
                 allocationStockDetailDTOS: popDataList.map((item:any)=>{
                      return {
@@ -268,11 +294,13 @@ import AuthUtil from '@utils/AuthUtil';
                  id: props.id,
                  allocationNumber: data?.allocationNumber
              })
+             setSaveLoading(false)
              message.success("创建成功！");
              setType(0)
              props?.handleCreate({ code: 1 })
              resove(result)
          } catch (error) {
+             setSaveLoading(false)
              reject(error)
          }
      }), { manual: true })
@@ -284,10 +312,12 @@ import AuthUtil from '@utils/AuthUtil';
                  id: props.id,
                  allocationNumber: data?.allocationNumber
              })
+             setSubmitLoading(false)
              message.success("创建成功！");
              props?.handleCreate({ code: 1 })
              resove(result)
          } catch (error) {
+             setSubmitLoading(false)
              reject(error)
          }
      }), { manual: true })
@@ -355,10 +385,10 @@ import AuthUtil from '@utils/AuthUtil';
                  }}>
                      取消
                  </Button>,
-                 <Button key="create" type="primary" onClick={() => handleSaveClick('save')}>
+                 <Button key="create" type="primary" onClick={() => handleSaveClick('save')} loading={saveLoading}>
                      保存
                  </Button>,
-                 <Button key="create" type="primary" onClick={() => handleSaveClick('submit')}>
+                 <Button key="create" type="primary" onClick={() => handleSaveClick('submit')} loading={submitLoading}>
                      保存并提交
                  </Button>
              ]}

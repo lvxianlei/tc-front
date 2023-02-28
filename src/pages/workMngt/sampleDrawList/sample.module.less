@@ -32,12 +32,20 @@
 }
 
 .highLight {
-    background-color: #ffb65d  !important;
-        :global(.ant-table-cell-fix-left) {    
-            background-color: #ffb65d !important;
-        }
+    --bgcolor: #FFB401  !important;
+}
+
+.selectHighLight {
+    --bgcolor: #89DF88  !important;
 }
 
 .search {
     margin-bottom: 16px;
+}
+
+.tableScroll {
+    width: 40%;
+    :global(.art-sticky-scroll) {
+        overflow: hidden !important;
+    }
 }
