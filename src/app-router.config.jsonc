@@ -2669,8 +2669,8 @@
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
-      "path": "/invoicing/billList/edit/:invoicingId",
-      "module": "./pages/invoicing/Edit",
+      "path": "/invoicing/billList/detail/:invoicingId",
+      "module": "./pages/invoicing/Overview",
       "exact": true,
       "authority": "tc_erp_fc_invoicing_manage_write"
     },
