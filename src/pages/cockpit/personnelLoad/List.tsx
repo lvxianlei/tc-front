@@ -4,16 +4,24 @@
  * @description 驾驶舱-人员工作负荷
  */
 
-import React, { useState } from 'react';
-import { Space, Input, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row } from 'antd';
+import React, { useRef, useState } from 'react';
+import { Space, Input, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, Col, Dropdown, Menu, Modal, message } from 'antd';
 import { CommonTable } from '../../common';
 import styles from './PersonnelLoad.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { columns, tableColumns } from "./personnelLoad.json"
+import { DownOutlined } from '@ant-design/icons';
+import { useHistory } from 'react-router-dom';
+import Allocation from './Allocation';
 
 export interface IPersonnelLoad {
     readonly id?: string;
+}
+
+interface modalProps {
+    onSubmit: () => void;
+    resetFields: () => void
 }
 
 export interface IResponseData {
@@ -24,16 +32,37 @@ export interface IResponseData {
 }
 
 export default function List(): React.ReactNode {
-    // const [page, setPage] = useState({
-    //     current: 1,
-    //     size: 10,
-    //     total: 0
-    // })
-
     const [form] = Form.useForm();
     const [filterValues, setFilterValues] = useState<Record<string, any>>();
     const [status, setStatus] = useState<number>(1);
     const [detailData, setDetailData] = useState<any>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [title, setTitle] = useState<string>('');
+    const history = useHistory()
+
+    const menu = (
+        <Menu>
+            <Menu.Item key="1" onClick={() => userChange('放样员')}>
+                放样员
+            </Menu.Item>
+            <Menu.Item key="2" onClick={() => userChange('提料员')}>
+                提料员
+            </Menu.Item>
+            <Menu.Item key="3" onClick={() => userChange('编程员')}>
+                编程员
+            </Menu.Item>
+            <Menu.Item key="4" onClick={() => userChange('螺栓员')}>
+                螺栓员
+            </Menu.Item>
+        </Menu>
+    );
+
+    const userChange = (title: string) => {
+        setTitle(title)
+        setVisible(true)
+    }
 
     const { loading, data, run } = useRequest<any[]>((filterValue: Record<string, any>) => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get<any>(`/tower-science/personal/work/load`, { type: status, ...filterValue });
@@ -73,7 +102,39 @@ export default function List(): React.ReactNode {
         detailRun(record.userId, record.type)
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('人员配置成功');
+            setVisible(false);
+            history?.go(0);
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return <Spin spinning={loading}>
+        <Modal
+            destroyOnClose
+            key='allocation'
+            visible={visible}
+            width="60%"
+            title={"人员配置-" + title}
+            footer={
+                <Space>
+                    <Button type="ghost" onClick={async () => {
+                        setVisible(false);
+                        editRef.current?.resetFields()
+                    }}>关闭</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleModalOk} ghost>保存</Button>
+                </Space>
+            }
+            onCancel={() => {
+                setVisible(false);
+            }}>
+            <Allocation type={title} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
+        </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
             <Form.Item name="userNme">
                 <Input style={{ width: '200px' }} placeholder="姓名" />
@@ -85,18 +146,28 @@ export default function List(): React.ReactNode {
                 </Space>
             </Form.Item>
         </Form>
-        <Row>
-            <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
-                setStatus(event.target.value);
-                setFilterValues({ type: event.target.value });
-                run({ type: event.target.value })
-            }}>
-                <Radio.Button value={1} key="1">全部</Radio.Button>
-                <Radio.Button value={2} key="2">放样</Radio.Button>
-                <Radio.Button value={3} key="3">提料</Radio.Button>
-                <Radio.Button value={4} key="4">编程</Radio.Button>
-                <Radio.Button value={5} key="5">螺栓</Radio.Button>
-            </Radio.Group>
+        <Row justify="space-between" style={{ marginBottom: '6px' }}>
+            <Col>
+                <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
+                    setStatus(event.target.value);
+                    setFilterValues({ type: event.target.value });
+                    run({ type: event.target.value })
+                }}>
+                    <Radio.Button value={1} key="1">全部</Radio.Button>
+                    <Radio.Button value={2} key="2">放样</Radio.Button>
+                    <Radio.Button value={3} key="3">提料</Radio.Button>
+                    <Radio.Button value={4} key="4">编程</Radio.Button>
+                    <Radio.Button value={5} key="5">螺栓</Radio.Button>
+                </Radio.Group>
+            </Col>
+            <Col>
+                <Dropdown overlay={menu} trigger={['click']}>
+                    <Button type='primary' ghost>
+                        人员配置
+                        <DownOutlined />
+                    </Button>
+                </Dropdown>
+            </Col>
         </Row>
         <div className={styles.left}>
             <CommonTable
