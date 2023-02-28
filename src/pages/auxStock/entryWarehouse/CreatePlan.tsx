@@ -443,7 +443,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                         }
                                         if(type==='4'||type===4 ){
                                             return <InputNumber
-                                                min={1}
+                                                min={0.00001}
                                                 value={value || 1}
                                                 onChange={(value: number) => handleMaterailChange(value, key, "num")}
                                                 key={key} />
