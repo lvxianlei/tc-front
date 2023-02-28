@@ -48,12 +48,13 @@ export default function ReleaseList(): React.ReactNode {
         })
     }), { manual: true })
 
-    const handleCHange = async (page: number, pageSize: number) => {
+    const handleChange = async (page: number, pageSize: number) => {
         setPages({
             ...params,
             size: pageSize,
             current: page
         })
+        run({...filterValue})
     }
 
     const columns = [
@@ -268,7 +269,7 @@ export default function ReleaseList(): React.ReactNode {
                             pageSize: pages?.size,
                             total: pages?.total,
                             showSizeChanger: true,
-                            onChange: handleCHange
+                            onChange: handleChange
                         }}
                         onRow={(record: any) => ({
                             className: styles.tableRow,
