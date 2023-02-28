@@ -58,6 +58,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = `${formatDate[0]} 00:00:00`
+            value.endCreateTime = `${formatDate[1]} 23:59:59`
+            delete value.createTime
+        }else{
+            value.startCreateTime = ``
+            value.endCreateTime = ``
+        }
+        if (value.entryTime) {
+            const formatDate = value.entryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startEntryTime = `${formatDate[0]} 00:00:00`
+            value.endEntryTime = `${formatDate[1]} 23:59:59`
+            delete value.entryTime
+        }else{
+            value.startEntryTime = ``
+            value.endEntryTime = ``
+        }
         setFilterValue({ ...value })
         run(value)
         return value
@@ -301,6 +319,16 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         name: 'structureSpec',
                         label: '规格',
                         children: <Input width={100} maxLength={200} placeholder="请输入规格" />
+                    },
+                    {
+                        name: 'createTime',
+                        label: '创建时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'entryTime',
+                        label: '入库日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
                     },
                     {
                         name: 'fuzzyQuery',
