@@ -1,40 +1,66 @@
 import React from "react"
-import { Button, message, Spin } from 'antd'
+import { Button, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
-import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../common'
-import { invoicingInfoHead, billingHead } from "./InvoicingData.json"
+import { DetailContent, DetailTitle, BaseInfo, Attachment, CommonTable } from '../common'
+import { baseInfoHead, invoiceHead, billingHeader, saleInvoiceDetail, transferHead } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../utils/RequestUtil'
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
-export default function Edit() {
+export default function Overview() {
     const history = useHistory()
     const params = useParams<{ invoicingId: string }>()
     const productType: any = productTypeOptions
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getInvoicingInfo/${params.invoicingId}`)
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getTaskInfo/${params.invoicingId}`)
             resole(result)
         } catch (error) {
             reject(error)
         }
     }))
-    return <DetailContent operation={[<Button key="cancel" onClick={() => history.go(-1)}>返回</Button>]}>
+
+    return <DetailContent
+        operation={[
+            <Button key="cancel" onClick={() => history.go(-1)}>返回</Button>
+        ]}>
         <Spin spinning={loading}>
-            <DetailTitle title="开票信息" />
-            <BaseInfo columns={invoicingInfoHead.map((item: any) => {
+            <DetailTitle title="基本信息" />
+            <BaseInfo columns={baseInfoHead.map((item: any) => {
                 if (item.dataIndex === "productTypeId") {
                     return ({
                         ...item,
+                        type: "select",
                         enum: productType.map((product: any) => ({
                             value: product.id,
                             label: product.name
                         }))
                     })
                 }
+                if (item.dataIndex === "weigh") {
+                    if (parseFloat(data?.weigh) > parseFloat(data?.reasonWeight)) {
+                        return ({ ...item, contentStyle: { backgroundColor: "red" } })
+                    }
+                    return item
+                }
                 return item
             })} dataSource={data || {}} />
+
+            <DetailTitle title="发票信息" />
+            <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
+
             <DetailTitle title="开票明细" />
-            <CommonTable haveIndex columns={billingHead} dataSource={data?.invoicingDetailVos || []} />
+            <CommonTable columns={billingHeader} dataSource={data?.invoicingDetailVos || []} />
+
+            <DetailTitle title="移交信息" />
+            <BaseInfo
+                columns={transferHead}
+                dataSource={data || {}} />
+
+            <DetailTitle title="销售发票" />
+            <CommonTable
+                columns={saleInvoiceDetail}
+                dataSource={data?.invoicingSaleVos} />
+
             <Attachment dataSource={data?.attachInfoVos} />
         </Spin>
     </DetailContent>
