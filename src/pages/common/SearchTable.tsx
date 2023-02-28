@@ -103,7 +103,8 @@ export default function SearchTable({
         refreshDeps: [
             JSON.stringify(filterValue),
             path,
-            location.search
+            location.search,
+            props.refresh
         ]
     })
 
