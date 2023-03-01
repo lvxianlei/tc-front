@@ -232,7 +232,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const { run: getWeight, data: weightData } = useRequest<{ [key: string]: any }>((value: Record<string, any>) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/auxiliaryOutStock/detail/statistics`, {
-                ...filterValue, ...value, outStockItemStatus: pagePath === '/tower-storage/auxiliaryOutStock'?'':2,
+                ...filterValue, ...value, outStockItemStatus: 2,
             })
             resole(result)
         } catch (error) {
