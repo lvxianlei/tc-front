@@ -288,7 +288,7 @@ export default function Edit() {
                 submit: allFields.submit?.map((el: any) => ({
                     ...el,
                     ticketType,
-                    taxAmount: (parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2),
+                    taxAmount: (parseFloat(el.moneyCount || "0") - (parseFloat(el.moneyCount || "0") / (1 + parseFloat(el.taxRate || "0") * 0.01))).toFixed(2),
                     untaxPrice: (parseFloat(el.moneyCount || "0") / (1 + parseFloat(el.taxRate || "0") * 0.01)).toFixed(2)
                 }))
             })
