@@ -38,7 +38,7 @@ export default function Overview() {
             saleInvoiceForm.setFieldsValue({
                 submit: allFields.submit?.map((el: any) => ({
                     ...el,
-                    taxAmount: (parseFloat(el.moneyCount || "0") * parseFloat(el.taxRate || "0") * 0.01).toFixed(2),
+                    taxAmount: (parseFloat(el.moneyCount || "0") - (parseFloat(el.moneyCount || "0") / (1 + parseFloat(el.taxRate || "0") * 0.01))).toFixed(2),
                     untaxPrice: (parseFloat(el.moneyCount || "0") / (1 + parseFloat(el.taxRate || "0") * 0.01)).toFixed(2)
                 }))
             })
