@@ -283,6 +283,7 @@ export default function List(): React.ReactNode {
                 }
             ]}
             dataSource={data}
+            scroll={{ y: 350 }}
             pagination={{
                 current: page.current,
                 pageSize: page.size,
@@ -341,6 +342,7 @@ export default function List(): React.ReactNode {
                 }
                 return res
             })}
+            scroll={{ y: 350 }}
             dataSource={detailData || []}
             pagination={false} />
     </Spin>
