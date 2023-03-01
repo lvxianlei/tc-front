@@ -37,7 +37,7 @@ export default function Materials(): React.ReactNode {
             value.endStockTakingTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         return value
     }
 

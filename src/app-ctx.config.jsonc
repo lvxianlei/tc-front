@@ -462,12 +462,12 @@
                     {
                         "label": "辅材入库",
                         "path": "/auxStock/entryWarehouse",
-                        "authority": "tc_erp_sw_stock_auxiliary_material"
+                        "authority": "tc_erp_sw_stock_auxiliary_material_in"
                     },
                     {
                         "label": "辅材领料单",
                         "path": "/auxStock/pickWarehouse",
-                        "authority": "tc_erp_sw_stock_material_out"
+                        "authority": "tc_erp_sw_stock_auxiliary_material_picking"
                     },
                     {
                         "label": "辅材出库",
