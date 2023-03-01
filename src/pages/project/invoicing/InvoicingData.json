@@ -755,7 +755,7 @@
             "width": 200
         },
         {
-            "title": "金额",
+            "title": "价税合计",
             "dataIndex": "moneyCount",
             "type": "number",
             "width": 200
