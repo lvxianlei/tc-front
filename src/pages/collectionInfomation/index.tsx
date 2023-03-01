@@ -301,6 +301,7 @@ export default function CollectionInfomation(): React.ReactNode {
                     addRef.current?.resetFields();
                     setVisible(false);
                 }}
+                destroyOnClose
                 footer={[
                     <Button
                         key="submit"
