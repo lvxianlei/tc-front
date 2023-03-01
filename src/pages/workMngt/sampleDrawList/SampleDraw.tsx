@@ -270,7 +270,7 @@ export default function SampleDraw(): React.ReactNode {
                                             title="要删除该条数据吗？"
                                             okText="确认"
                                             cancelText="取消"
-                                            onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/sampleDelete?ids=${record.id}`).then(() => {
+                                            onConfirm={async () => await RequestUtil.post(`/tower-science/smallSample/sampleDelete`, { productStructureIdList: [record.id] }).then(() => {
                                                 message.success('删除成功！');
                                             }).then(async () => {
                                                 const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
