@@ -5,8 +5,8 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, Col, Dropdown, Menu, Modal, message } from 'antd';
-import { CommonTable } from '../../common';
+import { Space, Input, Form, Spin, Button, Radio, RadioChangeEvent, Row, Col, Dropdown, Menu, Modal, message } from 'antd';
+import { CommonAliTable, CommonTable } from '../../common';
 import styles from './PersonnelLoad.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -199,11 +199,12 @@ export default function List(): React.ReactNode {
             />
         </div>
         <div className={styles.right}>
-            <CommonTable
+            <CommonAliTable
                 haveIndex
                 columns={tableColumns}
                 dataSource={[...detailData || []]}
                 pagination={false}
+                style={{maxHeight: '750px', overflow: 'auto'}}
             />
         </div>
     </Spin>
