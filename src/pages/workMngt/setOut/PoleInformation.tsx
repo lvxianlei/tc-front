@@ -112,7 +112,7 @@ export default function PoleInformation(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -122,14 +122,18 @@ export default function PoleInformation(): React.ReactNode {
                     }
                     <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
                     <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.packageStatus } }}><Button type="link">包装清单</Button></Link>
-                    <Button type="link" onClick={async () => {
-                        setLoftingStatus(record.loftingStatus)
-                        let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
-                        setAllotData(result)
-                        setProductId(record.id);
-                        await editRef.current?.visibleData()
-                        setAllotVisible(true);
-                    }}>特殊件号</Button>
+                    {
+                        record?.loftingUser === userId ?
+                            <Button type="link" onClick={async () => {
+                                setLoftingStatus(record.loftingStatus)
+                                let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
+                                setAllotData(result)
+                                setProductId(record.id);
+                                await editRef.current?.visibleData()
+                                setAllotVisible(true);
+                            }}>特殊件号</Button>
+                            : <Button type="link" disabled>特殊件号</Button>
+                    }
                 </Space>
             )
         }
