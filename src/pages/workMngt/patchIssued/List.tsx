@@ -155,7 +155,7 @@ export default function List(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small">
                     <Popconfirm
@@ -232,6 +232,7 @@ export default function List(): React.ReactNode {
                 }]
             }
             headTabs={[]}
+            style={{ maxHeight: '700px', overflow: 'auto' }}
             searchFormItems={
                 status === 1 ? [
                     {
@@ -319,27 +320,28 @@ export default function List(): React.ReactNode {
             onFilterSubmit={onFinish}
             filterValue={filterValues}
             extraOperation={
-                <Space>
-                    <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
-                        setStatus(event.target.value);
-                        setFilterValues({
-                            status: event.target.value
-                        })
-                    }}>
-                        <Radio.Button value={1} key="1">补件下达</Radio.Button>
-                        <Radio.Button value={2} key="2">补件条目</Radio.Button>
-                    </Radio.Group>
-                    <Row gutter={12}>
-                        <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
-                        <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
-                        <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
-                        <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
-                        <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
-                        <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
-                        <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
-                        <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
-                    </Row>
-                </Space>
+                <Row gutter={12}>
+                    <Col>
+                        <Radio.Group defaultValue={status} onChange={(event: RadioChangeEvent) => {
+                            setStatus(event.target.value);
+                            setFilterValues({
+                                status: event.target.value
+                            })
+                        }}>
+                            <Radio.Button value={1} key="1">补件下达</Radio.Button>
+                            <Radio.Button value={2} key="2">补件条目</Radio.Button>
+                        </Radio.Group>
+                    </Col>
+                            <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
+                            <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
+                            <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
+                            <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
+                            <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
+                            <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
+                            <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
+                            <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
+                    
+                </Row>
             }
         />
     </>
