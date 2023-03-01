@@ -10,30 +10,32 @@ import { columns } from './releaseList.json'
 import styles from './release.module.less';
 
 export default function ReleaseList(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
-    const [materialNames, setMaterialNames] = useState([]);
+    // const [materialNames, setMaterialNames] = useState([]);
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
     const [form] = useForm();
     const [pageForm] = useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
+    const [searchVisible, setSearchVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
-        const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
-        setMaterialNames(value)
+        // const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
+        // const value: any = Array.from(new Set(data?.records.map((item: { materialCategoryName: any; }) => item.materialCategoryName)));
+        // setMaterialNames(value)
         specRun();
         textureRun();
         craftRun();
-        resole(value);
+        materialRun();
+        resole(true);
     }))
 
     const { data, run: getCount } = useRequest<any>((filters: any) => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/loftingBatch/batchDetailCount`, {
+            ...filterValue,
             ...filters,
             id: params?.id,
             productCategoryId: params?.productCategoryId
@@ -76,7 +78,6 @@ export default function ReleaseList(): React.ReactNode {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
         getCount(value)
         return value
     }
@@ -326,7 +327,6 @@ export default function ReleaseList(): React.ReactNode {
             ]}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            refresh={refresh}
             requestData={{ productCategoryId: params.productCategoryId, id: params.id }}
             exportPath="/tower-science/loftingBatch/batchDetail"
             extraOperation={<Space>
@@ -335,6 +335,7 @@ export default function ReleaseList(): React.ReactNode {
                         title: "查找",
                         width: '40%',
                         icon: null,
+                        visible: searchVisible,
                         content: <Form form={formTable} className={styles.searchForm} labelAlign="right" labelCol={{ span: 6 }} layout="inline">
                             <Row gutter={12}>
                                 <Col span={12}>
@@ -470,6 +471,14 @@ export default function ReleaseList(): React.ReactNode {
                                     </Form.Item>
                                 </Col>
                                 <Col span={12}>
+                                    <Form.Item label='冲孔' name='punching'>
+                                        <Radio.Group>
+                                            <Radio value={1}>是</Radio>
+                                            <Radio value={0}>否</Radio>
+                                        </Radio.Group>
+                                    </Form.Item>
+                                </Col>
+                                <Col span={12}>
                                     <Form.Item label='扩孔' name='loftingMoreScreenDTO.withReaming'>
                                         <Radio.Group>
                                             <Radio value={1}>是</Radio>
@@ -496,6 +505,9 @@ export default function ReleaseList(): React.ReactNode {
                             try {
                                 const value = await formTable.getFieldsValue(true)
                                 setFilterValue({
+                                    ...value
+                                })
+                                getCount({
                                     ...value
                                 })
                                 resolve(true)
@@ -550,7 +562,7 @@ export default function ReleaseList(): React.ReactNode {
                     label: '材料名称',
                     children: <Select style={{ width: "100px" }} defaultValue={''}>
                         <Select.Option value={''} key={''}>全部</Select.Option>
-                        {materialNames && materialNames.map((item: any) => {
+                        {materialDatas && materialDatas.map((item: any) => {
                             return <Select.Option key={item} value={item}>
                                 {item}
                             </Select.Option>

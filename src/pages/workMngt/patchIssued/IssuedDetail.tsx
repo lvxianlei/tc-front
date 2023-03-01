@@ -62,7 +62,7 @@ export default function IssuedDetail(): React.ReactNode {
     }), { manual: true })
 
     const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
+        // setFilterValue(value)
         return value
     }
 

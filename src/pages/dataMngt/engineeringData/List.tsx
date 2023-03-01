@@ -334,6 +334,7 @@ export default function List(): React.ReactNode {
                 onClick: () => onRowChange(record),
                 className: styles.tableRow
             })}
+            scroll={{y: 350}}
         />
         <Row className={styles.search} gutter={12}>
             <Col>
@@ -388,6 +389,7 @@ export default function List(): React.ReactNode {
             </Col>
         </Row>
         <CommonTable
+            scroll={{y: 350}}
             haveIndex
             columns={detailColumns}
             dataSource={detailData}

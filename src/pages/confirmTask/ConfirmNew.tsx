@@ -55,6 +55,8 @@ export default function ConfirmNew(): React.ReactNode {
                     plannedDeliveryTime: formData?.plannedDeliveryTime?.format('YYYY-MM-DD HH:mm:ss'),
                     fileIds: attachRef.current?.getDataSource().map(item => item.id),
                     fileVOList: attachRef.current?.getDataSource()
+                }).then(res => {
+                    history?.goBack();
                 })
             })
         })
