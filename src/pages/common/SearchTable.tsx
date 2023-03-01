@@ -43,6 +43,8 @@ function formatURISearch(search: { [key: string]: any }) {
     Object.keys(search).forEach((item: string) => {
         if (search[item] instanceof Array) {
             formObj[item] = search[item].map((item: any) => moment(item))
+        } else if (search[item]?.slice(0, 2) === "t_") {
+            formObj[item] = moment(search[item].slice(2))
         } else if (search[item]?.slice(0, 2) === "n_") {
             formObj[item] = Number(search[item].slice(2))
         } else if (search[item]?.slice(0, 2) === "o_") {
@@ -128,7 +130,9 @@ export default function SearchTable({
                 const formValue = await form.getFieldsValue()
                 const formObj: { [key: string]: any } = {}
                 Object.keys(formValue).forEach((item: string) => {
-                    if (formValue[item] instanceof Array) {
+                    if (formValue[item]?.year) {
+                        formObj[item] = `t_${formValue[item].format("YYYY-MM-DD HH:mm:ss")}`
+                    } else if (formValue[item] instanceof Array) {
                         formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
                     } else if (typeof formValue[item] === "number") {
                         formObj[item] = `n_${formValue[item]}`

@@ -238,7 +238,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         value.lengthMin = value.length.lengthMin
                         value.lengthMax = value.length.lengthMax
                     }
-                    setFilterValue(value)
+                    // setFilterValue(value)
                     run(value)
                     return value
                 }}
