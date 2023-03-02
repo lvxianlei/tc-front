@@ -51,6 +51,12 @@ export default function CollectionInfomation(): React.ReactNode {
     // 查询按钮
     const onFilterSubmit = (value: any) => {
         // 来款日期
+        if (value.startCreateTime) {
+            const formatDate = value.startCreateTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = `${formatDate[0]} 00:00:00`
+            value.endCreateTime = `${formatDate[1]} 23:59:59`
+        }
+        // 来款日期
         if (value.startRefundTime) {
             const formatDate = value.startRefundTime.map((item: any) => item.format("YYYY-MM-DD"))
             value.startPayTime = `${formatDate[0]} 00:00:00`

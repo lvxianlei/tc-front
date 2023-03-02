@@ -27,7 +27,7 @@ export default function Overview() {
             {data?.returnType === 1172 && <>
                 <DetailTitle title="合同信息" />
                 <CommonTable columns={contractInformationDetail.map((item: any) => {
-                    if (item.dataIndex === "planName") {
+                    if (item.dataIndex === "paymentPlanName") {
                         return ({
                             ...item,
                             type: "select",
