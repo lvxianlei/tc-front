@@ -3547,14 +3547,14 @@
       "path": "/auxStock/pickWarehouse",
       "module": "./pages/auxStock/pickWarehouse/index",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_out_list"
+      "authority": "tc_erp_sw_stock_auxiliary_material_picking_list"
     },
     { // 辅材库存-辅材领料单-详情
       "name": "辅材领料单详情",
       "path": "/auxStock/pickWarehouse/detail/:id/:approval",
       "module": "./pages/auxStock/pickWarehouse/detail/detail",
       "exact": true,
-      "authority": "tc_erp_sw_stock_material_out_info"
+      "authority": "tc_erp_sw_stock_auxiliary_material_picking_detail_list"
     }
   ]
 }
