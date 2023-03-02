@@ -132,6 +132,7 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
         try {
             RequestUtil.post(`/tower-science/staffing`, postData).then(res => {
                 resole(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)
