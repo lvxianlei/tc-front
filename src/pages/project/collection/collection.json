@@ -315,6 +315,12 @@
             "width": 200
         },
         {
+            "title": "内部合同号",
+            "dataIndex": "contractName",
+            "disabled": true,
+            "width": 200
+        },
+        {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
             "disabled": true,
@@ -336,7 +342,7 @@
             "title": "业务经理",
             "dataIndex": "salesman",
             "disabled": true,
-            "width": 200
+            "width": 120
         },
         {
             "title": "回款计划名称",
@@ -361,7 +367,7 @@
         "type": "popTable",
         "path": "/tower-market/contract",
         "width": 1011,
-        "selectType":"checkbox",
+        "selectType": "checkbox",
         "value": "contractName",
         "dependencies": true,
         "readOnly": true,
