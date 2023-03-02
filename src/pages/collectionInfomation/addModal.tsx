@@ -121,7 +121,7 @@ export default forwardRef(function AddModal({ editId }: EditProps, ref) {
             return item;
         });
         // 输入对来款金额的处理
-        if (results && results[0].label !== 'RMB人民币') {
+        if (results && results[0]?.label !== 'RMB人民币') {
             const exchangeRate = addCollectionForm.getFieldValue("exchangeRate") ?
                 processingNumber(addCollectionForm.getFieldValue("exchangeRate") + "", 4)
                 : 0,

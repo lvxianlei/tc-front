@@ -17,6 +17,10 @@
             "dataIndex": "contractName"
         },
         {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber"
+        },
+        {
             "title": "产品类型",
             "dataIndex": "productTypeId",
             "type": "select",
@@ -643,52 +647,59 @@
         {
             "title": "货物",
             "dataIndex": "productName",
-            "width": 200
+            "width": 160
         },
         {
             "title": "规格型号",
             "dataIndex": "model",
-            "width": 200
+            "width": 160
         },
         {
             "title": "单位",
             "dataIndex": "company",
-            "width": 200
+            "width": 100
         },
         {
             "title": "重量(吨)",
             "dataIndex": "weight",
-            "width": 200
+            "width": 140
         },
         {
             "title": "货币类型",
             "dataIndex": "currencyType",
-            "width": 200
+            "width": 160
         },
         {
             "title": "单价",
             "dataIndex": "money",
             "type": "number",
-            "width": 200
+            "width": 100
         },
         {
-            "title": "金额",
+            "title": "价税合计",
             "dataIndex": "moneyCount",
             "type": "number",
-            "width": 200
+            "width": 100
         },
         {
             "title": "税率",
             "dataIndex": "taxRate",
             "type": "number",
-            "width": 200
+            "width": 100
         },
         {
             "title": "税额",
             "dataIndex": "taxAmount",
             "type": "number",
             "disabled": true,
-            "width": 200
+            "width": 100
+        },
+        {
+            "title": "不含税金额",
+            "dataIndex": "untaxPrice",
+            "type": "number",
+            "disabled": true,
+            "width": 100
         },
         {
             "title": "备注",

@@ -268,6 +268,7 @@ const SelfSelect: React.FC<SelfSelectProps> = ({ data, ...props }) => {
         {...props}
         disabled={data.disabled}
         style={{ width: "100%", minWidth: 80 }}
+        allowClear
         {...componentProps}
     >
         {data.enum?.map((item: SelectOption, index: number) => (<Select.Option key={`select_option_${index}_${item.value}`} value={item.value} >{item.label}</Select.Option>))}
