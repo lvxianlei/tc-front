@@ -221,6 +221,12 @@
             "width": "100%"
         },
         {
+            "title": "内部合同号",
+            "dataIndex": "internalNumber",
+            "disabled": true,
+            "width": "100%"
+        },
+        {
             "title": "合同/工程名称",
             "dataIndex": "contractName",
             "disabled": true,
@@ -316,7 +322,7 @@
         },
         {
             "title": "内部合同号",
-            "dataIndex": "contractName",
+            "dataIndex": "internalNumber",
             "disabled": true,
             "width": 200
         },
