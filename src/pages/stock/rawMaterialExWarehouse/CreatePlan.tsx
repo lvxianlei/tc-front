@@ -587,7 +587,7 @@ export default function CreatePlan(props: any): JSX.Element {
             }}
             maskClosable={false}
             width={1100}
-            footer={type!==2?[
+            footer={type===2?[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
