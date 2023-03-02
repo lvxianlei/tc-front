@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Button, message, Radio, Spin } from 'antd'
 import { useHistory, useParams } from 'react-router-dom'
 import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '../../common'
-import { baseInfoHead, invoiceHead, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHeadDetail, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
@@ -84,7 +84,7 @@ export default function Edit() {
             })} dataSource={data || {}} />
 
             <DetailTitle title="发票信息" />
-            <BaseInfo columns={invoiceHead} dataSource={data?.invoicingInfoVo || []} />
+            <BaseInfo columns={invoiceHeadDetail} dataSource={data?.invoicingInfoVo || []} />
 
             <Radio.Group value={tab} onChange={handleRadioChange} style={{ margin: "12px 0" }}>
                 <Radio.Button value="a">开票明细</Radio.Button>
