@@ -80,6 +80,7 @@ export default function SearchTable({
     const location = useLocation<{ state: {} }>();
     const history = useHistory()
     const uriSearch: any = parse(location.search.replace("?", ""))
+    const [filterSearch, setFilterSearch] = useState<any>({ ...filterValue });
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
@@ -91,6 +92,7 @@ export default function SearchTable({
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
             const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
+            setFilterSearch ({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -247,8 +249,8 @@ export default function SearchTable({
             url={exportPath}
             fileName={exportFileName}
             serchObj={{
-                ...JSON.parse(JSON.stringify(filterValue || {})),
-                ...JSON.parse(JSON.stringify(exportObject || {}))
+                ...JSON.parse(JSON.stringify(filterSearch||{})),
+                ...JSON.parse(JSON.stringify(exportObject||{}))
             }}
             closeExportList={() => {
                 setIsExport(false)
