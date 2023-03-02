@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page, SearchTable } from '../../common';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/es/form/Form';
 import { columns } from './patchIssued.json'
 import styles from './PatchIssued.module.less';
+import SearchTable from '../SearchTable';
 
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -493,6 +493,7 @@ export default function IssuedDetail(): React.ReactNode {
                                 setFilterValue({
                                     ...value
                                 })
+                                formTable.resetFields()
                                 resolve(true)
                             } catch (error) {
                                 reject(false)
