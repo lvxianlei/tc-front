@@ -152,7 +152,8 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
                         userId: res?.userId,
                         type: type === '放样员' ? 2 : type === '提料员' ? 3 : type === '编程员' ? 4 : 5
                     }
-                })
+                }),
+                type: type === '放样员' ? 2 : type === '提料员' ? 3 : type === '编程员' ? 4 : 5
             })
             resolve(true);
         } catch (error) {
