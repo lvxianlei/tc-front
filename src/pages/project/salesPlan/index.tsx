@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, DatePicker, Input, message, Modal, Radio } from "antd";
+import { Button, DatePicker, Input, message, Modal, Radio, Select } from "antd";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { DetailContent, SearchTable } from "../../common";
 import { TabTypes } from "../Detail";
@@ -228,6 +228,11 @@ export default function Index() {
                     name: 'startIssueTime',
                     label: '下发日期',
                     children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+                },
+                {
+                    name: 'productTypeName',
+                    label: '产品类型',
+                    children: <Input placeholder="产品类型" style={{ width: 210 }} />
                 },
             ]}
             onFilterSubmit={handleFilterSubmit}
