@@ -12,6 +12,7 @@ import styles from './PatchApplication.module.less';
 import { detailColumns, detailTableColumns } from "./patchApplication.json"
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Space, Spin, Tooltip } from 'antd';
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 
 
 export default function Detail(): React.ReactNode {
@@ -30,6 +31,9 @@ export default function Detail(): React.ReactNode {
                     <Button onClick={() => history.goBack()}>关闭</Button>
                 </Space>
             ]}>
+                <Button type='primary' style={{marginBottom: '16px'}} onClick={() => {
+                    downloadTemplate(`/tower-science/supplyEntry/export?supplyEntityId=${params.id}`, '补件申请详情', {})
+                }} ghost>导出</Button>
                 <BaseInfo columns={detailColumns.map(res => {
                     if (res.dataIndex === 'description') {
                         return {

@@ -266,7 +266,7 @@ export default function List(): React.ReactNode {
                     )
                 }] as any}
             extraOperation={
-                <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' style={{ margin: '16px 0' }} ghost>申请</Button></Link>
+                <Link to={`/businessDisposal/patchApplication/apply`}><Button type='primary' ghost>申请</Button></Link>
 
             }
             searchFormItems={[
