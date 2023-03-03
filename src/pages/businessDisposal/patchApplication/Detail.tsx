@@ -32,7 +32,7 @@ export default function Detail(): React.ReactNode {
                 </Space>
             ]}>
                 <Button type='primary' style={{marginBottom: '16px'}} onClick={() => {
-                    downloadTemplate(`/tower-science/supplyEntry/export?supplyEntityId=${params.id}`, '补件申请详情', {})
+                    downloadTemplate(`/tower-science/supplyEntry/export/${params.id}`, '补件申请详情', {})
                 }} ghost>导出</Button>
                 <BaseInfo columns={detailColumns.map(res => {
                     if (res.dataIndex === 'description') {
