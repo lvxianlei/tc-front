@@ -20,6 +20,8 @@ export default function ReleaseList(): React.ReactNode {
         current: 1,
         size: 20
     })
+    const height = document.documentElement.clientHeight - 200;
+
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/loftingBatch/getBatchWeld`, { ...pages, weldingId: params.weldingId, ...data, id: params.id })
@@ -227,7 +229,7 @@ export default function ReleaseList(): React.ReactNode {
                     </Form.Item>
                 </Form>
             </Modal>
-            <Form layout="inline" style={{ margin: '20px' }} onFinish={async (values) => {
+            <Form layout="inline" style={{ marginBottom: '16px' }} onFinish={async (values) => {
                 setFilterValue(values)
                 await run({
                     ...values
@@ -282,7 +284,7 @@ export default function ReleaseList(): React.ReactNode {
                     />
                 </Col>
                 <Col span={16}>
-                    <CommonTable haveIndex columns={detailColumns} styles={{ maxLength: '800px', overFlowY: 'auto' }} dataSource={segmentDataSource} pagination={false} />
+                    <CommonTable haveIndex columns={detailColumns} scroll={{ y: height }} dataSource={segmentDataSource} pagination={false} />
                 </Col>
             </Row>
         </DetailContent>
