@@ -46,6 +46,7 @@ export default function Lofting(): React.ReactNode {
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [rowData, setRowData] = useState<any>([])
     const addModalRef = useRef<modalProps>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`, {
@@ -487,11 +488,12 @@ export default function Lofting(): React.ReactNode {
             title={type === 'new' ? "添加" : "编辑"}
             onOk={handleAddModalOk}
             key='add'
+            confirmLoading={confirmLoading}
             onCancel={() => {
                 setAddVisible(false);
                 addModalRef?.current?.resetFields();
             }}>
-            <AddPick id={params.id} type={type} rowData={rowData || []} ref={addModalRef} />
+            <AddPick id={params.id} getLoading={(loading: boolean) => setConfirmLoading(loading)} type={type} rowData={rowData || []} ref={addModalRef} />
         </Modal>
         <Modal
             destroyOnClose

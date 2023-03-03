@@ -111,7 +111,7 @@ export default function PickList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 300,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space size="small" className={styles.operationBtn}>

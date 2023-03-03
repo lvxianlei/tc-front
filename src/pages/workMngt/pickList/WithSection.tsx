@@ -16,8 +16,8 @@ import { patternTypeOptions } from "../../../configuration/DictionaryOptions"
 export interface EditProps {
     type: "new" | "detail" | "edit",
     id: string,
-    // batchNo: boolean,
     productCategoryId: string
+    getLoading: (loading: boolean) => void;
 }
 
 export interface EditRefProps {
@@ -25,7 +25,7 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ type, id, productCategoryId }: EditProps, ref) {
+export default forwardRef(function Edit({ type, id, productCategoryId, getLoading }: EditProps, ref) {
     const [form] = Form.useForm();
     const [fastForm] = Form.useForm();
     const [fastLoading, setFastLoading] = useState(false);
@@ -98,11 +98,12 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [type, id] })
+    }), { refreshDeps: [type, id, getLoading] })
 
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/materialProduct/material/segment/save`, { ...postData })
+            getLoading(false)
             resole(result)
         } catch (error) {
             reject(error)
@@ -111,25 +112,31 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            await fastForm.validateFields();
-            let baseData = await form.validateFields();
-            const productSegmentListDTOList = form.getFieldsValue(true).productSegmentListDTOList;
-            const value = productSegmentListDTOList.map((res: any, index: number) => {
-                return {
-                    ...res
-                }
+            getLoading(true)
+            fastForm.validateFields().then(async res => {
+                let baseData = await form.validateFields();
+                const productSegmentListDTOList = form.getFieldsValue(true).productSegmentListDTOList;
+                const value = productSegmentListDTOList.map((res: any, index: number) => {
+                    return {
+                        ...res
+                    }
+                })
+                await saveRun({
+                    legNumberA: baseData.legNumberA,
+                    legNumberB: baseData.legNumberB,
+                    legNumberC: baseData.legNumberC,
+                    legNumberD: baseData.legNumberD,
+                    productCategoryId: detailData?.productCategory,
+                    productId: detailData?.productId,
+                    productIdList: detailData?.productIdList,
+                    productSegmentListDTOList: value
+                })
+                resolve(true);
+            }).catch(e => {
+                getLoading(false)
+                reject(false)
             })
-            await saveRun({
-                legNumberA: baseData.legNumberA,
-                legNumberB: baseData.legNumberB,
-                legNumberC: baseData.legNumberC,
-                legNumberD: baseData.legNumberD,
-                productCategoryId: detailData?.productCategory,
-                productId: detailData?.productId,
-                productIdList: detailData?.productIdList,
-                productSegmentListDTOList: value
-            })
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
@@ -164,7 +171,7 @@ export default forwardRef(function Edit({ type, id, productCategoryId }: EditPro
                 setFastLoading(false);
             } else {
                 let inputList = inputString.split(',');
-                inputList =inputList.filter(x => x!=='')
+                inputList = inputList.filter(x => x !== '')
                 let list: IMaterialDetail[] = [];
                 inputList.forEach((res: string) => {
                     const newRes = res.split('*')[0].replace(/\(|\)/g, "");

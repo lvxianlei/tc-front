@@ -19,9 +19,10 @@ interface modalProps {
     id: string;
     type: 'new' | 'edit';
     rowData?: any[];
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function AddPick({ id, type, rowData }: modalProps, ref) {
+export default forwardRef(function AddPick({ id, type, rowData, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
     const [isBig, setIsBig] = useState<boolean>(true);
@@ -39,7 +40,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type, rowData] })
+    }), { manual: type === 'new', refreshDeps: [id, type, rowData, getLoading] })
 
     /**
      * weightAlgorithm 
@@ -473,8 +474,10 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         try {
             RequestUtil.post(`/tower-science/drawProductStructure/submit`, postData).then(res => {
                 resole(true)
+                getLoading(false)
             }).catch(e => {
                 reject(e)
+                getLoading(false)
             })
         } catch (error) {
             reject(error)
@@ -483,6 +486,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
 
     const onSubmitDone = () => new Promise((resolve, reject) => {
         try {
+            getLoading(true)
             form.validateFields().then(async () => {
                 const values = form.getFieldsValue(true).data.map((item: any) => {
                     return {
@@ -496,6 +500,9 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
                 }
                 await saveRun(submitData);
                 resolve(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(false)
             })
         } catch (error) {
             reject(false)
