@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button, DatePicker, Input, message, Modal, Radio, Select } from "antd";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
-import { DetailContent, SearchTable } from "../../common";
+import { DetailContent, SearchTable, Workflow } from "../../common";
 import { TabTypes } from "../Detail";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
@@ -162,7 +162,7 @@ export default function Index() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 240,
+                    width: 300,
                     render: (_: any, record: any) => {
                         const commonDisable: boolean = ![2, -1, 3].includes(record.taskReviewStatus)
                         return <>
@@ -194,6 +194,7 @@ export default function Index() {
                                 disabled={record.taskReviewStatus !== 0}
                                 onClick={() => recallSaleOrderItem(record.id)}
                             >撤销</Button>
+                            <Workflow disabled={!record?.approvalNumber} workflowId={record?.approvalNumber} />
                         </>;
                     }
                 }
