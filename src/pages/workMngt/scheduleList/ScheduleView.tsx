@@ -27,6 +27,7 @@ export default function ScheduleView(): React.ReactNode {
     const assignModalRef = useRef<modalProps>();
     const [type, setType] = useState<'single' | 'batch' | 'detail'>('single');
     const [rowId, setRowId] = useState<string>('')
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
@@ -73,12 +74,12 @@ export default function ScheduleView(): React.ReactNode {
                     type === 'detail' ? null : <>
                         <SchedulePlan plan={setPlanData} />
                         <Button onClick={handleModalCancel}>取消</Button>
-                        <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
+                        <Button loading={confirmLoading} type='primary' onClick={handleModalOk}>保存并提交</Button>
                     </>
                 }
                 key='add'
                 onCancel={handleModalCancel}>
-                <Assign id={rowId} ids={selectedKeys} type={type} planData={planData} ref={assignModalRef} />
+                <Assign id={rowId} ids={selectedKeys} type={type} getLoading={(loading: boolean) => setConfirmLoading(loading)} planData={planData} ref={assignModalRef} />
             </Modal>
             <SearchTable
                 path={`/tower-science/productCategory/taskPage`}
