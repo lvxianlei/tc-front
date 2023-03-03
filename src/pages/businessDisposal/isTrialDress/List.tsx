@@ -34,6 +34,7 @@ export default function List(): React.ReactNode {
     const addRef = useRef<EditRefProps>();
     const [type, setType] = useState<'new' | 'detail' | 'edit'>('new');
     const [rowId, setRowId] = useState<string>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const handleOk = () => new Promise(async (resove, reject) => {
         try {
@@ -71,8 +72,8 @@ export default function List(): React.ReactNode {
                     null
                     :
                     <>
-                        <Button onClick={handleOk} type="primary" ghost>保存并关闭</Button>
-                        <Button onClick={handleLaunchOk} type="primary" ghost>保存并发起</Button>
+                        <Button onClick={handleOk} loading={confirmLoading} type="primary" ghost>保存并关闭</Button>
+                        <Button onClick={handleLaunchOk} loading={confirmLoading} type="primary" ghost>保存并发起</Button>
                     </>
                 }
                 <Button onClick={() => {
@@ -85,7 +86,7 @@ export default function List(): React.ReactNode {
                 setVisible(false);
                 addRef.current?.resetFields();
             }}>
-            <ApplyTrial type={type} id={rowId} ref={addRef} />
+            <ApplyTrial getLoading={(loading: boolean) => setConfirmLoading(loading)} type={type} id={rowId} ref={addRef} />
         </Modal>
         <Page
             path="/tower-science/trialAssembly"

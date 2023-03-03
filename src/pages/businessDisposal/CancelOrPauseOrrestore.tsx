@@ -5,15 +5,13 @@
  */
 
 import React, { useRef, useState } from 'react';
-import { Space, Input, DatePicker, Form, Spin, Button, TablePaginationConfig, Radio, RadioChangeEvent, Row, Col, Modal, message, Select } from 'antd';
+import { Space, Input, Form, Spin, Button, TablePaginationConfig } from 'antd';
 import { CommonTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './CancelOrPauseOrrestore.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../utils/RequestUtil';
-import { Link, useHistory } from 'react-router-dom';
-import { voltageGradeOptions } from '../../configuration/DictionaryOptions';
-import AuthUtil from '../../utils/AuthUtil';
+import { Link } from 'react-router-dom';
 
 export interface ILofting {
     readonly id?: string;

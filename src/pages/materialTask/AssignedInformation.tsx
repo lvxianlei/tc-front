@@ -19,15 +19,17 @@ import SelectUser from "../common/SelectUser"
 export interface EditProps {
     id: string;
     status: number;
+    getLoading: (loading: boolean) => void;
 }
 
 export interface RefProps {
     onSubmit: () => void
     resetFields: () => void
+    getLoading: (loading: boolean) => void;
 }
 
 
-export default forwardRef(function Edit({ id, status }: EditProps, ref) {
+export default forwardRef(function Edit({ id, status, getLoading }: EditProps, ref) {
     const [form] = Form.useForm()
     const [userList, setUserList] = useState<any>();
 
@@ -40,7 +42,7 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id, status] })
+    }), { refreshDeps: [id, status, getLoading] })
 
     const { data: department } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -125,6 +127,7 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
     const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/materialProductCategory`, [postData])
+            getLoading(false)
             resole(result)
         } catch (error) {
             reject(error)
@@ -133,6 +136,7 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form.validateFields().then(async res => {
                 let baseData = await form.getFieldsValue(true);
                 const value = {
@@ -142,6 +146,8 @@ export default forwardRef(function Edit({ id, status }: EditProps, ref) {
                 }
                 await saveRun(value)
                 resolve(true);
+            }).catch(e => {
+                getLoading(false)
             })
         } catch (error) {
             console.log(error)

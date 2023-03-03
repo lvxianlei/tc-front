@@ -77,7 +77,8 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
                 <>
                     <Button type="link" onClick={() => {
                         selectedData?.splice(index, 1)
-                        setSelectedData(selectedData)
+                        setSelectedData([...selectedData]);
+                        getUserData(rowId, filterValue)
                     }}><DeleteOutlined /></Button>
                 </>
             )
@@ -117,14 +118,14 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
             size: 10000,
             ...filter
         });
-        setRowId(id)
+        setRowId(id ? id : deptData[0]?.id)
         const selected = selectedData?.map((res: any) => res?.userId)
         const newData = data?.records?.filter((res: any) => selected?.indexOf(res?.userId) === -1)
         setUserData([...newData])
     }), { manual: true })
 
     const onSearch = (values: Record<string, any>) => {
-        getUserData(rowId, { ...values });
+        getUserData(rowId === deptData[0]?.id ? '' : rowId, { ...values });
         setFilterValue({ ...values })
     }
 
@@ -132,6 +133,7 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
         try {
             RequestUtil.post(`/tower-science/staffing`, postData).then(res => {
                 resole(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)
@@ -150,7 +152,8 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
                         userId: res?.userId,
                         type: type === '放样员' ? 2 : type === '提料员' ? 3 : type === '编程员' ? 4 : 5
                     }
-                })
+                }),
+                type: type === '放样员' ? 2 : type === '提料员' ? 3 : type === '编程员' ? 4 : 5
             })
             resolve(true);
         } catch (error) {
@@ -178,7 +181,6 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
                     </Form.Item>
                 </Form>
             </Col>
-
             <Col>
                 <Button type="link" onClick={() => {
                     setSelectedData([])
@@ -190,6 +192,7 @@ export default forwardRef(function Allocation({ getLoading, type }: AllocationPr
         <Row gutter={12}>
             <Col span={10}>
                 <CommonTable
+                    scroll={{ y: 500 }}
                     columns={columns}
                     dataSource={deptData}
                     pagination={false}

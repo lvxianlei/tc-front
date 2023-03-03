@@ -18,6 +18,7 @@ import SelectUser from "../common/SelectUser"
 
 export interface EditProps {
     id: string;
+    getLoading: (loading: boolean) => void;
 }
 
 export interface EditRefProps {
@@ -25,7 +26,7 @@ export interface EditRefProps {
     resetFields: () => void
 }
 
-export default forwardRef(function Edit({ id }: EditProps, ref) {
+export default forwardRef(function Edit({ id, getLoading }: EditProps, ref) {
     const [form] = Form.useForm();
     const [detailData, setDetailData] = useState<any>();
 
@@ -47,12 +48,13 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [id, getLoading] })
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((postData: any) => new Promise(async (resole, reject) => {
+    const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.post(`/tower-science/materialProductCategory`, [...postData])
-            resole(result)
+            await RequestUtil.post(`/tower-science/materialProductCategory`, [...postData])
+            getLoading(false)
+            resole(true)
         } catch (error) {
             reject(error)
         }
@@ -60,18 +62,24 @@ export default forwardRef(function Edit({ id }: EditProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            let baseData = await form.validateFields();
-            const assignedList = form.getFieldsValue(true).assignedList;
-            const value = assignedList.map((res: any, index: number) => {
-                return {
-                    ...res,
-                    materialLeader: res.materialLeader === '0' ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === '0') - 1].materialLeader : res.materialLeader,
-                    priority: res.priority === '0' ? assignedList[assignedList.findIndex((item: any) => item.priority === '0') - 1].priority : res.priority,
-                    materialDeliverTime: res.materialDeliverTime.format('YYYY-MM-DD')
-                }
+            getLoading(true)
+            form.validateFields().then(async res => {
+                const assignedList = form.getFieldsValue(true).assignedList;
+                const value = assignedList.map((res: any, index: number) => {
+                    return {
+                        ...res,
+                        materialLeader: res.materialLeader === '0' ? assignedList[assignedList.findIndex((item: any) => item.materialLeader === '0') - 1].materialLeader : res.materialLeader,
+                        priority: res.priority === '0' ? assignedList[assignedList.findIndex((item: any) => item.priority === '0') - 1].priority : res.priority,
+                        materialDeliverTime: res.materialDeliverTime.format('YYYY-MM-DD')
+                    }
+                })
+                await saveRun(value)
+                resolve(true);
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
-            await saveRun(value)
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
