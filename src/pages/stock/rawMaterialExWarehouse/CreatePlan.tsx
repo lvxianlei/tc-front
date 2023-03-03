@@ -587,7 +587,22 @@ export default function CreatePlan(props: any): JSX.Element {
             }}
             maskClosable={false}
             width={1100}
-            footer={type===0?[
+            footer={type===2?[
+                <Button key="back" onClick={() => {
+                    setMaterialList([]);
+                    setPopDataList([]);
+                    setType(0)
+                    props?.handleCreate({code:1});
+                }}>
+                    取消
+                </Button>,
+                <Button key="create" type="primary" onClick={() => handleSaveClick('save')} loading={saveLoading}>
+                    保存
+                </Button>,
+                <Button key="create" type="primary" onClick={() => handleSaveClick('submit')} loading={submitLoading}>
+                    保存并提交
+                </Button>
+            ]:[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
@@ -599,20 +614,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
-            ]:[
-                <Button key="back" onClick={() => {
-                    setMaterialList([]);
-                    setPopDataList([]);
-                    props?.handleCreate({code:1});
-                }}>
-                    取消
-                </Button>,
-                <Button key="create" type="primary" onClick={() => handleSaveClick('save')} loading={saveLoading}>
-                    保存
-                </Button>,
-                <Button key="create" type="primary" onClick={() => handleSaveClick('submit')} loading={submitLoading}>
-                    保存并提交
-                </Button>
+                
             ]}
         >
             <Spin spinning={loading}>
