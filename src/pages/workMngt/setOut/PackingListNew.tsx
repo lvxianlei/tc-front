@@ -656,7 +656,7 @@ export default function PackingListNew(): React.ReactNode {
                     </Descriptions.Item>
                     <Descriptions.Item label="复用杆塔">
                         <Form.Item name="towers">
-                            <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }} disabled={packageAttributeName === '专用'}>选择杆塔</Button>} disabled />
+                            <Input addonBefore={<Button type="link" onClick={() => { setVisible(true) }}>选择杆塔</Button>} disabled />
                         </Form.Item>
                     </Descriptions.Item>
                 </Descriptions>

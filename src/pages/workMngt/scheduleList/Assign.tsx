@@ -21,9 +21,10 @@ interface modalProps {
     type: 'single' | 'batch' | 'detail' | 'taskBatch';
     planData: any;
     ids?: any[];
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function Assign({ ids, planData, id, type }: modalProps, ref) {
+export default forwardRef(function Assign({ ids, planData, id, type, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [scheduleData, setScheduleData] = useState<any | undefined>({});
     const [detailData, setDetailData] = useState<any>({});
@@ -261,12 +262,13 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [ids, planData, id, type] })
+    }), { refreshDeps: [ids, planData, id, type, getLoading] })
 
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            const result = await RequestUtil.post('/tower-science/productCategory/assign', postData)
+            const result = await RequestUtil.post('/tower-science/productCategory/assign', postData);
+            getLoading(false)
             resole(result)
         } catch (error) {
             reject(error)
@@ -275,60 +277,65 @@ export default forwardRef(function Assign({ ids, planData, id, type }: modalProp
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            await form.validateFields();
-            const saveData = await form.getFieldsValue(true);
-            saveData.id = scheduleData.id;
-            saveData.assignPlanId = scheduleData.assignPlanId;
+            getLoading(true)
+            form.validateFields().then(async res => {
+                const saveData = await form.getFieldsValue(true);
+                saveData.id = scheduleData.id;
+                saveData.assignPlanId = scheduleData.assignPlanId;
 
-            saveData.loftingUser = Array.isArray(saveData.loftingUser) && saveData.loftingUser.length > 0 ? saveData.loftingUser.join(',') : '';
-            if (saveData.loftingMutualReview && saveData.loftingMutualReview.indexOf('0') === 0) { //审图校卡
-                saveData.loftingMutualReview = saveData.loftingUser && Array.isArray(saveData.loftingUser) ? saveData.loftingUser?.join(',') : saveData.loftingUser
-            } else {
-                saveData.loftingMutualReview = saveData.loftingMutualReview?.join(',')
-            }
-            if (saveData.weldingUser && saveData.weldingUser.indexOf('0') === 0) { //组焊清单
-                if (saveData.loftingMutualReview && saveData.loftingMutualReview?.indexOf('0') === 0) {
-                    saveData.weldingUser = saveData.loftingUser && Array.isArray(saveData.loftingUser) ? saveData.loftingUser.join(',') : saveData.loftingUser
+                saveData.loftingUser = Array.isArray(saveData.loftingUser) && saveData.loftingUser.length > 0 ? saveData.loftingUser.join(',') : '';
+                if (saveData.loftingMutualReview && saveData.loftingMutualReview.indexOf('0') === 0) { //审图校卡
+                    saveData.loftingMutualReview = saveData.loftingUser && Array.isArray(saveData.loftingUser) ? saveData.loftingUser?.join(',') : saveData.loftingUser
                 } else {
-                    saveData.weldingUser = Array.isArray(saveData.loftingMutualReview) ? saveData.loftingMutualReview?.join(',') : saveData.loftingMutualReview
+                    saveData.loftingMutualReview = saveData.loftingMutualReview?.join(',')
                 }
-            } else {
-                saveData.weldingUser = saveData.weldingUser.join(',')
-            }
-            saveData.ncUser = saveData?.ncUser && saveData?.ncUser.indexOf('0') === 0 ? saveData?.programmingLeader : saveData?.ncUser;
-            saveData.productPartUser = saveData?.productPartUser && saveData?.productPartUser.indexOf('0') === 0 ? saveData?.ncUser : saveData?.productPartUser;
-            saveData.packageUser = saveData?.packageUser && saveData?.packageUser.indexOf('0') === 0 ? saveData?.productPartUser : saveData?.packageUser;
-            saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser;
-            if (saveData?.boltUser && saveData?.boltUser.indexOf('0') === 0) { //螺栓清单
-                saveData.boltUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser
-            } else {
-                saveData.boltUser = saveData?.boltUser?.join(',')
-            }
-            if (saveData.boltCheckUser && saveData.boltCheckUser.indexOf('0') === 0) { //螺栓清单校核
-                if (saveData.boltUser && saveData.boltUser?.indexOf('0') === 0) {
-                    saveData.boltCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.loftingUser : saveData?.boltPlanCheckUser
+                if (saveData.weldingUser && saveData.weldingUser.indexOf('0') === 0) { //组焊清单
+                    if (saveData.loftingMutualReview && saveData.loftingMutualReview?.indexOf('0') === 0) {
+                        saveData.weldingUser = saveData.loftingUser && Array.isArray(saveData.loftingUser) ? saveData.loftingUser.join(',') : saveData.loftingUser
+                    } else {
+                        saveData.weldingUser = Array.isArray(saveData.loftingMutualReview) ? saveData.loftingMutualReview?.join(',') : saveData.loftingMutualReview
+                    }
                 } else {
-                    saveData.boltCheckUser = Array.isArray(saveData.boltUser) ? saveData.boltUser?.join(',') : saveData.boltUser
+                    saveData.weldingUser = saveData.weldingUser.join(',')
                 }
-            } else {
-                saveData.boltCheckUser = saveData?.boltCheckUser?.join(',')
-            }
-            saveData.boltCheckUser = Array.isArray(saveData?.boltCheckUser) ? saveData?.boltCheckUser?.join(',') : saveData?.boltCheckUser;
-            saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader && saveData?.deliveryDrawLeader.indexOf('0') === 0 ? saveData?.drawLeader : saveData?.deliveryDrawLeader;
+                saveData.ncUser = saveData?.ncUser && saveData?.ncUser.indexOf('0') === 0 ? saveData?.programmingLeader : saveData?.ncUser;
+                saveData.productPartUser = saveData?.productPartUser && saveData?.productPartUser.indexOf('0') === 0 ? saveData?.ncUser : saveData?.productPartUser;
+                saveData.packageUser = saveData?.packageUser && saveData?.packageUser.indexOf('0') === 0 ? saveData?.productPartUser : saveData?.packageUser;
+                saveData.boltPlanCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser;
+                if (saveData?.boltUser && saveData?.boltUser.indexOf('0') === 0) { //螺栓清单
+                    saveData.boltUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.boltLeader : saveData?.boltPlanCheckUser
+                } else {
+                    saveData.boltUser = saveData?.boltUser?.join(',')
+                }
+                if (saveData.boltCheckUser && saveData.boltCheckUser.indexOf('0') === 0) { //螺栓清单校核
+                    if (saveData.boltUser && saveData.boltUser?.indexOf('0') === 0) {
+                        saveData.boltCheckUser = saveData?.boltPlanCheckUser && saveData?.boltPlanCheckUser.indexOf('0') === 0 ? saveData?.loftingUser : saveData?.boltPlanCheckUser
+                    } else {
+                        saveData.boltCheckUser = Array.isArray(saveData.boltUser) ? saveData.boltUser?.join(',') : saveData.boltUser
+                    }
+                } else {
+                    saveData.boltCheckUser = saveData?.boltCheckUser?.join(',')
+                }
+                saveData.boltCheckUser = Array.isArray(saveData?.boltCheckUser) ? saveData?.boltCheckUser?.join(',') : saveData?.boltCheckUser;
+                saveData.deliveryDrawLeader = saveData?.deliveryDrawLeader && saveData?.deliveryDrawLeader.indexOf('0') === 0 ? saveData?.drawLeader : saveData?.deliveryDrawLeader;
 
-            await saveRun({
-                ...saveData,
-                boltDeliverTime: saveData?.boltDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                weldingDeliverTime: saveData?.weldingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                loftingDeliverTime: saveData?.loftingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                loftingPartDeliverTime: saveData?.loftingPartDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                programmingDeliverTime: saveData?.programmingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                smallSampleDeliverTime: saveData?.smallSampleDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                deliveryDrawDeliverTime: saveData?.deliveryDrawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                drawDeliverTime: saveData?.drawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
-                idList: type === 'batch' ? scheduleData?.productCategoryIds : type === 'taskBatch' ? scheduleData?.productCategoryIds : [scheduleData.productCategoryId]
+                await saveRun({
+                    ...saveData,
+                    boltDeliverTime: saveData?.boltDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    weldingDeliverTime: saveData?.weldingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    loftingDeliverTime: saveData?.loftingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    loftingPartDeliverTime: saveData?.loftingPartDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    programmingDeliverTime: saveData?.programmingDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    smallSampleDeliverTime: saveData?.smallSampleDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    deliveryDrawDeliverTime: saveData?.deliveryDrawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    drawDeliverTime: saveData?.drawDeliverTime?.format('YYYY-MM-DD HH:mm:ss'),
+                    idList: type === 'batch' ? scheduleData?.productCategoryIds : type === 'taskBatch' ? scheduleData?.productCategoryIds : [scheduleData.productCategoryId]
+                })
+                resolve(true)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
-            resolve(true)
         } catch (error) {
             reject(error)
         }

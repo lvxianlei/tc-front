@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, Form, Spin, Button, Radio, RadioChangeEvent, Row, Col, Dropdown, Menu, Modal, message } from 'antd';
-import { CommonAliTable, CommonTable } from '../../common';
+import { CommonAliTable, CommonTable, IntgSelect } from '../../common';
 import styles from './PersonnelLoad.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -136,8 +136,8 @@ export default function List(): React.ReactNode {
             <Allocation type={title} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
         </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="userNme">
-                <Input style={{ width: '200px' }} placeholder="姓名" />
+            <Form.Item name="userId">
+                <IntgSelect style={{ width: '200px' }} placeholder="姓名" />
             </Form.Item>
             <Form.Item>
                 <Space direction="horizontal">
