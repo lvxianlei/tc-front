@@ -25,8 +25,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     inspectionScheme: value,
-                    inspectionNum:value===0?0:item.inspectionNum,
-                    type: value===0?2:item.type,
+                    inspectionNum:value===0?0:value===2?3:item.inspectionNum,
+                    machiningNum:value===0?0:value===2?3:item.machiningNum,
+                    type: value===0?2:value===2?1:item.type,
                     inspectionTypeName: value!==3?[]:item.inspectionTypeName
                 })
             }
@@ -165,25 +166,25 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${props.id}`)
             console.log(result)
-            type==='save'&&saveRun({
-                qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
-                    return {
-                        ...item,
-                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
-                        receiveStockDetailId: item?.receiveStockDetailId,
-                        productionTime: item?.manufactureTime
-                    }
-                }),
-                ...baseInfo,
-                receiveStockId: props.id,
-                supplierId: result?.supplierId,
-                supplierName:result?.supplierName,
-                receiveTime: result?.receiveTime,
-                receiveNumber: result?.receiveNumber,
-                warehouseId:result?.warehouseId,
-                inspectionBatch:1,
-                commit:0,
-            });
+            // type==='save'&&saveRun({
+            //     qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
+            //         return {
+            //             ...item,
+            //             inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+            //             receiveStockDetailId: item?.receiveStockDetailId,
+            //             productionTime: item?.manufactureTime
+            //         }
+            //     }),
+            //     ...baseInfo,
+            //     receiveStockId: props.id,
+            //     supplierId: result?.supplierId,
+            //     supplierName:result?.supplierName,
+            //     receiveTime: result?.receiveTime,
+            //     receiveNumber: result?.receiveNumber,
+            //     warehouseId:result?.warehouseId,
+            //     inspectionBatch:1,
+            //     commit:0,
+            // });
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
@@ -216,20 +217,20 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }, [props.visible])
 
-    const { loading: saveLoading,  run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
-        try {
-            const path = '/tower-storage/qualityInspection'
-            const result: { [key: string]: any } = await RequestUtil.post(path, {
-                ...data,
-                // id: props.id
-            })
-            message.success("保存成功！");
-            props?.handleCreate({ code: 1 })
-            resove(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
+    // const { loading: saveLoading,  run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    //     try {
+    //         const path = '/tower-storage/qualityInspection'
+    //         const result: { [key: string]: any } = await RequestUtil.post(path, {
+    //             ...data,
+    //             // id: props.id
+    //         })
+    //         message.success("保存成功！");
+    //         props?.handleCreate({ code: 1 })
+    //         resove(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
     const { loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path =  '/tower-storage/tower-storage/qualityInspection/inspection'
@@ -246,9 +247,34 @@ export default function CreatePlan(props: any): JSX.Element {
             const result: any[] = await RequestUtil.get(`/tower-storage/receiveStock/quality/${props.id}`)
             const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
             setUserList(userData.records);
-            setPopDataList(result)
+            const realReceiveBatchNumbers = result?.map((res: any) => res?.realReceiveBatchNumber)
+            const ids: any = Array.from(new Set([...realReceiveBatchNumbers]))
+            console.log(ids)
+            let value:any = []
+            ids.map((item:any)=>{
+                const index = result.findIndex((itemE:any)=>{return itemE.realReceiveBatchNumber===item})
+                value.push(index)
+            })
+            console.log(value)
+            setPopDataList(result.map((item:any,index:number)=>{
+                return {
+                    ...item,
+                    inspectionScheme: value.includes(index)?2:0,
+                    inspectionNum: value.includes(index)?3:0,
+                    machiningNum: value.includes(index)?3:0,
+                    type: value.includes(index)?1:2,
+                }
+            }))
             resole({
-                ...result
+                ...(result.map((item:any,index:number)=>{
+                    return {
+                        ...item,
+                        inspectionScheme: value.includes(index)?2:0,
+                        inspectionNum: value.includes(index)?3:0,
+                        machiningNum: value.includes(index)?3:0,
+                        type: value.includes(index)?1:2,
+                    }
+                }))
             })
         } catch (error) {
             console.log(error)
@@ -274,9 +300,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
-                    保存
-                </Button>,
+                // <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
+                //     保存
+                // </Button>,
                 <Button key="create" type="primary" onClick={() => handleCreateClick('submit')} loading={submitLoading}>
                     保存并提交
                 </Button>
