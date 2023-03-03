@@ -1,150 +1,116 @@
-import React from 'react';
-import { Button, Space, Modal, Input, Form, FormInstance } from 'antd';
-import { DetailContent, Attachment, AttachmentRef } from '../../common';
+/**
+ * @author zyc
+ * @copyright © 2023
+ * @description 放样过程管理-评估列表-评估信息
+ * */
+
+import React, { useImperativeHandle, forwardRef, useRef } from "react";
+import { Spin, Form, Input } from 'antd';
+import { Attachment, AttachmentRef } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
+import useRequest from '@ahooksjs/use-request';
 import styles from './Evaluation.module.less';
-import { WithTranslation, withTranslation } from 'react-i18next';
-import { RouteComponentProps, withRouter } from 'react-router';
-import { FileProps } from '../../common/Attachment';
 
-interface IResponse {
-    readonly id?: string;
-    readonly assessInfo?: string;
-    readonly status?: string | number;
-    readonly assessFileVOList?: FileProps[];
-    readonly instructionFileVOList?: FileProps[];
+interface AllocationProps {
+    getLoading: (loading: boolean) => void;
+    id: string;
 }
 
-export interface EvaluationInformationProps { }
-export interface IEvaluationInformationRouteProps extends RouteComponentProps<EvaluationInformationProps>, WithTranslation {
-    readonly id: number | string;
-    readonly updateList: () => void;
-}
+export default forwardRef(function EvaluationInformation({ getLoading, id }: AllocationProps, ref) {
+    const [form] = Form.useForm();
+    const attchsRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
 
-export interface EvaluationInformationState {
-    readonly visible: boolean;
-    readonly description?: string;
-    readonly information?: IResponse;
-}
-
-class EvaluationInformation extends React.Component<IEvaluationInformationRouteProps, EvaluationInformationState> {
-
-    private form: React.RefObject<FormInstance> = React.createRef<FormInstance>();
-    private attchsRef: React.RefObject<AttachmentRef> = React.createRef<AttachmentRef>();
-    /**
-     * @protected
-     * @description Gets ref
-     * @returns ref 
-     */
-    protected getAttchsRef(): AttachmentRef | null {
-        return this.attchsRef?.current
-    }
-
-    /**
-     * @protected
-     * @description Gets form
-     * @returns form 
-     */
-    protected getForm(): FormInstance | null {
-        return this.form?.current;
-    }
-
-    public state: EvaluationInformationState = {
-        visible: false
-    }
-
-    private modalCancel(): void {
-        this.setState({
-            visible: false
-        })
-        this.getForm()?.resetFields();
-    }
-
-    private async modalShow(): Promise<void> {
-        const data: IResponse = await RequestUtil.get<IResponse>(`/tower-science/assessTask/infoDetail/${this.props.id}`);
-        this.setState({
-            visible: true,
-            information: data,
-            description: data.assessInfo
-        })
-    }
-
-    public onSave(): void {
-        if (this.getForm()) {
-            this.getForm()?.validateFields().then((res) => {
-                RequestUtil.post(`/tower-science/assessTask/infoSave`, {
-                    assessInfo: this.getForm()?.getFieldsValue(true).description,
-                    id: this.props.id,
-                    fileIdList: this.getAttchsRef()?.getDataSource().map(res => { return res.id })
-                }).then(res => {
-                    this.setState({
-                        visible: false
-                    })
-                    this.props.updateList();
-                });
+    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/assessTask/infoDetail/${id}`);
+            form?.setFieldsValue({
+                description: result?.assessInfo
             })
+            resole(result)
+        } catch (error) {
+            reject(error)
         }
-    }
+    }), { refreshDeps: [getLoading] })
 
-    public onSubmit(): void {
-        if (this.getForm()) {
-            this.getForm()?.validateFields().then((res) => {
-                RequestUtil.post(`/tower-science/assessTask/infoSubmit`, {
-                    assessInfo: this.getForm()?.getFieldsValue(true).description,
-                    id: this.props.id,
-                    fileIdList: this.getAttchsRef()?.getDataSource().map(res => { return res.id })
-                }).then(res => {
-                    this.setState({
-                        visible: false
-                    })
-                    this.props.updateList();
-                });
+    const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            RequestUtil.post(`/tower-science/assessTask/infoSubmit`, postData).then(res => {
+                resole(true)
+                getLoading(false)
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
+        } catch (error) {
+            reject(error)
         }
+    }), { manual: true })
+
+    const onSubmit = () => new Promise(async (resolve, reject) => {
+        try {
+            getLoading(true)
+            await submitRun({
+                assessInfo: form?.getFieldsValue(true)?.description,
+                id: id,
+                fileIdList: attchsRef.current.getDataSource().map(res => { return res.id })
+            })
+            resolve(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
+        try {
+            if (form) {
+                form?.validateFields().then(res => {
+                    RequestUtil.post(`/tower-science/assessTask/infoSave`, postData).then(res => {
+                        resole(true)
+                        getLoading(false)
+                    }).catch(e => {
+                        getLoading(false)
+                        reject(e)
+                    })
+                }).catch(e => {
+                    getLoading(false)
+                })
+            }
+
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const onSave = () => new Promise(async (resolve, reject) => {
+        try {
+            getLoading(true)
+            await saveRun({
+                assessInfo: form?.getFieldsValue(true)?.description,
+                id: id,
+                fileIdList: attchsRef.current.getDataSource().map(res => { return res.id })
+            })
+            resolve(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+    const resetFields = () => {
+        form.resetFields();
     }
 
-    /**
-    * @description Renders AbstractDetailComponent
-    * @returns render 
-    */
-    public render(): React.ReactNode {
-        return <>
-            <Button type="link" onClick={() => this.modalShow()}>评估信息</Button>
-            <Modal
-                visible={this.state.visible}
-                width="40%"
-                title="评估信息"
-                footer={
-                    <Space direction="horizontal" size="small">
-                        <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
-                        {
-                            this.state.information?.status === 3 ?
-                                <><Button type="primary" onClick={() => this.onSave()}>保存</Button>
-                                    <Button type="primary" onClick={() => this.onSubmit()} ghost>保存并提交</Button></>
-                                : null
-                        }
-                    </Space>
-                }
-                className={styles.modal}
-                onCancel={() => this.modalCancel()}
+    useImperativeHandle(ref, () => ({ onSave, onSubmit, resetFields }), [ref, onSave, onSubmit, resetFields]);
+    return <Spin spinning={loading}>
+        <Form form={form}>
+            <Attachment title="说明文件" dataSource={data?.instructionFileVOList} />
+            <p className={styles.topPadding}>评估信息<span style={{ color: 'red' }}>*</span></p>
+            <Form.Item
+                name="description"
+                rules={[{ required: true, message: '请输入评估信息' }]}
             >
-                <Form onFinish={() => this.onSave()} ref={this.form}>
-                    <DetailContent>
-                        <Attachment title="说明文件" dataSource={this.state.information?.instructionFileVOList} />
-                        <p className={styles.topPadding}>评估信息<span style={{ color: 'red' }}>*</span></p>
-                        <Form.Item
-                            name="description"
-                            rules={[{ required: true, message: '请输入评估信息' }]}
-                            initialValue={this.state.description}
-                        >
-                            <Input.TextArea placeholder="请输入" maxLength={300} disabled={this.state.information?.status === 4} showCount />
-                        </Form.Item>
-                        <Attachment title="评估文件" ref={this.attchsRef} edit={!(this.state.information?.status === 4)} dataSource={this.state.information?.assessFileVOList} />
-                    </DetailContent>
-                </Form>
-            </Modal>
-        </>
-    }
-}
+                <Input.TextArea placeholder="请输入" maxLength={300} disabled={data?.status === 4} showCount />
+            </Form.Item>
+            <Attachment title="评估文件" ref={attchsRef} edit={!(data?.status === 4)} dataSource={data?.assessFileVOList} />
+        </Form>
+    </Spin>
+})
 
-export default withRouter(withTranslation('translation')(EvaluationInformation))
