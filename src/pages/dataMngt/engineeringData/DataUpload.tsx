@@ -5,17 +5,14 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
-import { Button, Form, Input, Select } from 'antd';
-import { Attachment, CommonTable, DetailContent } from '../../common';
+import { Button, Col, Empty, Form, Input, Row, Select, Spin } from 'antd';
+import { BatchAttachment, CommonTable, DetailContent } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './EngineeringData.module.less';
-import { AttachmentRef, FileProps } from "../../common/Attachment";
+import Attachment, { AttachmentRef, FileProps } from "../../common/Attachment";
 import { FixedType } from 'rc-table/lib/interface';
 import { documentTypeOptions, fileTypeOptions } from "../../../configuration/DictionaryOptions";
-import Item from "antd/lib/list/Item";
-import { number } from "echarts";
-
 interface modalProps {
     readonly projectBackupId?: string;
     readonly id?: string;
@@ -25,7 +22,7 @@ interface modalProps {
 
 export default forwardRef(function DataUpload({ type, getLoading, projectBackupId, id }: modalProps, ref) {
     const [form] = Form.useForm();
-    const [uploadData, setUploadData] = useState<any>();
+    const [uploadData, setUploadData] = useState<any>([]);
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
 
     const { data: planNumbers } = useRequest<any>(() => new Promise(async (resole, reject) => {
@@ -258,45 +255,46 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     return <DetailContent>
         {
             type === 'new' ?
-                <Attachment multiple key={uploadData} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                    const values = form.getFieldsValue(true).data || []
-                    const data = [...dataInfo]?.map(res => {
-                        return {
-                            fileName: res?.originalName,
-                            fileId: res?.id,
-                            fileSuffix: res?.fileSuffix,
-                            projectBackupId: projectBackupId
-                        }
-                    })
-                    const newData = [
-                        ...values || [],
-                        ...data
-                    ].map((item: any, index: number) => {
-                        if (index === 0) {
+                <BatchAttachment multiple key={uploadData} columns={tableColumns} ref={attachRef} edit isTable={false}
+                    onDoneChange={(dataInfo: FileProps[]) => {
+                        const values = form.getFieldsValue(true).data || []
+                        const data = [...dataInfo]?.map(res => {
                             return {
-                                ...item,
-                                fileCategory: item?.fileCategory ? item?.fileCategory : '',
-                                fileType: item?.fileType ? item?.fileType : '',
-                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...planNumbers?.map((e: any) => {
-                                    return e
-                                }) || []]
+                                fileName: res?.originalName,
+                                fileId: res?.id,
+                                fileSuffix: res?.fileSuffix,
+                                projectBackupId: projectBackupId
                             }
-                        } else {
-                            return {
-                                ...item,
-                                fileCategory: item?.fileCategory ? item?.fileCategory : 0,
-                                fileType: item?.fileType ? item?.fileType : 0,
-                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : [0]
+                        })
+                        const newData = [
+                            ...values || [],
+                            ...data
+                        ].map((item: any, index: number) => {
+                            if (index === 0) {
+                                return {
+                                    ...item,
+                                    fileCategory: item?.fileCategory ? item?.fileCategory : '',
+                                    fileType: item?.fileType ? item?.fileType : '',
+                                    planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...planNumbers?.map((e: any) => {
+                                        return e
+                                    }) || []]
+                                }
+                            } else {
+                                return {
+                                    ...item,
+                                    fileCategory: item?.fileCategory ? item?.fileCategory : 0,
+                                    fileType: item?.fileType ? item?.fileType : 0,
+                                    planNumber: item?.planNumber?.length > 0 ? item?.planNumber : [0]
+                                }
                             }
-                        }
-                    })
-                    setUploadData(newData);
-                    form?.setFieldsValue({
-                        data: newData
-                    })
-                }}>
+                        })
+                        setUploadData(newData);
+                        form?.setFieldsValue({
+                            data: newData
+                        })
+                    }}>
                     <Button type="primary" style={{ marginBottom: '16px' }} ghost>上传</Button>
-                </Attachment>
+                </BatchAttachment>
                 :
                 null
         }
@@ -307,6 +305,6 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                 dataSource={[...uploadData || []]}
             />
         </Form>
-    </DetailContent>
+    </DetailContent >
 })
 
