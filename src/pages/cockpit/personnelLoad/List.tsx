@@ -41,6 +41,7 @@ export default function List(): React.ReactNode {
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const history = useHistory()
+    const height = document.documentElement.clientHeight - 200;
 
     const menu = (
         <Menu>
@@ -204,7 +205,7 @@ export default function List(): React.ReactNode {
                 columns={tableColumns}
                 dataSource={[...detailData || []]}
                 pagination={false}
-                style={{maxHeight: '750px', overflow: 'auto'}}
+                style={{maxHeight: height, overflow: 'auto'}}
             />
         </div>
     </Spin>
