@@ -145,7 +145,7 @@ export default function Invoicing() {
                             >
                                 <Button type="link" size="small" disabled={record.state !== 0}>删除</Button>
                             </Popconfirm>
-                            <Workflow workflowId={record?.id} />
+                            <Workflow workflowId={record?.processId} />
                         </>
                     }
                 }]}
