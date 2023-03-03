@@ -16,9 +16,10 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 interface modalProps {
     readonly id?: any;
     readonly type?: 'new' | 'detail' | 'edit';
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function GenerationOfMaterialApply({ id, type }: modalProps, ref) {
+export default forwardRef(function GenerationOfMaterialApply({ id, type, getLoading }: modalProps, ref) {
     const [towerSelects, setTowerSelects] = useState([]);
     const [detailData, setDetailData] = useState<any>()
     const [editForm] = Form.useForm();
@@ -40,7 +41,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type] })
+    }), { manual: type === 'new', refreshDeps: [id, type, getLoading] })
 
     const { data: types } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -82,6 +83,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             editForm.validateFields().then(async res => {
                 const value = editForm.getFieldsValue(true);
                 if (!(value?.changeMaterialStandard || value?.structureTexture || value?.changeStructureTexture)) {
@@ -99,6 +101,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     resolve(true);
                 }
 
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
         } catch (error) {
             reject(false)
@@ -108,6 +113,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/substitute/material`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -116,6 +122,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             editForm.validateFields().then(async res => {
                 const value = await editForm.getFieldsValue(true);
                 await submitRun({
@@ -127,6 +134,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     fileIds: attachRef.current?.getDataSource().map(item => item.id)
                 })
                 resolve(true);
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
 
         } catch (error) {
@@ -137,6 +147,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/substitute/material/submit`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
