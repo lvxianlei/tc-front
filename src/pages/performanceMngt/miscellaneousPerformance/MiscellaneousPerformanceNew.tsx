@@ -16,9 +16,10 @@ import SelectUser from "../../common/SelectUser";
 interface modalProps {
     readonly id?: any;
     readonly type?: 'new' | 'detail' | 'edit';
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function GenerationOfMaterialApply({ id, type }: modalProps, ref) {
+export default forwardRef(function GenerationOfMaterialApply({ id, type, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [towerSelects, setTowerSelects] = useState([]);
     const [types, setTypes] = useState<any>([]);
@@ -32,7 +33,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type] })
+    }), { manual: type === 'new', refreshDeps: [id, type, getLoading] })
 
     const { data: loftingLink } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const result: any = await RequestUtil.get(`/tower-science/performance/enable`);
@@ -56,6 +57,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form?.validateFields().then(async res => {
                 const value = await form.getFieldsValue(true);
                 await saveRun({
@@ -63,6 +65,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     id: id
                 })
                 resolve(true);
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
 
         } catch (error) {
@@ -73,6 +78,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/sundryConfig/saveSundryMerits`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -81,6 +87,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form?.validateFields().then(async res => {
                 const value = await form.getFieldsValue(true);
                 await submitRun({
@@ -88,6 +95,9 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     id: id
                 })
                 resolve(true);
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
         } catch (error) {
             reject(false)
@@ -97,6 +107,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/sundryConfig/saveAndLaunchSundryMerits`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
