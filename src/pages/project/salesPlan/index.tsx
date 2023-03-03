@@ -194,7 +194,7 @@ export default function Index() {
                                 disabled={record.taskReviewStatus !== 0}
                                 onClick={() => recallSaleOrderItem(record.id)}
                             >撤销</Button>
-                            <Workflow workflowId={record?.approvalNumber} />
+                            <Workflow disabled={!record?.approvalNumber} workflowId={record?.approvalNumber} />
                         </>;
                     }
                 }
