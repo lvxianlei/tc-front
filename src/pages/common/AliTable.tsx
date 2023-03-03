@@ -61,6 +61,7 @@ const StyledBaseTable = (styled(BaseTable)`
         padding: 0 8px;
       .ant-btn-link {
         padding-left: 0px;
+        padding-right: 7px;
       }
     }
     &.edit {
