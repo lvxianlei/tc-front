@@ -210,9 +210,9 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form.validateFields().then(async res => {
                 const value = await form.getFieldsValue(true)?.data || []
-                getLoading(true)
                 await saveRun(value?.map((res: any) => {
                     return {
                         ...res,
@@ -225,6 +225,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                 }))
                 resolve(true);
             }).catch(e => {
+                getLoading(false)
                 reject(e)
             })
 
@@ -237,6 +238,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
         try {
             await RequestUtil.post(`/tower-science/projectData`, data).then(res => {
                 resove(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)

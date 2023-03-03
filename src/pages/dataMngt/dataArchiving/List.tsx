@@ -59,7 +59,7 @@ export default function List(): React.ReactNode {
             confirmLoading={confirmLoading}
             footer={
                 <Space>
-                    {type === 'detail' ? null : <Button type='primary' onClick={handleOk}>保存</Button>}
+                    {type === 'detail' ? null : <Button type='primary' loading={confirmLoading} onClick={handleOk}>保存</Button>}
                     <Button onClick={() => {
                         setVisible(false);
                         newRef.current?.resetFields();

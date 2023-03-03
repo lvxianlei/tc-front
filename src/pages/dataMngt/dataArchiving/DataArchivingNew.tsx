@@ -56,14 +56,18 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form?.validateFields().then(async res => {
                 const value = form.getFieldsValue(true);
-                getLoading(true)
+                getLoading(false)
                 await saveRun({
                     ...value,
                     id: data?.id
                 })
                 resolve(true);
+            }).catch(e => {
+                reject(e)
+                getLoading(false)
             })
 
         } catch (error) {
@@ -75,6 +79,7 @@ export default forwardRef(function DataArchivingNew({ record, type, getLoading }
         try {
             RequestUtil.post(`/tower-science/data/backup`, data).then(res => {
                 resove(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)
