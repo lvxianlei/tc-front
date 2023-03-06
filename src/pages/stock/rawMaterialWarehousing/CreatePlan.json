@@ -24,7 +24,8 @@
             ],
             "enum": [
                 { "value": "1", "label": "采购入库" },
-                { "value": "2", "label": "盘点入库" }
+                { "value": "2", "label": "盘点入库" },
+                { "value": "4", "label": "退货出库" }
             ]
         },
         
@@ -92,6 +93,18 @@
                 {
                     "required": true,
                     "message": "请选择到货仓库"
+                }
+            ]
+        },
+        {
+            "title": "入库时间",
+            "dataIndex": "warehousingEntryTime",
+            "format": "YYYY-MM-DD",
+            "type": "date",
+            "rules": [
+                {
+                    "required": true,
+                    "message": "请选择入库时间"
                 }
             ]
         }
@@ -283,6 +296,125 @@
             {
                 "title": "区位",
                 "dataIndex": "location"
+            },
+            {
+                "title": "炉批号",
+                "dataIndex": "furnaceBatchNumber"
+            },
+            {
+                "title": "质保书号",
+                "dataIndex": "warrantyNumber"
+            }
+        ]
+    },
+    "addMaterialB": {
+        "title": "原材料",
+        "type": "popTable",
+        "path": "/tower-storage/materialStock",
+        "width": 1011,
+        "selectType": "checkbox",
+        "dependencies": true,
+        "readOnly": true,
+        "search": [
+            {
+                "title": "品名",
+                "type": "string",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "规格",
+                "type": "string",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "材质",
+                "type": "select",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "标准",
+                "type": "select",
+                "dataIndex": "materialStandard"
+            },
+            {
+                "title": "长度",
+                "type": "number",
+                "dataIndex": "length"
+            },
+            {
+                "title": "创建日期",
+                "type": "date",
+                "dataIndex": "createTime"
+            }
+        ],
+        "columns": [
+            {
+                "title": "收货标识码",
+                "dataIndex": "receiveBatchNumber"
+            },
+            {
+                "title": "入库日期",
+                "dataIndex": "entryTime"
+            },
+            {
+                "title": "品名",
+                "dataIndex": "materialName"
+            },
+            {
+                "title": "标准",
+                "dataIndex": "materialStandardName"
+            },
+            {
+                "title": "材质",
+                "dataIndex": "structureTexture"
+            },
+            {
+                "title": "规格",
+                "dataIndex": "structureSpec"
+            },
+            {
+                "title": "长度",
+                "dataIndex": "length"
+            },
+            {
+                "title": "宽度",
+                "dataIndex": "width"
+            },
+            {
+                "title": "数量",
+                "dataIndex": "num"
+            },
+            {
+                "title": "理算重量",
+                "dataIndex": "totalWeight"
+            },
+            {
+                "title": "含税单价（元/吨）",
+                "dataIndex": "taxPrice"
+            },
+            {
+                "title": "含税金额（元）",
+                "dataIndex": "totalTaxPrice"
+            },
+            {
+                "title": "不含税单价（元/吨）",
+                "dataIndex": "unTaxPrice"
+            },
+            {
+                "title": "不含税金额（元）",
+                "dataIndex": "totalUnTaxPrice"
+            },
+            {
+                "title": "所在仓库",
+                "dataIndex": "warehouseName"
+            },
+            {
+                "title": "库位",
+                "dataIndex": "reservoirName"
+            },
+            {
+                "title": "区位",
+                "dataIndex": "locatorName"
             },
             {
                 "title": "炉批号",

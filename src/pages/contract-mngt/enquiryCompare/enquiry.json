@@ -450,7 +450,7 @@
             "title": "报价(元/吨)",
             "dataIndex": "taxOffer",
             "type": "number",
-            "min": 1,
+            "min": 0,
             "max": 999999.99,
             "step": 0.01
         }

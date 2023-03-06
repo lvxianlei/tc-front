@@ -4,7 +4,7 @@
  */
 import React, { useState, useRef } from 'react';
 import { Button, Input, DatePicker, Select, Form, TreeSelect, Table } from 'antd'
-import { Page } from '../common'
+import { SearchTable } from '../common'
 import { fundRecordColumns } from "./fundRecord.json"
 import { payTypeOptions } from '../../configuration/DictionaryOptions';
 import OverViewRecord from './overViewRecord'; // 查看付款记录详情
@@ -96,7 +96,7 @@ export default function FaundInfomation() {
     }
     return (
         <>
-            <Page
+            <SearchTable
                 path="/tower-finance/payApply/payment"
                 onFilterSubmit={onFilterSubmit}
                 searchFormItems={[
@@ -137,7 +137,7 @@ export default function FaundInfomation() {
                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
                     }
                 ]}
-                sourceKey="paymentDetailListVOIPage.records"
+                transformResult={(result) => result?.paymentDetailListVOIPage}
                 extraOperation={(data: any) => <>
                     金额合计：<span style={{ color: "#FF8C00" }}>{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
                 </>}
@@ -148,7 +148,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: 'payType',
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any):
                                     React.ReactNode => (
                                     <span>
@@ -164,7 +164,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
                             })
                         }
@@ -174,7 +174,7 @@ export default function FaundInfomation() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 120,
                         render: (_: any, record: any) => {
                             if (!record.Sunmry) {
                                 return <Button className="btn-operation-link" type="link"

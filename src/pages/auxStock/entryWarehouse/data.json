@@ -38,6 +38,13 @@
             "width": 80
         },
         {
+            "title": "入库日期",
+            "dataIndex": "warehousingTime",
+            "type":"date",
+            "format": "YYYY-MM-DD",
+            "width": 80
+        },
+        {
             "title": "最新状态变更时间",
             "dataIndex": "statusUpdateTime",
             "type": "date",

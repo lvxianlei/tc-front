@@ -149,7 +149,7 @@ import AuthUtil from '../../../utils/AuthUtil';
         }
     }
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-supply/task/purchase/manual`, data)
             message.success("创建成功！");
@@ -181,7 +181,7 @@ import AuthUtil from '../../../utils/AuthUtil';
                 }}>
                     关闭
                 </Button>,
-                <Button type="primary" onClick={() => handleCreateClick()}>
+                <Button type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     创建
                 </Button>
             ]}

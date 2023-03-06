@@ -1375,7 +1375,7 @@
       "authority": "tc_erp_sw_auxiliary_purchase_plan_purchse_list"
     },
     { //辅材采购管理-辅材采购汇总
-      "name": "辅材采购计划",
+      "name": "辅材采购汇总",
       "path": "/buyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "module": "./pages/margeBuyAuxiliaryMaterial/margeBuyAuxiliaryMaterial",
       "exact": true,
@@ -2683,8 +2683,8 @@
     },
     { // 填写开票申请信息
       "name": "填写开票信息",
-      "path": "/invoicing/billList/edit/:invoicingId",
-      "module": "./pages/invoicing/Edit",
+      "path": "/invoicing/billList/detail/:invoicingId",
+      "module": "./pages/invoicing/Overview",
       "exact": true,
       "authority": "tc_erp_fc_invoicing_manage_write"
     },
@@ -3520,6 +3520,20 @@
       "module": "./pages/stock/rawMaterialPick/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
+    },
+    { // 辅材库存-辅材领料单
+      "name": "辅材领料单",
+      "path": "/auxStock/pickWarehouse",
+      "module": "./pages/auxStock/pickWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_auxiliary_material_picking_list"
+    },
+    { // 辅材库存-辅材领料单-详情
+      "name": "辅材领料单详情",
+      "path": "/auxStock/pickWarehouse/detail/:id/:approval",
+      "module": "./pages/auxStock/pickWarehouse/detail/detail",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_auxiliary_material_picking_detail_list"
     }
   ]
 }

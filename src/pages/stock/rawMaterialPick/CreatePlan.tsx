@@ -55,22 +55,41 @@ export default function CreatePlan(props: any): JSX.Element {
         
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         setMaterialList([...materialList, ...newMaterialList])
-        const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,materialList)
-        setPopDataList([...materialList.map((item: any) => {
-            return ({
-                ...item,
-                furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
-                applyNum: item.num,
-                stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
-                stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
-                weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
-                        : (Number(item?.proportion || 1) / 1000).toFixed(5),
-                totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
-                    : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
-                        : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
-            })
-        })])
+        if(materialList.length>0){
+            const data:any[]= await RequestUtil.post(`/tower-storage/materialStock/getPrincipalStockNum`,materialList)
+            setPopDataList([...materialList.map((item: any) => {
+                return ({
+                    ...item,
+                    furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
+                    applyNum: item.num,
+                    stockNum: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockNum,
+                    stockTotalWeight: data.filter((eve:any)=> item.receiveBatchNumber===eve.receiveBatchNumber&&item.materialCode===eve.materialCode&&item.materialName===eve.materialName)[0].stockTotalWeight,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
+                })
+            })])
+        }else{
+            setPopDataList([...materialList.map((item: any) => {
+                return ({
+                    ...item,
+                    furnaceBatch: item.furnaceBatchNumber||item.furnaceBatch,
+                    applyNum: item.num,
+                    stockNum: 0,
+                    stockTotalWeight: 0,
+                    weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) / 1000).toFixed(5),
+                    totalWeight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) * (item.num || 1) / 1000 / 1000).toFixed(5)
+                        : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) * (item.num || 1) / 1000 / 1000 / 1000).toFixed(5)
+                            : (Number(item?.proportion || 1) * (item.num || 1) / 1000).toFixed(5)   
+                })
+            })])
+        }
+        
         setVisible(false)
     }
 
@@ -226,6 +245,8 @@ export default function CreatePlan(props: any): JSX.Element {
         }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId);
+            setPopDataList([])
+            setMaterialList([])
             return;
         }
     }
@@ -380,7 +401,7 @@ export default function CreatePlan(props: any): JSX.Element {
         }
     }, [props.visible])
 
-    const { run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const {loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = props.type === "create" ? `/tower-storage/materialPicking` : '/tower-storage/materialPicking'
             const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? data : {
@@ -395,7 +416,7 @@ export default function CreatePlan(props: any): JSX.Element {
             reject(error)
         }
     }), { manual: true })
-    const { run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
+    const {loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((data: any) => new Promise(async (resove, reject) => {
         try {
             const path = `/tower-storage/outStock/saveExcess` 
             const result: { [key: string]: any } = await RequestUtil[ "post" ](path, props.type === "create" ? data : {
@@ -481,7 +502,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick()}>
+                <Button key="create" type="primary" onClick={() => handleCreateClick()} loading={saveLoading}>
                     确定
                 </Button>
             ]

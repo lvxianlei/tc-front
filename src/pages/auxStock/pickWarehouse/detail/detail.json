@@ -1,8 +1,8 @@
 {
     "baseColumn": [
         {
-            "title": "状态",
-            "dataIndex": "outStockItemStatusName",
+            "title": "发料状态",
+            "dataIndex": "pickingStatusName",
             "width": 120
         },
         {
@@ -16,8 +16,18 @@
             "width": 120
         },
         {
-            "title": "已出库数量",
+            "title": "申请数量",
             "dataIndex": "num",
+            "width": 120
+        },
+        {
+            "title": "备注",
+            "dataIndex": "remark",
+            "width": 150
+        },
+        {
+            "title": "库存数量",
+            "dataIndex": "stockNum",
             "width": 120
         },
         {
@@ -27,7 +37,12 @@
         },
         {
             "title": "出库时间",
-            "dataIndex": "pickingTime",
+            "dataIndex": "outStockTime",
+            "width": 120
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "receiveBatchNumber",
             "width": 120
         },
         {
@@ -46,12 +61,7 @@
             "width": 120
         },
         {
-            "title": "备注",
-            "dataIndex": "remark",
-            "width": 120
-        },
-        {
-            "title": "含税单价（元）",
+            "title": "含税单价（元/吨）",
             "dataIndex": "taxPrice",
             "width": 120
         },
@@ -61,7 +71,7 @@
             "width": 120
         },
         {
-            "title": "不含税单价（元）",
+            "title": "不含税单价（元/吨）",
             "dataIndex": "unTaxPrice",
             "width": 140
         },
@@ -69,6 +79,27 @@
             "title": "不含税金额（元）",
             "dataIndex": "totalUnTaxPrice",
             "width": 120
+        },
+        {
+            "title": "领料部门",
+            "dataIndex": "deptName",
+            "width": 120
+        },
+        {
+            "title": "领料人",
+            "dataIndex": "pickingUserName",
+            "width": 120
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeamName",
+            "width": 120
+        },
+        {
+            "title": "领料时间",
+            "dataIndex": "pickingTime",
+            "width": 140
         }
+       
     ]
 }

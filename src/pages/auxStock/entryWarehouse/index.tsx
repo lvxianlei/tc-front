@@ -58,6 +58,24 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             value.endStatusUpdateTime = `${formatDate[1]} 23:59:59`
             delete value.startRefundTime
         }
+        if (value.createTime) {
+            const formatDate = value.createTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startCreateTime = `${formatDate[0]} 00:00:00`
+            value.endCreateTime = `${formatDate[1]} 23:59:59`
+            delete value.createTime
+        }else{
+            value.startCreateTime = ``
+            value.endCreateTime = ``
+        }
+        if (value.entryTime) {
+            const formatDate = value.entryTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startEntryTime = `${formatDate[0]} 00:00:00`
+            value.endEntryTime = `${formatDate[1]} 23:59:59`
+            delete value.entryTime
+        }else{
+            value.startEntryTime = ``
+            value.endEntryTime = ``
+        }
         setFilterValue({ ...value })
         run(value)
         return value
@@ -147,7 +165,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         width: 50,
                         render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
-                    ...(tabs === 1 ? baseColumn : baseDetail) as any,
+                    ...(tabs === 1 ? baseColumn : baseDetail.map((item)=>{
+                        switch (item.dataIndex) {
+                            case "num":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalTaxPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                })
+                            case "totalPrice":
+                                return ({
+                                    ...item,
+                                    render: (value: any, records: any, key: number) => {
+                                            return <span>{value}</span>
+                                    }
+                                }) 
+                            default:
+                                return item
+                        }
+                    })) as any,
                     {
                         title: '操作',
                         dataIndex: 'key',
@@ -236,6 +280,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="">全部</Select.Option>
                                 <Select.Option value="1">采购入库</Select.Option>
                                 <Select.Option value="2">盘点入库</Select.Option>
+                                <Select.Option value="4">退货出库</Select.Option>
                             </Select>
                         )
                     },
@@ -276,6 +321,16 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         children: <Input width={100} maxLength={200} placeholder="请输入规格" />
                     },
                     {
+                        name: 'createTime',
+                        label: '创建时间',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'entryTime',
+                        label: '入库日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
                         name: 'fuzzyQuery',
                         label: "模糊查询项",
                         children: <Input placeholder="请输入收货单号/物料编码/供应商/合同编号/联系人/联系电话进行查询" style={{ width: 300 }} />
@@ -294,7 +349,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     setVisible(false)
                     editRef.current?.resetFields()
                 }}>
-                <CreatePlan ref={editRef} id={editId} type={oprationType} />
+                <CreatePlan ref={editRef} id={editId} type={oprationType} visible={visible}/>
             </Modal>
         </>
     )

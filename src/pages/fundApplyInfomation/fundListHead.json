@@ -2,51 +2,63 @@
     "fundListColumns": [
         {
             "title": "请款编号",
-            "dataIndex": "payApplyNumber"
+            "dataIndex": "payApplyNumber",
+            "width": 150
         },
         {
             "title": "请款日期",
-            "dataIndex": "payApplyTime"
+            "dataIndex": "payApplyTime",
+            "width": 150
         },
         {
             "title": "请款单号",
-            "dataIndex": "payNumber"
+            "dataIndex": "payNumber",
+            "width": 150
         },
         {
             "title": "收款方",
-            "dataIndex": "payee"
+            "dataIndex": "payee",
+            "width": 150
         },
         {
             "title": "请款方",
-            "dataIndex": "payer"
+            "dataIndex": "payer",
+            "width": 150
         },
         {
             "title": "请款部门",
-            "dataIndex": "payerDeptName"
+            "dataIndex": "payerDeptName",
+            "width": 150
         },
         {
             "title": "费用类型",
-            "dataIndex": "costType"
+            "dataIndex": "costType",
+            "width": 150
         },
         {
             "title": "付款方式",
-            "dataIndex": "payType"
+            "dataIndex": "payType",
+            "width": 150
         },
         {
             "title": "请款金额",
-            "dataIndex": "sumMoney"
+            "dataIndex": "sumMoney",
+            "width": 150
         },
         {
             "title": "已付金额",
-            "dataIndex": "money"
+            "dataIndex": "money",
+            "width": 150
         },
         {
             "title": "应付款余额",
-            "dataIndex": "payMoney"
+            "dataIndex": "payMoney",
+            "width": 150
         },
         {
             "title": "付款状态",
-            "dataIndex": "payStatus"
+            "dataIndex": "payStatus",
+            "width": 150
         }
     ],
     "approvalStatus": [
@@ -165,10 +177,14 @@
         {
             "title": "意见",
             "dataIndex": "payMoney",
-            "width":200
+            "width": 200
         }
     ],
-    "payStatuOptions": ["待付款","部分付款","已付款"],
+    "payStatuOptions": [
+        "待付款",
+        "部分付款",
+        "已付款"
+    ],
     "addColums": [
         {
             "title": "付款日期",

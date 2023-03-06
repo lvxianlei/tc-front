@@ -5,7 +5,7 @@
 import React, { useState, useRef } from 'react';
 import { Button, Input, DatePicker, Radio, Select, Form, TreeSelect, Table } from 'antd'
 // import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { SearchTable } from '../common'
 import { fundListColumns, approvalStatus, payStatuOptions } from "./fundListHead.json"
 import { costTypeOptions } from '../../configuration/DictionaryOptions';
 import AddModal from './addModal'; // 新增付款记录
@@ -90,7 +90,7 @@ export default function FaundInfomation() {
     }
     return (
         <>
-            <Page
+            <SearchTable
                 path="/tower-finance/payApply"
                 onFilterSubmit={onFilterSubmit}
                 filterValue={{ payStatus }}
@@ -133,7 +133,7 @@ export default function FaundInfomation() {
                         children: <Input placeholder="请输入请款单号/收款方进行查询" style={{ width: 200 }} />
                     }
                 ]}
-                sourceKey="payApplyListVOIPage.records"
+                transformResult={(result) => result?.payApplyListVOIPage}
                 extraOperation={(data: any) => <>
                     <Radio.Group defaultValue={payStatus} onChange={operationChange}>
                         {approvalStatus.map((item: any) =>
@@ -142,9 +142,9 @@ export default function FaundInfomation() {
                     </Radio.Group>
                     {payStatus == 1 ?
                         <span style={{ marginLeft: "20px" }}>
-                            请款金额总计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
-                            已付金额合计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalMoney) : 0.00}元</span>
-                            应付款余额合计：<span style={{color: "#FF8C00", marginRight: 12}}>{data ? changeTwoDecimal_f(data.totalPayMoney) : 0.00}元</span>
+                            请款金额总计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
+                            已付金额合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data ? changeTwoDecimal_f(data.totalMoney) : 0.00}元</span>
+                            应付款余额合计：<span style={{ color: "#FF8C00", marginRight: 12 }}>{data ? changeTwoDecimal_f(data.totalPayMoney) : 0.00}元</span>
                         </span>
                         :
                         <span style={{ marginLeft: "20px" }}>请款金额总计：{data ? changeTwoDecimal_f(data.totalSumMoney) : 0.00}元</span>
@@ -156,7 +156,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: 'payStatus',
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any):
                                     React.ReactNode => (
                                     <span>{!record.Sunmry ? payStatuOptions[record.payStatus] : ""}</span>
@@ -167,7 +167,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.sumMoney ? changeTwoDecimal_f(record.sumMoney) : ''}</span>)
                             })
                         }
@@ -175,7 +175,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.money ? changeTwoDecimal_f(record.money) : ''}</span>)
                             })
                         }
@@ -183,7 +183,7 @@ export default function FaundInfomation() {
                             return ({
                                 title: item.title,
                                 dataIndex: item.dataIndex,
-                                width: 50,
+                                width: 150,
                                 render: (_: any, record: any): React.ReactNode => (<span>{record.payMoney ? changeTwoDecimal_f(record.payMoney) : ''}</span>)
                             })
                         }
@@ -193,7 +193,7 @@ export default function FaundInfomation() {
                         title: "操作",
                         dataIndex: "opration",
                         fixed: "right",
-                        width: 100,
+                        width: 120,
                         render: (_: any, record: any) => {
                             if (!record.Sunmry) {
                                 if (payStatus === 1) {
@@ -234,7 +234,7 @@ export default function FaundInfomation() {
                             <>
                                 {
                                     pageData && pageData.length > 0 ? (
-                                        <Table.Summary.Row style={{background: "rgba(255, 140, 0, .08)"}}>
+                                        <Table.Summary.Row style={{ background: "rgba(255, 140, 0, .08)" }}>
                                             {
                                                 number.map((item: any, index: number) => {
                                                     if (index === 0) {

@@ -8,34 +8,56 @@ import {
     material,
     baseInfoColumn,
     addMaterial,
-    addPlanMaterial
+    addPlanMaterial,
+    addMaterialB
 } from "./CreatePlan.json";
 import { qualityAssuranceOptions } from "../../../configuration/DictionaryOptions"
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
 import { totalTaxPrice, totalUnTaxPrice, unTaxPrice } from '@utils/calcUtil';
 import "./CreatePlan.less";
+import moment from 'moment';
 export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [addCollectionForm] = Form.useForm();
     const [visible, setVisible] = useState<boolean>(false)
+    const [visibleB, setVisibleB] = useState<boolean>(false)
     const [planVisible, setPlanVisible] = useState<boolean>(false)
     const [materialList, setMaterialList] = useState<any[]>([])
     const [popDataList, setPopDataList] = useState<any[]>([])
     const [materialPlanList, setMaterialPlanList] = useState<any[]>([])
     const [warehouseId, setWarehouseId] = useState<string | undefined>();
     const [supplierId, setSupplierId] = useState<any>("");
+    const [type, setType] = useState<any>('1');
     const qualityAssuranceEnum = qualityAssuranceOptions?.map((item: { id: string, name: string }) => ({ value: item.id, label: item.name }))
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(
                 `/tower-storage/warehousingEntry/auxiliary/${props.id}`
             )
-            setPopDataList(result?.warehousingEntryDetailList)
-            setMaterialList(result?.warehousingEntryDetailList)
+            setPopDataList(result?.warehousingEntryDetailList.map((item:any)=>{
+                return {
+                    ...item,
+                    num: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.num : item.num, 
+                    totalTaxPrice: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                    totalPrice: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalPrice : item.totalPrice,
+                    totalWeight: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalWeight : item.totalWeight,
+                }
+            }))
+            setMaterialList(result?.warehousingEntryDetailList.map((item:any)=>{
+                return {
+                    ...item,
+                    num: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.num : item.num, 
+                    totalTaxPrice: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                    totalPrice: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalPrice : item.totalPrice,
+                    totalWeight: result?.warehousingType==='4'||result?.warehousingType===4 ? 0 - item.totalWeight : item.totalWeight,
+                }
+            }))
+            setType(result?.warehousingType)
             setSupplierId(result?.supplierId)
             setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
+                warehousingEntryTime: result.warehousingEntryTime!== null ? moment(result.warehousingEntryTime):'',
                 supplierId: {
                     id: result?.supplierId,
                     value: result?.supplierName,
@@ -50,7 +72,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     value: result?.warehouseId,
                     label: result?.warehouseName
                 },
-                warehousingType: result?.warehousingType || "1"
+                warehousingType: typeof result?.warehousingType==='number' ? result?.warehousingType.toString() : result?.warehousingType || "1"
             })
         } catch (error) {
             reject(error)
@@ -117,7 +139,25 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         })])
         setVisible(false)
     }
-
+    const handleAddModalOkB = () => {
+        setMaterialPlanList([...materialList.map((item: any, index: number) => {
+            return ({
+                ...item,
+                totalTaxPrice: item.totalTaxPrice || item.totalTaxAmount,
+                totalPrice: item.totalPrice || item.totalAmount,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        })])
+        setPopDataList([...materialList.map((item: any, index: number) => {
+            return ({
+                ...item,
+                totalTaxPrice: item.totalTaxPrice || item.totalTaxAmount,
+                totalPrice: item.totalPrice || item.totalAmount,
+                key: `${item.id}-${item.receiveStockId}-${item.receiveStockDetailId}-${index}`
+            })
+        })])
+        setVisibleB(false)
+    }
     const handleAddPlanModalOk = () => {
         const materials = [...materialPlanList]
         // const newMaterialList = materialPlanList.filter((item: any) => !materialPlanList.find((maItem: any) => item.id === maItem.id))
@@ -159,12 +199,23 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     }
 
     const performanceBondChange = (fields: { [key: string]: any }) => {
+        if (fields.warehousingType) {
+            console.log(fields.warehousingType)
+            setType(fields.warehousingType)
+            setPopDataList([])
+            setMaterialList([])
+            return;
+        }
         if (fields.warehouseId) {
             setWarehouseId(fields.warehouseId.value);
+            type===4||type==='4'&&setMaterialList([])
+            type===4||type==='4'&&setPopDataList([])
             return;
         }
         if (fields.supplierId) {
             setSupplierId(fields.supplierId?.id);
+            setMaterialList([])
+            setPopDataList([])
             return;
         }
     }
@@ -172,7 +223,16 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const handleCreateClick = () => new Promise(async (resove, reject) => {
         try {
             const baseInfo = await addCollectionForm.validateFields();
-            let warehousingEntryDetailList = [...popDataList]
+            let warehousingEntryDetailList = [...popDataList].map((item:any)=>{
+                return {
+                    ...item,
+                    num: type==='4'||type===4 ? 0 - item.num : item.num, 
+                    totalTaxPrice: type==='4'||type===4 ? 0 - item.totalTaxPrice : item.totalTaxPrice,
+                    totalPrice:type==='4'||type===4 ? 0 - item.totalPrice : item.totalPrice,
+                    totalWeight: type==='4'||type===4 ? 0 - item.totalWeight : item.totalWeight,
+                    materialStockId: type==='4'||type===4 ? item.id : '',
+                }
+            })
             if (warehousingEntryDetailList.length < 1) {
                 message.error("请添加入库明细!");
                 return false;
@@ -281,6 +341,17 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         resetFields
     }), [ref, handleCreateClick, resetFields])
 
+    useEffect(() => {
+        if (props.visible) {
+            addCollectionForm.setFieldsValue({
+                warehousingType: "1",
+                warehouseId:'',
+                warehousingEntryNumber:'',
+                supplierId:'',
+                warehousingEntryTime: moment().format('YYYY-MM-DD')
+            })
+        }
+    }, [props.visible])
     return (<>
         <Spin spinning={loading}>
             <DetailTitle title="基本信息" />
@@ -320,7 +391,13 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             />
             <DetailTitle title="入库明细" />
             <div className='btnWrapper'>
-                <Button type='primary'
+                {type==='4'||type===4?<Button type='primary'
+                    key="add"
+                    ghost
+                    style={{ marginRight: 8 }}
+                    disabled={!(warehouseId && supplierId)}
+                    onClick={() => setVisibleB(true)}>选择库存</Button>:
+                <><Button type='primary'
                     key="add"
                     ghost
                     style={{ marginRight: 8 }}
@@ -331,7 +408,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     key="clear"
                     ghost
                     disabled={!(warehouseId && supplierId)}
-                    onClick={() => setPlanVisible(true)}>选择计划明细</Button>
+                    onClick={() => setPlanVisible(true)}>选择计划明细</Button></>}
             </div>
             <CommonTable
                 rowKey="key"
@@ -361,6 +438,13 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                             return <InputNumber
                                                 min={1}
                                                 value={value || 1}
+                                                onChange={(value: number) => handleMaterailChange(value, key, "num")}
+                                                key={key} />
+                                        }
+                                        if(type==='4'||type===4 ){
+                                            return <InputNumber
+                                                min={0.00001}
+                                                value={value}
                                                 onChange={(value: number) => handleMaterailChange(value, key, "num")}
                                                 key={key} />
                                         }
@@ -412,6 +496,9 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                                                 treeData={locatorData}
                                                 onChange={(value: any) => handleMaterailChange(value, key, "locatorId")}
                                             />
+                                        }
+                                        if(type==='4'||type===4){
+                                            return records.locatorName||records.location
                                         }
                                         return records.location
                                     }
@@ -477,6 +564,46 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     value: ""
                 }}
                 onChange={(fields: any[]) => setMaterialPlanList(fields || [])}
+            />
+        </Modal>
+        <Modal width={1100} title={`选择库存`} destroyOnClose
+            visible={visibleB}
+            onOk={handleAddModalOkB}
+            onCancel={() => setVisibleB(false)}
+        >
+            <PopTableContent
+                data={{
+                    ...addMaterialB as any,
+                    search: (addMaterialB as any).search.map((item: any) => {
+                        if (item.dataIndex === "locatorId") {
+                            return ({
+                                ...item,
+                                treeData: locator
+                            })
+                        }
+                        return item
+                    }),
+                    path: `${addMaterialB.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
+                }}
+                value={{
+                    id: "",
+                    records: popDataList.map((item:any)=>{
+                        return {
+                            ...item,
+                            id: item.materialStockId
+                        }
+                    }),
+                    value: ""
+                }}
+                onChange={(fields: any[]) => setMaterialList(fields.map((item:any)=>{
+                    return{
+                        ...item, 
+                        price: item.unTaxPrice,
+                        totalPrice: item.totalUnTaxPrice,
+                        reservoirArea: item.reservoirName,
+                        location: item.locatorName,
+                    }
+                }) || [])}
             />
         </Modal>
     </>

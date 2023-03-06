@@ -238,7 +238,7 @@ export default function RawMaterialStock(): React.ReactNode {
                         value.lengthMin = value.length.lengthMin
                         value.lengthMax = value.length.lengthMax
                     }
-                    setFilterValue(value)
+                    // setFilterValue(value)
                     run(value)
                     return value
                 }}
@@ -375,7 +375,7 @@ export default function RawMaterialStock(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: '模糊查询项',
-                        children: <Input width={100} maxLength={200} placeholder="请输入收货单号/收货标识码" />
+                        children: <Input width={100} maxLength={200} placeholder="请输入收货单号/收货标识码/收货批次" />
                     }
                 ]}
             />

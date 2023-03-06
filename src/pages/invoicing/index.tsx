@@ -1,7 +1,7 @@
 import React from "react"
 import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
-import { Page } from '../common'
+import { SearchTable } from '../common'
 import { invoicingListHead } from "./InvoicingData.json"
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
 export default function Invoicing() {
@@ -15,7 +15,7 @@ export default function Invoicing() {
         return value
     }
 
-    return <Page
+    return <SearchTable
         path="/tower-finance/invoicing"
         columns={[
             ...invoicingListHead.map((item: any) => {
@@ -34,12 +34,13 @@ export default function Invoicing() {
                 title: "操作",
                 dataIndex: "opration",
                 fixed: "right",
-                width: 100,
+                width: 140,
                 render: (_: any, record: any) => {
                     return <>
-                        <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/taskInfo/${record.id}`)}>查看任务信息</Button>
-                        {record.taskType === 1 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/edit/${record.id}`)}>填写开票信息</Button>}
-                        {record.taskType === 2 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>}
+                        <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/detail/${record.id}`)}>查看</Button>
+                        <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/taskInfo/${record.id}`)}>开票维护</Button>
+                        {/* {record.taskType === 1 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/billList/edit/${record.id}`)}>填写开票信息</Button>}
+                        {record.taskType === 2 && <Button type="link" className="btn-operation-link" onClick={() => history.push(`/invoicing/detail/${record.id}`)}>查看开票信息</Button>} */}
                     </>
                 }
             }]}
@@ -57,6 +58,11 @@ export default function Invoicing() {
                 name: 'startLaunchTime',
                 label: '申请时间',
                 children: <DatePicker.RangePicker format="YYYY-MM-DD" />
+            },
+            {
+                name: 'internalNumber',
+                label: '内部合同号',
+                children: <Input placeholder="请输入内部合同号" width={140} />
             },
             {
                 name: 'fuzzyQuery',

@@ -45,6 +45,12 @@
           { "value": 1, "label": "办公用品" },
           { "value": 0, "label": "辅材" }
       ]
+    },
+    {
+      "title": "用途",
+      "dataIndex": "remark",
+      "type": "textarea",
+      "required": true
     }
   ],
   "editCargoDetails": [

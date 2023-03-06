@@ -11,6 +11,11 @@
             "width": 100
         },
         {
+            "title": "出库日期",
+            "dataIndex": "pickingTime",
+            "width": 100
+        },
+        {
             "title": "状态",
             "dataIndex": "stockStatusName",
             "width": 80
@@ -76,7 +81,7 @@
         },
         {
             "title": "出库日期",
-            "dataIndex": "outStockTime",
+            "dataIndex": "pickingTime",
             "type": "date",
             "format": "YYYY-MM-DD",
             "width": 100

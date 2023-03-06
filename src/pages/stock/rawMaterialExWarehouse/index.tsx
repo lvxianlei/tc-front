@@ -88,7 +88,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         okText="确认"
                         cancelText="取消"
                     >
-                        <Button type="link" disabled={record.stockStatus === 2}>删除</Button>
+                        <Button type="link" disabled={record.outStockStatus === 1}>删除</Button>
                     </Popconfirm>
 
                 </>
@@ -142,17 +142,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }
         if (value.openTime) {
             const formatDate = value.openTime.map((item: any) => item.format("YYYY-MM-DD"))
-            value.startUpdateTime = `${formatDate[0]} 00:00:00`
-            value.endUpdateTime = `${formatDate[1]} 23:59:59`
+            value.startPickingTime = `${formatDate[0]} 00:00:00`
+            value.endPickingTime = `${formatDate[1]} 23:59:59`
             delete value.openTime
         } else {
-            value.startUpdateTime = ``
-            value.endUpdateTime = ``
+            value.startPickingTime = ``
+            value.endPickingTime = ``
         }
-        if (value.batcherId) {
-            value.applyStaffId = value.batcherId.value
+        if (value.applyStaffId) {
+            value.applyStaffId = value.applyStaffId.value
+        }else{
+            value.applyStaffId = ''
         }
-        setFilterValue({ ...filterValue, ...value })
+        // setFilterValue({ ...filterValue, ...value })
         run({...filterValue, ...value})
         return value
     }
@@ -244,7 +246,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         )
                     },
                     {
-                        name: 'batcherId',
+                        name: 'applyStaffId',
                         label: '申请人',
                         children: <IntgSelect width={200} />
                     },
@@ -311,7 +313,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         name: 'fuzzyQuery',
                         label: "模糊查询",
-                        children: <Input placeholder="请输入炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型/备注进行查询" style={{ width: 200 }} />
+                        children: <Input placeholder="请输入收货批次/收货标识码/炉批号/质保书号/下达单号/计划号/工程名称/内部合同号/塔型/备注进行查询" style={{ width: 200 }} />
                     }
                 ]}
             />

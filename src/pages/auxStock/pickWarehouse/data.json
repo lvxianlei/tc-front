@@ -1,0 +1,41 @@
+{
+    "baseColumn": [
+        {
+            "title": "审批状态",
+            "dataIndex": "approvalName",
+            "width": 100
+        },
+        {
+            "title": "辅材单领料单号",
+            "dataIndex": "pickingNumber",
+            "width": 100
+        },
+        {
+            "title": "状态",
+            "dataIndex": "pickingStatusName",
+            "width": 80
+        },
+        {
+            "title": "最新状态变更时间",
+            "dataIndex": "updateTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 120
+        },
+        {
+            "title": "用途",
+            "dataIndex": "remark",
+            "width": 100
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "createUserName",
+            "width": 80
+        },
+        {
+            "title": "创建日期",
+            "dataIndex": "createTime",
+            "width": 80
+        }
+    ]
+}
