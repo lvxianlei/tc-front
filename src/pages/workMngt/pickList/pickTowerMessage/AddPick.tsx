@@ -205,10 +205,15 @@ export default forwardRef(function AddPick({ id, type, rowData, getLoading }: mo
             key: 'structureTexture',
             width: 120,
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
-                <Form.Item name={['data', index, "structureTexture"]} initialValue={_} rules={[{ required: true, message: '请输入材质' }, {
-                    pattern: /^[0-9a-zA-Z-]*$/,
-                    message: '仅可输入数字/字母/-',
-                }]}>
+                <Form.Item name={['data', index, "structureTexture"]} initialValue={_}
+                    rules={[{
+                        required: true, message: '请输入材质'
+                    },
+                        // {
+                        //     pattern: /^[0-9a-zA-Z-]*$/,
+                        //     message: '仅可输入数字/字母/-',
+                        // }
+                    ]}>
                     <Input size="small" maxLength={10} onBlur={async (e) => {
                         const values = form.getFieldsValue(true)?.data || [];
                         if (isBig) {
