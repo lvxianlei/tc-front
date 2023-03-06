@@ -191,7 +191,12 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     throw Error('请您填写数量！')
                 }
                 await saveRun({
-                    materialPickingDetailDTOS: materialList,
+                    materialPickingDetailDTOS: materialList.map((item:any)=>{
+                        return{
+                            ...item,
+                            id:item.ids?item.ids:''
+                        }
+                    }),
                     // ...baseInfo,
                     isApproval: 0,
                     pickingTeamName: baseInfo?.dept.value,
@@ -237,7 +242,12 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                     throw Error('请您填写数量！')
                 }
                 await submitRun({
-                    materialPickingDetailDTOS: materialList,
+                    materialPickingDetailDTOS: materialList.map((item:any)=>{
+                        return{
+                            ...item,
+                            id:item.ids?item.ids:''
+                        }
+                    }),
                     // ...baseInfo,
                     isApproval: 1,
                     pickingTeamName: baseInfo?.dept.value,
@@ -320,8 +330,18 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 `/tower-storage/auxiliaryMaterialPicking/${props.id}`
             )
             setDetail(result)
-            setPopDataList(result?.materialPickingDetailVOS)
-            setMaterialList(result?.materialPickingDetailVOS)
+            setPopDataList(result?.materialPickingDetailVOS.map((item:any)=>{
+                return{
+                    ...item,
+                    ids:item.id,
+                }
+            }))
+            setMaterialList(result?.materialPickingDetailVOS.map((item:any)=>{
+                return{
+                    ...item,
+                    ids:item.id,
+                }
+            }))
             setWarehouseId(result?.warehouseId)
             // addCollectionForm.setFieldsValue({...result,dept:{id:result?.deptId,value:result?.deptName}})
             resole({
@@ -541,14 +561,19 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                 }}
                 value={{
                     id: "",
-                    records: popDataList,
+                    records: popDataList.map((item:any)=>{
+                        return{
+                            ...item,
+                            id: item?.rawStockId
+                        }
+                    })||[],
                     value: ""
                 }}
                 onChange={(fields: any[]) => {
                     setMaterialList(fields.map((item:any)=>{
                         return{
                             ...item,
-                            rawStockId: item.id,
+                            rawStockId: item.rawStockId?item.rawStockId: item.id,
                         }
                     }) || [])
                 }}
