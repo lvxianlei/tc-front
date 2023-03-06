@@ -197,6 +197,23 @@ export default function StaffNew(): React.ReactNode {
             )
         },
         {
+            title: <span><span style={{ color: 'red' }}>*</span>班组</span>,
+            dataIndex: 'teamGroupId',
+            width: 250,
+            render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (
+                <Form.Item name={["list", index, "teamGroupId"]} key={index} initialValue={_} rules={[{
+                    "required": true,
+                    "message": "请选择部门"
+                }]}>
+                    <TreeSelect
+                        style={{ width: '100%' }}
+                        treeData={wrapRole2DataNode(departData)}
+                        placeholder="请选择部门"
+                    />
+                </Form.Item>
+            )
+        },
+        {
             title: '工号',
             dataIndex: 'number',
             width: 150,
@@ -337,6 +354,7 @@ export default function StaffNew(): React.ReactNode {
             account: '',
             category: undefined,
             dept: undefined,
+            teamGroupId: undefined,
             description: '',
             email: '',
             name: '',

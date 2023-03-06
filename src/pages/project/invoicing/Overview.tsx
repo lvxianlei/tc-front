@@ -5,7 +5,7 @@ import { DetailContent, DetailTitle, BaseInfo, CommonTable, Attachment } from '.
 import { baseInfoHead, invoiceHeadDetail, billingHeadOverView, batchHead, saleInvoiceOverView, invoicingStatistics } from "./InvoicingData.json"
 import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
-import { currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
+import { contractPlanStatusOptions, currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const history = useHistory()
     const params = useParams<{ id: string }>()
@@ -78,6 +78,15 @@ export default function Edit() {
                     return ({
                         ...item,
                         type: "string"
+                    })
+                }
+                if (item.dataIndex === "contractType") {
+                    return ({
+                        ...item,
+                        enum: contractPlanStatusOptions?.map(item => ({
+                            value: item.id,
+                            label: item.name
+                        }))
                     })
                 }
                 return item
