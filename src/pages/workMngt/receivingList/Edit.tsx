@@ -1,5 +1,5 @@
 import React, { useState, useRef, forwardRef, useImperativeHandle } from "react"
-import { Button, Form, message, Spin, Modal, Space } from 'antd'
+import { Button, Form, message, Spin, Modal, Space, Input } from 'antd'
 import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
@@ -8,6 +8,7 @@ import { unloadModeOptions, settlementModeOptions, materialTextureOptions, mater
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
 import moment from "moment"
+import styles from './edit.module.less';
 /**
  * 纸质单号，原材料税款合计，车辆牌照
  */
@@ -65,15 +66,44 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
             setSupplierId(result?.supplierId)
-            setCargoData(result?.lists.map((item: any) => ({
+            const dataSourceE:any = []
+            result?.lists?Promise.all( result?.lists.map(async (item: any) => {
+                await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
+                    {
+                        materialName: item.materialName,
+                        materialStandard: item.materialStandard,
+                        structureSpec: item.structureSpec
+                    }
+                ]}).then((res:any)=>{
+                    const postData = {
+                        ...item,
+                        ...( res && res.length>0 ? res[0] : {} ),
+                        num: item.num ? item.num : 0
+                    }
+                    console.log(postData)
+                    dataSourceE.push(postData)
+                    })
+                return item
+            })).then((res)=>{
+                // console.log(res)
+                // console.log(dataSourceE)
+                // const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                //     num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                //     balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                //     totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                //     totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+                // }), {})
+                // setTotal(seletTotal)
+                setCargoData(dataSourceE)
+            }):setCargoData(result?.lists.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 0
             })) || [])
             const seletTotal = result?.lists.reduce((total: TotalState, current: any) => ({
-                num: parseFloat(total.num || "0") + parseFloat(current.num),
-                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
-                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
-                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
+                num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice|| '0')).toFixed(2)
             }), {})
             setTotal(seletTotal)
             resole({
@@ -103,8 +133,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             reject(error)
         }
     }), { manual: true })
-
-    const handleModalOk = () => {
+    //随机数
+    const random =(min:number, max:number)=> {
+        return (Math.random() * (max - min) + min).toFixed(2);
+    }
+    const handleModalOk = async () => {
         const meteringMode = form.getFieldValue("meteringMode")
         const totalPonderationWeight = form.getFieldValue("totalPonderationWeight") || "0"
         // 所有明细理算重量总和
@@ -116,8 +149,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 proportion: item.proportion,
                 num: item.num
             }))).toFixed(5), 0)
-
-        const dataSource: any[] = modalRef.current?.dataSource.map((item: any) => {
+        const dataSourceE:any = []
+        Promise.all( modalRef.current?.dataSource.map(async (item: any) => {
             const weight = calcObj.weight({
                 length: item.length,
                 width: item.width,
@@ -131,67 +164,114 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 weight,
                 item.num,
                 totalPonderationWeight,
-                allTotalWeight)
+                allTotalWeight) || '0'
             // 含税金额
-            const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight)
+            const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight) || '0'
             // 不含税金额
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material)
+            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material) || '0'
             // 含税运费
-            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight)
+            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight) || '0'
             // 不含税运费
-            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport)
+            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport) || '0'
             // 含税装卸费
-            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
+            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight) || '0'
             // 不含税装卸费
-            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
-
-            const postData = {
-                ...item,
-                materialContractDetailId: item.id,
-                materialName: item.materialName,
-                materialStandard: item.materialStandard,
-                // materialStandardName: item.materialStandardName,
-                num: item.num,
-                contractUnitPrice: item.taxPrice,
-                taxPrice: item.taxPrice,
-                /** 不含税单价 */
-                unTaxPrice: item.price,
-                /** 理算重量 */
-                weight: calcObj.weight({
-                    length: item.length,
-                    width: item.width,
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                }),
-                /** 理算总重量 */
-                totalWeight: calcObj.totalWeight({
-                    length: item.length,
-                    width: item.width,
-                    weightAlgorithm: item.weightAlgorithm,
-                    proportion: item.proportion,
-                    num: item.num
-                }),
-                balanceTotalWeight,
-                totalTaxPrice,
-                totalUnTaxPrice,
-                appearance: item.appearance || 1,
-                totalTransportTaxPrice,
-                totalTransportPrice,
-                totalUnloadTaxPrice,
-                totalUnloadPrice
-            }
-            delete postData.id
-            return postData
+            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload) || '0'
+            console.log(item)
+            await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
+                {
+                    materialName: item.materialName,
+                    materialStandard: item.materialStandard,
+                    structureSpec: item.structureSpec
+                }
+            ]}).then((res:any)=>{
+                const limbWidth = [];
+                const thickness = [];
+                const caliber = [];
+                const measureHeight= [];
+                const gageLength = [];
+                if( res && res.length > 0 ){
+                    let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
+                    let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
+                    let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
+                    let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
+                    let len = item.length
+                    for(var i = 1;i<=3; i++){
+                        console.log(Number(limb)+Number(res[0]?.limbWidthMin))
+                        limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                        thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                        caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                        measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                        gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                    }
+                    console.log(limbWidth,thickness,caliber,measureHeight)
+                }else{
+                    limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
+                    thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
+                    caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
+                    measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
+                    gageLength.push(item.length)
+                    console.log(limbWidth,thickness,caliber,measureHeight)
+                }
+                const postData = {
+                    ...item,
+                    ...( res && res.length>0 ? res[0] : {} ),
+                    limbWidth: limbWidth.join(','),
+                    thickness: thickness.join(','),
+                    caliber: caliber.join(','),
+                    measureHeight: measureHeight.join(','),
+                    gageLength: gageLength.join(','),
+                    materialContractDetailId: item.id,
+                    materialName: item.materialName,
+                    materialStandard: item.materialStandard,
+                    // materialStandardName: item.materialStandardName,
+                    num: item.num,
+                    contractUnitPrice: item.taxPrice,
+                    taxPrice: item.taxPrice,
+                    /** 不含税单价 */
+                    unTaxPrice: item.price,
+                    /** 理算重量 */
+                    weight: calcObj.weight({
+                        length: item.length,
+                        width: item.width,
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                    }),
+                    /** 理算总重量 */
+                    totalWeight: calcObj.totalWeight({
+                        length: item.length,
+                        width: item.width,
+                        weightAlgorithm: item.weightAlgorithm,
+                        proportion: item.proportion,
+                        num: item.num
+                    }),
+                    balanceTotalWeight,
+                    totalTaxPrice,
+                    totalUnTaxPrice,
+                    appearance: item.appearance || 1,
+                    totalTransportTaxPrice,
+                    totalTransportPrice,
+                    totalUnloadTaxPrice,
+                    totalUnloadPrice
+                }
+                console.log(postData)
+                delete postData.id
+                dataSourceE.push(postData)
+                })
+            return item
+        })).then((res)=>{
+            console.log(res)
+            console.log(dataSourceE)
+            const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+            }), {})
+            setTotal(seletTotal)
+            setCargoData(dataSourceE)
+            setVisible(false);
         })
-        const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
-            num: parseFloat(total.num || "0") + parseFloat(current.num),
-            balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight)).toFixed(5),
-            totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice)).toFixed(2),
-            totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
-        }), {})
-        setTotal(seletTotal)
-        setCargoData(dataSource)
-        setVisible(false);
     }
 
     const onSubmit = () => new Promise(async (resole, reject) => {
@@ -432,6 +512,73 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 submit: dataSource
             })
         }
+        if (changeFiled.materialStandard){
+            const dataSource: any[] = editForm.getFieldsValue(true).submit
+            const dataSourceE:any = []
+            Promise.all( dataSource.map(async (item: any) => {
+                await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
+                    {
+                        materialName: item.materialName,
+                        materialStandard: item.materialStandard,
+                        structureSpec: item.structureSpec
+                    }
+                ]}).then((res:any)=>{
+                    const limbWidth = [];
+                    const thickness = [];
+                    const caliber = [];
+                    const measureHeight= [];
+                    const gageLength = [];
+                    if( res && res.length > 0 ){
+                        let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
+                        let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
+                        let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
+                        let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
+                        let len = item.length
+                        for(var i = 1;i<=3; i++){
+                            console.log(Number(limb)+Number(res[0]?.limbWidthMin))
+                            limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                            thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                            caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                            measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                            gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                        }
+                        console.log(limbWidth,thickness,caliber,measureHeight)
+                    }else{
+                        limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
+                        thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
+                        caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
+                        measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
+                        gageLength.push(item.length)
+                        console.log(limbWidth,thickness,caliber,measureHeight)
+                    }
+                    const postData = {
+                        ...item,
+                        ...( res && res.length>0 ? res[0] : {} ),
+                        limbWidth: limbWidth.join(','),
+                        thickness: thickness.join(','),
+                        caliber: caliber.join(','),
+                        measureHeight: measureHeight.join(','),
+                        gageLength: gageLength.join(','),
+                    }
+                    console.log(postData)
+                    delete postData.id
+                    dataSourceE.push(postData)
+                    })
+                return item
+            })).then((res)=>{
+                const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                    num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                    balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                    totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                    totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+                }), {})
+                setTotal(seletTotal)
+                // setCargoData(dataSourceE)
+                editForm.setFieldsValue({
+                    submit: dataSourceE
+                })
+            })
+        }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
@@ -444,7 +591,6 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         setTotal(seletTotal)
         setSelect(selectedRowKeys)
     }
-
     return <Spin spinning={loading && warehouseLoading && materialLoading}>
         <Modal
             width={1011}
@@ -539,6 +685,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             haveIndex={false}
             form={editForm}
             rowKey="key"
+            className={styles.formStyle}
             haveOpration={false}
             onChange={handleEditableChange}
             haveNewButton={false}
@@ -560,6 +707,127 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                                 value: item.name,
                                 label: item.name
                             }))
+                        })
+                    }
+                    if (item.dataIndex === "measureHeight") {
+                        return ({
+                            ...item,
+                            render: (number: number, record: any, index: number) => {
+                                    return <Form.Item name={['submit', index, 'height']} initialValue={number} rules={[
+                                        {
+                                            validator: (rule, value, callback) => {
+                                                const resData:any = (editForm.getFieldsValue(true).submit)[index]
+                                                const hei = calcObj.calculateHeight(resData.materialName,resData.structureSpec)
+                                                if(!value&&['槽钢','不锈钢槽钢','H型钢','工字钢'].includes(resData.materialName)){
+                                                    callback(`请输入高度`);
+                                                }else if((resData?.measureHeightMax&&value > Number(resData?.measureHeightMax)+Number(hei) )||(resData?.measureHeightMin&&value< Number(resData?.measureHeightMin) +Number(hei))){
+                                                    callback(`请输入大于或等于${Number(resData?.measureHeightMin) +Number(hei)}且小于或等于${Number(resData?.measureHeightMax)+Number(hei)}的值`);
+                                                }else{
+                                                    callback()
+                                                }
+                                            },
+                                        },
+                                    ]}>
+                                        <Input  style={{ width: '100%' }} />
+                                    </Form.Item>
+                            }
+                            
+                        })
+                    }
+                    if (item.dataIndex === "limbWidth") {
+                        return ({
+                            ...item,
+                            render: (number: number, record: any, index: number) => {
+                                return <Form.Item name={['submit', index, 'limbWidth']} initialValue={number} rules={[
+                                    {
+                                        validator: (rule, value, callback) => {
+                                            const resData:any = (editForm.getFieldsValue(true).submit)[index]
+                                            const limb = calcObj.calculateWidth(resData.materialName,resData.structureSpec,resData.width)
+                                            if(!value&&!['钢管','无缝钢管','直缝钢管','圆钢','螺纹钢'].includes(resData.materialName)){
+                                                callback(`请输入肢宽`);
+                                            }else if((resData?.limbWidthMax&&value>Number(resData?.limbWidthMax)+Number(limb)) ||(resData?.limbWidthMin&&value<Number(resData?.limbWidthMin) +Number(limb))){
+                                                callback(`请输入大于或等于${Number(resData?.limbWidthMin) +Number(limb)}且小于或等于${Number(resData?.limbWidthMax)+Number(limb)}的值`);
+                                            }else{
+                                                callback()
+                                            }
+                                        },
+                                    },
+                                ]}>
+                                    <Input  style={{ width: '100%' }} />
+                                </Form.Item>
+                            }
+                        })
+                    }
+                    if (item.dataIndex === "thickness") {
+                        return ({
+                            ...item,
+                            render: (number: number, record: any, index: number) => {
+                                return <Form.Item name={['submit', index, 'thickness']} initialValue={number} rules={[
+                                    {
+                                        validator: (rule, value, callback) => {
+                                            const resData:any = (editForm.getFieldsValue(true).submit)[index]
+                                            const thickness= calcObj.calculateThickness(resData.materialName,resData.structureSpec)
+                                            if(!value&&!['圆钢','螺纹钢'].includes(resData.materialName)){
+                                                callback(`请输入厚度`);
+                                            }else if((resData?.thicknessMax&&value>Number(resData?.thicknessMax)+Number(thickness) )||(resData?.thicknessMin&&value< Number(resData?.thicknessMin)+Number(thickness) )){
+                                                callback(`请输入大于或等于${Number(resData?.thicknessMin)+Number(thickness)}且小于或等于${Number(resData?.thicknessMax)+Number(thickness)}的值`);
+                                            }else{
+                                                callback()
+                                            }
+                                        },
+                                    },
+                                ]}>
+                                    <Input  style={{ width: '100%' }} />
+                                </Form.Item>
+                            }
+                        })
+                    }
+                    if (item.dataIndex === "caliber") {
+                        return ({
+                            ...item,
+                            render: (number: number, record: any, index: number) => {
+                                return <Form.Item name={['submit', index, 'caliber']} initialValue={number} rules={[
+                                    {
+                                        validator: (rule, value, callback) => {
+                                            const resData:any = (editForm.getFieldsValue(true).submit)[index]
+                                            const caliber= calcObj.calculatePipeDiameter(resData.materialName,resData.structureSpec)
+                                            if(!value&&['钢管','无缝钢管','直缝钢管','圆钢','螺纹钢','H型钢'].includes(resData.materialName)){
+                                                callback(`请输入管径`);
+                                            }else if((resData?.caliberMax && value > Number(resData?.caliberMax) + Number(caliber) )||(resData?.caliberMin&&value< Number(resData?.caliberMin)+Number(caliber) )){
+                                                callback(`请输入大于或等于${Number(resData?.caliberMin)+Number(caliber)}且小于或等于${Number(resData?.caliberMax) + Number(caliber)}的值`);
+                                            }else{
+                                                callback()
+                                            }
+                                        },
+                                        
+                                    },
+                                ]}>
+                                    <Input  style={{ width: '100%' }} />
+                                </Form.Item>
+                            }
+                        })
+                    }
+                    if (item.dataIndex === "测量长度") {
+                        return ({
+                            ...item,
+                            render: (number: number, record: any, index: number) => {
+                                return <Form.Item name={['submit', index, 'gageLength']} initialValue={number} rules={[
+                                    {
+                                        validator: (rule, value, callback) => {
+                                            const resData:any = (editForm.getFieldsValue(true).submit)[index]
+                                            const gageLength = resData.length
+                                            if((resData?.gageLengthMax&& value>Number(resData?.gageLengthMax)+Number(gageLength) )||(resData?.gageLengthMin && value< Number(resData?.gageLengthMin)+Number(gageLength))){
+                                                callback(`请输入大于或等于${Number(resData?.gageLengthMin)+Number(gageLength)}且小于或等于${Number(resData?.gageLengthMax)+Number(gageLength)}的值`);
+                                            }else{
+                                                callback()
+                                            }
+                                        },
+                                        
+                                    },
+                                ]}>
+                                    <Input  style={{ width: '100%' }} />
+                                </Form.Item>
+                            }
                         })
                     }
                     return item;
