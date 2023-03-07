@@ -614,6 +614,24 @@
             "dataIndex": "moneyCount"
         }
     ],
+    "opration": [
+        {
+            "title": "审批节点",
+            "dataIndex": "deptName"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "optUserName"
+        },
+        {
+            "title": "操作记录",
+            "dataIndex": "optTime"
+        },
+        {
+            "title": "备注",
+            "dataIndex": "description"
+        }
+    ],
     "saleInvoice": [
         {
             "title": "开票日期",
