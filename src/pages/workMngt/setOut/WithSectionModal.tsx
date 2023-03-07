@@ -27,6 +27,7 @@ export interface WithSectionModalState {
     readonly fastLoading?: boolean;
     readonly basicHeightList?: IBasicHeight[];
     readonly productList?: IProductVOList[];
+    readonly loading: boolean;
 }
 
 interface IBasicHeight {
@@ -55,7 +56,8 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
 
     public state: WithSectionModalState = {
         visible: false,
-        fastVisible: false
+        fastVisible: false,
+        loading: false
     }
 
     private modalCancel(): void {
@@ -100,6 +102,9 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
 
     protected save = (path: string) => {
         if (this.fastForm) {
+            this.setState({
+                loading: true
+            })
             if (this.state.detailData?.productId || this.state.detailData?.productIdList) {
                 this.fastForm.current?.validateFields().then(res => {
                     const value = this.getForm()?.getFieldsValue(true);
@@ -123,11 +128,24 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                     RequestUtil.post(path, { ...value }).then(res => {
                         this.props.updateList();
                         this.modalCancel();
+                        this.setState({
+                            loading: false
+                        })
                     }).catch(error => {
+                        this.setState({
+                            loading: false
+                        })
                         this.getForm()?.setFieldsValue({})
                     });
+                }).catch(e => {
+                    this.setState({
+                        loading: false
+                    })
                 })
             } else {
+                this.setState({
+                    loading: false
+                })
                 message.warning('请选择杆塔')
             }
 
@@ -263,7 +281,7 @@ class WithSectionModal extends React.Component<IWithSectionModalRouteProps, With
                 title="配段"
                 footer={<Space>
                     <Button type="ghost" onClick={() => this.modalCancel()}>关闭</Button>
-                    <Button type="primary" onClick={() => this.save('/tower-science/productSegment/distribution/submit')} ghost>保存并提交</Button>
+                    <Button type="primary" loading={this.state?.loading} onClick={() => this.save('/tower-science/productSegment/distribution/submit')} ghost>保存并提交</Button>
                 </Space>}
                 onCancel={() => this.modalCancel()}
             >
