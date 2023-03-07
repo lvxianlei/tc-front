@@ -7,7 +7,7 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { contractPlanStatusOptions } from "../../../configuration/DictionaryOptions"
 import BatchCreate from "./BatchCreate"
-import Bill from "../../invoicing/Bill"
+import Bill from "./Bill"
 import ReactToPrint from "react-to-print"
 export default function Invoicing() {
     const history = useHistory()

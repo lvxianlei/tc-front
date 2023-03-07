@@ -48,7 +48,7 @@ function formatTextarea(value: string, dataItem: any): string {
     return value.replace(/\n/g, '<br/>') || value.replace(/\r\n/g, '<br/>') || value.replace(/\r/g, '<br/>')
 }
 
-function formatDataType(dataItem: any, dataSource: any): string {
+export function formatDataType(dataItem: any, dataSource: any): string {
     const value = dataSource[dataItem.dataIndex]
     const types: any = {
         number: (value && value !== -1) ? value : 0,
