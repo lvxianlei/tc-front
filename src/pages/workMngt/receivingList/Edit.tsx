@@ -410,7 +410,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     (parseFloat(count) + parseFloat(`${item.balanceTotalWeight}`)).toFixed(5), "0")
                 form.setFieldsValue({ totalPonderationWeight })
             }
-            setCargoData(dataSource || [])
+            // setCargoData(dataSource || [])
+            editForm.setFieldsValue({
+                submit: dataSource
+            })
         }
         if (changeFiled.length || changeFiled.width) {
             const result = editForm.getFieldsValue(true).submit[changeIndex];
@@ -504,7 +507,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice)).toFixed(2)
             }), {})
             setTotal(seletTotal)
-            setCargoData(dataSource || [])
+            // setCargoData(dataSource || [])
+            editForm.setFieldsValue({
+                submit: dataSource
+            })
         }
     }
 
