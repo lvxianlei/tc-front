@@ -311,7 +311,7 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         })
                     })
                 }
-                data = data.map(res => {
+                data = data?.map(res => {
                     const weldingDetailedStructureListNew: IComponentList[] = weldingDetailedStructureList?.filter(item => item.structureId === res.id) || [];
                     if (weldingDetailedStructureListNew.length > 0) {
                         return {
@@ -322,11 +322,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
                         return { ...res }
                     }
                 })
-                let newData = data.filter(res => {
+                let newData = data?.filter(res => {
                     return Number(res.basicsPartNumNow) !== 0
                 })
-                setComponentList(checked ? [...data] : [...newData])
-                toRightNum.length = checked ? data.length : newData.length;
+                setComponentList(checked ? [...data || []] : [...newData||[]])
+                toRightNum.length = checked ? (data || [])?.length : (newData || [])?.length;
                 toRightNum.fill(0);
                 setToRightNum(toRightNum)
             })
@@ -509,10 +509,11 @@ export default function AddAssemblyWelding(): React.ReactNode {
                     RequestUtil.post(`/tower-science/welding`, { ...value }).then(res => {
                         message.success('添加成功');
                         if (tip === 'goOn') {
-                            setComponentList([]);
-                            setWeldingDetailedStructureList([]);
-                            setMainPartId('');
-                            form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName', 'singleGroupWeight', 'segmentGroupNum']);
+                            // setComponentList([]);
+                            // setWeldingDetailedStructureList([]);
+                            // setMainPartId('');
+                            // form.resetFields(['componentId', 'electricWeldingMeters', 'segmentName', 'singleGroupWeight', 'segmentGroupNum']);
+                            history.go(0)
                         } else {
                             history.goBack();
                         }
