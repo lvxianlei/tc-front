@@ -1,4 +1,4 @@
-import React, { useRef, LegacyRef, useState } from "react"
+import React, { useRef, LegacyRef } from "react"
 import { Button, Input, DatePicker, Select } from 'antd'
 import { useHistory } from 'react-router-dom'
 import ReactToPrint from 'react-to-print'
@@ -12,10 +12,9 @@ export default function Invoicing() {
     const history = useHistory()
     const billRef = useRef<LegacyRef<HTMLDivElement> | null>()
 
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string, processId: string) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getTaskInfo/${invoicingId}`)
-            // const workflow: { [key: string]: any } = await RequestUtil.get(`/tower-workflow/workflow/Engine/FlowBefore/${invoicingId}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -63,9 +62,10 @@ export default function Invoicing() {
                                 content={() => billRef.current as any}
                                 trigger={() => <Button
                                     type="link"
+                                    disabled={record?.taskType !== 2}
                                     className="btn-operation-link"
                                 >打印</Button>}
-                                onBeforeGetContent={() => run(record?.id, record?.processId)}
+                                onBeforeGetContent={() => run(record?.id)}
                             />
                         </>
                     }

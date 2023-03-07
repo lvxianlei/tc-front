@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useEffect } from "react"
 import { Spin } from 'antd'
 import { DetailTitle, BaseInfo, CommonTable } from '../common'
-import { baseInfoHead, invoiceHead, billingHeader, opration } from "./InvoicingData.json"
+import { baseInfoHead, invoiceHead, billingHeader, batchHead } from "./InvoicingData.json"
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
 import "./Bill.less"
 import AuthUtil from "@utils/AuthUtil"
@@ -48,11 +48,11 @@ export default forwardRef(function Bill({ loading, data, ...props }: any, ref) {
                 dataSource={billData?.invoicingDetailVos || []}
             />
 
-            <DetailTitle title="审批流程" style={{ paddingTop: 5 }} />
+            <DetailTitle title="审批记录" style={{ paddingTop: 5 }} />
             <CommonTable
                 pagination={false}
-                columns={opration}
-                dataSource={billData?.invoicingDetailVos || []}
+                columns={batchHead}
+                dataSource={billData?.invoicingBatchVOS || []}
             />
         </Spin>
     </div>

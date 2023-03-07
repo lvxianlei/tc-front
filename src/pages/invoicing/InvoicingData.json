@@ -614,22 +614,30 @@
             "dataIndex": "moneyCount"
         }
     ],
-    "opration": [
+    "batchHead": [
         {
-            "title": "审批节点",
-            "dataIndex": "deptName"
+            "title": "部门",
+            "dataIndex": "department"
         },
         {
             "title": "审批人",
-            "dataIndex": "optUserName"
+            "dataIndex": "approver"
         },
         {
-            "title": "操作记录",
-            "dataIndex": "optTime"
+            "title": "职位",
+            "dataIndex": "position"
         },
         {
-            "title": "备注",
-            "dataIndex": "description"
+            "title": "审批时间",
+            "dataIndex": "batchTime"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "opinion"
         }
     ],
     "saleInvoice": [
