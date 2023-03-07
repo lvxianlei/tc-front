@@ -512,6 +512,73 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 submit: dataSource
             })
         }
+        if (changeFiled.materialStandard){
+            const dataSource: any[] = editForm.getFieldsValue(true).submit
+            const dataSourceE:any = []
+            Promise.all( dataSource.map(async (item: any) => {
+                await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
+                    {
+                        materialName: item.materialName,
+                        materialStandard: item.materialStandard,
+                        structureSpec: item.structureSpec
+                    }
+                ]}).then((res:any)=>{
+                    const limbWidth = [];
+                    const thickness = [];
+                    const caliber = [];
+                    const measureHeight= [];
+                    const gageLength = [];
+                    if( res && res.length > 0 ){
+                        let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
+                        let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
+                        let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
+                        let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
+                        let len = item.length
+                        for(var i = 1;i<=3; i++){
+                            console.log(Number(limb)+Number(res[0]?.limbWidthMin))
+                            limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                            thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                            caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                            measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                            gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                        }
+                        console.log(limbWidth,thickness,caliber,measureHeight)
+                    }else{
+                        limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
+                        thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
+                        caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
+                        measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
+                        gageLength.push(item.length)
+                        console.log(limbWidth,thickness,caliber,measureHeight)
+                    }
+                    const postData = {
+                        ...item,
+                        ...( res && res.length>0 ? res[0] : {} ),
+                        limbWidth: limbWidth.join(','),
+                        thickness: thickness.join(','),
+                        caliber: caliber.join(','),
+                        measureHeight: measureHeight.join(','),
+                        gageLength: gageLength.join(','),
+                    }
+                    console.log(postData)
+                    delete postData.id
+                    dataSourceE.push(postData)
+                    })
+                return item
+            })).then((res)=>{
+                const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                    num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                    balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                    totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                    totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+                }), {})
+                setTotal(seletTotal)
+                // setCargoData(dataSourceE)
+                editForm.setFieldsValue({
+                    submit: dataSourceE
+                })
+            })
+        }
     }
 
     const onSelectChange = (selectedRowKeys: string[], selectRows: any[]) => {
