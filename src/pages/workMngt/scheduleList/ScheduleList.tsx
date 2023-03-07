@@ -19,6 +19,7 @@ export default function ScheduleList(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const height = document.documentElement.clientHeight - 260;
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
@@ -184,6 +185,7 @@ export default function ScheduleList(): React.ReactNode {
             requestData={{
                 status: location.state?.state
             }}
+            style={{maxHeight: height, overflowY: "auto"}}
             tableProps={{
                 rowSelection: {
                     type: "checkbox",

@@ -1,12 +1,9 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
+import { Input, DatePicker, Select, Button, Modal, Form, Popconfirm, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { IntgSelect, Page, SearchTable } from '../common';
+import { IntgSelect, SearchTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { TreeNode } from 'antd/lib/tree-select';
-import useRequest from '@ahooksjs/use-request';
 import styles from './confirm.module.less';
 import { FixedType } from 'rc-table/lib/interface';
 import SelectUser from '../common/SelectUser';
@@ -139,7 +136,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             width: 400,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <>
                     <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}/${record.status}`)} >任务详情</Button>
                     <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
@@ -180,7 +177,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     >
                         <Button type='link' disabled={record.status !== 4}>退回</Button>
                     </Popconfirm>
-                    <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
+                    <Button type='link' disabled={record.initiator === '营销发起'} onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
                     <Popconfirm
                         title="确认删除任务?"
                         onConfirm={async () => {
@@ -192,11 +189,11 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.status !== 3}
+                        disabled={record.status !== 3 || record.initiator === '营销发起'}
                     >
-                        <Button type='link' disabled={record.status !== 3}>删除</Button>
+                        <Button type='link' disabled={record.status !== 3|| record.initiator === '营销发起'}>删除</Button>
                     </Popconfirm>
-                </Space>
+                </>
             )
         }
     ]
