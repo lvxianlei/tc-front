@@ -195,6 +195,7 @@ export default function List(): React.ReactNode {
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [fileListId, setFileListId] = useState<string>('');
     const [filters, setFilters] = useState<Record<string, any>>();
+    const [planNumbers, setPlanNumbers] = useState<any>();
 
     useEffect(() => {
         setConfirmLoading(confirmLoading);
@@ -271,7 +272,7 @@ export default function List(): React.ReactNode {
             onOk={handleOk}
             confirmLoading={confirmLoading}
             onCancel={() => setVisible(false)}>
-            <DataUpload getLoading={(loading) => setConfirmLoading(loading)} projectBackupId={rowData?.id} id={fileListId} type={type} ref={newRef} />
+            <DataUpload getLoading={(loading) => setConfirmLoading(loading)} planNumbers={planNumbers} projectBackupId={rowData?.id} id={fileListId} type={type} ref={newRef} />
         </Modal>
         <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFinish}>
             <Form.Item label='电压等级' name="voltageGrade">
@@ -283,7 +284,6 @@ export default function List(): React.ReactNode {
                     })}
                 </Select>
             </Form.Item>
-
             <Form.Item label='工程类型' name="address" initialValue={''}>
                 <Select placeholder="请选择工程类型" style={{ width: '120px' }}>
                     <Select.Option value={''} key="0">全部</Select.Option>
@@ -292,7 +292,6 @@ export default function List(): React.ReactNode {
 
                 </Select>
             </Form.Item>
-
             <Form.Item label='产品类型' name="productType" initialValue={''}>
                 <Select placeholder="请选择产品类型" style={{ width: '120px' }}>
                     <Select.Option value={''} key="0">全部</Select.Option>
@@ -334,7 +333,7 @@ export default function List(): React.ReactNode {
                 onClick: () => onRowChange(record),
                 className: styles.tableRow
             })}
-            scroll={{y: 350}}
+            scroll={{ y: 350 }}
         />
         <Row className={styles.search} gutter={12}>
             <Col>
@@ -382,14 +381,16 @@ export default function List(): React.ReactNode {
                 </Form>
             </Col>
             <Col>
-                <Button type='primary' disabled={record.length > 0} onClick={() => {
+                <Button type='primary' disabled={record.length > 0} onClick={async () => {
+                    const result: any = await RequestUtil.get(`/tower-science/projectData/planNumber/list/${rowData?.id}`)
+                    setPlanNumbers(result)
                     setVisible(true);
                     setType('new');
                 }} ghost>上传</Button>
             </Col>
         </Row>
         <CommonTable
-            scroll={{y: 350}}
+            scroll={{ y: 350 }}
             haveIndex
             columns={detailColumns}
             dataSource={detailData}
