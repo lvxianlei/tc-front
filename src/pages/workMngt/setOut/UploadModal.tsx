@@ -1,5 +1,5 @@
 import React, { forwardRef, useState } from 'react';
-import { Button, Space, Modal, Form, Input } from 'antd';
+import { Button, Space, Modal, Form, Input, Select } from 'antd';
 import { DetailContent, Attachment, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import { FileProps } from '../../common/Attachment';
@@ -14,6 +14,7 @@ export interface IUploadModalRouteProps {
 
 export interface UploadModalState {
     readonly visible: boolean;
+    readonly loading: boolean;
     readonly description?: string;
     readonly data?: IData;
 }
@@ -35,6 +36,7 @@ export default forwardRef(function ({
     updateList = () => { }
 }: IUploadModalRouteProps, ref): JSX.Element {
     const [visible, setVisible] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [form] = Form.useForm();
     const [list, setList] = useState<IFile[]>([]);
 
@@ -56,6 +58,7 @@ export default forwardRef(function ({
 
     const save = () => {
         if (form) {
+            setLoading(true)
             form.validateFields().then(res => {
                 let value = form.getFieldsValue(true).data;
                 value = value.map((res: IFile) => {
@@ -66,11 +69,15 @@ export default forwardRef(function ({
                     }
                 })
                 RequestUtil.post(path, [...value]).then(res => {
+                    setLoading(false)
                     setVisible(false);
                     updateList();
                     setList([]);
                     form.resetFields();
                 })
+            }).catch(e => {
+                setLoading(false)
+                console.log(e)
             })
         }
     }
@@ -83,7 +90,7 @@ export default forwardRef(function ({
             title="上传"
             footer={<Space direction="horizontal" size="small">
                 <Button type="ghost" onClick={() => modalCancel()}>关闭</Button>
-                <Button type="primary" onClick={save} ghost>确定</Button>
+                <Button type="primary" loading={loading} onClick={save} ghost>确定</Button>
             </Space>}
             onCancel={() => modalCancel()}
             className={styles.uploadModal}
@@ -119,6 +126,25 @@ export default forwardRef(function ({
                             title: '附件名称',
                             dataIndex: 'originalName',
                             width: 300
+                        },
+                        {
+                            key: 'type',
+                            title: '类型',
+                            dataIndex: 'type',
+                            width: 150,
+                            render: (_: undefined, record: Record<string, any>, index: number
+                            ): React.ReactNode => (
+                                <Form.Item name={['data', index, 'type']} rules={[{
+                                    required: true,
+                                    message: '请选择类型'
+                                }]}>
+                                    <Select placeholder="请选择类型" size='small'>
+                                        <Select.Option value={1}>模型</Select.Option>
+                                        <Select.Option value={2}>样图</Select.Option>
+                                        <Select.Option value={3}>工艺卡</Select.Option>
+                                    </Select>
+                                </Form.Item>
+                            )
                         },
                         {
                             key: 'segmentName',

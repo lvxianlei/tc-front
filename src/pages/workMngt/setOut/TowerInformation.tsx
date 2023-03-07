@@ -700,6 +700,7 @@ export default function TowerInformation(): React.ReactNode {
                             <Button type="primary" disabled={selectedKeys.length<=0} onClick={() => {
                                 setEditVisible(true)
                             }} ghost>批量编辑</Button>
+                            <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/dataList` }}><Button type='primary' ghost>数据上传</Button></Link>
                             <Button type='primary' onClick={batchPick} ghost>批量完成放样</Button>
                             <Button type='primary' onClick={batchCheck} ghost>批量完成校核</Button>
                             <Dropdown trigger={['click']} overlay={
@@ -715,41 +716,19 @@ export default function TowerInformation(): React.ReactNode {
                                     <Menu.Item key={3}>
                                         <Button type="text" onClick={closeOrEdit}>{editorLock}</Button>
                                     </Menu.Item>
+                                    <Menu.Item key={4}>
+                                        <Button type='text' onClick={() => setVisible(true)}>挑料清单</Button>
+                                    </Menu.Item>
+                                    <Menu.Item key={5}>
+                                        <Button type="text" onClick={comparison}>放样提料比对</Button>
+                                    </Menu.Item>
+                                    <Menu.Item key={3}>
+                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type='text'>NC程序上传</Button></Link>
+                                    </Menu.Item>
                                 </Menu>
                             }>
                                 <Button type="primary" ghost>
                                     操作<DownOutlined />
-                                </Button>
-                            </Dropdown>
-                            <Dropdown trigger={['click']} overlay={
-                                <Menu>
-                                    <Menu.Item key={1}>
-                                        <Button type="text" onClick={comparison}>放样提料比对</Button>
-                                    </Menu.Item>
-                                    <Menu.Item key={2}>
-                                        <Button type='text' onClick={() => setVisible(true)}>挑料清单</Button>
-                                    </Menu.Item>
-                                </Menu>
-                            }>
-                                <Button type="primary" ghost>
-                                    辅助功能<DownOutlined />
-                                </Button>
-                            </Dropdown>
-                            <Dropdown trigger={['click']} overlay={
-                                <Menu>
-                                    <Menu.Item key={1}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/modalList` }}><Button type='text'>模型</Button></Link>
-                                    </Menu.Item>
-                                    <Menu.Item key={2}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/processCardList` }}><Button type='text'>大样图工艺卡</Button></Link>
-                                    </Menu.Item>
-                                    <Menu.Item key={3}>
-                                        <Link to={{ pathname: `/workMngt/setOutList/towerInformation/${params.id}/NCProgram` }}><Button type='text'>NC程序</Button></Link>
-                                    </Menu.Item>
-                                </Menu>
-                            }>
-                                <Button type="primary" ghost>
-                                    数据上传<DownOutlined />
                                 </Button>
                             </Dropdown>
                             {

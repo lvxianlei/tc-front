@@ -1472,6 +1472,13 @@
       "exact": true,
       "authority": "tc_erp_rd_work_loft_tower_sketch"
     },
+    { // 工作管理-工作目录-数据上传
+      "name": "数据上传",
+      "path": "/workMngt/setOutList/towerInformation/:id/dataList",
+      "module": "./pages/workMngt/setOut/DataList",
+      "exact": true,
+      "authority": "tc_erp_rd_work_loft_tower_sketch"
+    },
     { // 工作管理-工作目录-NC程序
       "name": "NC程序",
       "path": "/workMngt/setOutList/towerInformation/:id/NCProgram",
