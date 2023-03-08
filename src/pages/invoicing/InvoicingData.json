@@ -614,6 +614,32 @@
             "dataIndex": "moneyCount"
         }
     ],
+    "batchHead": [
+        {
+            "title": "部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "approver"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "batchTime"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "opinion"
+        }
+    ],
     "saleInvoice": [
         {
             "title": "开票日期",
