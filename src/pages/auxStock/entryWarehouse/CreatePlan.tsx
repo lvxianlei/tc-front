@@ -57,7 +57,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
             setWarehouseId(result?.warehouseId)
             resole({
                 ...result,
-                warehousingEntryTime: moment(result?.warehousingEntryTime),
+                warehousingEntryTime: result.warehousingEntryTime!== null ? moment(result.warehousingEntryTime):'',
                 supplierId: {
                     id: result?.supplierId,
                     value: result?.supplierName,

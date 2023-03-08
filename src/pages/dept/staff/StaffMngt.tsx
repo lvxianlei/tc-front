@@ -24,6 +24,8 @@ export interface IStaff {
     readonly categoryName?: string;
     readonly dept?: string;
     readonly deptName?: string;
+    readonly teamGroupId?: string;
+    readonly teamGroupIdName?: string;
     readonly description?: string;
     readonly email?: string;
     readonly entryDate?: string;
@@ -89,6 +91,11 @@ export default function StaffMngt(): React.ReactNode {
             title: '部门',
             width: 150,
             dataIndex: 'deptName'
+        },
+        {
+            title: '班组',
+            width: 150,
+            dataIndex: 'teamGroupName'
         },
         {
             title: '工号',
@@ -241,14 +248,14 @@ export default function StaffMngt(): React.ReactNode {
                         }
                     })
                 }}>删除</Button>
-               <Popconfirm
-                 title="确认同步到即时通讯吗?"
-                 onConfirm={importUserToTencentIm}
-                 okText="确认"
-                 cancelText="取消"
-                 >
-                <Button  type="primary" >同步到即时通讯</Button>
-               </Popconfirm>
+            <Popconfirm
+                title="确认同步到即时通讯吗?"
+                onConfirm={importUserToTencentIm}
+                okText="确认"
+                cancelText="取消"
+            >
+                <Button type="primary" >同步到即时通讯</Button>
+            </Popconfirm>
 
         </Space>}
         refresh={refresh}

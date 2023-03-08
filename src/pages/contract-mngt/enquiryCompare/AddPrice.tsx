@@ -130,7 +130,7 @@ export default forwardRef(function ({ id, comparisonPriceId, type, materialLists
                     render: (value: number, records: any) =>
                         <div style={{ padding: "2px 0" }}>
                             <InputNumber style={{ height: 28 }}
-                                min={1} max={999999.99} step={0.01}
+                                min={0} max={999999.99} step={0.01}
                                 value={value}
                                 key={records.materialCode}
                                 onChange={(value: number) =>

@@ -244,7 +244,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
                 addCollectionForm.setFieldsValue({
                     ...result,
-                    warehousingEntryTime: moment(result.warehousingEntryTime),
+                    warehousingEntryTime: result.warehousingEntryTime!== null ? moment(result.warehousingEntryTime):'',
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
                     supplierId: {
                         id: result?.supplierId,
