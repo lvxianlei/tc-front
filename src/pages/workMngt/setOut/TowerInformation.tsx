@@ -65,13 +65,13 @@ export default function TowerInformation(): React.ReactNode {
             let programmingLeaderList: any[] = [];
             setLoftingUser(user?.loftingLeader)
             result?.records?.forEach((res: any) => {
-                if (user?.loftingUser.split(',').indexOf(res.userId) > -1) {
+                if (user?.loftingUser?.split(',').indexOf(res.userId) > -1) {
                     loftingUserList.push(res)
                 }
-                if (user?.loftingMutualReview.split(',').indexOf(res.userId) > -1) {
+                if (user?.loftingMutualReview?.split(',').indexOf(res.userId) > -1) {
                     loftingMutualReviewList.push(res)
                 }
-                if (user?.programmingLeader.split(',').indexOf(res.userId) > -1) {
+                if (user?.programmingLeader?.split(',').indexOf(res.userId) > -1) {
                     programmingLeaderList.push(res)
                 }
             })

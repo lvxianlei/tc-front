@@ -41,6 +41,11 @@ export default function SampleDraw(): React.ReactNode {
         resole(data)
     }), {})
 
+    const { data: segmentNames } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        const data: any = await RequestUtil.get(`/tower-science/productSegment/list/${params.id}`);
+        resole(data)
+    }), {})
+
     const onKeyUp = (e: any) => {
         switch (e.keyCode) {
             case 37:
@@ -163,6 +168,16 @@ export default function SampleDraw(): React.ReactNode {
             </Select>
         },
         {
+            name: 'segmentId',
+            label: '段号',
+            children: <Select style={{ width: "100px" }} defaultValue={''}>
+                <Select.Option value={''} key={''}>全部</Select.Option>
+                {segmentNames && segmentNames.map((item: any) => {
+                    return <Select.Option key={item.id} value={item.id}>{item.segmentName}</Select.Option>
+                })}
+            </Select>
+        },
+        {
             name: 'uploadStatus',
             label: '上传状态',
             // 0是未上传1已上传
@@ -175,7 +190,7 @@ export default function SampleDraw(): React.ReactNode {
         {
             name: 'fuzzyMsg',
             label: '模糊查询项',
-            children: <Input placeholder="请输入段号/构件编号进行查询" maxLength={200} />
+            children: <Input placeholder="请输入构件编号进行查询" maxLength={200} />
         }
     ]
 
