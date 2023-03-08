@@ -198,11 +198,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     let len = item.length
                     for(var i = 1;i<=3; i++){
                         console.log(Number(limb)+Number(res[0]?.limbWidthMin))
-                        limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
-                        thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
-                        caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
-                        measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
-                        gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                        res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                        res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                        res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                        res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                        res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
                     }
                     console.log(limbWidth,thickness,caliber,measureHeight)
                 }else{
@@ -216,11 +216,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 const postData = {
                     ...item,
                     ...( res && res.length>0 ? res[0] : {} ),
-                    limbWidth: limbWidth.join(','),
-                    thickness: thickness.join(','),
-                    caliber: caliber.join(','),
-                    measureHeight: measureHeight.join(','),
-                    gageLength: gageLength.join(','),
+                    limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
+                    thickness: thickness[0]===null?'':thickness.join(','),
+                    caliber: caliber[0]===null?'':caliber.join(','),
+                    measureHeight: measureHeight[0]===null?'':measureHeight.join(','),
+                    gageLength: gageLength[0]===null?'':gageLength.join(','),
                     materialContractDetailId: item.id,
                     materialName: item.materialName,
                     materialStandard: item.materialStandard,
@@ -536,11 +536,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         let len = item.length
                         for(var i = 1;i<=3; i++){
                             console.log(Number(limb)+Number(res[0]?.limbWidthMin))
-                            limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
-                            thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
-                            caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
-                            measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
-                            gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                            res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                            res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                            res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                            res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                            res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
                         }
                         console.log(limbWidth,thickness,caliber,measureHeight)
                     }else{
@@ -554,11 +554,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     const postData = {
                         ...item,
                         ...( res && res.length>0 ? res[0] : {} ),
-                        limbWidth: limbWidth.join(','),
-                        thickness: thickness.join(','),
-                        caliber: caliber.join(','),
-                        measureHeight: measureHeight.join(','),
-                        gageLength: gageLength.join(','),
+                        limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
+                        thickness: thickness[0]===null?'':thickness.join(','),
+                        caliber: caliber[0]===null?'':caliber.join(','),
+                        measureHeight: measureHeight[0]===null?'':measureHeight.join(','),
+                        gageLength: gageLength[0]===null?'':gageLength.join(','),
                     }
                     console.log(postData)
                     delete postData.id
@@ -713,7 +713,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                         return ({
                             ...item,
                             render: (number: number, record: any, index: number) => {
-                                    return <Form.Item name={['submit', index, 'height']} initialValue={number} rules={[
+                                    return <Form.Item name={['submit', index, 'measureHeight']} initialValue={number} rules={[
                                         {
                                             validator: (rule, value, callback) => {
                                                 const resData:any = (editForm.getFieldsValue(true).submit)[index]
