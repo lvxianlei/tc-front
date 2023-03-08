@@ -46,6 +46,11 @@ const tableColumns = [
                     return '已完成';
             }
         } 
+    },
+    { 
+        title: '备注', 
+        dataIndex: 'description', 
+        key: 'description' 
     }
 ]
 
