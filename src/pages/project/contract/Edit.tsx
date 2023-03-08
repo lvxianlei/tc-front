@@ -98,7 +98,7 @@ export default function Edit() {
       if (type === "new") {
         reqType = "post"
       } else {
-        if (["2", "3"].includes(params.contractType) && !data?.relationId) {
+        if (["2", "3"].includes(params.contractType)) {
           reqType = "post"
         } else {
           reqType = "put"
