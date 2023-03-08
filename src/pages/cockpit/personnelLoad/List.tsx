@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, Form, Spin, Button, Radio, RadioChangeEvent, Row, Col, Dropdown, Menu, Modal, message } from 'antd';
-import { CommonAliTable, CommonTable } from '../../common';
+import { CommonAliTable, CommonTable, IntgSelect } from '../../common';
 import styles from './PersonnelLoad.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -41,6 +41,7 @@ export default function List(): React.ReactNode {
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [title, setTitle] = useState<string>('');
     const history = useHistory()
+    const height = document.documentElement.clientHeight - 200;
 
     const menu = (
         <Menu>
@@ -136,8 +137,8 @@ export default function List(): React.ReactNode {
             <Allocation type={title} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
         </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="userNme">
-                <Input style={{ width: '200px' }} placeholder="姓名" />
+            <Form.Item name="userId">
+                <IntgSelect style={{ width: '200px' }} placeholder="姓名" />
             </Form.Item>
             <Form.Item>
                 <Space direction="horizontal">
@@ -204,7 +205,7 @@ export default function List(): React.ReactNode {
                 columns={tableColumns}
                 dataSource={[...detailData || []]}
                 pagination={false}
-                style={{maxHeight: '750px', overflow: 'auto'}}
+                style={{maxHeight: height, overflow: 'auto'}}
             />
         </div>
     </Spin>

@@ -1,19 +1,14 @@
 import React, { useState } from 'react'
-import { Space, Input, DatePicker, Select, Button, Modal, Form, Popconfirm, Row, Col, TreeSelect, message } from 'antd'
+import { Input, DatePicker, Select, Button, Modal, Form, Popconfirm, message } from 'antd'
 import { useHistory, useLocation } from 'react-router-dom'
-import { IntgSelect, Page, SearchTable } from '../common';
+import { IntgSelect, SearchTable } from '../common';
 import RequestUtil from '../../utils/RequestUtil';
 import moment from 'moment';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
-import { TreeNode } from 'antd/lib/tree-select';
-import useRequest from '@ahooksjs/use-request';
 import styles from './confirm.module.less';
 import { FixedType } from 'rc-table/lib/interface';
 import SelectUser from '../common/SelectUser';
 
 export default function ConfirmTaskMngt(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
-    const [confirmLeader, setConfirmLeader] = useState<any | undefined>([]);
     const [assignVisible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const [drawTaskId, setDrawTaskId] = useState<string>('');
@@ -23,22 +18,30 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [assignType, setAssignType] = useState<'batch' | 'single'>('single');
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const handleAssignModalOk = async () => {
         try {
+            setConfirmLoading(true)
             form.validateFields().then(async res => {
                 const submitData = await form.getFieldsValue(true);
-                submitData.drawTaskIds = assignType === 'single' ? [drawTaskId] : selectedKeys;
-                submitData.plannedDeliveryTime = moment(submitData.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm");
-                await RequestUtil.post('/tower-science/drawTask/batchAssignDrawTask', submitData).then(() => {
-                    message.success('指派成功！')
+                await RequestUtil.post('/tower-science/drawTask/batchAssignDrawTask', {
+                    ...submitData,
+                    drawTaskIds: assignType === 'single' ? [drawTaskId] : selectedKeys,
+                    plannedDeliveryTime: moment(submitData?.plannedDeliveryTime).format("YYYY-MM-DD HH:ss:mm")
                 }).then(() => {
-                    setVisible(false);
+                    message.success('指派成功！')
+                    setConfirmLoading(false)
+                }).then(() => {
                     form.resetFields();
                 }).then(() => {
-                    setRefresh(!refresh);
+                    setVisible(false);
                     history.go(0)
+                }).catch(e => {
+                    setConfirmLoading(false)
                 })
+            }).catch(e => {
+                setConfirmLoading(false)
             })
 
         } catch (error) {
@@ -133,12 +136,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             width: 400,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
-                <Space direction="horizontal" size="small">
+                <>
                     <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmTaskDetail/${record.id}/${record.status}`)} >任务详情</Button>
                     <Button type='link' onClick={async () => {
                         setDrawTaskId(record.id);
                         form.setFieldsValue({
-                            plannedDeliveryTime: record.plannedDeliveryTime ? moment(record.plannedDeliveryTime) : ''
+                            plannedDeliveryTime: record?.plannedDeliveryTime ? moment(record?.plannedDeliveryTime) : ''
                         })
                         setVisible(true);
                         setAssignType('single');
@@ -150,7 +153,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                             await RequestUtil.post(`/tower-science/drawTask/submitDrawTask`, { drawTaskId: record.id }).then(() => {
                                 message.success('提交成功！');
                             }).then(() => {
-                                setRefresh(!refresh)
+                                history.go(0)
                             })
                         }}
                         okText="确认"
@@ -165,7 +168,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                             await RequestUtil.post(`/tower-science/drawTask/retract/${record.id}`).then(() => {
                                 message.success('退回成功！');
                             }).then(() => {
-                                setRefresh(!refresh)
+                                history.go(0)
                             })
                         }}
                         okText="确认"
@@ -174,23 +177,23 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     >
                         <Button type='link' disabled={record.status !== 4}>退回</Button>
                     </Popconfirm>
-                    <Button type='link' onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
+                    <Button type='link' disabled={record.initiator === '营销发起'} onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
                     <Popconfirm
                         title="确认删除任务?"
                         onConfirm={async () => {
                             await RequestUtil.delete(`/tower-science/drawTask/${record.id}`).then(() => {
                                 message.success('删除成功！');
                             }).then(() => {
-                                setRefresh(!refresh)
+                                history.go(0)
                             })
                         }}
                         okText="确认"
                         cancelText="取消"
-                        disabled={record.status !== 3}
+                        disabled={record.status !== 3 || record.initiator === '营销发起'}
                     >
-                        <Button type='link' disabled={record.status !== 3}>删除</Button>
+                        <Button type='link' disabled={record.status !== 3|| record.initiator === '营销发起'}>删除</Button>
                     </Popconfirm>
-                </Space>
+                </>
             )
         }
     ]
@@ -225,7 +228,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
     }
 
     return <>
-        <Modal visible={assignVisible} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
+        <Modal visible={assignVisible} confirmLoading={confirmLoading} title="指派" okText="提交" onOk={handleAssignModalOk} onCancel={handleAssignModalCancel}>
             <Form form={form} {...formItemLayout} layout="horizontal">
                 <Form.Item name="assignorName" label="人员" rules={[{ required: true, message: "请选择人员" }]}>
                     <Input size="small" disabled suffix={
@@ -245,7 +248,6 @@ export default function ConfirmTaskMngt(): React.ReactNode {
         <SearchTable
             path="/tower-science/drawTask"
             columns={columns}
-            refresh={refresh}
             exportPath="/tower-science/drawTask"
             extraOperation={
                 <>

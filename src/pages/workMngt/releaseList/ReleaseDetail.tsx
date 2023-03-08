@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { Page, SearchTable } from '../../common';
+import   SearchTable  from '../SearchTable';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/lib/form/Form';
@@ -505,12 +505,15 @@ export default function ReleaseList(): React.ReactNode {
                             try {
                                 const value = await formTable.getFieldsValue(true)
                                 setFilterValue({
-                                    ...value
+                                    ...value,
+                                    current: 1
                                 })
-                                getCount({
-                                    ...value
-                                })
-                                resolve(true)
+                                
+                                // getCount({
+                                //     ...value
+                                // })
+                                formTable.resetFields()
+                                resolve(true);
                             } catch (error) {
                                 reject(false)
                             }

@@ -19,6 +19,8 @@ export default function WeldingDetail(): React.ReactNode {
         current: 1,
         size: 20
     })
+    const height = document.documentElement.clientHeight - 200;
+
     const { loading, data, run } = useRequest<any[]>((data: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/supplyBatch/getBatchWeld`, { ...pages, id: params.productCategoryId, ...data });
@@ -285,7 +287,7 @@ export default function WeldingDetail(): React.ReactNode {
                     />
                 </div>
                 <div style={{ width: '60%' }} >
-                    <CommonTable columns={detailColumns} dataSource={segmentData} pagination={false} />
+                    <CommonTable columns={detailColumns} scroll={{ y: height }} dataSource={segmentData} pagination={false} />
                 </div>
             </div>
         </>

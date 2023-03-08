@@ -18,6 +18,8 @@ export default function ScheduleList(): React.ReactNode {
     const history = useHistory()
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const height = document.documentElement.clientHeight - 260;
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const planData: any = await RequestUtil.get(`/tower-science/assignPlan`);
@@ -166,13 +168,13 @@ export default function ScheduleList(): React.ReactNode {
             footer={
                 <>
                     <SchedulePlan plan={setPlanData} />
-                    <Button onClick={handleModalCancel}>取消</Button>
-                    <Button type='primary' onClick={handleModalOk}>保存并提交</Button>
+                    <Button loading={confirmLoading} onClick={handleModalCancel}>取消</Button>
+                    <Button type='primary' loading={confirmLoading} onClick={handleModalOk}>保存并提交</Button>
                 </>
             }
             key='add'
             onCancel={handleModalCancel}>
-            <Assign id={''} ids={selectedKeys} type={'taskBatch'} planData={planData} ref={assignModalRef} />
+            <Assign id={''} ids={selectedKeys} type={'taskBatch'} getLoading={(loading: boolean) => setConfirmLoading(loading)} planData={planData} ref={assignModalRef} />
         </Modal>
         <SearchTable
             path="/tower-science/loftingTask"
@@ -183,6 +185,7 @@ export default function ScheduleList(): React.ReactNode {
             requestData={{
                 status: location.state?.state
             }}
+            style={{maxHeight: height, overflowY: "auto"}}
             tableProps={{
                 rowSelection: {
                     type: "checkbox",

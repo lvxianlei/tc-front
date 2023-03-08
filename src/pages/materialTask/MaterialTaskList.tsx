@@ -6,9 +6,8 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, message, Popconfirm } from 'antd';
-import { Page, SearchTable } from '../common';
+import { SearchTable } from '../common';
 import { FixedType } from 'rc-table/lib/interface';
-import styles from './MaterialTaskList.module.less';
 import { useHistory, useLocation } from 'react-router-dom';
 import BatchAssigned, { EditRefProps } from './BatchAssigned';
 import AssignedInformation, { RefProps } from './AssignedInformation';
@@ -28,6 +27,8 @@ export default function MaterialTaskList(): React.ReactNode {
     const [id, setId] = useState<string>('');
     const [status, setStatus] = useState(1);
     const history = useHistory();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [saveLoading, setSaveLoading] = useState<boolean>(false);
 
     const columns = [
         {
@@ -163,6 +164,7 @@ export default function MaterialTaskList(): React.ReactNode {
             width="60%"
             onOk={handleModalOk}
             okText="保存并提交"
+            confirmLoading={confirmLoading}
             onCancel={() => {
                 batchEditRef.current?.resetFields();
                 setVisible(false);
@@ -170,7 +172,7 @@ export default function MaterialTaskList(): React.ReactNode {
                 setSelectedRows([]);
             }}
         >
-            <BatchAssigned ref={batchEditRef} id={selectedKeys.join(',')} />
+            <BatchAssigned ref={batchEditRef} getLoading={(loading: boolean) => setConfirmLoading(loading)} id={selectedKeys.join(',')} />
         </Modal>
         <Modal
             title="指派"
@@ -182,14 +184,14 @@ export default function MaterialTaskList(): React.ReactNode {
                     setId('');
                     setInformationVisible(false);
                 }}>关闭</Button>,
-                <>{status === 3 ? null : <Button onClick={assignedOk} type='primary'>保存并提交</Button>}</>
+                <>{status === 3 ? null : <Button onClick={assignedOk} loading={saveLoading} type='primary'>保存并提交</Button>}</>
             ]}
             onCancel={() => {
                 setId('');
                 setInformationVisible(false);
             }}
         >
-            <AssignedInformation id={id} status={status} ref={editRef} />
+            <AssignedInformation id={id} getLoading={(loading: boolean) => setSaveLoading(loading)} status={status} ref={editRef} />
         </Modal>
         <SearchTable
             path="/tower-science/materialTask"

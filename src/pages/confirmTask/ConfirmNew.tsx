@@ -5,7 +5,7 @@
  */
 
 import React, { useRef, useState } from 'react'
-import { Button, Spin, Space, Form,Select, Input, DatePicker } from 'antd';
+import { Button, Spin, Space, Form, Select, Input, DatePicker } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
 import { BaseInfo, DetailContent, DetailTitle, Attachment, AttachmentRef } from '../common';
 import { EditInfoData, AssignInfoData } from './confirmTaskData.json';
@@ -20,10 +20,11 @@ export default function ConfirmNew(): React.ReactNode {
     const [userForm] = Form.useForm();
     const params = useParams<{ id: string }>();
     const attachRef = useRef<AttachmentRef>()
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
-        form?.setFieldsValue({...data});
+        form?.setFieldsValue({ ...data });
         userForm?.setFieldsValue({
             assignorId: data?.assignorId,
             assignorName: data?.assignorName,
@@ -45,6 +46,7 @@ export default function ConfirmNew(): React.ReactNode {
     const detailData: any = data;
 
     const save = () => {
+        setConfirmLoading(true)
         form?.validateFields().then(res => {
             userForm?.validateFields().then(item => {
                 const baseData = form?.getFieldsValue(true)
@@ -56,9 +58,14 @@ export default function ConfirmNew(): React.ReactNode {
                     fileIds: attachRef.current?.getDataSource().map(item => item.id),
                     fileVOList: attachRef.current?.getDataSource()
                 }).then(res => {
+                    setConfirmLoading(false)
                     history?.goBack();
+                }).catch(e => {
+                    setConfirmLoading(false)
                 })
             })
+        }).catch(e => {
+            setConfirmLoading(false)
         })
     }
 
@@ -66,7 +73,7 @@ export default function ConfirmNew(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space>
-                    <Button type='primary' onClick={save} ghost>保存并创建</Button>
+                    <Button type='primary' loading={confirmLoading} onClick={save} ghost>保存并创建</Button>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
                 </Space>
             ]}>
