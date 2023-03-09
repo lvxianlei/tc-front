@@ -237,7 +237,7 @@
                 "title": "查询",
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
-                "placeholder": "品名/规格"
+                "placeholder": "品名/规格/收货批次"
             },
             {
                 "title": "标准",

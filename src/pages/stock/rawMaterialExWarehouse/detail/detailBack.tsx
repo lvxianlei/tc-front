@@ -31,7 +31,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         label: item.name
     }))
     const history = useHistory();
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     // 批量入库
@@ -195,7 +195,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={(data: any) => {
                     return <>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
-                        <Button type="primary" ghost onClick={() => handleBackWarehousingClick()} loading={saveLoading}>批量回库</Button>
+                        <Button type="primary" ghost onClick={() => handleBackWarehousingClick()} loading={saveLoading} disabled={ params.lock==='1' }>批量回库</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined', null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
@@ -249,7 +249,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             // 0待出库 2 已出库  1缺料中 3待回库  4已回库
                             <>
                                 
-                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 2} onClick={async () => {
+                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 2 || params.lock==='1'} onClick={async () => {
                                     const result = [ record.id ]
                                     await backSingleRun(result);
                                     history.go(0);
@@ -260,7 +260,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus === 0} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.outStockItemStatus === 0 || params.lock==='1'} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -268,7 +268,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2 || params.lock==='1'} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )

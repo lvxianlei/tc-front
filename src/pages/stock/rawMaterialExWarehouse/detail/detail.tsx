@@ -31,7 +31,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         label: item.name
     }))
     const history = useHistory();
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
@@ -537,7 +537,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 exportFileName="原材料出库明细"
                 extraOperation={(data: any) => {
                     return <>
-                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => {
+                        <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0) || params.lock==='1'} onClick={() => {
                             let flag = false;
                             for (let i = 0; i < selectedRows.length; i += 1) {
                                 if (selectedRows[i].materialPickingDetailId&&selectedRows[i].materialPickingDetailId!==null) {
@@ -556,7 +556,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         }).then(()=>{
                             message.success('出库成功！')
                             history.go(0)
-                        })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
+                        })}} disabled={!(selectedKeys.length>0) || params.lock==='1'}>批量出库</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
@@ -609,7 +609,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中
                             <>
-                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={() => { IssueOperation(record) }}>出库</Button>
+                                <Button type='link' disabled={record.outStockItemStatus !== 0 || params.lock==='1'} onClick={() => { IssueOperation(record) }}>出库</Button>
                                 <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
                                 <Popconfirm
                                     title="确认撤销?"
@@ -617,7 +617,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2 || params.lock==='1'} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -625,7 +625,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2 || params.lock==='1'} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
