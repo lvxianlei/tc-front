@@ -427,6 +427,46 @@
             "width": 100
         },
         {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber",
+            "width": 100
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber",
+            "width": 100
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "width": 100
+        },
+        {
+            "title": "肢宽/宽度",
+            "dataIndex": "limbWidth",
+            "width": 100
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness",
+            "width": 100
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber",
+            "width": 100
+        },
+        {
+            "title": "测量长度",
+            "dataIndex": "gageLength",
+            "width": 100
+        },
+        {
+            "title": "高度",
+            "dataIndex": "measureHeight",
+            "width": 100
+        },
+        {
             "title": "含税单价（元/吨）",
             "dataIndex": "taxPrice",
             "width": 120
@@ -467,39 +507,9 @@
             "width": 140
         },
         {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber",
-            "width": 100
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber",
-            "width": 100
-        },
-        {
-            "title": "生产厂家",
-            "dataIndex": "manufacturer",
-            "width": 100
-        },
-        {
             "title": "轧制批号",
             "dataIndex": "rollingNumber",
             "width": 100
-        },
-        {
-            "title": "肢宽",
-            "dataIndex": "limbWidth",
-            "width": 50
-        },
-        {
-            "title": "厚度",
-            "dataIndex": "thickness",
-            "width": 50
-        },
-        {
-            "title": "管径",
-            "dataIndex": "caliber",
-            "width": 50
         },
         {
             "title": "外观检验结果",
@@ -512,7 +522,6 @@
             "title": "收货批次",
             "dataIndex": "realReceiveBatchNumber",
             "type": "string",
-            "disabled": true,
             "placeholder": "自动生成"
         },
         {
@@ -626,7 +635,7 @@
             "format":"YYYY-MM-DD"
         },
         {
-            "title": "肢宽",
+            "title": "肢宽/宽度",
             "dataIndex": "limbWidth",
             "maxLength": 50
         },
@@ -641,14 +650,14 @@
             "maxLength": 50
         },
         {
-            "title": "高度",
-            "dataIndex": "measureHeight",
-            "maxLength": 50
-        },
-        {
             "title": "测量长度",
             "dataIndex": "gageLength",
             "required": true
+        },
+        {
+            "title": "高度",
+            "dataIndex": "measureHeight",
+            "maxLength": 50
         },
         {
             "title": "计量方式",
@@ -844,7 +853,7 @@
             "format":"YYYY-MM-DD"
         },
         {
-            "title": "肢宽",
+            "title": "肢宽/宽度",
             "dataIndex": "limbWidth",
             "disabled": true,
             "maxLength": 50
@@ -862,15 +871,15 @@
             "maxLength": 50
         },
         {
+            "title": "测量长度",
+            "disabled": true,
+            "dataIndex": "gageLength"
+        },
+        {
             "title": "高度",
             "dataIndex": "measureHeight",
             "disabled": true,
             "maxLength": 50
-        },
-        {
-            "title": "测量长度",
-            "disabled": true,
-            "dataIndex": "gageLength"
         },
         {
             "title": "计量方式",
