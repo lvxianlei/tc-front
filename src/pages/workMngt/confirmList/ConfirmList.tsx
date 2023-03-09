@@ -79,7 +79,7 @@ export default function ConfirmList() {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 100,
+            width: 150,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
