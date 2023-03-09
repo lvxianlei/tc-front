@@ -759,8 +759,8 @@ export default function TowerInformation(): React.ReactNode {
                     </>
                 }
                 searchFormItems={[]}
+                pagination={false}
                 tableProps={{
-                    pagination: false,
                     rowSelection: {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange

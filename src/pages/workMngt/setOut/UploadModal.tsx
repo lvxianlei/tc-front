@@ -76,6 +76,8 @@ export default forwardRef(function ({
                     updateList();
                     setList([]);
                     form.resetFields();
+                }).catch(e => {
+                    setLoading(false)
                 })
             }).catch(e => {
                 setLoading(false)

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -8,6 +8,7 @@ import { useForm } from 'antd/es/form/Form';
 import { columns } from './patchIssued.json'
 import styles from './PatchIssued.module.less';
 import SearchTable from '../SearchTable';
+import { stringify } from 'query-string';
 
 export default function IssuedDetail(): React.ReactNode {
     const [refresh, setRefresh] = useState<boolean>(false);
@@ -20,6 +21,7 @@ export default function IssuedDetail(): React.ReactNode {
     const [pageVisible, setPageVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
+    const location = useLocation<{ state: {} }>();
 
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -489,10 +491,23 @@ export default function IssuedDetail(): React.ReactNode {
                         </Form>,
                         onOk: () => new Promise(async (resolve, reject) => {
                             try {
-                                const value = await formTable.getFieldsValue(true)
-                                setFilterValue({
-                                    ...value
+                                const formValue = await formTable.getFieldsValue(true)
+                                // setFilterValue({
+                                //     ...value
+                                // })
+                                const formObj: { [key: string]: any } = {}
+                                Object.keys(formValue).forEach((item: string) => {
+                                    if (formValue[item] instanceof Array) {
+                                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
+                                    } else if (typeof formValue[item] === "number") {
+                                        formObj[item] = `n_${formValue[item]}`
+                                    } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
+                                        formObj[item] = `o_${stringify(formValue[item])}`
+                                    } else {
+                                        formObj[item] = formValue[item]
+                                    }
                                 })
+                                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
                                 formTable.resetFields()
                                 resolve(true)
                             } catch (error) {
