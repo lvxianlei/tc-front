@@ -35,8 +35,7 @@ export default function Index() {
 
     const { run: removeDict } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`
-            /tower-system/productType/dict?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-system/productType/dict?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
