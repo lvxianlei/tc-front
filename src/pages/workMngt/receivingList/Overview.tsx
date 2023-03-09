@@ -15,7 +15,7 @@ interface ReceiveStrokAttachProps {
 }
 
 interface ReceiveStrokAttachUploadProps {
-    id: string
+    id: any[]
 }
 const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const [form] = Form.useForm()
@@ -162,7 +162,7 @@ const ReceiveStrokAttachUpload = forwardRef(({ id }: ReceiveStrokAttachUploadPro
             }
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
-                id,
+                ids: id,
                 fieldIds,
                 attachType: 2
             })
@@ -193,7 +193,7 @@ export default function Overview() {
     const [saveAttachLoding, setSaveAttachLoading] = useState<boolean>(false)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [editId, setEditId] = useState<string>('');
-    const [detailAttachId, setDetailAttachId] = useState<string>("")
+    const [detailAttachId, setDetailAttachId] = useState<any[]>([])
     const [attachVisible, setAttachVisible] = useState<boolean>(false)
     const [userData, setUserData] = useState<any>({})
     const handleCreate = (options: any) => {
@@ -312,7 +312,7 @@ export default function Overview() {
             onOk={handleAttachOkK}
             okText="保存"
             onCancel={() => {
-                setDetailAttachId("")
+                setDetailAttachId([])
                 setAttachVisible(false)
             }}>
             <ReceiveStrokAttachUpload id={detailAttachId} ref={receiveAttachRef}  />
@@ -353,6 +353,14 @@ export default function Overview() {
                     ghost
                     disabled={!(selectedRows.length > 0)}
                     onClick={() => {
+                        setDetailAttachId(selectedRows)
+                        setAttachVisible(true)
+                    }}
+                >质保书上传</Button>
+                <Button type="primary"
+                    ghost
+                    disabled={!(selectedRows.length > 0)}
+                    onClick={() => {
                         setAttachType(1)
                         setDetailId(selectedRows)
                         setVisible(true)
@@ -367,7 +375,6 @@ export default function Overview() {
                     setEditId(params.id)
                     const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/quality/${params.id}`)
                     setIsOpenId(true)
-                    
                 }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
@@ -413,7 +420,7 @@ export default function Overview() {
                             }}
                         >拒收</Button>
                         <a style={{ marginRight: 12 }} onClick={() => {
-                            setDetailAttachId(records.id)
+                            setDetailAttachId([records.id])
                             setAttachVisible(true)
                         }}>质保单</a>
                     </>

@@ -632,7 +632,7 @@
             },
             {
                 "title": "标准",
-                "dataIndex": "materialName"
+                "dataIndex": "materialStandardName"
             },
             {
                 "title": "材质",
