@@ -212,7 +212,7 @@ export default function CreatePlan(props: any): JSX.Element {
     useEffect(() => {
         if (props.visible) {
             addCollectionForm.setFieldsValue({
-                isUrgent:'',
+                isUrgent: 0,
             })
         }
     }, [props.visible])

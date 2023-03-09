@@ -700,6 +700,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                             }))
                         })
                     }
+                    if (item.dataIndex === "realReceiveBatchNumber") {
+                        return ({
+                            ...item,
+                            disabled: type === "new"
+                        })
+                    }
                     if (item.dataIndex === "structureTexture") {
                         return ({
                             ...item,
@@ -807,7 +813,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                             }
                         })
                     }
-                    if (item.dataIndex === "测量长度") {
+                    if (item.dataIndex === "gageLength") {
                         return ({
                             ...item,
                             render: (number: number, record: any, index: number) => {
