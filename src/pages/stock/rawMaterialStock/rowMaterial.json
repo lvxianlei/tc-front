@@ -127,5 +127,44 @@
             "dataIndex": "totalUnTaxPrice",
             "width": 120
         }
+    ],
+    "detailPage": [
+        {
+            "title": "入库数量",
+            "dataIndex": "inStockNum",
+            "width": 80
+        },
+        {
+            "title": "入库重量",
+            "dataIndex": "totalInStockWeight",
+            "width": 80
+        },
+        {
+            "title": "出库数量",
+            "dataIndex": "outStockNum",
+            "width": 140
+        },
+        {
+            "title": "出库重量",
+            "dataIndex": "totalOutStockWeight",
+            "width": 140
+        },
+        {
+            "title": "更新时间",
+            "dataIndex": "updateTime",
+            "type":"date",
+            "format":"YYYY-MM-DD",
+            "width": 80
+        },
+        {
+            "title": "操作人",
+            "dataIndex": "createUserName",
+            "width": 60
+        },
+        {
+            "title": "更新类型",
+            "dataIndex": "operationTypeName",
+            "width": 80
+        }
     ]
 }

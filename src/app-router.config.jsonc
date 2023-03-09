@@ -893,7 +893,7 @@
     },
     { // 库存管理-原材料入库-详情
       "name": "原材料入库明细",
-      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval",
+      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval/:lock",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_info"
@@ -935,7 +935,7 @@
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
-      "path": "/auxStock/entryWarehouse/detail/:id/:approval",
+      "path": "/auxStock/entryWarehouse/detail/:id/:approval/:lock",
       "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_in_detailList"
