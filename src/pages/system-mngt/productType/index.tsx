@@ -51,7 +51,7 @@ export default function Index() {
         }
     }))
 
-    const { loading: productLoading, data: productData } = useRequest<object[]>((ids: string[]) => new Promise(async (resole, reject) => {
+    const { loading: productLoading, data: productData } = useRequest<any[]>((ids: string[]) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get("/tower-system/productType")
             resole(result)
@@ -159,6 +159,7 @@ export default function Index() {
             </>
         }]
     }).primaryKey("id").use(features.rowDetail({
+        defaultOpenKeys: productData?.[0] ? [productData?.[0]?.id] : [],
         renderDetail: (row) => <AliTable
             size="small"
             style={{ boxShadow: '0 0 4px 1px #33333333', margin: 8 }}
