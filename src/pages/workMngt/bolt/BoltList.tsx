@@ -121,7 +121,7 @@ export default function BoltList(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 100,
+            width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/boltList/boltListing/${record.id}/${record.boltLeader}/${record.boltStatus}`}>螺栓清单</Link>
