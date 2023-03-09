@@ -116,6 +116,7 @@ export default function Index() {
             setDicVisible(false)
             setSelectedRowKeys([])
             resove(true)
+            history.go(0)
         } catch (error) {
             console.log(error)
         }
