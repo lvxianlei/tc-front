@@ -15,7 +15,7 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({
         fuzzyQuery: "",
@@ -97,11 +97,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 100,
+                        width: 160,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1} onClick={async () => {
+                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1 || params.lock==='1'} onClick={async () => {
                                     const result = [ record.id ]
                                     await saveRun(result);
                                     history.go(0);
@@ -118,7 +118,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     cancelText="取消"
                                     disabled={record.warehousingEntryStatus === 0}
                                 >
-                                    <Button type="link" disabled={record.warehousingEntryStatus === 0}>撤销</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 0 || params.lock==='1'}>撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -130,9 +130,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={record.warehousingEntryStatus === 1}
+                                    disabled={record.warehousingEntryStatus === 1 || params.lock==='1'}
                                 >
-                                    <Button type="link" disabled={record.warehousingEntryStatus === 1}>删除</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 1 || params.lock==='1'}>删除</Button>
                                 </Popconfirm>
                             </>
                         )
@@ -158,7 +158,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 message.error('不可撤销！')
                             }
                         }} >撤销审批</Button>
-                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
+                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} disabled={ params.lock==='1' }>批量入库</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
                         <div>已收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveTaxPrice}</span> 待收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitTaxPrice}</span></div>
                     </>
