@@ -537,17 +537,51 @@ export default forwardRef(function AddPick({ id, type, rowData, getLoading }: mo
     const addRow = () => {
         const values = form.getFieldsValue(true).data || [];
         if (isAddUp) {
-            const arr = new Array(5).fill({
-                segmentName: values[values?.length - 1]?.segmentName || '',
-                code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
-                materialName: values[values?.length - 1]?.materialName || '',
-                structureTexture: values[values?.length - 1]?.structureTexture || '',
-                structureSpec: values[values?.length - 1]?.structureSpec || ''
-            })
-            num(values[values?.length - 1]?.code || '')
+            // const arr = new Array(5).fill({
+            //     segmentName: values[values?.length - 1]?.segmentName || '',
+            //     code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+            //     materialName: values[values?.length - 1]?.materialName || '',
+            //     structureTexture: values[values?.length - 1]?.structureTexture || '',
+            //     structureSpec: values[values?.length - 1]?.structureSpec || ''
+            // })
+            // num(values[values?.length - 1]?.code || '')
             const newValues = [
                 ...values,
-                ...arr
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(values[values?.length - 1]?.code || '')) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(values[values?.length - 1]?.code || ''))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(num(values[values?.length - 1]?.code || '')))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(num(num(values[values?.length - 1]?.code || ''))))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                }
             ]
             setTableData([...newValues])
             form.setFieldsValue({ data: [...newValues] })
