@@ -190,7 +190,7 @@ export default function Overview() {
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ receiveStockId: params.id })
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string[]>([])
-    const [receiveStockId, setReceiveStockId] = useState<string>("")
+    // const [receiveStockId, setReceiveStockId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [saveAttachLoding, setSaveAttachLoading] = useState<boolean>(false)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
@@ -258,6 +258,7 @@ export default function Overview() {
 
     const handleSelectChange = (ids: any, selectRows: any[]) => {
         setSelectedRows(ids)
+        console.log(selectRows)
         const rWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
         },0)
@@ -285,7 +286,7 @@ export default function Overview() {
             waitWeight,
             waitPrice
         })
-        setReceiveStockId(selectRows[0]?.receiveStockId)
+        // setReceiveStockId(selectRows[0]?.receiveStockId)
     }
 
     return <DetailContent>
@@ -301,10 +302,10 @@ export default function Overview() {
             onCancel={() => {
                 setAttachType(1)
                 setDetailId([])
-                setReceiveStockId("")
+                // setReceiveStockId("")
                 setVisible(false)
             }}>
-            <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={receiveStockId} ref={receiveRef} />
+            <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={params.id} ref={receiveRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -392,7 +393,7 @@ export default function Overview() {
                 rowSelection: {
                     selectedRowKeys: selectedRows,
                     onChange: handleSelectChange,
-                    getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
+                    // getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
                 }
             }}
             columns={[
@@ -408,7 +409,7 @@ export default function Overview() {
                             onClick={() => {
                                 setAttachType(1)
                                 setDetailId([records.id])
-                                setReceiveStockId(records.receiveStockId)
+                                // setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}>收货</Button>
                         <Button
@@ -417,7 +418,7 @@ export default function Overview() {
                             onClick={() => {
                                 setAttachType(2)
                                 setDetailId([records.id])
-                                setReceiveStockId(records.receiveStockId)
+                                // setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}
                         >拒收</Button>
