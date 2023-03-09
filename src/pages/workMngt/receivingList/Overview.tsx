@@ -154,11 +154,13 @@ const ReceiveStrokAttachUpload = forwardRef(({ id }: ReceiveStrokAttachUploadPro
         try {
             // 对上传数据进行处理
             const fieldIds: any = [],
-                source = attachRef.current.getDataSource();
+            source = attachRef.current.getDataSource();
+            console.log(source)
             if (source.length < 1) {
                 message.error("请您先上传质保单！");
-                resole(false as any)
-                return false;
+                throw new Error( `请您先上传质保单！`)
+                // resole(false as any)
+                // return false;
             }
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
