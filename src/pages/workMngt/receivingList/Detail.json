@@ -121,6 +121,34 @@
     ],
     "goodsDetail": [
         {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
             "title": "合同编号",
             "dataIndex": "materialContractNumber",
             "width": 70
@@ -139,30 +167,6 @@
             "title": "品名",
             "dataIndex": "materialName",
             "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number",
             "disabled": true
         },
         {

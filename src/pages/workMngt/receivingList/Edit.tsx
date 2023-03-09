@@ -4,6 +4,7 @@ import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import { FixedType } from 'rc-table/lib/interface';
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
@@ -720,6 +721,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                                 value: item.name,
                                 label: item.name
                             }))
+                        })
+                    }
+                    if (item.dataIndex === "structureSpec") {
+                        return ({
+                            ...item,
                         })
                     }
                     if (item.dataIndex === "measureHeight") {

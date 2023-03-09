@@ -372,7 +372,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["machiningNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={0} value={value===0?0:value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
                                 })
                             }
                             if (["sampler"].includes(item.dataIndex)) {
