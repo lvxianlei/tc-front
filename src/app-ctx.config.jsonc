@@ -42,11 +42,11 @@
                 "appName": "COMM",
                 "authority": "tc_erp_sys_system",
                 "items": [
-                    // {
-                    //     "label": "用户管理",
-                    //     "path": "/sys/users",
-                    //     "authority": "users"
-                    // },
+                    {
+                        "label": "产品类型",
+                        "path": "/sys/product",
+                        "authority": "tc_erp_sys_system_dic"
+                    },
                     {
                         "label": "字典管理",
                         "path": "/sys/dxnry",
@@ -809,7 +809,7 @@
                     }
                 ]
             },
-            {  
+            {
                 "label": "资料管理",
                 "icon": "customer",
                 "path": "/dataMngt",
@@ -1269,7 +1269,6 @@
                         "path": "/commCenter/unitMngt",
                         "authority": "tc_erp_sys_log_operation"
                     }
-                   
                 ]
             },
             // {

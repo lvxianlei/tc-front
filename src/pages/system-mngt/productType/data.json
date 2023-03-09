@@ -1,0 +1,28 @@
+{
+    "table": [
+        {
+            "name": "产品类别名称",
+            "code": "productTypeName"
+        }
+    ],
+    "aliDic": [
+        {
+            "name": "选项值名",
+            "code": "dictName"
+        }
+    ],
+    "dic": [
+        {
+            "title": "选项值名",
+            "dataIndex": "name"
+        }
+    ],
+    "edit": {
+        "base": [
+            {
+                "title": "类别",
+                "dataIndex": "productTypeName"
+            }
+        ]
+    }
+}
