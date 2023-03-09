@@ -1,6 +1,6 @@
 import React, { forwardRef, useState, useEffect } from "react"
 import { Spin } from 'antd'
-import { DetailTitle, BaseInfo, CommonTable, formatDataType } from '../common'
+import { DetailTitle, CommonTable, formatDataType } from '../common'
 import { baseInfoHead, invoiceHead, billingHeader, batchHead } from "./InvoicingData.json"
 import { productTypeOptions } from "../../configuration/DictionaryOptions"
 import "./Bill.less"

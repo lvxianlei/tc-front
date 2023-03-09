@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Ref, RefObject, useImperativeHandle } from "react"
 import { Checkbox, TableColumnProps, Typography, Radio } from "antd"
 import styles from "./CommonTable.module.less"
 import "./CommonTable.module.less"
@@ -95,12 +95,13 @@ interface CommonTableProps {
     columns: TableColumnProps<object>[]
     dataSource?: object[]
     haveIndex?: boolean
+    actionRef?: RefObject<any>
     [key: string]: any
     rowKey?: any
     isPage?: boolean
 }
 
-export default function CommonAliTable({ columns, dataSource = [], rowKey, haveIndex = false, isPage = false, ...props }: CommonTableProps): JSX.Element {
+export default function CommonAliTable({ columns, dataSource = [], rowKey, haveIndex = false, isPage = false, actionRef, ...props }: CommonTableProps): JSX.Element {
     const formatColumns = columns.map((item: any) => generateRender(item.type || "text", item))
     const columnsResult = haveIndex ? [
         {
@@ -138,6 +139,10 @@ export default function CommonAliTable({ columns, dataSource = [], rowKey, haveI
             }));
     pipeline.use(features.autoRowSpan());
     formatColumns.some((item: any) => item.features?.sortable) && pipeline.use(features.sort({ mode: 'single', highlightColumnWhenActive: true }));
+    useImperativeHandle(actionRef, () => ({
+        ...actionRef?.current,
+        pipeline
+    }), [pipeline, actionRef?.current])
     return <nav className={styles.componentsTable} style={{ paddingBottom: props.code && props.code === 1 ? "0px" : "88px" }}>
         <AliTable
             size="small"

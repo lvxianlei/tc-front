@@ -1,7 +1,7 @@
-import ApplicationContext from "./ApplicationContext";
+import AuthUtil from "@utils/AuthUtil";
 import { IDict } from "./IApplicationContext";
 
-const dictionary: Record<string, IDict[] | undefined> | undefined = ApplicationContext.get().dictionaryOption;
+const dictionary: Record<string, IDict[] | undefined> | undefined = AuthUtil.getDictionary();
 
 export enum DictionaryEnums {
     PRODUCT_TYPE = 101,
@@ -58,7 +58,7 @@ export enum DictionaryEnums {
     DOCUMENT_TYPE = 1014,
     FILE_TYPE = 1015,
     IMPLEMENT_STANDARD = 1233,
-    INVOICE_SOURCE= 119,
+    INVOICE_SOURCE = 119,
     PAYMENT_METHOD = 1310,
 }
 

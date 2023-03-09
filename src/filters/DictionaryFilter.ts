@@ -37,7 +37,7 @@ export default class DictionaryFilter implements IFilter {
                     dictionaryOption[dict.id] = dict.dictionaries;
                 });
                 ApplicationContext.get({ dictionaryOption: dictionaryOption });
-                setDictionary(dictionaryOption as any)
+               AuthUtil.setDictionary(dictionaryOption as any)
             }
         }
         return true;

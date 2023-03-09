@@ -1,5 +1,5 @@
 
-import React, { ReactElement, useCallback, useState, useEffect } from "react"
+import React, { ReactElement, useImperativeHandle, useCallback, useState, useEffect, Ref, RefObject, useRef } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonAliTable, { columnsProps } from "./CommonAliTable"
@@ -24,6 +24,7 @@ interface SearchTableProps {
     transformResult?: (result: any) => any
     onFilterSubmit?: <T>(arg: T) => T
     filterValue?: { [key: string]: any }
+    actionRef?: RefObject<any>
     extraOperation?: React.ReactNode | React.ReactNode[] | ((result: any) => any)
     tableProps?: { [i: string]: any }
     pagination?: boolean
@@ -75,15 +76,17 @@ export default function SearchTable({
     exportPath,
     exportObject = {},
     tableRender,
+    actionRef,
     ...props }: SearchTableProps): JSX.Element {
     const match = useRouteMatch()
+    const aliTableRef = useRef<any>()
     const location = useLocation<{ state: {} }>();
     const history = useHistory()
     const uriSearch: any = parse(location.search.replace("?", ""))
     const [filterSearch, setFilterSearch] = useState<any>({ ...filterValue });
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, refresh, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             let params: any = {}
             if (pagination !== false) {
@@ -123,6 +126,12 @@ export default function SearchTable({
             pageSize: pageSize || uriSearch.pageSize
         })}`)
     }, [uriSearch, location])
+
+    useImperativeHandle(actionRef, () => ({
+        refresh,
+        run,
+        ...aliTableRef?.current
+    }), [refresh, run])
 
     return <>
         {searchFormItems.length > 0 && <Form
@@ -195,7 +204,8 @@ export default function SearchTable({
                 rowKey={rowKey || ((record: any) => record.id)}
                 size="small"
                 isLoading={loading}
-                dataSource={data ?.result ?.records || data ?.result || []}
+                dataSource={data?.result?.records || data?.result || []}
+                actionRef={aliTableRef}
                 {...tableProps}
                 {...props}
             />
@@ -220,6 +230,7 @@ export default function SearchTable({
                 size="small"
                 isLoading={loading}
                 dataSource={data?.result?.records || data?.result || []}
+                actionRef={aliTableRef}
                 {...tableProps}
                 {...props}
             />

@@ -97,7 +97,6 @@ export default function SeeGuarantee(): JSX.Element {
             const taxPrice = processingNumber(result.contractAmount / result.contractTotalWeight + "", 6)
             const price = taxPrice / (1 + taxRate / 100)
             const amount = (+result.contractTotalWeight || 0) * price; // 含税金额
-            console.log(amount)
             addCollectionForm.setFieldsValue({
                 purchaseOrderNumber: result.purchaseOrderNumber, // 采购订单号
                 // internalNumber: result.internalNumber, // 内部合同编号
@@ -110,6 +109,7 @@ export default function SeeGuarantee(): JSX.Element {
                 signCustomerName: result.signCustomerName, // 合同签订单位
                 signContractTime: result.signContractTime, // 合同签订日期
                 deliveryTime: result.deliveryTime, // 合同要求交货日期
+                orderDeliveryTime: result.deliveryTime, // 合同要求交货日期
                 currencyType: result.currencyType, // 币种
                 saleType: result.saleType, // 销售类型
                 orderProjectName: result.contractName, // 订单工程名称

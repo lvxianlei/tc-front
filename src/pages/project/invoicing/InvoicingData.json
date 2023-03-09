@@ -572,32 +572,7 @@
     "invoiceHeadDetail": [
         {
             "title": "票面单位名称",
-            "dataIndex": "name",
-            "type": "popTable",
-            "path": "/tower-market/customer",
-            "readOnly": false,
-            "value": "name",
-            "width": 1101,
-            "dependencies": true,
-            "columns": [
-                {
-                    "title": "客户类型",
-                    "dataIndex": "typeName"
-                },
-                {
-                    "title": "客户名称",
-                    "dataIndex": "name",
-                    "search": true
-                },
-                {
-                    "title": "首要联系人",
-                    "dataIndex": "linkman"
-                },
-                {
-                    "title": "联系电话",
-                    "dataIndex": "phone"
-                }
-            ]
+            "dataIndex": "name"
         },
         {
             "title": "纳税人识别号",
