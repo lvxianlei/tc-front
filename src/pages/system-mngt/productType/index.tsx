@@ -35,8 +35,7 @@ export default function Index() {
 
     const { run: removeDict } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
-            const result: { [key: string]: any } = await RequestUtil.delete(`
-            /tower-system/productType/dict?id=${id}`)
+            const result: { [key: string]: any } = await RequestUtil.delete(`/tower-system/productType/dict?id=${id}`)
             resole(result)
         } catch (error) {
             reject(error)
@@ -52,7 +51,7 @@ export default function Index() {
         }
     }))
 
-    const { loading: productLoading, data: productData } = useRequest<object[]>((ids: string[]) => new Promise(async (resole, reject) => {
+    const { loading: productLoading, data: productData } = useRequest<any[]>((ids: string[]) => new Promise(async (resole, reject) => {
         try {
             const result: any[] = await RequestUtil.get("/tower-system/productType")
             resole(result)
@@ -117,6 +116,7 @@ export default function Index() {
             setDicVisible(false)
             setSelectedRowKeys([])
             resove(true)
+            history.go(0)
         } catch (error) {
             console.log(error)
         }
@@ -159,6 +159,7 @@ export default function Index() {
             </>
         }]
     }).primaryKey("id").use(features.rowDetail({
+        defaultOpenKeys: productData?.[0] ? [productData?.[0]?.id] : [],
         renderDetail: (row) => <AliTable
             size="small"
             style={{ boxShadow: '0 0 4px 1px #33333333', margin: 8 }}
