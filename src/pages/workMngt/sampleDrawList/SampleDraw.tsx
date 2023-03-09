@@ -59,6 +59,14 @@ export default function SampleDraw(): React.ReactNode {
 
     const columns = [
         {
+            key: 'index',
+            title: '序号',
+            dataIndex: 'index',
+            width: 50,
+            fixed: "left" as FixedType,
+            render: (_a: any, _b: any, index: number): React.ReactNode => (<span>{index + 1}</span>)
+        },
+        {
             key: 'segmentName',
             title: '段名',
             width: 50,

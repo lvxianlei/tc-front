@@ -177,7 +177,7 @@ export default function ConfirmTaskMngt(): React.ReactNode {
                     >
                         <Button type='link' disabled={record.status !== 4}>退回</Button>
                     </Popconfirm>
-                    <Button type='link' disabled={record.initiator === '营销发起'} onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
+                    <Button type='link' disabled={record.initiator === '营销发起' || record.status === 4 || record.status === 5 } onClick={() => history.push(`/taskMngt/ConfirmTaskMngt/ConfirmEdit/${record.id}`)}>编辑</Button>
                     <Popconfirm
                         title="确认删除任务?"
                         onConfirm={async () => {

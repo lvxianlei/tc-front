@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
 import   SearchTable  from '../SearchTable';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
@@ -8,6 +8,7 @@ import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/lib/form/Form';
 import { columns } from './releaseList.json'
 import styles from './release.module.less';
+import { stringify } from 'query-string';
 
 export default function ReleaseList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -21,6 +22,7 @@ export default function ReleaseList(): React.ReactNode {
     const [searchVisible, setSearchVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
+    const location = useLocation<{ state: {} }>();
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -79,6 +81,7 @@ export default function ReleaseList(): React.ReactNode {
 
     const onFilterSubmit = (value: any) => {
         getCount(value)
+        setFilterValue(value)
         return value
     }
 
@@ -503,15 +506,24 @@ export default function ReleaseList(): React.ReactNode {
                         </Form>,
                         onOk: () => new Promise(async (resolve, reject) => {
                             try {
-                                const value = await formTable.getFieldsValue(true)
-                                setFilterValue({
-                                    ...value,
-                                    current: 1
-                                })
-                                
-                                // getCount({
-                                //     ...value
+                                const formValue = await formTable.getFieldsValue(true)
+                                // onFilterSubmit({
+                                //     ...formValue,
+                                //     current: 1
                                 // })
+                                const formObj: { [key: string]: any } = {}
+                                Object.keys(formValue).forEach((item: string) => {
+                                    if (formValue[item] instanceof Array) {
+                                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
+                                    } else if (typeof formValue[item] === "number") {
+                                        formObj[item] = `n_${formValue[item]}`
+                                    } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
+                                        formObj[item] = `o_${stringify(formValue[item])}`
+                                    } else {
+                                        formObj[item] = formValue[item]
+                                    }
+                                })
+                                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
                                 formTable.resetFields()
                                 resolve(true);
                             } catch (error) {

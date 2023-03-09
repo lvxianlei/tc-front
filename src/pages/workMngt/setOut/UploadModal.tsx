@@ -22,6 +22,7 @@ export interface UploadModalState {
 interface IFile extends FileProps {
     readonly name?: string;
     readonly segmentName?: string
+    readonly type?: string
 }
 
 interface IData {
@@ -65,7 +66,8 @@ export default forwardRef(function ({
                     return {
                         fileVo: res,
                         productCategoryId: id,
-                        segmentName: res.segmentName
+                        segmentName: res.segmentName,
+                        type: res?.type
                     }
                 })
                 RequestUtil.post(path, [...value]).then(res => {
@@ -74,6 +76,8 @@ export default forwardRef(function ({
                     updateList();
                     setList([]);
                     form.resetFields();
+                }).catch(e => {
+                    setLoading(false)
                 })
             }).catch(e => {
                 setLoading(false)

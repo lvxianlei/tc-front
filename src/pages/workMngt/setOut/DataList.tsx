@@ -5,7 +5,7 @@
 */
 
 import React, { useState } from 'react';
-import { Space, Button, Modal, Row, Col, Input, message, Popconfirm, Checkbox } from 'antd';
+import { Space, Button, Modal, Row, Col, Input, message, Popconfirm, Checkbox, Form } from 'antd';
 import { Page } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -14,16 +14,17 @@ import RequestUtil from '../../../utils/RequestUtil';
 import UploadModal from './UploadModal';
 import { FileProps } from '../../common/Attachment';
 import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import { useForm } from 'antd/lib/form/Form';
 
 export default function ModelList(): React.ReactNode {
     const history = useHistory();
     const params = useParams<{ id: string }>();
     const [refresh, setRefresh] = useState(false);
     const [visible, setVisible] = useState(false);
-    const [segmentName, setSegmentName] = useState('');
     const [segmentId, setSegmentId] = useState('');
     const [checked, setChecked] = useState(false);
     const [filterValue, setFilterValue] = useState<any>();
+    const [form] = useForm();
 
     const columns = [
         {
@@ -76,29 +77,31 @@ export default function ModelList(): React.ReactNode {
                         const data: FileProps = await RequestUtil.get(record?.modelType === 1 ? `/tower-science/productSegment/segmentModelDownload?segmentRecordId=${record.id}` : `/tower-science/loftingTemplate/download/${record.id}`);
                         window.open(data?.downloadUrl)
                     }}>下载</Button>
-                    {record?.modelType === 1 ?
-                        <>
-                            <Button type="link" onClick={() => {
-                                setVisible(true);
-                                setSegmentName(record.segmentName);
-                                setSegmentId(record.id)
-                            }}>编辑</Button>
-                            <Popconfirm
-                                title="确认删除?"
-                                onConfirm={() => {
-                                    RequestUtil.delete(`/tower-science/productSegment/segmentModelDelete?segmentRecordId=${record.id}`).then(res => {
-                                        message.success('删除成功');
-                                        setRefresh(!refresh);
-                                    })
-                                }}
-                                okText="确认"
-                                cancelText="取消"
-                            >
-                                <Button type="link">删除</Button>
-                            </Popconfirm>
-                        </>
-                        : null
-                    }
+                    {/* {record?.modelType === 1 ? */}
+                    <>
+                        <Button type="link" onClick={() => {
+                            setVisible(true);
+                            form?.setFieldsValue({
+                                segmentName: record.segmentName
+                            })
+                            setSegmentId(record.id)
+                        }}>编辑</Button>
+                        <Popconfirm
+                            title="确认删除?"
+                            onConfirm={() => {
+                                RequestUtil.delete(`/tower-science/productSegment/segmentModelDelete?segmentRecordId=${record.id}`).then(res => {
+                                    message.success('删除成功');
+                                    setRefresh(!refresh);
+                                })
+                            }}
+                            okText="确认"
+                            cancelText="取消"
+                        >
+                            <Button type="link">删除</Button>
+                        </Popconfirm>
+                    </>
+                    {/* : null
+                    } */}
                 </Space>
             )
         }
@@ -126,26 +129,38 @@ export default function ModelList(): React.ReactNode {
             </Space>}
             searchFormItems={[]}
         />
-        <Modal visible={visible} title="编辑" onCancel={() => setVisible(false)} onOk={() => {
-            if (segmentName && /^[^\s]*$/.test(segmentName) && /^[0-9a-zA-Z-,]*$/.test(segmentName)) {
-                RequestUtil.put(`/tower-science/productSegment/segmentModelUpdate`, {
-                    id: segmentId,
-                    productCategoryId: params.id,
-                    segmentName: segmentName
-                }).then(res => {
-                    setVisible(false);
-                    setRefresh(!refresh);
-                });
-            } else {
-                message.warning('请输入段信息，仅可输入数字/字母/-/,')
-            }
-        }}>
-            <Row>
-                <Col span={4}>段名</Col>
-                <Col span={20}><Input defaultValue={segmentName} onChange={(e) => {
-                    setSegmentName(e.target.value)
-                }} /></Col>
-            </Row>
+        <Modal
+            visible={visible}
+            title="编辑"
+            key={form?.getFieldsValue(true)?.segmentName}
+            onCancel={() => setVisible(false)}
+            onOk={() => {
+                const segmentName = form?.getFieldsValue(true)?.segmentName
+                if (segmentName && /^[^\s]*$/.test(segmentName) && /^[0-9a-zA-Z-,]*$/.test(segmentName)) {
+                    RequestUtil.put(`/tower-science/productSegment/segmentModelUpdate`, {
+                        id: segmentId,
+                        productCategoryId: params.id,
+                        segmentName: segmentName
+                    }).then(res => {
+                        setVisible(false);
+                        setRefresh(!refresh);
+                    });
+                } else {
+                    message.warning('请输入段信息，仅可输入数字/字母/-/,')
+                }
+            }}>
+            <Form form={form}>
+                <Row>
+                    <Col span={4}>段名</Col>
+                    <Col span={20}>
+                        <Form.Item name="segmentName" >
+                            <Input />
+                        </Form.Item>
+
+                    </Col>
+                </Row>
+            </Form>
+
         </Modal>
     </>
 }
