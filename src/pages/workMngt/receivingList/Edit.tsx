@@ -4,6 +4,7 @@ import { DetailTitle, BaseInfo, formatData, EditableTable } from '../../common'
 import ChooseModal from "./ChooseModal"
 import RequestUtil from '../../../utils/RequestUtil'
 import useRequest from '@ahooksjs/use-request'
+import { FixedType } from 'rc-table/lib/interface';
 import { unloadModeOptions, settlementModeOptions, materialTextureOptions, materialStandardOptions } from "../../../configuration/DictionaryOptions"
 import { BasicInformation, editCargoDetails } from "./receivingListData.json"
 import * as calcObj from '@utils/calcUtil'
@@ -95,6 +96,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 // }), {})
                 // setTotal(seletTotal)
                 setCargoData(dataSourceE)
+                editForm.setFieldsValue({
+                    submit: dataSourceE
+                })
             }):setCargoData(result?.lists.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 0
@@ -270,6 +274,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             }), {})
             setTotal(seletTotal)
             setCargoData(dataSourceE)
+            editForm.setFieldsValue({
+                submit: dataSourceE
+            })
             setVisible(false);
         })
     }
@@ -366,11 +373,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight)
                 // 不含税装卸费
                 const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload)
-
                 const postData = {
-                    ...item,
                     ...cargoData[index],
-
+                    ...item,
                     totalTaxPrice,
                     totalUnTaxPrice,
                     balanceTotalWeight,
@@ -382,6 +387,9 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 return postData
             })
             setCargoData(dataSource || [])
+            editForm.setFieldsValue({
+                submit: dataSource
+            })
             form.setFieldsValue({
                 meteringMode: fields.meteringMode?fields.meteringMode:form.getFieldValue("meteringMode"),
                 totalPonderationWeight: fields.totalPonderationWeight ? fields.totalPonderationWeight: form.getFieldValue("totalPonderationWeight")
@@ -713,6 +721,11 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                                 value: item.name,
                                 label: item.name
                             }))
+                        })
+                    }
+                    if (item.dataIndex === "structureSpec") {
+                        return ({
+                            ...item,
                         })
                     }
                     if (item.dataIndex === "measureHeight") {

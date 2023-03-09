@@ -123,20 +123,20 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             // 添加对取样数量的拦截
             let inspectionNum = false;
-            let machiningUser = false;
-            let sampler = false;
+            // let machiningUser = false;
+            // let sampler = false;
             let machiningNum = false;
             let inspectionScheme = false
             for (let i = 0; i < popDataList.length; i += 1) {
                 if (!(popDataList[i].inspectionNum)&&popDataList[i].inspectionScheme!==0) {
                     inspectionNum = true;
                 }
-                if (!(popDataList[i].machiningUser)) {
-                    machiningUser = true;
-                }
-                if (!(popDataList[i].sampler)) {
-                    sampler = true;
-                }
+                // if (!(popDataList[i].machiningUser)) {
+                //     machiningUser = true;
+                // }
+                // if (!(popDataList[i].sampler)) {
+                //     sampler = true;
+                // }
                 if (!(popDataList[i].machiningNum)) {
                     machiningNum = true;
                 }
@@ -152,14 +152,14 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写机加数量！");
                 return false;
             }
-            if (sampler) {
-                message.error("请您选择取样人！");
-                return false;
-            }
-            if (machiningUser) {
-                message.error("请您选择机加人！");
-                return false;
-            }
+            // if (sampler) {
+            //     message.error("请您选择取样人！");
+            //     return false;
+            // }
+            // if (machiningUser) {
+            //     message.error("请您选择机加人！");
+            //     return false;
+            // }
             if (inspectionScheme) {
                 message.error("请您选择检验方案！");
                 return false;
@@ -372,7 +372,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["machiningNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={0} value={value===0?0:value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
                                 })
                             }
                             if (["sampler"].includes(item.dataIndex)) {
