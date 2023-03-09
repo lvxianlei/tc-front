@@ -186,6 +186,45 @@
             "dataIndex": "balanceTotalWeight"
         },
         {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        },
+        {
+            "title": "出厂日期",
+            "dataIndex": "manufactureTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
+            "title": "肢宽/宽度",
+            "dataIndex": "limbWidth"
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness"
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber"
+        },
+        {
+            "title": "测量长度",
+            "dataIndex": "gageLength"
+        },
+        {
+            "title": "高度",
+            "dataIndex": "measureHeight"
+        },
+        {
             "title": "含税单价（元/吨）",
             "dataIndex": "taxPrice",
             "disabled": true
@@ -226,43 +265,8 @@
             "width": 140
         },
         {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber"
-        },
-        {
             "title": "轧制批号",
             "dataIndex": "rollingNumber"
-        },
-        {
-            "title": "出厂日期",
-            "dataIndex": "manufactureTime",
-            "type":"date",
-            "format":"YYYY-MM-DD"
-        },
-        {
-            "title": "生产厂家",
-            "dataIndex": "manufacturer",
-            "maxLength": 30
-        },
-        {
-            "title": "肢宽",
-            "dataIndex": "limbWidth"
-        },
-        {
-            "title": "厚度",
-            "dataIndex": "thickness"
-        },
-        {
-            "title": "管径",
-            "dataIndex": "caliber"
-        },
-        {
-            "title": "测量长度",
-            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验效果",
