@@ -3,7 +3,7 @@
  * 时间：2023/01/16
  */
 import React, { useEffect, useRef, useState } from 'react';
-import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber, Modal, Space } from 'antd';
+import { Input, Select, DatePicker, Button, Radio, message, Popconfirm, InputNumber, Modal, Space, Form, TreeSelect } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page, IntgSelect } from '../../common';
 import { Link, useHistory } from 'react-router-dom';
@@ -11,6 +11,7 @@ import { baseColumn } from "./data.json";
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
+import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
 
 
@@ -79,6 +80,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
     const [columns, setColumns] = useState<any[]>(outStockList)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [num, setNum] = useState<any>({});
+    const [departData, setDepartData] = useState<SelectDataNode[]>([]);
     const [visible, setVisible] = useState<boolean>(false)
     // const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState<any>({
@@ -116,6 +118,15 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         } else{
             value.startCreateTime  = ``
             value.endCreateTime = ``
+        }
+        if (value.pickingTime) {
+            const formatDate = value.pickingTime.map((item: any) => item.format("YYYY-MM-DD"))
+            value.startPickingTime  = `${formatDate[0]} 00:00:00`
+            value.endPickingTime = `${formatDate[1]} 23:59:59`
+            delete value.pickingTime
+        } else{
+            value.startPickingTime  = ``
+            value.endPickingTime = ``
         }
         if (value.createUser) {
             value.createUser = value.createUser.value
@@ -181,6 +192,26 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(false)
         }
     })
+
+    //请求部门
+    useRequest(() => new Promise(async (resole, reject) => {
+        const deptData: SelectDataNode[] = await RequestUtil.get(`/tower-system/department`);
+        setDepartData(deptData);
+    }), {})
+    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
+        roles && roles.forEach((role: any & SelectDataNode): void => {
+            if (role.type === 2) {
+                role.disabled = true;
+            }
+            role.value = role.id;
+            role.title = role.name;
+            role.isLeaf = false;
+            if (role.children && role.children.length > 0) {
+                wrapRole2DataNode(role.children);
+            }
+        });
+        return roles;
+    }
     return (
         <>
             <Page
@@ -268,6 +299,37 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             <Select.Option value="3">审批驳回</Select.Option>
                             <Select.Option value="4">已撤销</Select.Option>
                         </Select>
+                    },
+                    {
+                        name: 'pickingTime',
+                        label: '领料日期',
+                        children: <DatePicker.RangePicker format="YYYY-MM-DD" style={{ width: 220 }} />
+                    },
+                    {
+                        name: 'deptId',
+                        label: '领料车间',
+                        children: <Form.Item name="deptId">
+                            <TreeSelect
+                                style={{ width: '150px' }}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto', width: 200 }}
+                                treeData={wrapRole2DataNode(departData)}
+                                placeholder="请选择"
+
+                            />
+                        </Form.Item>
+                    },
+                    {
+                        name: 'pickingTeamId',
+                        label: '领料班组',
+                        children: <Form.Item name="pickingTeamId">
+                            <TreeSelect
+                                style={{ width: '150px' }}
+                                dropdownStyle={{ maxHeight: 400, overflow: 'auto', width: 200 }}
+                                treeData={wrapRole2DataNode(departData)}
+                                placeholder="请选择"
+
+                            />
+                        </Form.Item>
                     },
                     {
                         name: 'fuzzyQuery',
