@@ -141,7 +141,8 @@ export default function TemplateDetail() {
                                 if (formRef.getFieldsValue().pageNumber) {
                                     RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`, {
                                         id: item.id,
-                                        pageNumber: formRef.getFieldsValue().pageNumber
+                                        pageNumber: formRef.getFieldsValue().pageNumber,
+                                        description: formRef.getFieldsValue()?.description
                                     }).then(async () => {
                                         message.success('保存成功！')
                                         setEditingKey('');
@@ -154,7 +155,8 @@ export default function TemplateDetail() {
                             } else {
                                 RequestUtil.post(`/tower-science/loftingTemplate/templateRecord/${item.id}`, {
                                     id: item.id,
-                                    pageNumber: formRef.getFieldsValue().pageNumber
+                                    pageNumber: formRef.getFieldsValue().pageNumber,
+                                    description: formRef.getFieldsValue()?.description
                                 }).then(async () => {
                                     message.success('保存成功！')
                                     setEditingKey('');

@@ -34,17 +34,10 @@ export default function PickTower(): React.ReactNode {
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
     const [productId, setProductId] = useState('');
-    // const [status, setStatus] = useState('');
     const [withSectionVisible, setWithSectionVisible] = useState<boolean>(false);
     const editRef = useRef<EditRefProps>();
-    const userId = AuthUtil.getUserInfo().user_id;
-    // const [batchNo, setBatchNo] = useState<any>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
-        // const departmentData: any = await RequestUtil.get(`/sinzetech-user/department/tree`);
-        // setDepartment(departmentData);
-        resole(data)
-    }), {})
     const handleModalOk = () => new Promise(async (resove, reject) => {
         try {
             await editRef.current?.onSubmit();
@@ -188,7 +181,7 @@ export default function PickTower(): React.ReactNode {
                 width="60%"
                 onOk={handleModalOk}
                 footer={<Space>
-                    <Button type='primary' onClick={handleModalOk}>保存</Button>
+                    <Button type='primary' loading={confirmLoading} onClick={handleModalOk}>保存</Button>
                     <Button onClick={() => {
                         editRef.current?.resetFields();
                         setWithSectionVisible(false);
@@ -199,7 +192,7 @@ export default function PickTower(): React.ReactNode {
                     editRef.current?.resetFields();
                     setWithSectionVisible(false);
                 }}>
-                <WithSection id={productId} ref={editRef} type={productId ? 'edit' : 'new'} productCategoryId={params.id} />
+                <WithSection id={productId} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} type={productId ? 'edit' : 'new'} productCategoryId={params.id} />
             </Modal>
             <Page
                 path="/tower-science/materialProduct"

@@ -587,7 +587,10 @@ export default function TaskNew(props: any) {
                                         })
                                     }
                                     form.setFieldsValue({
-                                        ...formValue[0]
+                                        ...formValue[0],
+                                        loftingUserName: tower?.filter((e: any) => e?.productCategoryId === value)[0]?.loftingUserName,
+                                        programmingLeaderName: tower?.filter((e: any) => e?.productCategoryId === value)[0]?.programmingLeaderName
+                                    
                                     })
                                     setRead(true)
                                 }}>
@@ -616,6 +619,16 @@ export default function TaskNew(props: any) {
                                 <Input addonAfter={<Button type="link" style={{ padding: '0', lineHeight: 1, height: 'auto' }} onClick={() => {
                                     setPrintVisible(true)
                                 }}>+编辑</Button>} disabled />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="loftingUserName" label="放样员" >
+                                <Input disabled />
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="programmingLeaderName" label="编程负责人" >
+                                <Input disabled />
                             </Form.Item>
                         </Col>
                         <Col span={12}>

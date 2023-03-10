@@ -214,11 +214,10 @@ export default forwardRef(function AddPatch({ record }: modalProps, ref) {
                 }
             ]}
             filterValue={filterValue}
+            pageSize={50}
             tableProps={{
                 rowKey: 'id',
-                pagination: status === 1 ? {
-                    pageSize: 50
-                } : false,
+                pagination: status === 1 ? {} : false,
                 rowSelection: {
                     selectedRowKeys: selectedRowKeys,
                     onChange: onSelectChange,

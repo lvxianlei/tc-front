@@ -19,9 +19,10 @@ interface modalProps {
     id: string;
     type: 'new' | 'edit';
     rowData?: any[];
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function AddPick({ id, type, rowData }: modalProps, ref) {
+export default forwardRef(function AddPick({ id, type, rowData, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [tableData, setTableData] = useState<any>([])
     const [isBig, setIsBig] = useState<boolean>(true);
@@ -39,7 +40,7 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type, rowData] })
+    }), { manual: type === 'new', refreshDeps: [id, type, rowData, getLoading] })
 
     /**
      * weightAlgorithm 
@@ -476,10 +477,15 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            RequestUtil.post(`/tower-science/drawProductStructure/submit`, postData).then(res => {
+            RequestUtil.post(`/tower-science/drawProductStructure/submit`, {
+                productCategoryId: id,
+                drawProductStructureSaveDTOS: [...postData]
+            }).then(res => {
                 resole(true)
+                getLoading(false)
             }).catch(e => {
                 reject(e)
+                getLoading(false)
             })
         } catch (error) {
             reject(error)
@@ -489,18 +495,16 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     const onSubmitDone = () => new Promise((resolve, reject) => {
         try {
             form.validateFields().then(async () => {
-                const values = form.getFieldsValue(true).data.map((item: any) => {
+                const values = form.getFieldsValue(true).data || [];
+                await saveRun(values?.map((item: any) => {
                     return {
                         ...item,
                         productCategory: id,
                     }
-                })
-                const submitData = {
-                    productCategoryId: id,
-                    drawProductStructureSaveDTOS: [...values]
-                }
-                await saveRun(submitData);
+                }))
                 resolve(true)
+            }).catch(e => {
+                reject(false)
             })
         } catch (error) {
             reject(false)
@@ -530,17 +534,51 @@ export default forwardRef(function AddPick({ id, type, rowData }: modalProps, re
     const addRow = () => {
         const values = form.getFieldsValue(true).data || [];
         if (isAddUp) {
-            const arr = new Array(5).fill({
-                segmentName: values[values?.length - 1]?.segmentName || '',
-                code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
-                materialName: values[values?.length - 1]?.materialName || '',
-                structureTexture: values[values?.length - 1]?.structureTexture || '',
-                structureSpec: values[values?.length - 1]?.structureSpec || ''
-            })
-            num(values[values?.length - 1]?.code || '')
+            // const arr = new Array(5).fill({
+            //     segmentName: values[values?.length - 1]?.segmentName || '',
+            //     code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+            //     materialName: values[values?.length - 1]?.materialName || '',
+            //     structureTexture: values[values?.length - 1]?.structureTexture || '',
+            //     structureSpec: values[values?.length - 1]?.structureSpec || ''
+            // })
+            // num(values[values?.length - 1]?.code || '')
             const newValues = [
                 ...values,
-                ...arr
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(values[values?.length - 1]?.code || '') : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(values[values?.length - 1]?.code || '')) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(values[values?.length - 1]?.code || ''))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(num(values[values?.length - 1]?.code || '')))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                },
+                {
+                    segmentName: values[values?.length - 1]?.segmentName || '',
+                    code: values[values?.length - 1]?.code ? num(num(num(num(num(values[values?.length - 1]?.code || ''))))) : '',
+                    materialName: values[values?.length - 1]?.materialName || '',
+                    structureTexture: values[values?.length - 1]?.structureTexture || '',
+                    structureSpec: values[values?.length - 1]?.structureSpec || ''
+                }
             ]
             setTableData([...newValues])
             form.setFieldsValue({ data: [...newValues] })

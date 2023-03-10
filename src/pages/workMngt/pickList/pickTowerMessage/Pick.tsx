@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, message, InputNumber, Upload, Modal, Table, Checkbox, Select } from 'antd';
-import { SearchTable as Page } from '../../../common';
+import { SearchTable as Page, SearchTable } from '../../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './Pick.module.less';
 import { useHistory, useParams } from 'react-router-dom';
@@ -46,6 +46,7 @@ export default function Lofting(): React.ReactNode {
     const [type, setType] = useState<'new' | 'edit'>('new');
     const [rowData, setRowData] = useState<any>([])
     const addModalRef = useRef<modalProps>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
     const { loading, data } = useRequest<[]>(() => new Promise(async (resole, reject) => {
         const data: [] = await RequestUtil.get<[]>(`/tower-science/drawProductSegment`, {
@@ -436,7 +437,10 @@ export default function Lofting(): React.ReactNode {
 
     const onFilterSubmit = (value: any) => {
         value.productCategoryId = params.id
-        setFilterValue(value)
+        setFilterValue({
+            ...filterValue,
+            ...value
+        })
         return value
     }
 
@@ -454,10 +458,10 @@ export default function Lofting(): React.ReactNode {
         try {
             await editRef.current?.onSubmit();
             message.success('段明细复制成功！');
+            editRef.current?.resetFields();
             setCopyVisible(false);
             history.go(0);
             resove(true);
-            editRef.current?.resetFields();
         } catch (error) {
             reject(false)
         }
@@ -484,11 +488,12 @@ export default function Lofting(): React.ReactNode {
             title={type === 'new' ? "添加" : "编辑"}
             onOk={handleAddModalOk}
             key='add'
+            confirmLoading={confirmLoading}
             onCancel={() => {
                 setAddVisible(false);
                 addModalRef?.current?.resetFields();
             }}>
-            <AddPick id={params.id} type={type} rowData={rowData || []} ref={addModalRef} />
+            <AddPick id={params.id} getLoading={(loading: boolean) => setConfirmLoading(loading)} type={type} rowData={rowData || []} ref={addModalRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -549,7 +554,7 @@ export default function Lofting(): React.ReactNode {
                 }]}
             />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/drawProductStructure"
             exportPath="/tower-science/drawProductStructure"
             columns={[...columnsSetting as any, {
@@ -625,7 +630,7 @@ export default function Lofting(): React.ReactNode {
                                     message.success('导入成功！');
                                     history.go(0)
                                     // setRefresh(!refresh);
-                                    setFilterValue({ productCategoryId: params.id })
+                                    setFilterValue({ productCategoryId: params.id, segmentId: params?.productSegmentId === 'all' ? '' : params?.productSegmentId })
                                 }
                             }
                         }}

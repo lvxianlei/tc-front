@@ -67,6 +67,7 @@ export default forwardRef(function AllotModal({ id, allotData, status, getLoadin
         try {
             RequestUtil.post(`/tower-science/productStructure/getAllocation/submit`, postData).then(res => {
                 resole(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)

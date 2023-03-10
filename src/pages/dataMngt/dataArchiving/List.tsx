@@ -30,7 +30,6 @@ export default function List(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [type, setType] = useState<'edit' | 'new' | 'detail'>('new');
     const [filterValue, setFilterValue] = useState<any>();
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [rowData, setRowData] = useState<any>();
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
@@ -60,7 +59,7 @@ export default function List(): React.ReactNode {
             confirmLoading={confirmLoading}
             footer={
                 <Space>
-                    {type === 'detail' ? null : <Button type='primary' onClick={handleOk}>保存</Button>}
+                    {type === 'detail' ? null : <Button type='primary' loading={confirmLoading} onClick={handleOk}>保存</Button>}
                     <Button onClick={() => {
                         setVisible(false);
                         newRef.current?.resetFields();
@@ -113,7 +112,7 @@ export default function List(): React.ReactNode {
                                 onConfirm={() => {
                                     RequestUtil.delete(`/tower-science/data/backup/${record.id}`).then(res => {
                                         message.success('删除成功');
-                                        setRefresh(!refresh);
+                                        history.go(0)
                                     });
                                 }}
                                 okText="确认"
@@ -184,7 +183,6 @@ export default function List(): React.ReactNode {
                     children: <Input placeholder="客户名称/工程名称/计划号/塔型名称" style={{ width: 300 }} />
                 }
             ]}
-            refresh={refresh}
             onFilterSubmit={(values: any) => {
                 setFilterValue(values)
                 return values;

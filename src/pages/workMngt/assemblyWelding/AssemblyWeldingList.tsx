@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Modal, Row, Col, TreeSelect, message } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './AssemblyWelding.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -91,17 +91,17 @@ export default function AssemblyWeldingList(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 100,
+            width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingInformation/${record.id}`}>组焊信息</Link>
                     {
-                        record.weldingLeader ? 
+                        record.weldingLeader ?
                             <Link to={{ pathname: `/workMngt/assemblyWeldingList/assemblyWeldingListing/${record.id}/${record.productCategoryId}/${record.weldingLeader}`, state: { status: record.status } }}>组焊清单</Link>
-                        : 
-                        <Button type='link' onClick={() => {
-                            message.warning('当前无组焊负责人，请先进行指派')
-                        }}>组焊清单</Button>
+                            :
+                            <Button type='link' onClick={() => {
+                                message.warning('当前无组焊负责人，请先进行指派')
+                            }}>组焊清单</Button>
                     }
                     {/* {
                         record.weldingLeader.split(',').indexOf(userId) === -1 ?
@@ -206,13 +206,13 @@ export default function AssemblyWeldingList(): React.ReactNode {
                 </Row>
             </Form>
         </Modal> */}
-        <Page
+        <SearchTable
             path="/tower-science/welding"
             exportPath={`/tower-science/welding`}
             columns={columns}
             headTabs={[]}
             refresh={refresh}
-            requestData={{ status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator }}
+            // requestData={{ status: location.state?.state, boltLeader: location.state?.userId, boltOperator: location.state?.weldingOperator }}
             filterValue={filterValue}
             searchFormItems={[
                 {
@@ -246,10 +246,10 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     label: '优先级',
                     children: <Select style={{ width: '120px' }} placeholder="请选择">
                         <Select.Option value="" key="4">全部</Select.Option>
-                        <Select.Option value="0" key="0">紧急</Select.Option>
-                        <Select.Option value="1" key="1">高</Select.Option>
-                        <Select.Option value="2" key="2">中</Select.Option>
-                        <Select.Option value="3" key="3">低</Select.Option>
+                        <Select.Option value={1} key="0">紧急</Select.Option>
+                        <Select.Option value={2} key="1">高</Select.Option>
+                        <Select.Option value={3} key="2">中</Select.Option>
+                        <Select.Option value={4} key="3">低</Select.Option>
                     </Select>
                 },
                 {
@@ -258,7 +258,7 @@ export default function AssemblyWeldingList(): React.ReactNode {
                     children: <Input placeholder="放样任务编号/计划号/订单编号/内部合同编号/塔型" />
                 }
             ]}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 if (values.updateTime) {
                     const formatDate = values.updateTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

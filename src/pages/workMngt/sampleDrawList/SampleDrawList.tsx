@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Space, Input, DatePicker, Button, Form, Select } from 'antd';
 import { useHistory, useLocation } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './sample.module.less';
@@ -133,18 +133,20 @@ export default function SampleDrawList(): React.ReactNode {
         }
         if (value.smallSampleLeader) {
             value.smallSampleLeader = value.smallSampleLeader?.value;
+        } else {
+            value.smallSampleLeader = ''
         }
         setFilterValue(value)
         return value
     }
     return (
-        <Page
+        <SearchTable
             path="/tower-science/smallSample"
             columns={columns}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
             refresh={refresh}
-            requestData={{ smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId }}
+            // requestData={{ smallSampleStatus: location.state?.state, smallSampleLeader: location.state?.userId }}
             exportPath="/tower-science/smallSample"
             searchFormItems={[
                 {
@@ -174,10 +176,10 @@ export default function SampleDrawList(): React.ReactNode {
                     label: '优先级',
                     children: <Select style={{ width: "100px" }}>
                         <Select.Option value={''} key={''}>全部</Select.Option>
-                        <Select.Option value={0} key={0}>紧急</Select.Option>
-                        <Select.Option value={1} key={1}>高</Select.Option>
-                        <Select.Option value={2} key={2}>中</Select.Option>
-                        <Select.Option value={3} key={3}>低</Select.Option>
+                        <Select.Option value={1} key={1}>紧急</Select.Option>
+                        <Select.Option value={2} key={2}>高</Select.Option>
+                        <Select.Option value={3} key={3}>中</Select.Option>
+                        <Select.Option value={4} key={4}>低</Select.Option>
                     </Select>
                 },
                 {
