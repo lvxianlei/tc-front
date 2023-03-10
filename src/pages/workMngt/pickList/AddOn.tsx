@@ -1,7 +1,7 @@
 /**
  * @author zyc
- * @copyright © 2022 
- * @description rd1.2 特殊件号(调拨)
+ * @copyright © 2023 
+ * @description 追加提交
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -13,18 +13,19 @@ import useRequest from '@ahooksjs/use-request';
 interface AddOnProps {
     id: string;
     getLoading: (loading: boolean) => void
+    list: any
 }
 
-export default forwardRef(function AddOn({ id, getLoading }: AddOnProps, ref) {
+export default forwardRef(function AddOn({ id, getLoading, list }: AddOnProps, ref) {
 
-    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [id, getLoading] })
+    // const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${id}`)
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { refreshDeps: [id, getLoading] })
 
     const { run: submitRun } = useRequest(() => new Promise(async (resole, reject) => {
         try {
@@ -67,19 +68,20 @@ export default forwardRef(function AddOn({ id, getLoading }: AddOnProps, ref) {
             key: 'addSegmentCount',
             title: '本次追加段数',
             width: 120,
-            dataIndex: 'addSegmentCount'
+            dataIndex: 'addSegmentCount',
+            type: 'number'
         }
     ]
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
-    return <Spin spinning={loading}>
+    return <>
         <DetailContent title="配段信息">
             <CommonTable
                 columns={columns}
-                dataSource={data || []}
+                dataSource={list || []}
                 pagination={false}
             />
         </DetailContent>
-    </Spin>
+    </>
 })
 

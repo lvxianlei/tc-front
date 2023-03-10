@@ -458,10 +458,10 @@ export default function Lofting(): React.ReactNode {
         try {
             await editRef.current?.onSubmit();
             message.success('段明细复制成功！');
+            editRef.current?.resetFields();
             setCopyVisible(false);
             history.go(0);
             resove(true);
-            editRef.current?.resetFields();
         } catch (error) {
             reject(false)
         }
