@@ -1,7 +1,7 @@
 /**
  * @author zyc
- * @copyright © 2022 
- * @description rd1.2 特殊件号(调拨)
+ * @copyright © 2023 
+ * @description 追加提交
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
@@ -67,7 +67,8 @@ export default forwardRef(function AddOn({ id, getLoading }: AddOnProps, ref) {
             key: 'addSegmentCount',
             title: '本次追加段数',
             width: 120,
-            dataIndex: 'addSegmentCount'
+            dataIndex: 'addSegmentCount',
+            type: 'number'
         }
     ]
 

@@ -477,7 +477,10 @@ export default forwardRef(function AddPick({ id, type, rowData, getLoading }: mo
 
     const { run: saveRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
-            RequestUtil.post(`/tower-science/drawProductStructure/submit`, postData).then(res => {
+            RequestUtil.post(`/tower-science/drawProductStructure/submit`, {
+                productCategoryId: id,
+                drawProductStructureSaveDTOS: [...postData]
+            }).then(res => {
                 resole(true)
                 getLoading(false)
             }).catch(e => {
@@ -491,22 +494,16 @@ export default forwardRef(function AddPick({ id, type, rowData, getLoading }: mo
 
     const onSubmitDone = () => new Promise((resolve, reject) => {
         try {
-            getLoading(true)
             form.validateFields().then(async () => {
-                const values = form.getFieldsValue(true).data.map((item: any) => {
+                const values = form.getFieldsValue(true).data || [];
+                await saveRun(values?.map((item: any) => {
                     return {
                         ...item,
                         productCategory: id,
                     }
-                })
-                const submitData = {
-                    productCategoryId: id,
-                    drawProductStructureSaveDTOS: [...values]
-                }
-                await saveRun(submitData);
+                }))
                 resolve(true)
             }).catch(e => {
-                getLoading(false)
                 reject(false)
             })
         } catch (error) {
