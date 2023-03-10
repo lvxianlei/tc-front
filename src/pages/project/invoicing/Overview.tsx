@@ -8,7 +8,7 @@ import RequestUtil from '../../../utils/RequestUtil'
 import { contractPlanStatusOptions, currencyTypeOptions, productTypeOptions } from "../../../configuration/DictionaryOptions"
 export default function Edit() {
     const history = useHistory()
-    const params = useParams<{ id: string }>()
+    const params = useParams<{ id: string, processId: string }>()
     const productType: any = productTypeOptions
     const [tab, setTab] = useState<string>("a")
     const handleRadioChange = (e: any) => {
@@ -17,6 +17,12 @@ export default function Edit() {
     const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo?id=${params.id}`)
+            /**获取工作流流转记录 */
+            const process: { [key: string]: any } = params.processId !== "null" ? await RequestUtil.get(`/tower-workflow/workflow/Engine/FlowBefore/${params.processId}`) : {}
+            resole({
+                ...result,
+                invoicingBatchVOS: process?.flowTaskOperatorRecordList || []
+            })
             resole(result)
         } catch (error) {
             reject(error)
