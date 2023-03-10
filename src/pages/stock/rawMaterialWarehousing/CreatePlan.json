@@ -28,62 +28,6 @@
                 { "value": "4", "label": "退货出库" }
             ]
         },
-        
-        {
-            "title": "供应商",
-            "dataIndex": "supplierId",
-            "type": "popTable",
-            "path": "/tower-supply/supplier",
-            "width": 1011,
-            "value": "supplierName",
-            "dependencies": true,
-            "readOnly": true,
-            "search": [
-                {
-                    "title": "查询",
-                    "dataIndex": "fuzzyQuery",
-                    "placeholder": "编号/名称/联系人/联系人电话"
-                },
-                {
-                    "title": "质量保证体系",
-                    "dataIndex": "qualityAssurance",
-                    "type": "select",
-                    "placeholder": "请选择"
-                }
-            ],
-            "columns": [
-                {
-                    "title": "供应商编号",
-                    "dataIndex": "supplierCode"
-                },
-                {
-                    "title": "供应商名称",
-                    "dataIndex": "supplierName"
-                },
-                {
-                    "title": "联系人",
-                    "dataIndex": "contactMan"
-                },
-                {
-                    "title": "联系电话",
-                    "dataIndex": "contactManTel"
-                },
-                {
-                    "title": "质量保证体系",
-                    "dataIndex": "qualityAssuranceName"
-                },
-                {
-                    "title": "供货产品",
-                    "dataIndex": "supplyProductsName"
-                }
-            ],
-            "rules": [
-                {
-                    "required": true,
-                    "message": "请选择供应商..."
-                }
-            ]
-        },
         {
             "title": "到货仓库",
             "dataIndex": "warehouseId",
@@ -113,6 +57,10 @@
         {
             "title": "收货标识码",
             "dataIndex": "receiveBatchNumber"
+        },
+        {
+            "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber"
         },
         {
             "title": "收货日期",
@@ -201,10 +149,14 @@
                 "title": "查询",
                 "type": "string",
                 "dataIndex": "fuzzyQuery",
-                "placeholder": "收货单号/车牌号/收货标识码/品名/规格"
+                "placeholder": "收货单号/供应商/车牌号/收货标识码/品名/规格"
             }
         ],
         "columns": [
+            {
+                "title": "供应商",
+                "dataIndex": "supplierName"
+            },
             {
                 "title": "收货单号",
                 "dataIndex": "receiveNumber"
@@ -345,9 +297,18 @@
                 "title": "创建日期",
                 "type": "date",
                 "dataIndex": "createTime"
+            },
+            {
+                "title": "供应商",
+                "type": "string",
+                "dataIndex": "fuzzyQuery"
             }
         ],
         "columns": [
+            {
+                "title": "供应商",
+                "dataIndex": "supplierName"
+            },
             {
                 "title": "收货标识码",
                 "dataIndex": "receiveBatchNumber"

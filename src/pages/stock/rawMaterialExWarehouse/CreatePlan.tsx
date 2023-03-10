@@ -451,8 +451,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
-                        num: type !== 2 ? item.num : 0- item.num,
-                        totalWeight: type !==2 ? item.totalWeight : 0- item.totalWeight,
+                        num: !(type===2||type===7) ? item.num : 0- item.num,
+                        totalWeight: !(type===2||type===7) ? item.totalWeight : 0- item.totalWeight,
                         warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         id: item?.ids?item.ids:item.id,
                         reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
@@ -472,8 +472,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 outStockDetailDTOList: popDataList.map((item:any,index:number)=>{
                     return {
                         ...item,
-                        num: type !==2 ? item.num : 0- item.num,
-                        totalWeight: type !==2 ? item.totalWeight : 0- item.totalWeight,
+                        num: !(type===2||type===7) ? item.num : 0- item.num,
+                        totalWeight: !(type===2||type===7) ? item.totalWeight : 0- item.totalWeight,
                         warehouseItemId: item.locatorName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.locatorName !== '0', popDataList,index)].locatorId: item.locatorId,
                         reservoirName: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirName: item.reservoirName,
                         reservoirId: item.reservoirName==='0'?popDataList[findLastIndex(popDataList, (item:any) => item.reservoirName !== '0', popDataList,index)].reservoirId:item.reservoirId,
@@ -587,7 +587,7 @@ export default function CreatePlan(props: any): JSX.Element {
             }}
             maskClosable={false}
             width={1100}
-            footer={type===2?[
+            footer={type===2||type===7?[
                 <Button key="back" onClick={() => {
                     setMaterialList([]);
                     setPopDataList([]);
@@ -653,7 +653,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="出库明细" />
                 <div className={styles.btnWrapper}>
-                    {type!==2?
+                    {!(type===2||type===7)?
                     <Space>
                         <Button type='primary' key="add" ghost style={{ marginRight: 8 }} onClick={() => setPickVisible(true)}>选择领料明细</Button>
                         <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!warehouseId} onClick={() => setVisible(true)}>选择库存</Button>
@@ -680,7 +680,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             }
                         },
                         ...material.map((item: any) => {
-                            if (["receiveBatchNumber"].includes(item.dataIndex)&&type===2) {
+                            if (["receiveBatchNumber"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     width: 160,
@@ -700,7 +700,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                 }})
                             }
                             
-                            if (["num"].includes(item.dataIndex)&&type!==2) {
+                            if (["num"].includes(item.dataIndex)&&!(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => {return <Form.Item 
@@ -721,25 +721,25 @@ export default function CreatePlan(props: any): JSX.Element {
                                     // render: (value: number, records: any, key: number) => <InputNumber max={records?.maxNum} min={1} value={value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key}  disabled={records?.outStockItemStatus&&records?.outStockItemStatus!==0}/>
                                 }})
                             }
-                            if (["num"].includes(item.dataIndex)&&type===2) {
+                            if (["num"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={ value || undefined} onChange={(value: number) => handleNumChange(value, records.id)} key={key} />
                                 })
                             }
-                            if (["length"].includes(item.dataIndex)&&type===2) {
+                            if (["length"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleLengthChange(value, records.id)} key={key} />
                                 })
                             }
-                            if (["width"].includes(item.dataIndex)&&type===2) {
+                            if (["width"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleWidthChange(value, records.id)} key={key} />
                                 })
                             }
-                            if (["reservoirName"].includes(item.dataIndex)&&type===2) {
+                            if (["reservoirName"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: string, records: any, key: number) => <Select
@@ -768,7 +768,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                             </Select>
                                 })
                             }
-                            if (["locatorName"].includes(item.dataIndex)&&type===2) {
+                            if (["locatorName"].includes(item.dataIndex)&&(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     render: (value: string, records: any, key: number) => <Select
@@ -800,7 +800,7 @@ export default function CreatePlan(props: any): JSX.Element {
                                             </Select>
                                 })
                             }
-                            if (["remark"].includes(item.dataIndex)&&type!==2) {
+                            if (["remark"].includes(item.dataIndex)&&!(type===2||type===7)) {
                                 return ({
                                     ...item,
                                     width: 160,

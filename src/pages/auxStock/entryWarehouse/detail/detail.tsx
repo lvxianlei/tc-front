@@ -15,7 +15,7 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const history = useHistory();
 
     // 批量入库
@@ -122,7 +122,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1} onClick={async () => {
+                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1 ||  params.lock==='1' } onClick={async () => {
                                     await saveRun([record.id]);
                                     history.go(0);
                                 }}>入库</Button>
@@ -133,7 +133,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.warehousingEntryStatus !== 1} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.warehousingEntryStatus !== 1 || params.lock==='1'} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -142,7 +142,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     disabled={record.warehousingEntryStatus !== 0}
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.warehousingEntryStatus !== 0} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.warehousingEntryStatus !== 0 || params.lock==='1'} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
@@ -150,7 +150,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 ]}
                 extraOperation={() =>
                     <>
-                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
+                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} disabled={ params.lock==='1'}>批量入库</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null, 'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/storage/workflow/entryStock/start/${params.id}/2`)

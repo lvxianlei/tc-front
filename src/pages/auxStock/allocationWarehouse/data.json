@@ -1,0 +1,108 @@
+{
+    "baseColumn": [
+        {
+            "title": "调拨单号",
+            "dataIndex": "allocationNumber",
+            "width": 100
+        },
+        {
+            "title": "调拨日期",
+            "dataIndex": "allocationTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 100
+        },
+        {
+            "title": "调拨人",
+            "dataIndex": "allocationUserName",
+            "width": 100
+        },
+        {
+            "title": "状态",
+            "dataIndex": "allocationStatusName",
+            "width": 80
+        },
+        {
+            "title": "申请日期",
+            "dataIndex": "applyTime",
+            "type": "date",
+            "format": "YYYY-MM-DD",
+            "width": 80
+        },
+        {
+            "title": "申请人",
+            "dataIndex": "createUserName",
+            "width": 80
+        },
+        {
+            "title": "调出仓库",
+            "dataIndex": "allocationWarehouseOutName",
+            "width": 80
+        },
+        {
+            "title": "调出库区",
+            "dataIndex": "allocationReservoirOutName",
+            "width": 80
+        },
+        {
+            "title": "调出库位",
+            "dataIndex": "allocationLocatorOutName",
+            "width": 80
+        },
+        {
+            "title": "调入仓库",
+            "dataIndex": "allocationWarehouseInName",
+            "width": 80
+        },
+        {
+            "title": "调入库区",
+            "dataIndex": "allocationReservoirInName",
+            "width": 80
+        },
+        {
+            "title": "调入库位",
+            "dataIndex": "allocationLocatorInName",
+            "width": 80
+        },
+        {
+            "title": "物料编码",
+            "dataIndex": "materialCode",
+            "width": 80
+        },
+        {
+            "title": "品名",
+            "dataIndex": "materialName",
+            "width": 180
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 80
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 80
+        },
+        {
+            "title": "数量",
+            "dataIndex": "num",
+            "width": 80
+        },
+        {
+            "title": "单位",
+            "dataIndex": "unit",
+            "width": 80
+        },
+        {
+            "title": "含税单价（元/吨）",
+            "dataIndex": "taxPrice",
+            "width": 120
+        },
+        {
+            "title": "含税金额（元）",
+            "dataIndex": "totalTaxPrice",
+            "width": 120
+        }
+    ]
+}

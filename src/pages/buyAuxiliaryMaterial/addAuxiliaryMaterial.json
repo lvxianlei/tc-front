@@ -81,6 +81,12 @@
         "dataIndex": "structureSpec",
         "width": 200,
         "placeholder": "请输入规格"
+      },
+      {
+        "title": "物料编码",
+        "dataIndex": "materialCode",
+        "width": 200,
+        "placeholder": "请输入物料编码"
       }
     ]
   },

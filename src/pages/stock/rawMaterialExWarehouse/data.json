@@ -6,6 +6,11 @@
             "width": 100
         },
         {
+            "title": "锁定状态",
+            "dataIndex": "dataLockName",
+            "width": 100
+        },
+        {
             "title": "出库单号",
             "dataIndex": "pickingNumber",
             "width": 100

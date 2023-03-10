@@ -465,6 +465,11 @@
                         "authority": "tc_erp_sw_stock_auxiliary_material"
                     },
                     {
+                        "label": "辅材调拨单",
+                        "path": "/auxStock/allocationWarehouse",
+                        "authority": "tc_erp_sw_stock_material_out"
+                    },
+                    {
                         "label": "辅材入库",
                         "path": "/auxStock/entryWarehouse",
                         "authority": "tc_erp_sw_stock_auxiliary_material_in"

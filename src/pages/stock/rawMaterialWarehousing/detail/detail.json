@@ -26,6 +26,11 @@
             "width": 120
         },
         {
+            "title": "收货批次",
+            "dataIndex": "realReceiveBatchNumber",
+            "width": 120
+        },
+        {
             "title": "品名",
             "dataIndex": "materialName",
             "width": 80

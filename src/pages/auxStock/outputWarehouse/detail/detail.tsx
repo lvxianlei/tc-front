@@ -12,7 +12,7 @@ import { exportDown } from '@utils/Export';
 
 export default function Index(): React.ReactNode {
     const history = useHistory();
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const match = useRouteMatch()
     const location = useLocation<{ state: {} }>();
     const [supplierListdata, setSupplierListdata] = useState<any[]>([{}]);//详情-供应商信息列表数据
@@ -510,7 +510,7 @@ export default function Index(): React.ReactNode {
                         }).then(()=>{
                             message.success(`出库成功！`)
                             history.go(0)
-                        })}} disabled={!(selectedKeys.length>0)}>批量出库</Button>
+                        })}} disabled={!(selectedKeys.length>0) || params.lock==='1'}>批量出库</Button>
                         <Button onClick={() => history.goBack()}>返回上一级</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null,'null', 0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
@@ -605,7 +605,7 @@ export default function Index(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中
                             <>
-                                <Button type='link' disabled={record.outStockItemStatus !== 0} onClick={async () => { userData?.outType===1||userData?.outType==='1'?await RequestUtil.post(`/tower-storage/auxiliaryOutStock/auxiliary/batchOutStock`,{
+                                <Button type='link' disabled={record.outStockItemStatus !== 0 || params.lock==='1'} onClick={async () => { userData?.outType===1||userData?.outType==='1'?await RequestUtil.post(`/tower-storage/auxiliaryOutStock/auxiliary/batchOutStock`,{
                                     outStockDetailId: [record.id],
                                     outStockId: params.id
                                     }).then(()=>{
@@ -619,7 +619,7 @@ export default function Index(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2} type="link">撤销</Button>
+                                    <Button loading={revocating} disabled={record.outStockItemStatus !== 2 || params.lock==='1'} type="link">撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -627,7 +627,7 @@ export default function Index(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2 || params.lock==='1'} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
