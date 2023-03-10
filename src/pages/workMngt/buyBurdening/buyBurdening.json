@@ -7,6 +7,18 @@
             "type": "string"
         },
         {
+            "title": "提料类型",
+            "dataIndex": "liftingTypeName",
+            "width": 150,
+            "type": "string"
+        },
+        {
+            "title": "采购配料编号",
+            "dataIndex": "batchingTaskNumber",
+            "width": 150,
+            "type": "string"
+        },
+        {
             "title": "批次号",
             "dataIndex": "batchNumber",
             "width": 150,
