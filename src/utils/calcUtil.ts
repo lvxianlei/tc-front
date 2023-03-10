@@ -129,3 +129,89 @@ export const totalUnloadPrice = (totalUnloadTaxPrice: any = 0, taxMode: any = 0)
  */
 export const profitAndLossWeight = () => { }
 
+/**
+ * 品名&规格
+ * 角钢/不锈钢角钢 = 宽度（第一个数字） 厚度（第二个数字）
+ * 钢板/花纹钢/不锈钢钢板 = 宽度（系统上的宽度） 厚度（绝对值）
+ * 钢管/无缝钢管/直缝钢管 = 厚度（第二个数字）管径（第一个数字）
+ * 圆钢 = 管径（第一个数字）
+ * 方管（前后数字一致） = 宽度（第一个数字） 厚度（第二个数字）
+ * 方管（前后数字不一致） = 宽度（第一个数字，第二个数字） 厚度（第三个数字）
+ * 平颈法兰/高颈法兰 = 宽度（第一个数字） 厚度（前面的数字-后面的数字）
+ * H型钢 = 宽度（第二个数字） 厚度（第三个数字） 管径（第四个数字） 高度（第一个数字）
+ * 扁铁 = 宽度（第二个数字） 厚度（第一个数字）
+ */
+/**
+ * 宽度 
+ */
+export const calculateWidth = (materialName: any , structureSpec: any, width: any = 0 ) => {
+    let calculateWidth: any = ``
+    if(['角钢','不锈钢角钢','平颈法兰','高颈法兰'].includes(materialName)){
+        calculateWidth = structureSpec?.substring(1).split('*')[0]
+    }
+    if(['钢板','花纹板','不锈钢钢板'].includes(materialName)){
+        calculateWidth = width
+    }
+    if(['方管'].includes(materialName)){
+        if(structureSpec.split('*')[0]===structureSpec.split('*')[1]){
+            calculateWidth = structureSpec.split('*')[0]
+        }else{
+            calculateWidth = `${structureSpec.split('*')[0]},${structureSpec.split('*')[1]}`
+        } 
+    }
+    if(['H型钢','扁铁'].includes(materialName)){
+        calculateWidth = structureSpec.split('*')[1]
+    }
+    return calculateWidth
+}
+/**
+ * 厚度 
+ */
+export const calculateThickness = (materialName: any , structureSpec: any,) => {
+    let calculateThickness: any = ``
+    if(['角钢','不锈钢角钢','钢管','无缝钢管','直缝钢管'].includes(materialName)){
+        calculateThickness = structureSpec?.split('*')[1]
+    }
+    if(['钢板','花纹板','不锈钢钢板'].includes(materialName)){
+        calculateThickness = Number(structureSpec)>0?Number(structureSpec):0-Number(structureSpec)
+    }
+    if(['方管','H型钢'].includes(materialName)){
+        calculateThickness = structureSpec?.split('*')[2]
+    }
+    if(['平颈法兰','高颈法兰'].includes(materialName)){
+        calculateThickness = structureSpec?.substring(1).split('*')[0]-structureSpec?.substring(1).split('*')[1]
+    }
+    if(['扁铁'].includes(materialName)){
+        calculateThickness = Number(structureSpec?.split('*')[0])
+    }
+    return calculateThickness
+}
+/**
+ * 管径
+ */
+export const calculatePipeDiameter = (materialName: any , structureSpec: any,) => {
+    let calculatePipeDiameter: any = ``
+    if(['钢管','无缝钢管','直缝钢管'].includes(materialName)){
+        calculatePipeDiameter = structureSpec?.substring(1).split('*')[0]
+    }
+    if(['圆钢','螺纹钢'].includes(materialName)){
+        calculatePipeDiameter = Number(structureSpec?.substring(1))>0?Number(structureSpec?.substring(1)):0-Number(structureSpec?.substring(1))
+    }
+    if(['H型钢'].includes(materialName)){
+        calculatePipeDiameter = structureSpec?.split('*')[3]
+    }
+    return calculatePipeDiameter
+}
+/**
+ * 高度 
+ */
+export const calculateHeight = (materialName: any , structureSpec: any,) => {
+    let calculateHeight: any = ``
+    if(['H型钢'].includes(materialName)){
+        calculateHeight = structureSpec?.substring(2).split('*')[0]
+    }
+    if(['槽钢','不锈钢槽钢','工字钢'].includes(materialName)){
+        calculateHeight = Number(structureSpec?.replace(/[^\d]/g, " "))*10
+    }
+    return calculateHeight
+}

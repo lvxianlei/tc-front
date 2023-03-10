@@ -33,6 +33,16 @@
             "width": 80
         },
         {
+            "title": "领料车间",
+            "dataIndex": "deptName",
+            "width": 80
+        },
+        {
+            "title": "领料班组",
+            "dataIndex": "pickingTeamName",
+            "width": 80
+        },
+        {
             "title": "创建日期",
             "dataIndex": "createTime",
             "width": 80

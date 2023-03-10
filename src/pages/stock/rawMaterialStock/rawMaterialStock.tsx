@@ -34,8 +34,9 @@ const ReceiveStrokAttach = forwardRef(({ type, id, dataSource }: ReceiveStrokAtt
                 source = attachRef.current.getDataSource();
             if (source.length < 1) {
                 message.error("请您先上传附件！");
-                resole(false as any)
-                return false;
+                throw new Error( `请您先上传附件！`)
+                // resole(false as any)
+                // return false;
             }
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/materialStock/attach`, type===2?{

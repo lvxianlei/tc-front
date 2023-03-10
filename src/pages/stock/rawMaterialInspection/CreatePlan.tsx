@@ -27,8 +27,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 return ({
                     ...item,
                     inspectionScheme: value,
-                    inspectionNum:value===0?0:item.inspectionNum,
-                    type: value===0?2:item.type,
+                    inspectionNum:value===0?0:value===2?3:item.inspectionNum,
+                    machiningNum:value===0?0:value===2?3:item.machiningNum,
+                    type: value===0?2:value===2?1:item.type,
                     inspectionTypeName: value!==3?[]:item.inspectionTypeName
                 })
             }
@@ -113,8 +114,33 @@ export default function CreatePlan(props: any): JSX.Element {
             const list: any[] = await RequestUtil.get(`/tower-storage/receiveStock/quality/${result.id}`)
             const userData: any = await RequestUtil.get(`/tower-system/employee?size=10000`);
             setUserList(userData.records);
-            setPopDataList(list)
-            setMaterialList(list)
+            const realReceiveBatchNumbers = list?.map((res: any) => res?.realReceiveBatchNumber)
+            const ids: any = Array.from(new Set([...realReceiveBatchNumbers]))
+            console.log(ids)
+            let value:any = []
+            ids.map((item:any)=>{
+                const index = list.findIndex((itemE:any)=>{return itemE.realReceiveBatchNumber===item})
+                value.push(index)
+            })
+            console.log(value)
+            setPopDataList(list.map((item:any,index:number)=>{
+                return {
+                    ...item,
+                    inspectionScheme: value.includes(index)?2:0,
+                    inspectionNum: value.includes(index)?3:0,
+                    machiningNum: value.includes(index)?3:0,
+                    type: value.includes(index)?1:2,
+                }
+            }))
+            setMaterialList(list.map((item:any,index:number)=>{
+                return {
+                    ...item,
+                    inspectionScheme: value.includes(index)?2:0,
+                    inspectionNum: value.includes(index)?3:0,
+                    machiningNum: value.includes(index)?3:0,
+                    type: value.includes(index)?1:2,
+                }
+            }))
             // addCollectionForm.setFieldsValue({
             //     productCategoryName: result.productCategoryName, // 塔型
             //     contractNumber: result.contractNumber,// 内部合同号
@@ -135,20 +161,20 @@ export default function CreatePlan(props: any): JSX.Element {
             }
             // 添加对取样数量的拦截
             let inspectionNum = false;
-            let machiningUser = false;
-            let sampler = false;
+            // let machiningUser = false;
+            // let sampler = false;
             let machiningNum = false;
             let inspectionScheme = false
             for (let i = 0; i < popDataList.length; i += 1) {
                 if (!(popDataList[i].inspectionNum)&&popDataList[i].inspectionScheme!==0) {
                     inspectionNum = true;
                 }
-                if (!(popDataList[i].machiningUser)) {
-                    machiningUser = true;
-                }
-                if (!(popDataList[i].sampler)) {
-                    sampler = true;
-                }
+                // if (!(popDataList[i].machiningUser)) {
+                //     machiningUser = true;
+                // }
+                // if (!(popDataList[i].sampler)) {
+                //     sampler = true;
+                // }
                 if (!(popDataList[i].machiningNum)) {
                     machiningNum = true;
                 }
@@ -164,39 +190,39 @@ export default function CreatePlan(props: any): JSX.Element {
                 message.error("请您填写机加数量！");
                 return false;
             }
-            if (sampler) {
-                message.error("请您选择取样人！");
-                return false;
-            }
-            if (machiningUser) {
-                message.error("请您选择机加人！");
-                return false;
-            }
+            // if (sampler) {
+            //     message.error("请您选择取样人！");
+            //     return false;
+            // }
+            // if (machiningUser) {
+            //     message.error("请您选择机加人！");
+            //     return false;
+            // }
             if (inspectionScheme) {
                 message.error("请您选择检验方案！");
                 return false;
             }
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${baseInfo.receiveId?.records[0]?.id}`)
-            type==='save'&&saveRun({
-                qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
-                    return {
-                        ...item,
-                        inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
-                        receiveStockDetailId: item?.receiveStockDetailId,
-                        manufactureTime: item?.manufactureTime,
-                        contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
-                    }
-                }),
-                ...baseInfo,
-                receiveStockId: baseInfo.receiveId?.records[0]?.id,
-                supplierId: result?.supplierId,
-                supplierName:result?.supplierName,
-                receiveTime: result?.receiveTime,
-                receiveNumber: baseInfo.receiveId?.records[0]?.receiveNumber,
-                warehouseId:result?.warehouseId,
-                inspectionBatch:1,
-                commit:0,
-            });
+            // type==='save'&&saveRun({
+            //     qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
+            //         return {
+            //             ...item,
+            //             inspectionTypeName: item?.inspectionScheme===3&&item?.inspectionTypeName.length>0?item?.inspectionTypeName.join(','):'',
+            //             receiveStockDetailId: item?.receiveStockDetailId,
+            //             manufactureTime: item?.manufactureTime,
+            //             contractNumber: item?.contractNumber?item?.contractNumber:item?.materialContractNumber,
+            //         }
+            //     }),
+            //     ...baseInfo,
+            //     receiveStockId: baseInfo.receiveId?.records[0]?.id,
+            //     supplierId: result?.supplierId,
+            //     supplierName:result?.supplierName,
+            //     receiveTime: result?.receiveTime,
+            //     receiveNumber: baseInfo.receiveId?.records[0]?.receiveNumber,
+            //     warehouseId:result?.warehouseId,
+            //     inspectionBatch:1,
+            //     commit:0,
+            // });
             type==='submit'&&submitRun({
                 qualityInspectionDetailDTOs: popDataList.map((item:any)=>{
                     return {
@@ -225,26 +251,26 @@ export default function CreatePlan(props: any): JSX.Element {
     useEffect(() => {
         if (props.visible) {
             addCollectionForm.setFieldsValue({
-                isUrgent:'',
+                isUrgent: 0,
             })
         }
     }, [props.visible])
-    const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
-        try {
-            const path = `/tower-storage/qualityInspection`
-            const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
-                ...tranferData,
-                id: props.id,
-                qualityInspectionNumber: data?.qualityInspectionNumber,
-                inspectionStatus: data?.inspectionStatus
-            })
-            message.success("保存成功！");
-            props?.handleCreate({ code: 1 })
-            resove(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { manual: true })
+    // const { loading: saveLoading, run: saveRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
+    //     try {
+    //         const path = `/tower-storage/qualityInspection`
+    //         const result: { [key: string]: any } = await RequestUtil[props.type === "create" ? "post" : "put"](path, props.type === "create" ? tranferData : {
+    //             ...tranferData,
+    //             id: props.id,
+    //             qualityInspectionNumber: data?.qualityInspectionNumber,
+    //             inspectionStatus: data?.inspectionStatus
+    //         })
+    //         message.success("保存成功！");
+    //         props?.handleCreate({ code: 1 })
+    //         resove(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { manual: true })
     const { loading: submitLoading, run: submitRun } = useRequest<{ [key: string]: any }>((tranferData: any) => new Promise(async (resove, reject) => {
         try {
             const path =  '/tower-storage/qualityInspection'
@@ -319,9 +345,9 @@ export default function CreatePlan(props: any): JSX.Element {
                 }}>
                     取消
                 </Button>,
-                <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
-                    保存
-                </Button>,
+                // <Button key="create" type="primary" onClick={() => handleCreateClick('save')} loading={saveLoading}>
+                //     保存
+                // </Button>,
                 <Button key="create" type="primary" onClick={() => handleCreateClick('submit')} loading={submitLoading}>
                     保存并提交
                 </Button>
@@ -391,7 +417,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             if (["machiningNum"].includes(item.dataIndex)) {
                                 return ({
                                     ...item,
-                                    render: (value: number, records: any, key: number) => <InputNumber min={1} value={value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
+                                    render: (value: number, records: any, key: number) => <InputNumber min={0} value={value===0?0:value || undefined} onChange={(value: number) => handleMachiningNumChange(value, records.receiveStockDetailId)} key={key} />
                                 })
                             }
                             if (["sampler"].includes(item.dataIndex)) {

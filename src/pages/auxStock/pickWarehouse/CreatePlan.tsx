@@ -15,6 +15,7 @@ import {
 import moment from 'moment';
 import styles from "./CreatePlan.module.less";
 import { totalTaxPrice } from '@utils/calcUtil';
+import AuthUtil from '@utils/AuthUtil';
 
 export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [addCollectionForm] = Form.useForm();
@@ -26,6 +27,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
     const [detail, setDetail] = useState<any>({})
     const [warehouseId, setWarehouseId] = useState<string>("");
     const [type, setType] = useState<number>(0);
+    const [dataUser, setDataUser] = useState<any>({});
     const handleAddModalOk = () => {
         const newMaterialList = materialList.filter((item: any) => !materialList.find((maItem: any) => item.materialCode === maItem.materialCode))
         // for (let i = 0; i < popDataList.length; i += 1) {
@@ -129,7 +131,7 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
                         name: fields.pickingUserId.records[0].deptName
                     }],
                     value: fields.pickingUserId.records[0].deptName,
-                }
+                },
             })
             return;
         }
@@ -415,14 +417,41 @@ export default forwardRef(function CreatePlan(props: any, ref): JSX.Element {
         resetFields
     }), [ref, onSubmit, onSubmitApproval, onSubmitCancel,saveLoading,submitLoading, cancelLoading,resetFields])
 
+    const { data: userData } = useRequest<{ [key: string]: any }>((requestData: any) => new Promise(async (resove, reject) => {
+        try {
+            const value:any = await RequestUtil.get(`/tower-system/employee/getEmployeeByUserId/${AuthUtil.getUserInfo().user_id}`)
+            addCollectionForm.setFieldsValue({
+                pickingTime: moment(new Date()).format("YYYY-MM-DD"),
+                pickingUserId: {
+                    id: AuthUtil.getUserInfo().user_id,
+                    value: AuthUtil.getRealName()
+                },
+                departmentName:{
+                    id:value.dept,
+                    records: [{
+                        id:value.dept,
+                        name: value.deptName
+                    }],
+                    value: value.deptName,
+                },
+                dept: {
+                    id:value.teamGroupId,
+                    records: [{
+                        id:value.teamGroupId,
+                        name: value.teamGroupName
+                    }],
+                    value: value.teamGroupName,
+                },
+            })
+            resove(value)
+        } catch (error) {
+            reject(error)
+        }
+    }))
     useEffect(() => {
         if (props.visible) {
             addCollectionForm.setFieldsValue({
                 pickingTime: moment(new Date()).format("YYYY-MM-DD"),
-                dept:{
-                    id:'',
-                    value:''
-                },
             })
         }
     }, [props.visible])

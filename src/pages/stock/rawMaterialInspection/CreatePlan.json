@@ -124,6 +124,45 @@
             "dataIndex": "warrantyNumber"
         },
         {
+            "title": "检验方案",
+            "dataIndex": "inspectionScheme"
+        },
+        {
+            "title": "检验分类名称",
+            "dataIndex": "inspectionTypeName"
+        },
+        {
+            "title": "取样数量",
+            "dataIndex": "inspectionNum"
+        },
+        {
+            "title": "类型",
+            "dataIndex": "type",
+            "type": "select",
+            "enum": [
+                {
+                    "label": "试验数据",
+                    "value": 1
+                },
+                {
+                    "label": "填充数据",
+                    "value": 2
+                }
+            ]
+        },
+        {
+            "title": "取样人",
+            "dataIndex": "sampler"
+        },
+        {
+            "title": "机加数量",
+            "dataIndex": "machiningNum"
+        },
+        {
+            "title": "机加人",
+            "dataIndex": "machiningUser"
+        },
+        {
             "title": "轧制批号",
             "dataIndex": "rollingNumber"
         },
@@ -166,45 +205,6 @@
                     "value": 2
                 }
             ]
-        },
-        {
-            "title": "检验方案",
-            "dataIndex": "inspectionScheme"
-        },
-        {
-            "title": "检验分类名称",
-            "dataIndex": "inspectionTypeName"
-        },
-        {
-            "title": "取样数量",
-            "dataIndex": "inspectionNum"
-        },
-        {
-            "title": "类型",
-            "dataIndex": "type",
-            "type": "select",
-            "enum": [
-                {
-                    "label": "试验数据",
-                    "value": 1
-                },
-                {
-                    "label": "填充数据",
-                    "value": 2
-                }
-            ]
-        },
-        {
-            "title": "取样人",
-            "dataIndex": "sampler"
-        },
-        {
-            "title": "机加数量",
-            "dataIndex": "machiningNum"
-        },
-        {
-            "title": "机加人",
-            "dataIndex": "machiningUser"
         }
     ]
 }
