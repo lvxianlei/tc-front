@@ -62,7 +62,8 @@ export default forwardRef(function AddOn({ id, getLoading, list }: AddOnProps, r
             key: 'completedSegmentCount',
             title: '已下段数',
             width: 150,
-            dataIndex: 'completedSegmentCount'
+            dataIndex: 'completedSegmentCount',
+            type: 'number'
         },
         {
             key: 'addSegmentCount',
