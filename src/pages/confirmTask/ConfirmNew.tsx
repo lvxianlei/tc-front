@@ -22,7 +22,7 @@ export default function ConfirmNew(): React.ReactNode {
     const attachRef = useRef<AttachmentRef>()
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
 
-    const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
+    const { data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/drawTask/getDrawTaskById?drawTaskId=${params.id}`)
         form?.setFieldsValue({ ...data });
         userForm?.setFieldsValue({
@@ -34,7 +34,7 @@ export default function ConfirmNew(): React.ReactNode {
     }), { manual: !(params?.id) })
 
 
-    const { data: contractNums } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data: contractNums } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-market/contract?size=1000`);
             resole(result?.records)
@@ -63,6 +63,8 @@ export default function ConfirmNew(): React.ReactNode {
                 }).catch(e => {
                     setConfirmLoading(false)
                 })
+            }).catch(e => {
+                setConfirmLoading(false)
             })
         }).catch(e => {
             setConfirmLoading(false)
@@ -91,13 +93,24 @@ export default function ConfirmNew(): React.ReactNode {
                                         }
                                         allowClear
                                         onChange={(value: string, option: any) => {
-                                            const data = JSON.parse(option?.key)
-                                            form?.setFieldsValue({
-                                                contractId: data?.id,
-                                                contractName: data?.contractName,
-                                                contractNum: data?.internalNumber,
-                                                businessOwner: data?.customerCompany
-                                            })
+                                            if (option) {
+                                                const data = JSON.parse(option?.key)
+                                                form?.setFieldsValue({
+                                                    contractId: data?.id,
+                                                    contractName: data?.contractName,
+                                                    contractNum: data?.internalNumber,
+                                                    businessOwner: data?.customerCompany
+                                                })
+                                            } else {
+                                                form?.setFieldsValue({
+                                                    contractId: '',
+                                                    contractName: '',
+                                                    contractNum: '',
+                                                    businessOwner: ''
+                                                })
+
+                                            }
+
                                         }}>
                                         {contractNums?.map((item: any) => {
                                             return <Select.Option key={JSON.stringify(item)} value={item.id}>{item.contractNumber}</Select.Option>
