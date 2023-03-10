@@ -43,7 +43,7 @@
                 "authority": "tc_erp_sys_system",
                 "items": [
                     {
-                        "label": "产品类型",
+                        "label": "产品类别",
                         "path": "/sys/product",
                         "authority": "tc_erp_sys_system_dic"
                     },
