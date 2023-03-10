@@ -92,7 +92,7 @@ export default function SearchTable({
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
             const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
-            setFilterSearch ({ ...filterValue, ...props.requestData, ...params, ...search })
+            setFilterSearch({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -229,6 +229,7 @@ export default function SearchTable({
                         className={styles.pagination}
                         total={data?.result?.total}
                         pageSize={(uriSearch.pageSize || pageSize) * 1}
+                        pageSizeOptions={["10", "20", "50", "100", "500"]}
                         current={(uriSearch.current || 1) * 1}
                         showTotal={(total: number) => `共${total}条记录`}
                         showSizeChanger
@@ -249,8 +250,8 @@ export default function SearchTable({
             url={exportPath}
             fileName={exportFileName}
             serchObj={{
-                ...JSON.parse(JSON.stringify(filterSearch||{})),
-                ...JSON.parse(JSON.stringify(exportObject||{}))
+                ...JSON.parse(JSON.stringify(filterSearch || {})),
+                ...JSON.parse(JSON.stringify(exportObject || {}))
             }}
             closeExportList={() => {
                 setIsExport(false)

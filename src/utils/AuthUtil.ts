@@ -7,7 +7,6 @@ import Utf8 from 'crypto-js/enc-utf8'
 import Cookies, { CookieAttributes } from 'js-cookie'
 import ctxConfig from "../app-ctx.config.jsonc"
 import RequestUtil from './RequestUtil'
-import useRequest from "@ahooksjs/use-request";
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const TOKEN_EXPIRES: string = 'SINZETECH_TOKEN_EXPIRES'
