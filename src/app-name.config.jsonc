@@ -117,6 +117,26 @@
         "appName": "FC"
     },
     {
+        "authority": "tc_erp_mdm",
+        "title": "数据中心",
+        "description": "",
+        "iconFont": "icon-caiwuzhongxin2", // iconfont
+        "color": "#FCCD06", // iconfont的颜色
+        "path": "/invoicing/billList",
+        "corsWeb": true,
+        "appName": "MDM"
+    },
+    {
+        "authority": "tc_erp_salary",
+        "title": "薪资中心",
+        "description": "",
+        "iconFont": "icon-caiwuzhongxin2", // iconfont
+        "color": "#FCCD06", // iconfont的颜色
+        "path": "/invoicing/billList",
+        "corsWeb": true,
+        "appName": "SALARY"
+    },
+    {
         "authority": "tc_erp_sys",
         "title": "工单中心",
         "description": "解决派单，接收业务员系统关键数据",

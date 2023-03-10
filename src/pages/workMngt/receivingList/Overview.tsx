@@ -15,7 +15,8 @@ interface ReceiveStrokAttachProps {
 }
 
 interface ReceiveStrokAttachUploadProps {
-    id: string
+    id: any[],
+    title: boolean
 }
 const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStrokAttachProps, ref): JSX.Element => {
     const [form] = Form.useForm()
@@ -139,7 +140,7 @@ const ReceiveStrokAttach = forwardRef(({ type, ids, receiveStockId }: ReceiveStr
     </Spin>
 
 })
-const ReceiveStrokAttachUpload = forwardRef(({ id }: ReceiveStrokAttachUploadProps, ref): JSX.Element => {
+const ReceiveStrokAttachUpload = forwardRef(({ id , title }: ReceiveStrokAttachUploadProps, ref): JSX.Element => {
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
@@ -148,21 +149,23 @@ const ReceiveStrokAttachUpload = forwardRef(({ id }: ReceiveStrokAttachUploadPro
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [id] })
+    }), { refreshDeps: [id], manual: title })
 
     const { run: saveRun } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         try {
             // 对上传数据进行处理
             const fieldIds: any = [],
-                source = attachRef.current.getDataSource();
+            source = attachRef.current.getDataSource();
+            console.log(source)
             if (source.length < 1) {
                 message.error("请您先上传质保单！");
-                resole(false as any)
-                return false;
+                throw new Error( `请您先上传质保单！`)
+                // resole(false as any)
+                // return false;
             }
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
-                id,
+                ids: id,
                 fieldIds,
                 attachType: 2
             })
@@ -188,13 +191,14 @@ export default function Overview() {
     const [filterValue, setFilterValue] = useState<{ [key: string]: any }>({ receiveStockId: params.id })
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string[]>([])
-    const [receiveStockId, setReceiveStockId] = useState<string>("")
+    // const [receiveStockId, setReceiveStockId] = useState<string>("")
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [saveAttachLoding, setSaveAttachLoading] = useState<boolean>(false)
     const [isOpenId, setIsOpenId] = useState<boolean>(false);
     const [editId, setEditId] = useState<string>('');
-    const [detailAttachId, setDetailAttachId] = useState<string>("")
+    const [detailAttachId, setDetailAttachId] = useState<any[]>([])
     const [attachVisible, setAttachVisible] = useState<boolean>(false)
+    const [title, setTitle] = useState<boolean>(false)
     const [userData, setUserData] = useState<any>({})
     const handleCreate = (options: any) => {
         if (options?.code === 1) {
@@ -256,6 +260,7 @@ export default function Overview() {
 
     const handleSelectChange = (ids: any, selectRows: any[]) => {
         setSelectedRows(ids)
+        console.log(selectRows)
         const rWeight = selectRows.filter((item:any)=>{return item?.receiveDetailStatus!==0}).reduce((pre: any,cur: { totalWeight: any; })=>{
             return parseFloat(pre!==null?pre:0) + parseFloat(cur.totalWeight!==null?cur.totalWeight:0) 
         },0)
@@ -283,7 +288,7 @@ export default function Overview() {
             waitWeight,
             waitPrice
         })
-        setReceiveStockId(selectRows[0]?.receiveStockId)
+        // setReceiveStockId(selectRows[0]?.receiveStockId)
     }
 
     return <DetailContent>
@@ -299,10 +304,10 @@ export default function Overview() {
             onCancel={() => {
                 setAttachType(1)
                 setDetailId([])
-                setReceiveStockId("")
+                // setReceiveStockId("")
                 setVisible(false)
             }}>
-            <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={receiveStockId} ref={receiveRef} />
+            <ReceiveStrokAttach type={attchType} ids={detailId} receiveStockId={params.id} ref={receiveRef} />
         </Modal>
         <Modal
             destroyOnClose
@@ -312,10 +317,10 @@ export default function Overview() {
             onOk={handleAttachOkK}
             okText="保存"
             onCancel={() => {
-                setDetailAttachId("")
+                setDetailAttachId([])
                 setAttachVisible(false)
             }}>
-            <ReceiveStrokAttachUpload id={detailAttachId} ref={receiveAttachRef}  />
+            <ReceiveStrokAttachUpload id={detailAttachId} ref={receiveAttachRef}  title={title}/>
             </Modal>
         <CreatePlan
             visible={isOpenId}
@@ -353,6 +358,15 @@ export default function Overview() {
                     ghost
                     disabled={!(selectedRows.length > 0)}
                     onClick={() => {
+                        setDetailAttachId(selectedRows)
+                        setAttachVisible(true)
+                        setTitle(true)
+                    }}
+                >质保书上传</Button>
+                <Button type="primary"
+                    ghost
+                    disabled={!(selectedRows.length > 0)}
+                    onClick={() => {
                         setAttachType(1)
                         setDetailId(selectedRows)
                         setVisible(true)
@@ -367,7 +381,6 @@ export default function Overview() {
                     setEditId(params.id)
                     const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/quality/${params.id}`)
                     setIsOpenId(true)
-                    
                 }} >申请送检</Button>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span style={{ marginLeft: "20px" }}>
@@ -383,7 +396,7 @@ export default function Overview() {
                 rowSelection: {
                     selectedRowKeys: selectedRows,
                     onChange: handleSelectChange,
-                    getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
+                    // getCheckboxProps: (records: any) => [1, 2].includes(records.receiveDetailStatus)
                 }
             }}
             columns={[
@@ -399,7 +412,7 @@ export default function Overview() {
                             onClick={() => {
                                 setAttachType(1)
                                 setDetailId([records.id])
-                                setReceiveStockId(records.receiveStockId)
+                                // setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}>收货</Button>
                         <Button
@@ -408,13 +421,14 @@ export default function Overview() {
                             onClick={() => {
                                 setAttachType(2)
                                 setDetailId([records.id])
-                                setReceiveStockId(records.receiveStockId)
+                                // setReceiveStockId(records.receiveStockId)
                                 setVisible(true)
                             }}
                         >拒收</Button>
                         <a style={{ marginRight: 12 }} onClick={() => {
-                            setDetailAttachId(records.id)
+                            setDetailAttachId([records.id])
                             setAttachVisible(true)
+                            setTitle(false)
                         }}>质保单</a>
                     </>
                 }

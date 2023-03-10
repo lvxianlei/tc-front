@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useEffect, useState } from "react"
-import { Avatar, Breadcrumb, Col, Drawer, Dropdown, Layout, Menu, Row } from "antd";
+import { Avatar, Breadcrumb, Col, Drawer, Dropdown, Layout, Menu, Row, Spin } from "antd";
 import { DownOutlined, createFromIconfontCN } from "@ant-design/icons"
 import { Link, Route, Switch, useHistory, useLocation } from "react-router-dom";
 import AuthUtil from "../utils/AuthUtil";
@@ -151,6 +151,7 @@ const Hbreadcrumb = memo(({ onClick }: { onClick: (opend: boolean) => void }) =>
 
 export default function (): JSX.Element {
     const [visible, setVisible] = useState<boolean>(false)
+    const [loading, setLoading] = useState<boolean>(false)
     const history = useHistory()
     const location = useLocation()
     const authorities = useAuthorities()
@@ -195,6 +196,7 @@ export default function (): JSX.Element {
     };
 
     const doFiltersAll = async (props: any) => {
+        setLoading(true)
         const doFilterHandlers: Promise<boolean>[] = filters
             .keys().filter((item: string) => item !== "./IFilter.ts")
             .map<Promise<boolean>>((filter: any): Promise<boolean> => {
@@ -206,6 +208,7 @@ export default function (): JSX.Element {
                 return false;
             }
         }
+        setLoading(false)
         return true;
     }
     const handleClick = (opend: boolean) => setIsOpend(opend)
@@ -271,7 +274,7 @@ export default function (): JSX.Element {
         </Menu.Item>)}
     </Menu>)
 
-    return <Layout  style={{ backgroundColor: "#fff", height: "100%" }}>
+    return <Layout style={{ backgroundColor: "#fff", height: "100%" }}>
         <Header className={styles.header}>
             <h1
                 className={styles.logoStyle}
@@ -444,7 +447,6 @@ export default function (): JSX.Element {
                         </Layout>
                     </>
             }
-
         </Layout>
     </Layout>
 }

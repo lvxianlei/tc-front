@@ -1,5 +1,5 @@
 
-import React, { ReactElement, useCallback, useState, useEffect } from "react"
+import React, { ReactElement, useImperativeHandle, useCallback, useState, useEffect, Ref, RefObject, useRef } from "react"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "../../utils/RequestUtil"
 import CommonAliTable, { columnsProps } from "./CommonAliTable"
@@ -24,6 +24,7 @@ interface SearchTableProps {
     transformResult?: (result: any) => any
     onFilterSubmit?: <T>(arg: T) => T
     filterValue?: { [key: string]: any }
+    actionRef?: RefObject<any>
     extraOperation?: React.ReactNode | React.ReactNode[] | ((result: any) => any)
     tableProps?: { [i: string]: any }
     pagination?: boolean
@@ -75,15 +76,17 @@ export default function SearchTable({
     exportPath,
     exportObject = {},
     tableRender,
+    actionRef,
     ...props }: SearchTableProps): JSX.Element {
     const match = useRouteMatch()
+    const aliTableRef = useRef<any>()
     const location = useLocation<{ state: {} }>();
     const history = useHistory()
     const uriSearch: any = parse(location.search.replace("?", ""))
     const [filterSearch, setFilterSearch] = useState<any>({ ...filterValue });
     const [form] = Form.useForm()
     const [isExport, setIsExport] = useState<boolean>(false);
-    const { loading, data } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+    const { loading, data, refresh, run } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
         try {
             let params: any = {}
             if (pagination !== false) {
@@ -92,7 +95,7 @@ export default function SearchTable({
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
             const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
-            setFilterSearch ({ ...filterValue, ...props.requestData, ...params, ...search })
+            setFilterSearch({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({
@@ -123,6 +126,12 @@ export default function SearchTable({
             pageSize: pageSize || uriSearch.pageSize
         })}`)
     }, [uriSearch, location])
+
+    useImperativeHandle(actionRef, () => ({
+        refresh,
+        run,
+        ...aliTableRef?.current
+    }), [refresh, run])
 
     return <>
         {searchFormItems.length > 0 && <Form
@@ -196,6 +205,7 @@ export default function SearchTable({
                 size="small"
                 isLoading={loading}
                 dataSource={data?.result?.records || data?.result || []}
+                actionRef={aliTableRef}
                 {...tableProps}
                 {...props}
             />
@@ -220,6 +230,7 @@ export default function SearchTable({
                 size="small"
                 isLoading={loading}
                 dataSource={data?.result?.records || data?.result || []}
+                actionRef={aliTableRef}
                 {...tableProps}
                 {...props}
             />
@@ -229,6 +240,7 @@ export default function SearchTable({
                         className={styles.pagination}
                         total={data?.result?.total}
                         pageSize={(uriSearch.pageSize || pageSize) * 1}
+                        pageSizeOptions={["10", "20", "50", "100", "500"]}
                         current={(uriSearch.current || 1) * 1}
                         showTotal={(total: number) => `共${total}条记录`}
                         showSizeChanger
@@ -249,8 +261,8 @@ export default function SearchTable({
             url={exportPath}
             fileName={exportFileName}
             serchObj={{
-                ...JSON.parse(JSON.stringify(filterSearch||{})),
-                ...JSON.parse(JSON.stringify(exportObject||{}))
+                ...JSON.parse(JSON.stringify(filterSearch || {})),
+                ...JSON.parse(JSON.stringify(exportObject || {}))
             }}
             closeExportList={() => {
                 setIsExport(false)

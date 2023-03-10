@@ -70,7 +70,21 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(error)
         }
     }))
-
+    const { loading: madeLoading, run: madeRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/auxiliaryMaterialPicking/createOutStock`,{
+                materialPickingDetailIds: selectedKeys,
+                materialPickingId: params.id
+            })
+            message.success('出库成功！')
+            history.go(0)
+            resole({
+                ...result,
+            })
+        } catch (error) {
+            reject(error)
+        }
+    }),{manual: true})
 
     // 查询按钮
     const onFilterSubmit = (value: any) => {
@@ -101,13 +115,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                 extraOperation={(data: any) => {
                     return <>
                         {/* <Button type='primary' key="add" ghost  disabled={!(selectedKeys.length > 0)} onClick={() => setVisible(true)}>关联下达单</Button> */}
-                        <Button type="primary" ghost onClick={async ()=>{ await RequestUtil.post(`/tower-storage/auxiliaryMaterialPicking/createOutStock`,{
-                            materialPickingDetailIds: selectedKeys,
-                            materialPickingId: params.id
-                        }).then(()=>{
-                            message.success('出库成功！')
-                            history.go(0)
-                        })}} disabled={!(selectedKeys.length>0)}>生成出库单</Button>
+                        <Button type="primary" ghost onClick={()=>{madeRun()}} loading={madeLoading} disabled={!(selectedKeys.length>0)}>生成出库单</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined',null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/auxiliaryMaterialPicking/workflow/start/${params.id}`)

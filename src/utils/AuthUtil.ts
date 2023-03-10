@@ -6,8 +6,8 @@ import Base64 from 'crypto-js/enc-base64'
 import Utf8 from 'crypto-js/enc-utf8'
 import Cookies, { CookieAttributes } from 'js-cookie'
 import ctxConfig from "../app-ctx.config.jsonc"
+import { IDict } from '../configuration/IApplicationContext'
 import RequestUtil from './RequestUtil'
-import useRequest from "@ahooksjs/use-request";
 const TENANT_ID_KEY: string = 'SINZETECH_TENANT_ID'
 const TOKEN_KEY: string = 'SINZETECH_TOKEN'
 const TOKEN_EXPIRES: string = 'SINZETECH_TOKEN_EXPIRES'
@@ -18,6 +18,7 @@ const TENANT_LISTS: string = 'SINZETECH_TENANTS'
 const REAL_NAME: string = 'REAL_NAME';
 const APP_Name: string = 'CURRENT_APP_NAME';
 const ACCOUNT: string = "ACCOUNT";
+const DICS: string = "DICS"
 export default abstract class AuthUtil {
 
     static timeLength = 50 * 60 * 1000
@@ -269,6 +270,15 @@ export default abstract class AuthUtil {
         } catch (error) {
             console.log("ERROR: refrenshToken", error)
         }
+    }
+
+    public static setDictionary(dictionary: any): void {
+        sessionStorage.setItem(DICS, JSON.stringify(dictionary))
+    }
+
+    public static getDictionary(): Record<string, IDict[] | undefined> | undefined {
+        const dics = sessionStorage.getItem(DICS)
+        return dics ? JSON.parse(dics) : {}
     }
 
     /**

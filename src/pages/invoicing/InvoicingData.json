@@ -508,12 +508,20 @@
             "dataIndex": "taxNumber"
         },
         {
-            "title": "地址、电话",
+            "title": "地址",
             "dataIndex": "address"
         },
         {
-            "title": "开户行及账号",
-            "dataIndex": "bankNumber"
+            "title": "电话",
+            "dataIndex": "phone"
+        },
+        {
+            "title": "开户行",
+            "dataIndex": "openBankName"
+        },
+        {
+            "title": "开户账号",
+            "dataIndex": "bankCode"
         },
         {
             "title": "发票备注栏",
@@ -612,6 +620,53 @@
         {
             "title": "金额(元)",
             "dataIndex": "moneyCount"
+        }
+    ],
+    "batchHead": [
+        {
+            "title": "审批节点",
+            "dataIndex": "nodeName"
+        },
+        {
+            "title": "审核人员",
+            "dataIndex": "userName"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "handleStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "拒绝"
+                },
+                {
+                    "value": 1,
+                    "label": "同意"
+                },
+                {
+                    "value": 2,
+                    "label": "提交"
+                },
+                {
+                    "value": 3,
+                    "label": "撤回"
+                },
+                {
+                    "value": 4,
+                    "label": "终止"
+                }
+            ]
+        },
+        {
+            "title": "审批意见",
+            "dataIndex": "handleOpinion"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "handleTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm:ss"
         }
     ],
     "saleInvoice": [
