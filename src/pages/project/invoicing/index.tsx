@@ -18,10 +18,15 @@ export default function Invoicing() {
         ...history.location.state as object
     });
 
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string, processId: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo?id=${invoicingId}`)
-            resole(result)
+            /**获取工作流流转记录 */
+            const process: { [key: string]: any } = processId ? await RequestUtil.get(`/tower-workflow/workflow/Engine/FlowBefore/${processId}`) : {}
+            resole({
+                ...result,
+                invoicingBatchVOS: process?.flowTaskOperatorRecordList || []
+            })
         } catch (error) {
             reject(error)
         }
@@ -120,7 +125,7 @@ export default function Invoicing() {
                     width: 300,
                     render: (_: any, record: any) => {
                         return <>
-                            <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
+                            <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}/${record.processId}`)}>查看</Button>
                             <Button type="link" size="small" disabled={[1, 2].includes(record.state)} onClick={() => history.push(`/project/invoicing/edit/${record.id}`)}>编辑</Button>
                             <Popconfirm
                                 title="确定撤销此开票申请吗？"
@@ -169,7 +174,7 @@ export default function Invoicing() {
                                     disabled={record?.state !== 2}
                                     className="btn-operation-link"
                                 >打印</Button>}
-                                onBeforeGetContent={() => run(record?.id)}
+                                onBeforeGetContent={() => run(record?.id, record?.processId)}
                             />
                         </>
                     }
