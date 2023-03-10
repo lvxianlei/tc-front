@@ -33,6 +33,11 @@
             "width": 80
         },
         {
+            "title": "领料日期",
+            "dataIndex": "pickingTime",
+            "width": 80
+        },
+        {
             "title": "领料车间",
             "dataIndex": "deptName",
             "width": 80

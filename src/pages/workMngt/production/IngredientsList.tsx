@@ -228,7 +228,8 @@ export default function IngredientsList(): React.ReactNode {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-supply/task/scheme/produce/inheritScheme`, {
                 produceId: params.id,
-                productionBatchNo: options[0].batchNumber
+                taskIds: options.map((item: any) =>{return item.taskId}).join(',')
+                // productionBatchNo: options[0].batchNumber
             });
             let v = globallyStoredData?.sortChildren;
             for (let i = 0; i < v.length; i += 1) {

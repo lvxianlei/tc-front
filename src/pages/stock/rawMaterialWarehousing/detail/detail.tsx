@@ -4,7 +4,7 @@
  * 时间：2022/01/06
  */
 import React, { useState } from 'react';
-import { Button, message, Popconfirm, Space } from 'antd';
+import { Button, message, Modal, Popconfirm, Space } from 'antd';
 import { FixedType } from 'rc-table/lib/interface'
 import { SearchTable as Page } from '../../../common';
 import RequestUtil from '../../../../utils/RequestUtil';
@@ -15,7 +15,7 @@ import '../../StockPublicStyle.less';
 import './detail.less';
 
 export default function RawMaterialWarehousing(): React.ReactNode {
-    const params = useParams<{ id: string, approval: string }>();
+    const params = useParams<{ id: string, approval: string, lock: string }>();
     const history = useHistory();
     const [filterValue, setFilterValue] = useState<any>({
         fuzzyQuery: "",
@@ -28,6 +28,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
 
     // 批量入库
     const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
+    const [selectedRows, setSelectedRows] = useState<string[]>([]);
 
     // 入库以及批量入库  待联调
     const { data: statisticsDatas, run: saveRun } = useRequest<any[]>((data) => new Promise(async (resole, reject) => {
@@ -66,6 +67,33 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         await saveRun(selectedRowKeys);
         history.go(0);
     }
+
+    const { loading: finishPriceLoading, run: cancelRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/warehousingEntry/entry/repeal`, selectedRowKeys)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
+    const handleFinishPrice = async () => {
+        Modal.confirm({
+            title: "提示",
+            content: "确定将所选材料进行撤销入库吗？",
+            okText: "确认",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await cancelRun()
+                    resove(true)
+                    message.success("撤销成功...")
+                    history.go(-1)
+                } catch (error) {
+                    reject(false)
+                }
+            })
+        })
+    }
     return (
         <>
             <Page
@@ -97,11 +125,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     {
                         title: '操作',
                         dataIndex: 'key',
-                        width: 100,
+                        width: 160,
                         fixed: 'right' as FixedType,
                         render: (_: undefined, record: any): React.ReactNode => (
                             <>
-                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1} onClick={async () => {
+                                <Button className='btn-operation-link' type='link' disabled={record.warehousingEntryStatus === 1 || params.lock==='1'} onClick={async () => {
                                     const result = [ record.id ]
                                     await saveRun(result);
                                     history.go(0);
@@ -118,7 +146,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     cancelText="取消"
                                     disabled={record.warehousingEntryStatus === 0}
                                 >
-                                    <Button type="link" disabled={record.warehousingEntryStatus === 0}>撤销</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 0 || params.lock==='1'}>撤销</Button>
                                 </Popconfirm>
                                 <Popconfirm
                                     title="确认删除?"
@@ -130,9 +158,9 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     }}
                                     okText="确认"
                                     cancelText="取消"
-                                    disabled={record.warehousingEntryStatus === 1}
+                                    disabled={record.warehousingEntryStatus === 1 || params.lock==='1'}
                                 >
-                                    <Button type="link" disabled={record.warehousingEntryStatus === 1}>删除</Button>
+                                    <Button type="link" disabled={record.warehousingEntryStatus === 1 || params.lock==='1'}>删除</Button>
                                 </Popconfirm>
                             </>
                         )
@@ -158,7 +186,8 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 message.error('不可撤销！')
                             }
                         }} >撤销审批</Button>
-                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} >批量入库</Button>
+                        <Button type="primary" ghost onClick={() => handleFinishPrice()} disabled={!(selectedRowKeys.length>0) || params.lock==='1'} loading={finishPriceLoading}>批量撤销</Button>
+                        <Button type="primary" ghost onClick={() => handleWarehousingClick()} disabled={ params.lock==='1' }>批量入库</Button>
                         <Button type="ghost" onClick={() => history.go(-1)}>返回</Button>
                         <div>已收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveWeight}</span>已收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.receiveTaxPrice}</span> 待收货：重量(吨)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitWeight}</span>待收货：价税合计(元)合计：<span style={{ marginRight: 12, color: "#FF8C00" }}>{statisticsData?.waitTaxPrice}</span></div>
                     </>
@@ -169,10 +198,11 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     rowSelection: {
                         type: "checkbox",
                         selectedRowKeys: selectedRowKeys,
-                        onChange: (selectedRowKeys: any[]) => {
+                        onChange: (selectedRowKeys: any[], selectedRows:any) => {
                             setSelectedRowKeys(selectedRowKeys);
+                            setSelectedRows(selectedRows)
                         },
-                        getCheckboxProps: (record: any) => record.warehousingEntryStatus === 1
+                        // getCheckboxProps: (record: any) => record.warehousingEntryStatus === 1
                     }
                 }}
             />

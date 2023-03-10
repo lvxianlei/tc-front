@@ -907,7 +907,7 @@
     },
     { // 库存管理-原材料入库-详情
       "name": "原材料入库明细",
-      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval",
+      "path": "/stock/rawMaterialWarehousing/detail/:id/:approval/:lock",
       "module": "./pages/stock/rawMaterialWarehousing/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_in_info"
@@ -921,14 +921,14 @@
     },
     { // 库存管理-原材料出-详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/detail/:id/:approval",
+      "path": "/stock/rawMaterialExWarehouse/detail/:id/:approval/:lock",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
     },
     { // 库存管理-原材料出-回库详情
       "name": "原材料出库详情",
-      "path": "/stock/rawMaterialExWarehouse/backDetail/:id/:approval",
+      "path": "/stock/rawMaterialExWarehouse/backDetail/:id/:approval/:lock",
       "module": "./pages/stock/rawMaterialExWarehouse/detail/detailBack",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -949,7 +949,7 @@
     },
     { // 库存管理-辅材入库-详情
       "name": "辅材入库明细",
-      "path": "/auxStock/entryWarehouse/detail/:id/:approval",
+      "path": "/auxStock/entryWarehouse/detail/:id/:approval/:lock",
       "module": "./pages/auxStock/entryWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_in_detailList"
@@ -963,7 +963,7 @@
     },
     { // 库存管理-辅材出库-明细
       "name": "辅材出库明细",
-      "path": "/auxStock/outputWarehouse/detail/:id/:approval",
+      "path": "/auxStock/outputWarehouse/detail/:id/:approval/:lock",
       "module": "./pages/auxStock/outputWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_material_out_info"
@@ -3569,6 +3569,13 @@
       "module": "./pages/auxStock/pickWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_picking_detail_list"
+    },
+    { // 辅材库存-辅材调拨单
+      "name": "辅材调拨单",
+      "path": "/auxStock/allocationWarehouse",
+      "module": "./pages/auxStock/allocationWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out"
     }
   ]
 }

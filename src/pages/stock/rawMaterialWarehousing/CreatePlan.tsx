@@ -153,12 +153,12 @@ export default function CreatePlan(props: any): JSX.Element {
             setMaterialList([])
             return;
         }
-        if (fields.supplierId) {
-            setSupplierId(fields.supplierId?.id);
-            setPopDataList([])
-            setMaterialList([])
-            return;
-        }
+        // if (fields.supplierId) {
+        //     setSupplierId(fields.supplierId?.id);
+        //     setPopDataList([])
+        //     setMaterialList([])
+        //     return;
+        // }
     }
 
     const handleCreateClick = async () => {
@@ -194,10 +194,10 @@ export default function CreatePlan(props: any): JSX.Element {
                 }),
                 ...baseInfo,
                 
-                contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
-                contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
-                supplierId: baseInfo.supplierId?.records[0]?.id,
-                supplierName: baseInfo.supplierId?.records[0]?.supplierName
+                // contactsPhone: baseInfo.supplierId?.records[0]?.contactManTel,
+                // contactsUser: baseInfo.supplierId?.records[0]?.contactMan,
+                // supplierId: baseInfo.supplierId?.records[0]?.id,
+                // supplierName: baseInfo.supplierId?.records[0]?.supplierName
             });
         } catch (error) {
             console.log(error);
@@ -211,7 +211,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 warehousingType: "1",
                 warehouseId:'',
                 warehousingEntryNumber:'',
-                supplierId:'',
+                // supplierId:'',
                 warehousingEntryTime: moment().format('YYYY-MM-DD')
             })
         }
@@ -241,40 +241,40 @@ export default function CreatePlan(props: any): JSX.Element {
                 }))
                 setType(result?.warehousingType)
                 result?.warehouseId && result?.warehouseId!==null&& setWarehouseId(result?.warehouseId)
-                result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
+                // result?.supplierId && result?.supplierId!==null&& setSupplierId(result?.supplierId)
                 addCollectionForm.setFieldsValue({
                     ...result,
                     warehousingEntryTime: result.warehousingEntryTime!== null ? moment(result.warehousingEntryTime):'',
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
-                    supplierId: {
-                        id: result?.supplierId,
-                        value: result?.supplierName,
-                        records:[{
-                            id: result?.supplierId,
-                            value: result?.supplierName,
-                            contactManTel:result?.contactsPhone,
-                            contactMan:result?.contactsUser,
-                            supplierName:result?.supplierName,
-                        }]
+                    // supplierId: {
+                    //     id: result?.supplierId,
+                    //     value: result?.supplierName,
+                    //     records:[{
+                    //         id: result?.supplierId,
+                    //         value: result?.supplierName,
+                    //         contactManTel:result?.contactsPhone,
+                    //         contactMan:result?.contactsUser,
+                    //         supplierName:result?.supplierName,
+                    //     }]
                         
-                    }
+                    // }
                 })
                 resole({
                     ...result,
                     warehousingEntryTime: moment(result.warehousingEntryTime),
                     warehousingType: typeof(result?.warehousingType)==='number'?String(result?.warehousingType):result?.warehousingType,
-                    supplierId: {
-                        id: result?.supplierId,
-                        value: result?.supplierName,
-                        records:[{
-                            id: result?.supplierId,
-                            value: result?.supplierName,
-                            contactManTel:result?.contactsPhone,
-                            contactMan:result?.contactsUser,
-                            supplierName:result?.supplierName,
-                        }]
+                    // supplierId: {
+                    //     id: result?.supplierId,
+                    //     value: result?.supplierName,
+                    //     records:[{
+                    //         id: result?.supplierId,
+                    //         value: result?.supplierName,
+                    //         contactManTel:result?.contactsPhone,
+                    //         contactMan:result?.contactsUser,
+                    //         supplierName:result?.supplierName,
+                    //     }]
                         
-                    }
+                    // }
                 })
             }
             else{
@@ -358,21 +358,21 @@ export default function CreatePlan(props: any): JSX.Element {
                                 }))
                             })
                         }
-                        if (item.dataIndex === "supplierId") {
-                            return ({
-                                ...item, 
-                                disabled:props.type === "edit"&&data?.warehousingEntryDetailList.filter((item:any)=>{return item.warehousingEntryStatus===1}).length>0,
-                                search: item.search.map((res: any) => {
-                                    if (res.dataIndex === 'qualityAssurance') {
-                                        return ({
-                                            ...res,
-                                            enum: qualityAssuranceEnum
-                                        })
-                                    }
-                                    return res
-                                })
-                            })
-                        }
+                        // if (item.dataIndex === "supplierId") {
+                        //     return ({
+                        //         ...item, 
+                        //         disabled:props.type === "edit"&&data?.warehousingEntryDetailList.filter((item:any)=>{return item.warehousingEntryStatus===1}).length>0,
+                        //         search: item.search.map((res: any) => {
+                        //             if (res.dataIndex === 'qualityAssurance') {
+                        //                 return ({
+                        //                     ...res,
+                        //                     enum: qualityAssuranceEnum
+                        //                 })
+                        //             }
+                        //             return res
+                        //         })
+                        //     })
+                        // }
                         
                         return{ 
                             ...item,
@@ -383,8 +383,8 @@ export default function CreatePlan(props: any): JSX.Element {
                 />
                 <DetailTitle title="入库明细" />
                 <div className='btnWrapper'>
-                    { type === '4'? <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisibleB(true)}>选择</Button>
-                    :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId && supplierId)} onClick={() => setVisible(true)}>选择</Button>}
+                    { type === '4'? <Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId )} onClick={() => setVisibleB(true)}>选择</Button>
+                    :<Button type='primary' key="add" ghost style={{ marginRight: 8 }} disabled={!(warehouseId )} onClick={() => setVisible(true)}>选择</Button>}
                     <Button type='primary' key="clear" ghost onClick={() => message.warning("暂无此功能！")}>导入</Button>
                 </div>
                 <CommonTable
@@ -456,7 +456,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     <PopTableContent
                         data={{
                             ...addMaterial as any,
-                            path: `${addMaterial.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`
+                            path: `${addMaterial.path}?warehouseId=${warehouseId}`
                         }}
                         value={{
                             id: "",
@@ -485,7 +485,7 @@ export default function CreatePlan(props: any): JSX.Element {
                     <PopTableContent
                         data={{
                             ...addMaterialB as any,
-                            path: `${addMaterialB.path}?supplierId=${supplierId}&warehouseId=${warehouseId}`,
+                            path: `${addMaterialB.path}?warehouseId=${warehouseId}`,
                             search: addMaterialB.search.map((res: any) => {
                                 if (res.dataIndex === 'materialStandard') {
                                     return ({

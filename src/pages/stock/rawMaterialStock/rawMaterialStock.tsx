@@ -3,9 +3,9 @@ import { useHistory } from 'react-router';
 import { Input, Select, Modal, message, Spin, Button, Upload, InputNumber, DatePicker, Form } from 'antd';
 import { FixedType } from 'rc-table/lib/interface';
 import RequestUtil from '../../../utils/RequestUtil';
-import { listPage } from "./rowMaterial.json"
+import { listPage, detailPage } from "./rowMaterial.json"
 import { materialStandardOptions, materialTextureOptions } from '../../../configuration/DictionaryOptions';
-import { Attachment, AttachmentRef, SearchTable as Page } from '../../common';
+import { Attachment, AttachmentRef, SearchTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { exportDown } from '../../../utils/Export';
 import AuthUtil from '../../../utils/AuthUtil';
@@ -78,6 +78,7 @@ export default function RawMaterialStock(): React.ReactNode {
     const [attchType, setAttachType] = useState<1 | 2>(1)
     const [detailId, setDetailId] = useState<string>("")
     const [visible, setVisible] = useState<boolean>(false)
+    const [visibleDetail, setVisibleDetail] = useState<boolean>(false)
     const [saveLoding, setSaveLoading] = useState<boolean>(false)
     const [filterValue, setFilterValue] = useState({})
     const [lineData, setLineData] = useState<any>({})
@@ -154,7 +155,31 @@ export default function RawMaterialStock(): React.ReactNode {
                 }}>
                 <ReceiveStrokAttach type={attchType} id={detailId} ref={receiveRef} dataSource={dataSource}/>
             </Modal>
-            <Page
+            <Modal
+                destroyOnClose
+                visible={visibleDetail}
+                title={ "出入库明细" }
+                footer={[]}
+                width={'50%'}
+                onCancel={() => {
+                    setDetailId("")
+                    setVisibleDetail(false)
+                }}>
+                <SearchTable
+                    path={`/tower-storage/materialStock/optLogs/${detailId}`}
+                    pagination={false}
+                    columns={[{
+                        title: '序号',
+                        dataIndex: 'index',
+                        width: 50,
+                        fixed: "left",
+                        render: (text: any, item: any, index: any) => <span>{index + 1}</span>
+                    },
+                    ...detailPage as any,]}
+                    searchFormItems={[]}
+                />
+            </Modal>
+            <SearchTable
                 path={`/tower-storage/materialStock`}
                 exportPath={`/tower-storage/materialStock`}
                 columns={[{
@@ -168,7 +193,7 @@ export default function RawMaterialStock(): React.ReactNode {
                 {
                     title: '操作',
                     dataIndex: 'key',
-                    width: 120,
+                    width: 200,
                     fixed: 'right' as FixedType,
                     render: (_: undefined, record: any): React.ReactNode => (
                         <>
@@ -184,6 +209,12 @@ export default function RawMaterialStock(): React.ReactNode {
                                 setDetailId(record.id)
                                 setVisible(true)
                             }}>质检单</a>
+                            <a style={{ marginRight: 12 }} onClick={() => {
+                                // setDataSource(record)
+                                // setAttachType(1)
+                                setDetailId(record.id)
+                                setVisibleDetail(true)
+                            }}>出入库明细</a>
                         </>
                     )
                 }]}

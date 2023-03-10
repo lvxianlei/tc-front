@@ -12,6 +12,7 @@ import { baseColumn, baseDetail } from "./data.json";
 import CreatePlan from "./CreatePlan";
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '@utils/RequestUtil';
+import AuthUtil from '@utils/AuthUtil';
 interface EditRefProps {
     id?: string
     onSubmit: () => void
@@ -151,6 +152,29 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             reject(error)
         }
     }))
+
+    //锁定
+    const { loading: lockLoading, run: lockRun } = useRequest<{ [key: string]: any }>((id:any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/warehousingEntry/lock/${id}`)
+            message.success("操作成功...");
+            history.go(0)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+    //解锁
+    const { loading: cancelLockLoading, run: cancelLockRun } = useRequest<{ [key: string]: any }>((id:any) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/warehousingEntry/unlock/${id}`)
+            message.success("操作成功...");
+            history.go(0)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
     return (
         <>
             <Page
@@ -201,10 +225,10 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             if (tabs === 1) {
                                 return (
                                     <>
-                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}/${record.approval}`}>明细</Link>
+                                        <Link className='btn-operation-link' to={`/auxStock/entryWarehouse/detail/${record.id}/${record.approval}/${record.dataLock}`}>明细</Link>
                                         <Button
                                             type="link"
-                                            disabled={record?.receiveStatus === 1}
+                                            disabled={record?.receiveStatus === 1||record?.dataLockName==='已锁定'}
                                             onClick={
                                                 () => {
                                                     setVisible(true)
@@ -212,6 +236,26 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                                     setOperationType("edit")
                                                 }
                                             }>编辑</Button>
+                                        {record?.dataLockName==='已锁定'?<Popconfirm
+                                            title="确认解锁?"
+                                            onConfirm={() => cancelLockRun(record?.id)}
+                                            okText="确认"
+                                            cancelText="取消"
+                                        ><Button
+                                            type="link"
+                                            // loading={cancelLockLoading}
+                                            disabled={ record?.createUser !== AuthUtil.getUserInfo().user_id }>解锁</Button>
+                                        </Popconfirm>
+                                        :<Popconfirm
+                                        title="确认锁定?"
+                                        onConfirm={() => lockRun(record?.id)}
+                                        okText="确认"
+                                        cancelText="取消"
+                                        ><Button
+                                            type="link"
+                                            // loading={lockLoading}
+                                            disabled={ record?.createUser !== AuthUtil.getUserInfo().user_id }>锁定</Button>
+                                        </Popconfirm>}
                                         <Popconfirm
                                             title="确认删除?"
                                             onConfirm={() => handleDelete(record?.id)}
@@ -219,14 +263,14 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                             cancelText="取消"
                                         >
                                             <Button type="link"
-                                                disabled={record?.receiveStatus === 1}>删除</Button>
+                                                disabled={record?.receiveStatus === 1 || record?.dataLockName==='已锁定'}>删除</Button>
                                         </Popconfirm>
                                     </>
                                 )
                             }
                             return <Button
                                 type="link"
-                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}/${record.approval}`)}
+                                onClick={() => history.push(`/auxStock/entryWarehouse/detail/${record.warehousingEntryId}/${record.approval}/${record.dataLock}`)}
                             >所在单据</Button>
                         }
                     }
