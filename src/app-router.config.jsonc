@@ -3520,6 +3520,13 @@
       "module": "./pages/auxStock/pickWarehouse/detail/detail",
       "exact": true,
       "authority": "tc_erp_sw_stock_auxiliary_material_picking_detail_list"
+    },
+    { // 辅材库存-辅材调拨单
+      "name": "辅材调拨单",
+      "path": "/auxStock/allocationWarehouse",
+      "module": "./pages/auxStock/allocationWarehouse/index",
+      "exact": true,
+      "authority": "tc_erp_sw_stock_material_out"
     }
   ]
 }
