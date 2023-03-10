@@ -13,18 +13,19 @@ import useRequest from '@ahooksjs/use-request';
 interface AddOnProps {
     id: string;
     getLoading: (loading: boolean) => void
+    list: any
 }
 
-export default forwardRef(function AddOn({ id, getLoading }: AddOnProps, ref) {
+export default forwardRef(function AddOn({ id, getLoading, list }: AddOnProps, ref) {
 
-    const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${id}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [id, getLoading] })
+    // const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    //     try {
+    //         const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${id}`)
+    //         resole(result)
+    //     } catch (error) {
+    //         reject(error)
+    //     }
+    // }), { refreshDeps: [id, getLoading] })
 
     const { run: submitRun } = useRequest(() => new Promise(async (resole, reject) => {
         try {
@@ -73,14 +74,14 @@ export default forwardRef(function AddOn({ id, getLoading }: AddOnProps, ref) {
     ]
 
     useImperativeHandle(ref, () => ({ onSubmit }), [ref, onSubmit]);
-    return <Spin spinning={loading}>
+    return <>
         <DetailContent title="配段信息">
             <CommonTable
                 columns={columns}
-                dataSource={data || []}
+                dataSource={list || []}
                 pagination={false}
             />
         </DetailContent>
-    </Spin>
+    </>
 })
 
