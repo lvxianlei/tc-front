@@ -40,7 +40,7 @@ const outStock = [
         fixed: 'right' as FixedType,
         render: (_: undefined, record: any): React.ReactNode => (
             <>
-                {record?.outStockType!==2?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`}>所在单据</Link>
+                {!(record?.outStockType===2||record?.outStockType===7)?<Link to={`/stock/rawMaterialExWarehouse/detail/${record.outStockId}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`}>所在单据</Link>
                 :<Link to={`/stock/rawMaterialExWarehouse/backDetail/${record.outStockId}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`}>所在单据</Link>}
             </>
         )
@@ -71,7 +71,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
             render: (_: undefined, record: any): React.ReactNode => (
                 <>
                     <Button type="link"
-                        onClick={() => history.push(record?.outStockType!==2?`/stock/rawMaterialExWarehouse/detail/${record.id}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`:`/stock/rawMaterialExWarehouse/backDetail/${record.id}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`)}
+                        onClick={() => history.push(!(record?.outStockType===2||record?.outStockType===7)?`/stock/rawMaterialExWarehouse/detail/${record.id}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`:`/stock/rawMaterialExWarehouse/backDetail/${record.id}/${record.approval}/${record.dataLock}?weight=${record.totalWeight}`)}
                     >明细</Button>
                     <Button
                         type="link"
@@ -289,6 +289,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                 <Select.Option value="4">销售出库</Select.Option>
                                 <Select.Option value="5">外委出库</Select.Option>
                                 <Select.Option value="6">其他出库</Select.Option>
+                                <Select.Option value="7">退料回库</Select.Option>
                             </Select>
                         )
                     },

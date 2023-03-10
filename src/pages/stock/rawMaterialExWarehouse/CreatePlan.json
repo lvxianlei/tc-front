@@ -10,7 +10,8 @@
                 { "value": 2, "label": "余料回库" },
                 { "value": 4, "label": "销售出库" },
                 { "value": 5, "label": "外委出库" },
-                { "value": 6, "label": "其他出库" }
+                { "value": 6, "label": "其他出库" },
+                { "value": 7, "label": "退料回库" }
             ]
         },
         {

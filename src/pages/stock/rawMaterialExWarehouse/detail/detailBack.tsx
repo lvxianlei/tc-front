@@ -184,7 +184,32 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         await message.success("成功删除...")
         history.go(0)
     }
+    const { loading: finishPriceLoading, run: cancelRun } = useRequest<{ [key: string]: any }>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.put(`/tower-storage/outStock/detail/revocation/batch`, selectedRowKeys)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
 
+    const handleFinishPrice = async () => {
+        Modal.confirm({
+            title: "提示",
+            content: "确定将所选材料进行撤销出库吗？",
+            okText: "确认",
+            onOk: () => new Promise(async (resove, reject) => {
+                try {
+                    await cancelRun()
+                    resove(true)
+                    message.success("撤销成功...")
+                    history.go(-1)
+                } catch (error) {
+                    reject(false)
+                }
+            })
+        })
+    }
     return (
         <>
             <Page
@@ -196,6 +221,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                     return <>
                         <Button type="primary" ghost onClick={handleExport}>用友表格导出</Button>
                         <Button type="primary" ghost onClick={() => handleBackWarehousingClick()} loading={saveLoading} disabled={ params.lock==='1' }>批量回库</Button>
+                        <Button type="primary" ghost onClick={() => handleFinishPrice()} disabled={!(selectedRowKeys.length>0) || params.lock==='1'} loading={finishPriceLoading}>批量撤销</Button>
                         <Button type="primary" ghost onClick={async () => { 
                             if([undefined,'undefined', null,'null',0,'0',2,'2',3,'3',4,'4'].includes(params?.approval)){
                                 await RequestUtil.get(`/tower-storage/outStock/workflow/start/${params.id}`)
@@ -283,7 +309,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             onChange: (selectedRowKeys: any[]) => {
                                 setSelectedRowKeys(selectedRowKeys);
                             },
-                        getCheckboxProps: (record: any) => record.outStockItemStatus === 4
+                        // getCheckboxProps: (record: any) => record.outStockItemStatus === 4
                     }
                 }}
                 searchFormItems={[
