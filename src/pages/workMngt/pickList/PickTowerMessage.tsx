@@ -473,6 +473,15 @@ export default function Lofting(): React.ReactNode {
         }
     })
 
+    const { data: addOnList, run: getAddOnList } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${params?.id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     return <>
         <Modal
             destroyOnClose
@@ -480,12 +489,17 @@ export default function Lofting(): React.ReactNode {
             visible={addOnVisible}
             width="30%"
             title="追加提交"
-            onOk={handleModalOk}
+            footer={<>
+                <Button type="primary" disabled={addOnList?.length <= 0} onClick={handleModalOk}>确定</Button>
+                <Button onClick={() => {
+                    setAddOnVisible(false);
+                }}>关闭</Button>
+            </>}
             confirmLoading={confirmLoading}
             onCancel={() => {
                 setAddOnVisible(false);
             }}>
-            <AddOn id={params?.id} ref={editRef} getLoading={(loading: boolean) => setConfirmLoading(loading)} />
+            <AddOn id={params?.id} ref={editRef} list={addOnList} getLoading={(loading: boolean) => setConfirmLoading(loading)} />
         </Modal>
         <Modal title='段模式' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
             {detail ? <Form initialValues={{ detailData: detail }} autoComplete="off" form={form}>
@@ -659,6 +673,7 @@ export default function Lofting(): React.ReactNode {
                 extraOperation={
                     <Space>
                         <Button type='primary' onClick={() => {
+                            getAddOnList();
                             setAddOnVisible(true)
                         }} ghost>追加提交</Button>
                         <Popconfirm
