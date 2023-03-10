@@ -353,6 +353,31 @@
     ],
     "CargoDetails": [
         {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 80,
+            "fixed": "left"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "width": 80,
+            "fixed": "left"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 80,
+            "fixed": "left"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number",
+            "width": 80,
+            "fixed": "left"
+        },
+        {
             "title": "收货状态",
             "dataIndex": "receiveDetailStatusName",
             "width": 70
@@ -377,27 +402,6 @@
             "dataIndex": "materialName",
             "width": 80,
             "type": "string"
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "width": 80
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "width": 80
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "width": 80
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number",
-            "width": 80
         },
         {
             "title": "宽度（mm）",
@@ -519,6 +523,35 @@
     ],
     "editCargoDetails": [
         {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "type": "select",
+            "lock": true,
+            "width":120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "select",
+            "lock": true,
+            "width":100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true,
+            "lock": true,
+            "width":100
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "type": "number",
+            "lock": true,
+            "width":80
+        },
+        {
             "title": "收货批次",
             "dataIndex": "realReceiveBatchNumber",
             "type": "string",
@@ -552,34 +585,7 @@
             "fixed":true,
             "width":100
         },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard",
-            "type": "select",
-            "fixed":true,
-            "width":120
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "select",
-            "fixed":true,
-            "width":100
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "type": "string",
-            "disabled": true,
-            "fixed":true,
-            "width":100
-        },
-        {
-            "title": "长度(mm)",
-            "dataIndex": "length",
-            "type": "number",
-            "width":80
-        },
+        
         {
             "title": "宽度(mm)",
             "dataIndex": "width",
@@ -728,6 +734,38 @@
     ],
     "editCargoDetailsB": [
         {
+            "title": "标准",
+            "dataIndex": "materialStandard",
+            "type": "select",
+            "lock": true,
+            "disabled": true,
+            "width":120
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "select",
+            "lock": true,
+            "disabled": true,
+            "width":100
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true,
+            "lock": true,
+            "width":100
+        },
+        {
+            "title": "长度(mm)",
+            "dataIndex": "length",
+            "disabled": true,
+            "type": "number",
+            "lock": true,
+            "width":80
+        },
+        {
             "title": "收货批次",
             "dataIndex": "realReceiveBatchNumber",
             "type": "string",
@@ -762,37 +800,6 @@
             "disabled": true,
             "fixed":true,
             "width":100
-        },
-        {
-            "title": "标准",
-            "dataIndex": "materialStandard",
-            "type": "select",
-            "fixed":true,
-            "disabled": true,
-            "width":120
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "select",
-            "fixed":true,
-            "disabled": true,
-            "width":100
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "type": "string",
-            "disabled": true,
-            "fixed":true,
-            "width":100
-        },
-        {
-            "title": "长度(mm)",
-            "dataIndex": "length",
-            "disabled": true,
-            "type": "number",
-            "width":80
         },
         {
             "title": "宽度(mm)",

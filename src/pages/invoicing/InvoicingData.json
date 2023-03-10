@@ -508,12 +508,20 @@
             "dataIndex": "taxNumber"
         },
         {
-            "title": "地址、电话",
+            "title": "地址",
             "dataIndex": "address"
         },
         {
-            "title": "开户行及账号",
-            "dataIndex": "bankNumber"
+            "title": "电话",
+            "dataIndex": "phone"
+        },
+        {
+            "title": "开户行",
+            "dataIndex": "openBankName"
+        },
+        {
+            "title": "开户账号",
+            "dataIndex": "bankCode"
         },
         {
             "title": "发票备注栏",
@@ -612,6 +620,32 @@
         {
             "title": "金额(元)",
             "dataIndex": "moneyCount"
+        }
+    ],
+    "batchHead": [
+        {
+            "title": "部门",
+            "dataIndex": "department"
+        },
+        {
+            "title": "审批人",
+            "dataIndex": "approver"
+        },
+        {
+            "title": "职位",
+            "dataIndex": "position"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "batchTime"
+        },
+        {
+            "title": "审批结果",
+            "dataIndex": "batchResult"
+        },
+        {
+            "title": "意见",
+            "dataIndex": "opinion"
         }
     ],
     "saleInvoice": [

@@ -98,7 +98,7 @@ export default function Edit() {
       if (type === "new") {
         reqType = "post"
       } else {
-        if (["2", "3"].includes(params.contractType) && !data?.relationId) {
+        if (["2", "3"].includes(params.contractType)) {
           reqType = "post"
         } else {
           reqType = "put"
@@ -215,7 +215,9 @@ export default function Edit() {
     if (fields.customerCompany) {
       form.setFieldsValue({
         signCustomer: customerCompany,
-        payCompany: customerCompany
+        payCompany: customerCompany,
+        customerLinkman: customerCompany?.records?.[0]?.linkman,
+        customerPhone: customerCompany?.records?.[0]?.phone
       })
     }
     if (fields.region) {

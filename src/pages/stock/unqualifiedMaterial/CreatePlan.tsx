@@ -41,7 +41,7 @@ const ReceiveStrokAttach = forwardRef(({ id, type }: ReceiveStrokAttachProps, re
             }
             source.map((item: any) => fieldIds.push(item.id));
             const result: { [key: string]: any } = await RequestUtil.post(`/tower-storage/receiveStock/attach`, {
-                ids: id,
+                ids: [id],
                 fieldIds,
                 attachType:2
             })

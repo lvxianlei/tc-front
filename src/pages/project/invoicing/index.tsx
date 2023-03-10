@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react"
+import React, { useState, useRef, LegacyRef } from "react"
 import { Button, Input, DatePicker, Select, Modal, message, Popconfirm } from 'antd'
 import { Link, useHistory } from 'react-router-dom'
 import { SearchTable as Page, Workflow } from '../../common'
@@ -7,13 +7,26 @@ import useRequest from '@ahooksjs/use-request'
 import RequestUtil from '../../../utils/RequestUtil'
 import { contractPlanStatusOptions } from "../../../configuration/DictionaryOptions"
 import BatchCreate from "./BatchCreate"
+import Bill from "./Bill"
+import ReactToPrint from "react-to-print"
 export default function Invoicing() {
     const history = useHistory()
     const modalRef = useRef<{ onSubmit: () => void, loading: boolean }>()
+    const billRef = useRef<LegacyRef<HTMLDivElement> | null>()
     const [visible, setVisible] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({
         ...history.location.state as object
     });
+
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string) => new Promise(async (resole, reject) => {
+        try {
+            const result: { [key: string]: any } = await RequestUtil.get(`/tower-market/invoicing/getInvoicingInfo?id=${invoicingId}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     const { run: deleteRun } = useRequest<{ [key: string]: any }>((id: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.delete(`/tower-market/invoicing?id=${id}`)
@@ -73,6 +86,9 @@ export default function Invoicing() {
             onCancel={() => setVisible(false)}>
             <BatchCreate ref={modalRef} />
         </Modal>
+        <div style={{ display: "none" }}>
+            <Bill ref={billRef} data={data} loading={loading} />
+        </div>
         <Page
             path="/tower-market/invoicing"
             filterValue={filterValue}
@@ -101,7 +117,7 @@ export default function Invoicing() {
                     title: "操作",
                     dataIndex: "opration",
                     fixed: "right",
-                    width: 240,
+                    width: 300,
                     render: (_: any, record: any) => {
                         return <>
                             <Button type="link" size="small" onClick={() => history.push(`/project/invoicing/detail/${record.id}`)}>查看</Button>
@@ -146,6 +162,15 @@ export default function Invoicing() {
                                 <Button type="link" size="small" disabled={record.state !== 0}>删除</Button>
                             </Popconfirm>
                             <Workflow workflowId={record?.processId} />
+                            <ReactToPrint
+                                content={() => billRef.current as any}
+                                trigger={() => <Button
+                                    type="link"
+                                    disabled={record?.state !== 2}
+                                    className="btn-operation-link"
+                                >打印</Button>}
+                                onBeforeGetContent={() => run(record?.id)}
+                            />
                         </>
                     }
                 }]}

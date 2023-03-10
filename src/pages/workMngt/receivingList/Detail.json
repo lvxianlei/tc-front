@@ -121,6 +121,34 @@
     ],
     "goodsDetail": [
         {
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "材质",
+            "dataIndex": "structureTexture",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "type": "string",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
+            "title": "长度",
+            "dataIndex": "length",
+            "type": "number",
+            "disabled": true,
+            "fixed": "left"
+        },
+        {
             "title": "合同编号",
             "dataIndex": "materialContractNumber",
             "width": 70
@@ -142,30 +170,6 @@
             "disabled": true
         },
         {
-            "title": "标准",
-            "dataIndex": "materialStandardName",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "材质",
-            "dataIndex": "structureTexture",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "规格",
-            "dataIndex": "structureSpec",
-            "type": "string",
-            "disabled": true
-        },
-        {
-            "title": "长度",
-            "dataIndex": "length",
-            "type": "number",
-            "disabled": true
-        },
-        {
             "title": "宽度（mm）",
             "dataIndex": "width",
             "type": "number"
@@ -184,6 +188,45 @@
         {
             "title": "结算重量（吨）",
             "dataIndex": "balanceTotalWeight"
+        },
+        {
+            "title": "炉批号",
+            "dataIndex": "furnaceBatchNumber"
+        },
+        {
+            "title": "质保书号",
+            "dataIndex": "warrantyNumber"
+        },
+        {
+            "title": "出厂日期",
+            "dataIndex": "manufactureTime",
+            "type":"date",
+            "format":"YYYY-MM-DD"
+        },
+        {
+            "title": "生产厂家",
+            "dataIndex": "manufacturer",
+            "maxLength": 30
+        },
+        {
+            "title": "肢宽/宽度",
+            "dataIndex": "limbWidth"
+        },
+        {
+            "title": "厚度",
+            "dataIndex": "thickness"
+        },
+        {
+            "title": "管径",
+            "dataIndex": "caliber"
+        },
+        {
+            "title": "测量长度",
+            "dataIndex": "gageLength"
+        },
+        {
+            "title": "高度",
+            "dataIndex": "measureHeight"
         },
         {
             "title": "含税单价（元/吨）",
@@ -226,43 +269,8 @@
             "width": 140
         },
         {
-            "title": "炉批号",
-            "dataIndex": "furnaceBatchNumber"
-        },
-        {
-            "title": "质保书号",
-            "dataIndex": "warrantyNumber"
-        },
-        {
             "title": "轧制批号",
             "dataIndex": "rollingNumber"
-        },
-        {
-            "title": "出厂日期",
-            "dataIndex": "manufactureTime",
-            "type":"date",
-            "format":"YYYY-MM-DD"
-        },
-        {
-            "title": "生产厂家",
-            "dataIndex": "manufacturer",
-            "maxLength": 30
-        },
-        {
-            "title": "肢宽",
-            "dataIndex": "limbWidth"
-        },
-        {
-            "title": "厚度",
-            "dataIndex": "thickness"
-        },
-        {
-            "title": "管径",
-            "dataIndex": "caliber"
-        },
-        {
-            "title": "测量长度",
-            "dataIndex": "gageLength"
         },
         {
             "title": "外观检验效果",
