@@ -215,7 +215,9 @@ export default function Edit() {
     if (fields.customerCompany) {
       form.setFieldsValue({
         signCustomer: customerCompany,
-        payCompany: customerCompany
+        payCompany: customerCompany,
+        customerLinkman: customerCompany?.records?.[0]?.linkman,
+        customerPhone: customerCompany?.records?.[0]?.phone
       })
     }
     if (fields.region) {

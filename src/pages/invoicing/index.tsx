@@ -62,7 +62,6 @@ export default function Invoicing() {
                                 content={() => billRef.current as any}
                                 trigger={() => <Button
                                     type="link"
-                                    disabled={record?.taskType !== 2}
                                     className="btn-operation-link"
                                 >打印</Button>}
                                 onBeforeGetContent={() => run(record?.id)}
