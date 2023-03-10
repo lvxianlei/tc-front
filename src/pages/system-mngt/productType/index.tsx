@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react"
 import { useHistory } from "react-router"
-import { Button, message, Modal } from "antd"
+import { Button, message, Modal, Space } from "antd"
 import useRequest from "@ahooksjs/use-request"
 import RequestUtil from "@utils/RequestUtil"
 import { table, dic, aliDic } from "./data.json"
@@ -215,6 +215,12 @@ export default function Index() {
                     }}
                 />
             </Modal>
+            <Space style={{ marginBottom: 12 }}>
+                <Button type="primary" onClick={() => {
+                    setRowData({})
+                    setVisible(true)
+                }}>新增</Button>
+            </Space>
             <AliTable
                 size="small"
                 isLoading={productLoading}
