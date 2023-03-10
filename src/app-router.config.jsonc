@@ -53,6 +53,13 @@
       "authority": "tc_erp_sc_customer_edit"
     },
     { // 字典管理
+      "name": "产品类型",
+      "path": "/sys/product",
+      "module": "./pages/system-mngt/productType",
+      "exact": true,
+      "authority": "tc_erp_sys_system_dic_list"
+    },
+    { // 字典管理
       "name": "字典管理",
       "path": "/sys/dxnry",
       "module": "./pages/system-mngt/DictMngt",
@@ -375,7 +382,7 @@
     },
     { // 开票申请详情
       "name": "开票申请详情",
-      "path": "/project/invoicing/detail/:id",
+      "path": "/project/invoicing/detail/:id/:processId",
       "module": "./pages/project/invoicing/Overview",
       "exact": true,
       "authority": "tc_erp_sc_invoicing_detail"

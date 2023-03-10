@@ -1002,28 +1002,49 @@
     ],
     "batchHead": [
         {
-            "title": "部门",
-            "dataIndex": "department"
+            "title": "审批节点",
+            "dataIndex": "nodeName"
         },
         {
-            "title": "审批人",
-            "dataIndex": "approver"
-        },
-        {
-            "title": "职位",
-            "dataIndex": "position"
-        },
-        {
-            "title": "审批时间",
-            "dataIndex": "batchTime"
+            "title": "审核人员",
+            "dataIndex": "userName"
         },
         {
             "title": "审批结果",
-            "dataIndex": "batchResult"
+            "dataIndex": "handleStatus",
+            "type": "select",
+            "enum": [
+                {
+                    "value": 0,
+                    "label": "拒绝"
+                },
+                {
+                    "value": 1,
+                    "label": "同意"
+                },
+                {
+                    "value": 2,
+                    "label": "提交"
+                },
+                {
+                    "value": 3,
+                    "label": "撤回"
+                },
+                {
+                    "value": 4,
+                    "label": "终止"
+                }
+            ]
         },
         {
-            "title": "意见",
-            "dataIndex": "opinion"
+            "title": "审批意见",
+            "dataIndex": "handleOpinion"
+        },
+        {
+            "title": "审批时间",
+            "dataIndex": "handleTime",
+            "type": "date",
+            "format": "YYYY-MM-DD HH:mm:ss"
         }
     ],
     "batchCreateColumns": [

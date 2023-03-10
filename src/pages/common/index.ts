@@ -7,6 +7,7 @@ export { default as FormItemType, PopTable, PopTableContent } from './FormItemTy
 export { default as DetailContent } from './DetailContent'
 export { default as CommonTable, generateRender } from './CommonTable'
 export { default as CommonAliTable } from './CommonAliTable'
+export { default as AliTable } from './AliTable'
 export { default as SearchTable } from './SearchTable'
 export { default as DetailTitle } from './DetailTitle'
 export { default as EditTabs } from './EditTabs'
