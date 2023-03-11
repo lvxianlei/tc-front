@@ -166,6 +166,14 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [urlVisible, setUrlVisible] = useState<boolean>(false);
     const location = useLocation<{ status?: number }>();
     const userId = AuthUtil.getUserInfo().user_id;
+    const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
+    const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+ 
+    const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
+        setSelectedKeys(selectedRowKeys);
+        setSelectedRows(selectedRows)
+    }
 
     const getTableDataSource = (pagination: TablePaginationConfig) => new Promise(async (resole, reject) => {
         const data = await RequestUtil.get<IResponseData>(`/tower-science/welding/getDetailedById`, { weldingId: params.id, ...pagination });
@@ -183,24 +191,30 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const { loading } = useRequest<IResponseData>(() => getTableDataSource(page), {});
 
     const handleOk = () => {
+        setConfirmLoading(true)
         RequestUtil.get<boolean>(`/tower-science/welding/getWeldingStructure`, { weldingId: params.id }).then(res => {
             if (res) {
+                setConfirmLoading(false)
                 RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
+                    setConfirmLoading(false)
                     message.success('完成组焊清单成功！')
                     history.goBack();
                 })
             } else {
-
+                setConfirmLoading(false)
                 Modal.confirm({
                     title: "存在剩余未组合零件，是否完成组焊？",
                     onOk: async () => new Promise(async (resove, reject) => {
                         try {
+                            setConfirmLoading(true)
                             RequestUtil.post<IResponseData>(`/tower-science/welding/completeWeldingTask`, { weldingId: params.id }).then(res => {
                                 message.success('完成组焊清单成功！')
+                                setConfirmLoading(false)
                                 history.goBack();
                                 resove(true)
                             })
                         } catch (error) {
+                            setConfirmLoading(false)
                             reject(error)
                         }
                     })
@@ -215,7 +229,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                     <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
-                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={handleOk} >完成组焊清单</Button>
+                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={handleOk} loading={confirmLoading}>完成组焊清单</Button>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/new`}>
                         <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>添加组焊</Button>
                     </Link>
@@ -250,16 +264,28 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                     >
                         <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1} ghost>导入</Button>
                     </Upload>
+                    <Button type='primary' onClick={async () => {
+                        await RequestUtil.delete(`/tower-science/welding/deleteList`, {
+                            segmentIdList: selectedKeys
+                        })
+                        await message.success('删除成功！')
+                        history.go(0)
+                    }} disabled={selectedKeys?.length <= 0} ghost>批量删除</Button>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>
                 <CommonTable
                     dataSource={detailData?.records}
                     columns={towerColumns}
-                    onRow={(record: Record<string, any>, index: number) => ({
-                        onClick: () => { getParagraphData(record.id) },
-                        className: styles.tableRow
-                    })
+                    onRow={
+                        (record: Record<string, any>, index: number) => ({
+                            onClick: () => { getParagraphData(record.id) },
+                            className: styles.tableRow
+                        })
                     }
+                    rowSelection={{
+                        selectedRowKeys: selectedKeys,
+                        onChange: SelectChange
+                    }}
                     onChange={(pagination: TablePaginationConfig) => {
                         getTableDataSource(pagination);
                     }}

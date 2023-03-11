@@ -4,9 +4,9 @@
  * @description 业务处置管理-明细变更申请-申请
  */
 
-import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Button, Form, Input, Select, Modal, Spin, message } from "antd";
-import { BaseInfo, CommonTable, DetailContent } from "../../common";
+import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
+import { Button, Form, Input, Select, Modal, Spin, message, InputNumber } from "antd";
+import { Attachment, AttachmentRef, BaseInfo, CommonTable, DetailContent } from "../../common";
 import RequestUtil from "../../../utils/RequestUtil";
 import useRequest from "@ahooksjs/use-request";
 import styles from "./RequestForChange.module.less";
@@ -30,6 +30,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [selectedData, setSelectedData] = useState<any>([]);
     const [detailData, setDetailData] = useState({});
+    const attachRef = useRef<AttachmentRef>()
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -132,6 +133,30 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
             "title": "产品类型（修改后）",
             "width": 80,
             "dataIndex": "changeProductType"
+        },
+        {
+            "key": "monomerWeight",
+            "title": "单重（修改前）",
+            "width": 80,
+            "dataIndex": "monomerWeight"
+        },
+        {
+            "key": "changeMonomerWeight",
+            "title": "单重（修改后）",
+            "width": 80,
+            "dataIndex": "changeMonomerWeight"
+        },
+        {
+            "key": "productDescription",
+            "title": "备注（修改前）",
+            "width": 80,
+            "dataIndex": "productDescription"
+        },
+        {
+            "key": "changeProductDescription",
+            "title": "备注（修改后）",
+            "width": 80,
+            "dataIndex": "changeProductDescription"
         },
         {
             "key": "operation",
@@ -292,7 +317,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                     getLoading(true)
                     await saveRun({
                         ...value,
-                        productChangeDetailList: values
+                        productChangeDetailList: values,
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id),
                     })
                     resolve(true);
                 })
@@ -325,7 +351,8 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                         getLoading(true)
                         await submitRun({
                             ...value,
-                            productChangeDetailList: values
+                            productChangeDetailList: values,
+                            fileIds: attachRef.current?.getDataSource().map(item => item.id),
                         })
                         resolve(true);
                     })
@@ -572,6 +599,26 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                                 )
                             })
                         }
+                        if (res.dataIndex === "changeMonomerWeight") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeMonomerWeight"]}>
+                                        <InputNumber min={0} max={9999999.99} precision={2}/>
+                                    </Form.Item>
+                                )
+                            })
+                        }
+                        if (res.dataIndex === "changeProductDescription") {
+                            return ({
+                                ...res,
+                                render: (_: string, record: Record<string, any>, index: number) => (
+                                    <Form.Item name={["data", index, "changeProductDescription"]}>
+                                        <Input maxLength={800}/>
+                                    </Form.Item>
+                                )
+                            })
+                        }
 
                         return res
                     })}
@@ -579,6 +626,7 @@ export default forwardRef(function ApplyForChange({ id, type, getLoading }: moda
                     dataSource={selectedData}
                 />
             </Form>
+            <Attachment isBatchDel ref={attachRef} dataSource={data?.fileVOList} edit/>
         </DetailContent>
     </Spin>
 })

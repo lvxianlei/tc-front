@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, message, Modal, Select, DatePicker, Row, Col } from 'antd';
 // import { SearchTable as Page } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
@@ -8,15 +8,20 @@ import RequestUtil from '../../../utils/RequestUtil';
 import AuthUtil from '../../../utils/AuthUtil';
 import { IntgSelect, Page } from '../../common'
 import TowerPickAssign from './TowerPickAssign';
-import { TreeNode } from 'antd/lib/tree-select';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 // import styles from './pick.module.less';
 import useRequest from '@ahooksjs/use-request';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import moment from 'moment';
+import AddOn from './AddOn';
 interface Column extends ColumnType<object> {
     editable?: boolean;
 }
+
+export interface modalProps {
+    onSubmit: () => void;
+    resetFields: () => void
+}
+
 export default function Lofting(): React.ReactNode {
 
     const history = useHistory();
@@ -47,6 +52,9 @@ export default function Lofting(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [rowChangeList, setRowChangeList] = useState<number[]>([]);
+    const [addOnVisible, setAddOnVisible] = useState<boolean>(false);
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const detailTop: any = await RequestUtil.get(`/tower-science/materialProductCategory/${params.id}`);
@@ -453,7 +461,46 @@ export default function Lofting(): React.ReactNode {
 
     }
 
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('追加提交成功！');
+            setAddOnVisible(false);
+            history.go(0)
+            resove(true);
+        } catch (error) {
+            reject(false)
+        }
+    })
+
+    const { data: addOnList, run: getAddOnList } = useRequest<any>(() => new Promise(async (resole, reject) => {
+        try {
+            const result: any = await RequestUtil.get(`/tower-science/drawProductSegment/section/submit/count/${params?.id}`)
+            resole(result)
+        } catch (error) {
+            reject(error)
+        }
+    }), { manual: true })
+
     return <>
+        <Modal
+            destroyOnClose
+            key='AddOn'
+            visible={addOnVisible}
+            width="30%"
+            title="追加提交"
+            footer={<>
+                <Button type="primary" disabled={addOnList?.length <= 0} onClick={handleModalOk}>确定</Button>
+                <Button onClick={() => {
+                    setAddOnVisible(false);
+                }}>关闭</Button>
+            </>}
+            confirmLoading={confirmLoading}
+            onCancel={() => {
+                setAddOnVisible(false);
+            }}>
+            <AddOn id={params?.id} ref={editRef} list={addOnList} getLoading={(loading: boolean) => setConfirmLoading(loading)} />
+        </Modal>
         <Modal title='段模式' width={1200} visible={visible} onCancel={handleModalCancel} footer={false}>
             {detail ? <Form initialValues={{ detailData: detail }} autoComplete="off" form={form}>
                 <Row>
@@ -625,6 +672,10 @@ export default function Lofting(): React.ReactNode {
                 exportPath="/tower-science/drawProductSegment"
                 extraOperation={
                     <Space>
+                        <Button type='primary' onClick={() => {
+                            getAddOnList();
+                            setAddOnVisible(true)
+                        }} ghost>追加提交</Button>
                         <Popconfirm
                             title="确认批量完成提料?"
                             onConfirm={batchPick}

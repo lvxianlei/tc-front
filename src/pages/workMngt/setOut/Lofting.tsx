@@ -6,7 +6,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Space, Button, Popconfirm, Input, Form, Upload, message, Modal, Dropdown, Menu, InputNumber, Select } from 'antd';
-import { DetailContent, Page } from '../../common';
+import { DetailContent, Page, SearchTable } from '../../common';
 import { ColumnType, FixedType } from 'rc-table/lib/interface';
 import styles from './TowerLoftingAssign.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -848,7 +848,7 @@ export default function Lofting(): React.ReactNode {
         }
     })
 
-    return <DetailContent>
+    return <>
         <Modal
             destroyOnClose
             visible={copyVisible}
@@ -932,15 +932,14 @@ export default function Lofting(): React.ReactNode {
                 <Button htmlType="reset">重置</Button>
             </Form.Item>
         </Form> */}
-        {/* <Form form={form} className={styles.descripForm}> */}
-        <Page
+        <SearchTable
             path="/tower-science/productStructure/list"
             exportPath={`/tower-science/productStructure/list`}
             columns={columns}
             headTabs={[]}
             refresh={refresh}
+            pagination={false}
             tableProps={{
-                pagination: false,
                 rowSelection: {
                     selectedRowKeys: selectedKeys,
                     onChange: SelectChange
@@ -950,6 +949,8 @@ export default function Lofting(): React.ReactNode {
                         styles.row_color_1 : undefined
                 })
             }}
+            useVirtual={{ vertical: true, horizontal: true }}
+            style={{ overflow: 'auto', maxHeight: '700px', maxWidth: "100%" }}
             requestData={{ segmentId: params.productSegmentId === 'all' ? '' : params.productSegmentId, ...filterValue, productCategoryId: params.id }}
             extraOperation={<Space direction="horizontal" size="small">
                 <Button type="primary" key='1' onClick={() => downloadTemplate('/tower-science/productStructure/exportTemplate', '模板')} ghost>模板下载</Button>
@@ -1055,12 +1056,11 @@ export default function Lofting(): React.ReactNode {
                 ]
             }
             filterValue={filterValue}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 setFilterValue(values);
                 return values;
             }}
         />
-        {/* </Form> */}
         <Modal
             visible={urlVisible}
             onOk={() => {
@@ -1073,5 +1073,5 @@ export default function Lofting(): React.ReactNode {
         >
             当前存在错误数据，请重新下载上传！
         </Modal>
-    </DetailContent>
+    </>
 }

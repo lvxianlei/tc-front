@@ -40,5 +40,75 @@
             "dataIndex": "description",
             "title": "备注"
         }
+    ],
+    "EditInfoData": [
+        {
+            "dataIndex": "projectName",
+            "title": "图纸/工程名称",
+            "rules":  [
+                {
+                    "required": true,
+                    "message": "请输入图纸/工程名称"
+                }
+            ]
+        },
+        {
+            "dataIndex": "contractId",
+            "title": "内部合同编号"
+        },
+        {
+            "dataIndex": "contractName",
+            "title": "合同名称"
+        },
+        {
+            "dataIndex": "businessOwner",
+            "title": "业主单位"
+        },
+        {
+            "dataIndex": "aeName",
+            "title": "业务经理"
+        },
+        {
+            "dataIndex": "aePhone",
+            "title": "业务经理联系电话"
+        },
+        {
+            "dataIndex": "designInstituteName",
+            "title": "设计院名称"
+        },
+        {
+            "dataIndex": "designContactsName",
+            "title": "设计院联系人"
+        },
+        {
+            "dataIndex": "designPhone",
+            "title": "设计院联系电话"
+        },
+        {
+            "dataIndex": "description",
+            "title": "备注"
+        }
+    ],
+    "AssignInfoData": [
+        {
+            "dataIndex": "assignorId",
+            "title": "确认人",
+            "rules":  [
+                {
+                    "required": true,
+                    "message": "请选择确认人"
+                }
+            ]
+        },
+        {
+            "dataIndex": "plannedDeliveryTime",
+            "title": "计划完成时间",
+            "rules":  [
+                {
+                    "required": true,
+                    "message": "请选择计划完成时间"
+                }
+            ]
+        }
     ]
 }

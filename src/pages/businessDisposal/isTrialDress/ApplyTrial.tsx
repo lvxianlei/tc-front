@@ -4,9 +4,9 @@
  * @description 业务处置管理-试装免试装申请-申请
  */
 
-import React, { useImperativeHandle, forwardRef, useState } from "react";
+import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
 import { Descriptions, Form, Input, Select } from 'antd';
-import { BaseInfo, DetailContent, OperationRecord } from '../../common';
+import { Attachment, AttachmentRef, BaseInfo, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { applyColumns } from "./isTrialDress.json";
@@ -15,13 +15,15 @@ import styles from './IsTrialDress.module.less';
 interface modalProps {
     readonly id?: any;
     readonly type?: 'new' | 'detail' | 'edit';
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
+export default forwardRef(function ApplyTrial({ id, type, getLoading }: modalProps, ref) {
     const [form] = Form.useForm();
     const [detailForm] = Form.useForm();
     const [towerSelects, setTowerSelects] = useState([]);
     const [productCategoryData, setProductCategoryData] = useState<any>({});
+    const attachRef = useRef<AttachmentRef>()
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -35,7 +37,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type] })
+    }), { manual: type === 'new', refreshDeps: [id, type, getLoading] })
 
     const { data: planNums } = useRequest<any>(() => new Promise(async (resole, reject) => {
         const nums: any = await RequestUtil.get(`/tower-science/productCategory/planNumber/listAll`);
@@ -49,12 +51,19 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await saveRun({
-                ...value,
-                id: data?.id
+            getLoading(true)
+            await form.validateFields().then(async res => {
+                const value = form?.getFieldsValue(true);
+                await saveRun({
+                    ...value,
+                    id: data?.id,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id)
+                })
+                resolve(true);
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -63,6 +72,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/save`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -71,12 +81,19 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
-            const value = await form.validateFields();
-            await submitRun({
-                ...value,
-                id: data?.id
+            getLoading(true)
+            await form.validateFields().then(async res => {
+                const value = form?.getFieldsValue(true);
+                await submitRun({
+                    ...value,
+                    id: data?.id,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id)
+                })
+                resolve(true);
+            }).catch(e => {
+                getLoading(false)
+                reject(e)
             })
-            resolve(true);
         } catch (error) {
             reject(false)
         }
@@ -85,6 +102,7 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/trialAssembly/saveAndLaunch`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -242,9 +260,11 @@ export default forwardRef(function ApplyTrial({ id, type }: modalProps, ref) {
         }
         {
             type === 'detail' ?
+
                 <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />
                 : null
         }
+        <Attachment isBatchDel={type !== 'detail'} ref={attachRef} dataSource={data?.fileVOList} edit={type !== 'detail'} />
         {/* {
             type === 'detail' ?
 

@@ -283,6 +283,7 @@ export default function List(): React.ReactNode {
                 }
             ]}
             dataSource={data}
+            scroll={{ y: 350 }}
             pagination={{
                 current: page.current,
                 pageSize: page.size,
@@ -339,8 +340,25 @@ export default function List(): React.ReactNode {
                         )
                     }
                 }
+                if (res.dataIndex === 'changeMonomerWeight') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
+                if (res.dataIndex === 'changeProductDescription') {
+                    return {
+                        ...res,
+                        render: (_: any, record: Record<string, any>): React.ReactNode => (
+                            _ ? <p className={styles?.red}>{_}</p> : <p className={styles?.red}>{_}</p>
+                        )
+                    }
+                }
                 return res
             })}
+            scroll={{ y: 350 }}
             dataSource={detailData || []}
             pagination={false} />
     </Spin>

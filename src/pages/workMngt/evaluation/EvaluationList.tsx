@@ -1,19 +1,27 @@
-import React, { useState } from 'react';
-import { Space, Input, DatePicker, Select, Form, Button } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import React, { useRef, useState } from 'react';
+import { Space, Input, DatePicker, Select, Form, Button, Modal, message } from 'antd';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './Evaluation.module.less';
 import EvaluationInformation from './EvaluationInformation';
 import RequestUtil from '../../../utils/RequestUtil';
-import { TreeNode } from 'antd/lib/tree-select';
 import useRequest from '@ahooksjs/use-request';
-import { DataNode as SelectDataNode } from 'rc-tree-select/es/interface';
 import AuthUtil from '../../../utils/AuthUtil';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
+
+export interface modalProps {
+    onSubmit: () => void;
+    onSave: () => void;
+    resetFields: () => void
+}
 
 export default function EvaluationList(): React.ReactNode {
-    const [refresh, setRefresh] = useState(false);
     const location = useLocation<{ state?: number, userId?: string }>();
+    const [visible, setVisible] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const [rowId, setRowId] = useState('');
+    const history = useHistory()
 
     const columns = [
         {
@@ -67,10 +75,10 @@ export default function EvaluationList(): React.ReactNode {
             width: 150,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {
-                        AuthUtil.getUserInfo().user_id !== record.assessUser ? <Button type="link" disabled>评估信息</Button>
-                            : <EvaluationInformation id={record.id} updateList={() => setRefresh(!refresh)} />
-                    }
+                    <Button type="link" disabled={AuthUtil.getUserInfo().user_id !== record.assessUser} onClick={() => {
+                        setRowId(record?.id)
+                        setVisible(true);
+                    }}>评估信息</Button>
                 </Space>
             )
         }
@@ -80,37 +88,60 @@ export default function EvaluationList(): React.ReactNode {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data);
     }), {})
-    const programLeader: any = data?.records || [];
     const [filterValue, setFilterValue] = useState({});
 
-    const wrapRole2DataNode = (roles: (any & SelectDataNode)[] = []): SelectDataNode[] => {
-        roles && roles.forEach((role: any & SelectDataNode): void => {
-            role.value = role.id;
-            role.isLeaf = false;
-            if (role.children && role.children.length > 0) {
-                wrapRole2DataNode(role.children);
-            } else {
-                role.children = []
-            }
-        });
-        return roles;
-    }
-
-    const renderTreeNodes = (data: any) => data.map((item: any) => {
-        if (item.children) {
-            return (<TreeNode key={item.id} title={item.title} value={item.id} className={styles.node} >
-                {renderTreeNodes(item.children)}
-            </TreeNode>);
+    
+    const handleModalOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSave();
+            message.success('评估信息保存成功！');
+            resove(true);
+            setVisible(false);
+            history?.go(0);
+        } catch (error) {
+            reject(false)
         }
-        return <TreeNode {...item} key={item.id} title={item.title} value={item.id} />;
-    });
+    })
+        
+    const handleModalSubmit = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('评估信息保存并提交成功！');
+            resove(true);
+            setVisible(false);
+            history?.go(0);
+        } catch (error) {
+            reject(false)
+        }
+    })
 
-    return <Page
+    return <>
+            <Modal
+            destroyOnClose
+            key='EvaluationInformation'
+            visible={visible}
+            width="40%"
+            title={"评估信息"}
+            footer={
+                <Space>
+                    <Button type="ghost" onClick={async () => {
+                        setVisible(false);
+                        editRef.current?.resetFields()
+                    }}>关闭</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleModalOk} ghost>保存</Button>
+                    <Button type="primary" loading={confirmLoading} onClick={handleModalSubmit} ghost>保存并提交</Button>
+                </Space>
+            }
+            onCancel={() => {
+                setVisible(false);
+            }}>
+            <EvaluationInformation id={rowId} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
+        </Modal>
+    <SearchTable
         path="/tower-science/assessTask/assessList"
         columns={columns}
         headTabs={[]}
         exportPath={`/tower-science/assessTask/assessList`}
-        refresh={refresh}
         requestData={{ status: location.state?.state, assessUser: location.state?.userId }}
         searchFormItems={[
             {
@@ -141,7 +172,7 @@ export default function EvaluationList(): React.ReactNode {
             }
         ]}
         filterValue={filterValue}
-        onFilterSubmit={(values: Record<string, any>) => {
+        onFilterSubmit={(values: any) => {
             if (values.expectDeliverTimeAll) {
                 const formatDate = values.expectDeliverTimeAll.map((item: any) => item.format("YYYY-MM-DD"));
                 values.expectDeliverTimeStart = formatDate[0] + ' 00:00:00';
@@ -154,4 +185,5 @@ export default function EvaluationList(): React.ReactNode {
             return values;
         }}
     />
+    </>
 }

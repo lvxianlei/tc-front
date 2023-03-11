@@ -9,7 +9,7 @@ import { Space, Input, Select, Popconfirm, message, Button } from 'antd';
 import styles from './PackingList.module.less';
 import Page from '../../common/Page';
 import RequestUtil from '../../../utils/RequestUtil';
-import { CommonTable, IntgSelect } from '../../common';
+import { CommonTable, IntgSelect, SearchTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
@@ -202,7 +202,7 @@ export default function List(): React.ReactNode {
 
     return <>
         <Space direction="vertical" size="middle" style={{ display: 'flex' }}>
-            <Page
+            <SearchTable
                 path={"/tower-science/loftingList"}
                 exportPath="/tower-science/loftingList"
                 columns={[
@@ -215,19 +215,21 @@ export default function List(): React.ReactNode {
                         render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
                     },
                     ...columns]}
-                onGetDataSource={(e) => {
-                    if (e.length > 0 && e[0]?.id) {
-                        detailRun(e[0]?.id)
+                getDataSource={(e: any) => {
+                    if (e?.records?.length > 0 && e?.records[0]?.id) {
+                        detailRun(e?.records[0]?.id)
                     } else {
                         setDetailData([]);
                     }
                     return e
                 }}
                 tableProps={{
-                    onRow: (record: Record<string, any>) => ({
-                        onClick: () => onRowChange(record),
-                        className: styles.tableRow
-                    })
+                    getRowProps: (record: Record<string, any>) => {
+                        return ({
+                            onClick: () => onRowChange(record)
+
+                        })
+                    }
                 }}
                 headTabs={[]}
                 searchFormItems={[
@@ -253,7 +255,7 @@ export default function List(): React.ReactNode {
                     }
                 ]}
                 filterValue={filterValue}
-                onFilterSubmit={(values: Record<string, any>) => {
+                onFilterSubmit={(values: any) => {
                     if (values.packageUser) {
                         values.packageUser = values.packageUser?.value;
                     }

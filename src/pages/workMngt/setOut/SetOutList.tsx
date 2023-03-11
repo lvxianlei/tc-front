@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, DatePicker, Select, Button, Form, Spin } from 'antd';
-import { IntgSelect, SearchTable as Page } from '../../common';
+import { IntgSelect, SearchTable as Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useLocation } from 'react-router-dom';
@@ -136,7 +136,7 @@ export default function SetOutList(): React.ReactNode {
     const checkUser: any = data || [];
     const [filterValue, setFilterValue] = useState<any>({});
 
-    return <Page
+    return <SearchTable
         path="/tower-science/loftingList"
         exportPath={`/tower-science/loftingList`}
         pageSize={20}
