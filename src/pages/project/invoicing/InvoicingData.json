@@ -648,6 +648,7 @@
             "title": "重量",
             "dataIndex": "weight",
             "type": "number",
+            "precision": 5,
             "required": true
         },
         {
