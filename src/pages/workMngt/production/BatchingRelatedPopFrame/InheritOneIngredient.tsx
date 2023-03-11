@@ -96,7 +96,7 @@ export default function InheritOneIngredient(props: EditProps): JSX.Element {
             <CommonTable
                 rowKey={"batchNumber"}
                 rowSelection={{
-                    type: "radio",
+                    type: "checkbox",
                     ...rowSelectionCheck,
                 }}
                 pagination={false}
