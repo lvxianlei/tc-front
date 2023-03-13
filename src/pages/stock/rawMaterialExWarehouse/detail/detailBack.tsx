@@ -275,7 +275,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                             // 0待出库 2 已出库  1缺料中 3待回库  4已回库
                             <>
                                 
-                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 2 || params.lock==='1'} onClick={async () => {
+                                <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 4 || params.lock==='1'} onClick={async () => {
                                     const result = [ record.id ]
                                     await backSingleRun(result);
                                     history.go(0);
@@ -294,7 +294,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                                     okText="确认"
                                     cancelText="取消"
                                 >
-                                    <Button loading={deleting} disabled={record.outStockItemStatus === 2 || params.lock==='1'} type="link">删除</Button>
+                                    <Button loading={deleting} disabled={record.outStockItemStatus === 4 || params.lock==='1'} type="link">删除</Button>
                                 </Popconfirm>
                             </>
                         )
