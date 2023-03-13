@@ -251,7 +251,11 @@ export default forwardRef(function Apply({ getLoading, id }: ApplyProps, ref) {
                     dataSource={data || []}
                     pagination={false}
                     onRow={(record: any) => ({
-                        className: productCategoryId === record?.id ? styles.selected: undefined 
+                        onclick: () => {
+                            detailRun(record?.id);
+                            setProductCategoryId(record?.id)
+                        },
+                        className: productCategoryId === record?.id ? styles.selected : undefined
                     })}
                 />
             </Col>
@@ -264,6 +268,13 @@ export default forwardRef(function Apply({ getLoading, id }: ApplyProps, ref) {
                         selectedRowKeys: selectedKeys,
                         onChange: SelectChange
                     }}
+                    onRow={(record: any) => ({
+                        onclick: () => {
+                            detailRun(record?.id);
+                            setProductCategoryId(record?.id)
+                        },
+                        className: productCategoryId === record?.id ? styles.selected : undefined
+                    })}
                 />
             </Col>
             <Col span={6}>
