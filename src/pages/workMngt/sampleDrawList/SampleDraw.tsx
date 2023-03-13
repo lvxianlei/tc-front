@@ -12,6 +12,7 @@ import { FixedType } from 'rc-table/lib/interface';
 import { FileUnknownOutlined } from '@ant-design/icons';
 import { modalProps } from '../patchIssued/PatchIssued';
 import Apply from './Apply';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
@@ -33,6 +34,16 @@ export default function SampleDraw(): React.ReactNode {
     const [applyVisible, setApplyVisible] = useState<boolean>(false);
     const editRef = useRef<modalProps>();
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const userId = AuthUtil.getUserInfo().user_id;
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
@@ -232,7 +243,7 @@ export default function SampleDraw(): React.ReactNode {
                     setApplyVisible(false);
                     editRef.current?.resetFields();
                 }}>
-                <Apply getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
+                <Apply id={params?.id} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
             </Modal>
             <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFilterSubmit}>
                 {
@@ -256,7 +267,7 @@ export default function SampleDraw(): React.ReactNode {
                 }} ghost>导出</Button>
                 <Button type="primary" onClick={() => {
                     setApplyVisible(true)
-                }} ghost>套用小样图</Button>
+                }} disabled={!isShow} ghost>套用小样图</Button>
                 <Popconfirm
                     title="确认删除全部小样图?"
                     onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/all/sampleDelete/${params.id}`).then(() => {
@@ -265,10 +276,11 @@ export default function SampleDraw(): React.ReactNode {
                     })}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!isShow}
                 >
-                    <Button type="primary">删除全部</Button>
+                    <Button type="primary" disabled={!isShow}>删除全部</Button>
                 </Popconfirm>
-                <Button type='primary' onClick={del} disabled={selectedKeys?.length === 0} ghost>批量删除</Button>
+                <Button type='primary' onClick={del} disabled={selectedKeys?.length === 0 || !isShow} ghost>批量删除</Button>
                 {params.status === '1' ? <Popconfirm
                     title="确认完成小样图?"
                     onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
@@ -278,8 +290,9 @@ export default function SampleDraw(): React.ReactNode {
                     })}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!isShow}
                 >
-                    <Button type="primary">完成小样图</Button>
+                    <Button type="primary" disabled={!isShow}>完成小样图</Button>
                 </Popconfirm> : null}
                 <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                     const data = dataInfo.map(res => {
@@ -299,7 +312,7 @@ export default function SampleDraw(): React.ReactNode {
                         }, 1500)
                     })
                 }}>
-                    <Button type="primary" ghost>导入</Button>
+                    <Button type="primary" ghost disabled={!isShow}>导入</Button>
                 </Attachment>
                 <Button type="primary" onClick={() => {
                     history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
@@ -333,9 +346,9 @@ export default function SampleDraw(): React.ReactNode {
                                                 setHeaderName(data);
                                                 history.go(0);
                                             })}
-                                            disabled={!record.smallSample}
+                                            disabled={!isShow}
                                         >
-                                            <Button type="link" disabled={!record.smallSample}>
+                                            <Button type="link" disabled={!isShow}>
                                                 删除
                                             </Button>
                                         </Popconfirm>
