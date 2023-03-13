@@ -762,9 +762,10 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                                         validator: (rule, value, callback) => {
                                             const resData:any = (editForm.getFieldsValue(true).submit)[index]
                                             const limb = calcObj.calculateWidth(resData.materialName,resData.structureSpec,resData.width)
-                                            if(!value&&!['钢管','无缝钢管','直缝钢管','圆钢','螺纹钢'].includes(resData.materialName)){
-                                                callback(`请输入肢宽`);
-                                            }else if((resData?.limbWidthMax&&value>Number(resData?.limbWidthMax)+Number(limb)) ||(resData?.limbWidthMin&&value<Number(resData?.limbWidthMin) +Number(limb))){
+                                            // if(!value&&!['钢管','无缝钢管','直缝钢管','圆钢','螺纹钢'].includes(resData.materialName)){
+                                            //     callback(`请输入肢宽`);
+                                            // }else 
+                                            if((resData?.limbWidthMax&&value>Number(resData?.limbWidthMax)+Number(limb)) ||(resData?.limbWidthMin&&value<Number(resData?.limbWidthMin) +Number(limb))){
                                                 callback(`请输入大于或等于${Number(resData?.limbWidthMin) +Number(limb)}且小于或等于${Number(resData?.limbWidthMax)+Number(limb)}的值`);
                                             }else{
                                                 callback()
