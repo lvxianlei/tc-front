@@ -18,7 +18,6 @@ interface ApplyProps {
 
 export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
     const [searchForm] = useForm();
-    const [filterValue, setFilterValue] = useState({});
     const [productCategoryId, setProductCategoryId] = useState<string>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
@@ -28,8 +27,7 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
     const { loading, data, run } = useRequest<any>((filter: any) => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/productCategory/small/sample/category`, {
-                ...filter,
-                ...filterValue
+                ...filter
             });
             result && result?.length > 0 && setProductCategoryId(result[0]?.id)
             result && result?.length > 0 && detailRun(result[0]?.id)
@@ -37,7 +35,7 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { refreshDeps: [getLoading] })
+    }), { manual: true, refreshDeps: [getLoading] })
 
     const { data: detailData, run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -151,16 +149,16 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
             dataIndex: 'segmentName'
         },
         {
-            key: 'code',
+            key: 'loftingUserName',
             title: '放样人',
             width: 120,
-            dataIndex: 'code'
+            dataIndex: 'loftingUserName'
         },
         {
-            key: 'BasicsPartTotalNum',
+            key: 'checkUserName',
             title: '校核人',
             width: 120,
-            dataIndex: 'BasicsPartTotalNum'
+            dataIndex: 'checkUserName'
         }
     ]
 
@@ -173,10 +171,10 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
             render: (_: undefined, record: Record<string, any>, index: number): React.ReactNode => (<span>{index + 1}</span>)
         },
         {
-            key: 'segmentName',
+            key: 'code',
             title: '零件号',
             width: 150,
-            dataIndex: 'segmentName'
+            dataIndex: 'code'
         }
     ]
 
@@ -209,7 +207,7 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
     }
 
     const onFilterSubmit = (value: any) => {
-        setFilterValue(value)
+        run(value)
         return value
     }
 
