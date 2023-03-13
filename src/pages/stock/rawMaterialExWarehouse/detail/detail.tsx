@@ -636,7 +636,19 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中
                             <>
-                                <Button type='link' disabled={record.outStockItemStatus !== 0 || params.lock==='1'} onClick={() => { IssueOperation(record) }}>出库</Button>
+                                <Button type='link' disabled={record.outStockItemStatus !== 0 || params.lock==='1'} onClick={async () => { 
+                                    // IssueOperation(record) 
+                                    const data: any = await RequestUtil.post(`/tower-storage/outStock`, {
+                                        id: record.id,
+                                        // materialStockList: ary
+                                    });
+                                    if (data) {
+                                        message.success('操作成功')
+                                        // setIsOutLibraryModal(false)
+                                        // 刷新列表
+                                        history.go(0);
+                                    }
+                                }}>出库</Button>
                                 <Button type='link' disabled={record.outStockItemStatus !== 2} onClick={() => { getDetailData(record.id) }}>详情</Button>
                                 <Popconfirm
                                     title="确认撤销?"
