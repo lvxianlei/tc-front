@@ -12,10 +12,15 @@ export default function Invoicing() {
     const history = useHistory()
     const billRef = useRef<LegacyRef<HTMLDivElement> | null>()
 
-    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string) => new Promise(async (resole, reject) => {
+    const { loading, data, run } = useRequest<{ [key: string]: any }>((invoicingId: string, processId: string) => new Promise(async (resole, reject) => {
         try {
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-finance/invoicing/getTaskInfo/${invoicingId}`)
-            resole(result)
+            /**获取工作流流转记录 */
+            const process: { [key: string]: any } = processId ? await RequestUtil.get(`/tower-workflow/workflow/Engine/FlowBefore/${processId}`) : {}
+            resole({
+                ...result,
+                invoicingBatchVOS: process?.flowTaskOperatorRecordList || []
+            })
         } catch (error) {
             reject(error)
         }
@@ -64,7 +69,7 @@ export default function Invoicing() {
                                     type="link"
                                     className="btn-operation-link"
                                 >打印</Button>}
-                                onBeforeGetContent={() => run(record?.id)}
+                                onBeforeGetContent={() => run(record?.id, record?.processId)}
                             />
                         </>
                     }

@@ -4,9 +4,9 @@
  * @description 业务处置管理-代料-申请
  */
 
-import React, { useImperativeHandle, forwardRef, useState } from "react";
+import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
 import { Form, message, Select } from 'antd';
-import { BaseInfo, DetailContent, OperationRecord } from '../../common';
+import { Attachment, AttachmentRef, BaseInfo, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { applyColumns, detailColumns } from "./generationOfMaterial.json";
@@ -16,26 +16,32 @@ import { materialStandardOptions, materialTextureOptions } from "../../../config
 interface modalProps {
     readonly id?: any;
     readonly type?: 'new' | 'detail' | 'edit';
+    getLoading: (loading: boolean) => void;
 }
 
-export default forwardRef(function GenerationOfMaterialApply({ id, type }: modalProps, ref) {
+export default forwardRef(function GenerationOfMaterialApply({ id, type, getLoading }: modalProps, ref) {
     const [towerSelects, setTowerSelects] = useState([]);
     const [detailData, setDetailData] = useState<any>()
     const [editForm] = Form.useForm();
+    const attachRef = useRef<AttachmentRef>()
 
     const { loading, data } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             const result: any = await RequestUtil.get(`/tower-science/substitute/material/${id}`)
             editForm.setFieldsValue({
-                ...result
+                ...result,
+                productCategoryId: result?.productCategoryId?.split(',')
             })
             planNumChange(result?.planNumber)
-            setDetailData(result)
+            setDetailData({
+                ...result,
+                productCategoryId: result?.productCategoryId?.split(',')
+            })
             resole(result)
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [id, type] })
+    }), { manual: type === 'new', refreshDeps: [id, type, getLoading] })
 
     const { data: types } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -77,6 +83,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             editForm.validateFields().then(async res => {
                 const value = editForm.getFieldsValue(true);
                 if (!(value?.changeMaterialStandard || value?.structureTexture || value?.changeStructureTexture)) {
@@ -86,11 +93,17 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     await saveRun({
                         ...value,
                         id: id,
-                        productCategoryName: detailData?.productCategoryName
+                        productCategoryName: detailData?.productCategoryName,
+                        productCategoryId: detailData?.productCategoryId?.join(','),
+                        materialStandardName: detailData?.materialStandardName,
+                        fileIds: attachRef.current?.getDataSource().map(item => item.id)
                     })
                     resolve(true);
                 }
 
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
         } catch (error) {
             reject(false)
@@ -100,6 +113,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: saveRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/substitute/material`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -108,14 +122,21 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
 
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             editForm.validateFields().then(async res => {
                 const value = await editForm.getFieldsValue(true);
                 await submitRun({
                     ...value,
                     id: id,
-                    productCategoryName: detailData?.productCategoryName
+                    productCategoryName: detailData?.productCategoryName,
+                    productCategoryId: detailData?.productCategoryId?.join(','),
+                    materialStandardName: detailData?.materialStandardName,
+                    fileIds: attachRef.current?.getDataSource().map(item => item.id)
                 })
                 resolve(true);
+            }).catch(e => {
+                reject(false)
+                getLoading(false)
             })
 
         } catch (error) {
@@ -126,6 +147,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
     const { run: submitRun } = useRequest<any>((data: any) => new Promise(async (resove, reject) => {
         try {
             const result: any = await RequestUtil.post(`/tower-science/substitute/material/submit`, data)
+            getLoading(false)
             resove(result)
         } catch (error) {
             reject(error)
@@ -172,13 +194,13 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 onChange={(e) => {
                                                     planNumChange(e);
                                                     editForm.setFieldsValue({
-                                                        productCategoryId: '',
+                                                        productCategoryId: [],
                                                         materialStandard: '',
                                                         materialStandardName: ''
                                                     })
                                                     setDetailData({
                                                         ...editForm?.getFieldsValue(true),
-                                                        productCategoryId: '',
+                                                        productCategoryId: [],
                                                         materialStandard: '',
                                                         materialStandardName: ''
                                                     })
@@ -207,23 +229,26 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                                                 filterOption={(input, option) =>
                                                     option?.props?.children?.toLowerCase().indexOf(input?.toLowerCase()) >= 0
                                                 }
+                                                mode="multiple"
                                                 onChange={async (e, options: any) => {
-                                                    const productCategoryId = options?.key?.split(',')[0] || '';
-                                                    const productCategoryName = options?.key?.split(',')[1] || '';
-                                                    const materialStandard = options?.key?.split(',')[2] || '';
-                                                    const materialStandardName = options?.key?.split(',')[3] || '';
+                                                    let productCategoryName: string[] = [];
+                                                    let materialStandard: string[] = [];
+                                                    let materialStandardName: string[] = [];
+                                                    options?.forEach((element: any) => {
+                                                        productCategoryName?.push(element?.key?.split(',')[1] || '')
+                                                        materialStandard?.push(element?.key?.split(',')[2] || '')
+                                                        materialStandardName?.push(element?.key?.split(',')[3] || '')
+                                                    });
                                                     editForm.setFieldsValue({
-                                                        materialStandard: materialStandard,
-                                                        materialStandardName: materialStandardName,
-                                                        productCategoryId: productCategoryId,
-                                                        productCategoryName: productCategoryName
+                                                        materialStandard: materialStandard?.join(','),
+                                                        materialStandardName: materialStandardName?.join(','),
+                                                        productCategoryName: productCategoryName?.join(',')
                                                     })
                                                     setDetailData({
                                                         ...editForm?.getFieldsValue(true),
-                                                        materialStandard: materialStandard,
-                                                        materialStandardName: materialStandardName,
-                                                        productCategoryId: productCategoryId,
-                                                        productCategoryName: productCategoryName
+                                                        materialStandard: materialStandard?.join(','),
+                                                        materialStandardName: materialStandardName?.join(','),
+                                                        productCategoryName: productCategoryName?.join(',')
                                                     })
                                                 }}>
                                                 {towerSelects && towerSelects?.map((item: any) => {
@@ -416,6 +441,7 @@ export default forwardRef(function GenerationOfMaterialApply({ id, type }: modal
                     col={2}
                     edit />
         }
+        <Attachment isBatchDel={type !== 'detail'} ref={attachRef} dataSource={data?.fileVOList} edit={type !== 'detail'} />
         {
             type === 'detail' ?
                 <OperationRecord title="操作信息" serviceId={id} serviceName="tower-science" />

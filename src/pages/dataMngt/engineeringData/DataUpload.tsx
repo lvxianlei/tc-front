@@ -5,38 +5,26 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState, useRef } from "react";
-import { Button, Form, Input, Select } from 'antd';
-import { Attachment, CommonTable, DetailContent } from '../../common';
+import { Button, Form, Input, Select, Spin } from 'antd';
+import { BatchAttachment, CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './EngineeringData.module.less';
 import { AttachmentRef, FileProps } from "../../common/Attachment";
 import { FixedType } from 'rc-table/lib/interface';
 import { documentTypeOptions, fileTypeOptions } from "../../../configuration/DictionaryOptions";
-import Item from "antd/lib/list/Item";
-import { number } from "echarts";
-
 interface modalProps {
     readonly projectBackupId?: string;
     readonly id?: string;
     readonly type?: 'new' | 'detail' | 'edit';
     getLoading: (loading: boolean) => void
+    planNumbers: any
 }
 
-export default forwardRef(function DataUpload({ type, getLoading, projectBackupId, id }: modalProps, ref) {
+export default forwardRef(function DataUpload({ type, getLoading, projectBackupId, id, planNumbers }: modalProps, ref) {
     const [form] = Form.useForm();
-    const [uploadData, setUploadData] = useState<any>();
+    const [uploadData, setUploadData] = useState<any>([]);
     const attachRef = useRef<AttachmentRef>({ getDataSource: () => [], resetFields: () => { } })
-
-    const { data: planNumbers } = useRequest<any>(() => new Promise(async (resole, reject) => {
-        try {
-            const result: any = await RequestUtil.get(`/tower-science/projectData/planNumber/list/${projectBackupId}`)
-            resole(result)
-        } catch (error) {
-            reject(error)
-        }
-    }), { refreshDeps: [projectBackupId, type] })
-
 
     const { loading } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
@@ -58,7 +46,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
         } catch (error) {
             reject(error)
         }
-    }), { manual: type === 'new', refreshDeps: [projectBackupId, type] })
+    }), { manual: type === 'new', refreshDeps: [type, getLoading, projectBackupId, id] })
 
     const tableColumns = [
         {
@@ -115,8 +103,8 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                     required: true,
                     message: '请选择应用计划'
                 }]}>
-                    <Select placeholder="请选择应用计划" mode="multiple" onChange={(e: any) => {
-                        if (Array.from(e)?.findIndex(res => res === 'all') !== -1) {
+                    <Select placeholder="请选择应用计划" mode="multiple" onSelect={(e: any) => {
+                        if (e === 'all') {
                             form?.setFieldsValue({
                                 data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
                                     if (i === index) {
@@ -129,26 +117,42 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                                     } else {
                                         return item
                                     }
-
                                 })
                             })
                         }
-                        if (Array.from(e)?.findIndex(res => res === 0) !== -1) {
-                            form?.setFieldsValue({
-                                data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
-                                    if (i === index) {
-                                        return {
-                                            ...item,
-                                            planNumber: [0]
+                    }}
+                        onDeselect={(e: any) => {
+                            if (e === 'all') {
+                                form?.setFieldsValue({
+                                    data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
+                                        if (i === index) {
+                                            return {
+                                                ...item,
+                                                planNumber: []
+                                            }
+                                        } else {
+                                            return item
                                         }
-                                    } else {
-                                        return item
 
-                                    }
+                                    })
                                 })
-                            })
-                        }
-                    }}>
+                            } else {
+                                form?.setFieldsValue({
+                                    data: form.getFieldsValue(true)?.data?.map((item: any, i: number) => {
+                                        if (i === index) {
+                                            return {
+                                                ...item,
+                                                planNumber: item?.planNumber?.filter((res: any) => res !== 'all')
+                                            }
+                                        } else {
+                                            return item
+                                        }
+
+                                    })
+                                })
+                            }
+                        }}
+                    >
                         {index === 0 ? null : <Select.Option key={'ditto'} value={0}>同上</Select.Option>}
                         <Select.Option key={'all'} value={'all'}>全部</Select.Option>
                         {planNumbers && planNumbers.map((item: string, ind: number) => {
@@ -210,9 +214,9 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
 
     const onSave = () => new Promise(async (resolve, reject) => {
         try {
+            getLoading(true)
             form.validateFields().then(async res => {
                 const value = await form.getFieldsValue(true)?.data || []
-                getLoading(true)
                 await saveRun(value?.map((res: any) => {
                     return {
                         ...res,
@@ -225,6 +229,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                 }))
                 resolve(true);
             }).catch(e => {
+                getLoading(false)
                 reject(e)
             })
 
@@ -237,6 +242,7 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
         try {
             await RequestUtil.post(`/tower-science/projectData`, data).then(res => {
                 resove(true)
+                getLoading(false)
             }).catch(e => {
                 getLoading(false)
                 reject(e)
@@ -253,48 +259,47 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
     useImperativeHandle(ref, () => ({ onSave, resetFields }), [ref, onSave, resetFields]);
 
 
-    return <DetailContent>
+    return <Spin spinning={loading}>
         {
             type === 'new' ?
-                <Attachment multiple key={uploadData} ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
-                    const values = form.getFieldsValue(true).data || []
-                    const data = [...dataInfo]?.map(res => {
-                        return {
-                            fileName: res?.originalName,
-                            fileId: res?.id,
-                            fileSuffix: res?.fileSuffix,
-                            projectBackupId: projectBackupId
-                        }
-                    })
-                    const newData = [
-                        ...values || [],
-                        ...data
-                    ].map((item: any, index: number) => {
-                        if (index === 0) {
+                <BatchAttachment multiple key={uploadData} columns={tableColumns} ref={attachRef} edit isTable={false}
+                    onDoneChange={(dataInfo: FileProps[]) => {
+                        const values = form.getFieldsValue(true).data || []
+                        const data = [...dataInfo]?.map(res => {
                             return {
-                                ...item,
-                                fileCategory: item?.fileCategory ? item?.fileCategory : '',
-                                fileType: item?.fileType ? item?.fileType : '',
-                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...planNumbers?.map((e: any) => {
-                                    return e
-                                }) || []]
+                                fileName: res?.originalName,
+                                fileId: res?.id,
+                                fileSuffix: res?.fileSuffix,
+                                projectBackupId: projectBackupId
                             }
-                        } else {
-                            return {
-                                ...item,
-                                fileCategory: item?.fileCategory ? item?.fileCategory : 0,
-                                fileType: item?.fileType ? item?.fileType : 0,
-                                planNumber: item?.planNumber?.length > 0 ? item?.planNumber : [0]
+                        })
+                        const newData = [
+                            ...values || [],
+                            ...data
+                        ].map((item: any, index: number) => {
+                            if (index === 0) {
+                                return {
+                                    ...item,
+                                    fileCategory: item?.fileCategory ? item?.fileCategory : '',
+                                    fileType: item?.fileType ? item?.fileType : '',
+                                    planNumber: item?.planNumber?.length > 0 ? item?.planNumber : ['all', ...(planNumbers || [])]
+                                }
+                            } else {
+                                return {
+                                    ...item,
+                                    fileCategory: item?.fileCategory ? item?.fileCategory : 0,
+                                    fileType: item?.fileType ? item?.fileType : 0,
+                                    planNumber: item?.planNumber?.length > 0 ? item?.planNumber : [0]
+                                }
                             }
-                        }
-                    })
-                    setUploadData(newData);
-                    form?.setFieldsValue({
-                        data: newData
-                    })
-                }}>
+                        })
+                        setUploadData([...newData]);
+                        form?.setFieldsValue({
+                            data: [...newData]
+                        })
+                    }}>
                     <Button type="primary" style={{ marginBottom: '16px' }} ghost>上传</Button>
-                </Attachment>
+                </BatchAttachment>
                 :
                 null
         }
@@ -305,6 +310,6 @@ export default forwardRef(function DataUpload({ type, getLoading, projectBackupI
                 dataSource={[...uploadData || []]}
             />
         </Form>
-    </DetailContent>
+    </Spin >
 })
 

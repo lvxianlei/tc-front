@@ -6,7 +6,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import { Space, DatePicker, Select, Button, Spin, message } from 'antd';
-import { IntgSelect, Page } from '../../common';
+import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
 import { Link, useHistory, useParams } from 'react-router-dom';
@@ -112,7 +112,7 @@ export default function PoleInformation(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 250,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -122,14 +122,18 @@ export default function PoleInformation(): React.ReactNode {
                     }
                     <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
                     <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.packageStatus } }}><Button type="link">包装清单</Button></Link>
-                    <Button type="link" onClick={async () => {
-                        setLoftingStatus(record.loftingStatus)
-                        let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
-                        setAllotData(result)
-                        setProductId(record.id);
-                        await editRef.current?.visibleData()
-                        setAllotVisible(true);
-                    }}>特殊件号</Button>
+                    {
+                        record?.loftingUser === userId ?
+                            <Button type="link" onClick={async () => {
+                                setLoftingStatus(record.loftingStatus)
+                                let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
+                                setAllotData(result)
+                                setProductId(record.id);
+                                await editRef.current?.visibleData()
+                                setAllotVisible(true);
+                            }}>特殊件号</Button>
+                            : <Button type="link" disabled>特殊件号</Button>
+                    }
                 </Space>
             )
         }
@@ -271,7 +275,7 @@ export default function PoleInformation(): React.ReactNode {
         >
             <AllotModal getLoading={(loading: boolean) => setConfirmLoading(loading)} id={productId} allotData={allotData || {}} ref={editRef} status={loftingStatus} />
         </Modal>
-        <Page
+        <SearchTable
             path="/tower-science/product/lofting"
             exportPath={`/tower-science/product/lofting`}
             columns={columns}
@@ -306,7 +310,7 @@ export default function PoleInformation(): React.ReactNode {
                     children: <IntgSelect width={200} />
                 }
             ]}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 if (values.newStatusTime) {
                     const formatDate = values.newStatusTime.map((item: any) => item.format("YYYY-MM-DD"));
                     values.updateStatusTimeStart = formatDate[0] + ' 00:00:00';

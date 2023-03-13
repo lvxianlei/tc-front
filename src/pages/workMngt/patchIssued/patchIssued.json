@@ -412,5 +412,127 @@
             "dataIndex": "description",
             "width": 100
         }
+    ],
+    "columns": [
+        {
+            "key": "segmentName",
+            "title": "段名",
+            "width": 150,
+            "dataIndex": "segmentName"
+        },
+        {
+            "key": "code",
+            "title": "构件编号",
+            "dataIndex": "code",
+            "width": 120
+        },
+        {
+            "key": "materialName",
+            "title": "材料名称",
+            "width": 200,
+            "dataIndex": "materialName"
+        },
+        {
+            "key": "structureTexture",
+            "title": "材质",
+            "width": 150,
+            "dataIndex": "structureTexture"
+        },
+        {
+            "key": "structureSpec",
+            "title": "规格",
+            "dataIndex": "structureSpec",
+            "width": 200
+        },
+        {
+            "key": "materialStandardName",
+            "title": "标准",
+            "dataIndex": "materialStandardName",
+            "width": 200
+        },
+        {
+            "key": "width",
+            "title": "宽度（mm）",
+            "width": 200,
+            "dataIndex": "width"
+        },
+        {
+            "key": "thickness",
+            "title": "厚度（mm）",
+            "width": 200,
+            "dataIndex": "thickness"
+        },
+        {
+            "key": "length",
+            "title": "长度（mm）",
+            "width": 200,
+            "dataIndex": "length"
+        },
+        {
+            "key": "basicsPartNum",
+            "title": "单段件数",
+            "width": 200,
+            "dataIndex": "basicsPartNum"
+        },
+        {
+            "key": "processNum",
+            "title": "加工数",
+            "width": 200,
+            "dataIndex": "processNum"
+        },
+        {
+            "key": "basicsWeight",
+            "title": "单件重量（kg）",
+            "width": 200,
+            "dataIndex": "basicsWeight"
+        },
+        {
+            "key": "totalWeight",
+            "title": "小计重量（kg）",
+            "width": 200,
+            "dataIndex": "totalWeight"
+        },
+        {
+            "key": "sumWeight",
+            "title": "总计重量（kg）",
+            "width": 200,
+            "dataIndex": "sumWeight"
+        },
+        {
+            "key": "holesNum",
+            "title": "单件孔数",
+            "width": 200,
+            "dataIndex": "holesNum"
+        },
+        {
+            "key": "totalHolesNum",
+            "title": "总孔数",
+            "width": 200,
+            "dataIndex": "totalHolesNum"
+        },
+        {
+            "key": "craftName",
+            "title": "工艺",
+            "width": 200,
+            "dataIndex": "craftName"
+        },
+        {
+            "key": "description",
+            "title": "备注",
+            "width": 200,
+            "dataIndex": "description"
+        },
+        {
+            "key": "apertureNumber",
+            "title": "各孔径孔数",
+            "width": 200,
+            "dataIndex": "apertureNumber"
+        },
+        {
+            "key": "weldingEdge",
+            "title": "焊接边（mm）",
+            "width": 200,
+            "dataIndex": "weldingEdge"
+        }
     ]
 }

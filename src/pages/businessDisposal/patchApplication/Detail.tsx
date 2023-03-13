@@ -5,13 +5,14 @@
  */
 
 import React from 'react';
-import { BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
+import { Attachment, BaseInfo, CommonTable, DetailContent, OperationRecord } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import styles from './PatchApplication.module.less';
 import { detailColumns, detailTableColumns } from "./patchApplication.json"
 import { useHistory, useParams } from 'react-router-dom';
 import { Button, Space, Spin, Tooltip } from 'antd';
+import { downloadTemplate } from '../../workMngt/setOut/downloadTemplate';
 
 
 export default function Detail(): React.ReactNode {
@@ -27,9 +28,12 @@ export default function Detail(): React.ReactNode {
         <Spin spinning={loading}>
             <DetailContent operation={[
                 <Space direction="horizontal" size="small" >
-                    <Button onClick={() => history.push(`/businessDisposal/patchApplication`)}>关闭</Button>
+                    <Button onClick={() => history.goBack()}>关闭</Button>
                 </Space>
             ]}>
+                <Button type='primary' style={{marginBottom: '16px'}} onClick={() => {
+                    downloadTemplate(`/tower-science/supplyEntry/export/${params.id}`, '补件申请详情', {})
+                }} ghost>导出</Button>
                 <BaseInfo columns={detailColumns.map(res => {
                     if (res.dataIndex === 'description') {
                         return {
@@ -45,6 +49,7 @@ export default function Detail(): React.ReactNode {
                 })} dataSource={data || {}} col={4} />
                 <CommonTable columns={detailTableColumns} dataSource={data?.supplyStructureVOList || []} />
                 <OperationRecord title="操作信息" serviceId={params.id} serviceName="tower-science" />
+                <Attachment dataSource={data?.fileVOList || []} />
             </DetailContent>
         </Spin>
     )

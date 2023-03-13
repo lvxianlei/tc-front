@@ -1,7 +1,7 @@
 import React from 'react'
 import { Button, Space, Input, Form, Select } from 'antd';
 import { useHistory, useParams } from 'react-router-dom';
-import { Page } from '../../../common';
+import { Page, SearchTable } from '../../../common';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../../utils/RequestUtil';
 import { useState } from 'react';
@@ -115,7 +115,7 @@ export default function PickTowerDetail(): React.ReactNode {
     // }), {})
 
     return <>
-        <Page
+        <SearchTable
             path="/tower-science/drawProductStructure/check"
             exportPath={`/tower-science/drawProductStructure/check`}
             columns={towerColumns}
@@ -163,7 +163,7 @@ export default function PickTowerDetail(): React.ReactNode {
                 ]
             }
             filterValue={filterValue}
-            onFilterSubmit={(values: Record<string, any>) => {
+            onFilterSubmit={(values: any) => {
                 setFilterValue(values);
                 return values;
             }}

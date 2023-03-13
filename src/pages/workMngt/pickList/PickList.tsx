@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Space, Input, DatePicker, Button, Form, Modal, Select } from 'antd'
 import { FixedType } from 'rc-table/lib/interface';
 import { useHistory, useLocation } from 'react-router-dom';
-import { CommonTable, IntgSelect, Page } from '../../common';
+import { CommonTable, IntgSelect, Page, SearchTable } from '../../common';
 import { downloadTemplate } from '../setOut/downloadTemplate';
 import { patternTypeOptions } from '../../../configuration/DictionaryOptions';
 import useRequest from '@ahooksjs/use-request';
@@ -111,7 +111,7 @@ export default function PickList(): React.ReactNode {
             key: 'operation',
             title: '操作',
             fixed: 'right' as FixedType,
-            width: 200,
+            width: 300,
             dataIndex: 'operation',
             render: (_: undefined, record: any): React.ReactNode => (
                 <Space size="small" className={styles.operationBtn}>
@@ -186,7 +186,7 @@ export default function PickList(): React.ReactNode {
                         path: `/tower-science/materialProductCategory/material/productStructure/download/excel?productCategoryId=${taskId}`
                 }]} />
             </Modal>
-            <Page
+            <SearchTable
                 path="/tower-science/materialProductCategory"
                 columns={columns}
                 filterValue={filterValue}

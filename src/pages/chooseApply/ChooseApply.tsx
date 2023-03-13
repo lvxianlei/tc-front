@@ -49,10 +49,10 @@ export default function ChooseApply(): JSX.Element {
                                                 herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`;
                                             }
                                             if (res.appName === "MDM") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mdm").skipUrl}`;
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mdm").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`;
                                             }
                                             if (res.appName === "SALARY") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("salary").skipUrl}`;
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("salary").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`;
                                             }
                                             window.location.href = herf
                                             return

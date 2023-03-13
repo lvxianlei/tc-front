@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Space, Input, Form, Spin, Button, Row, Select, Modal } from 'antd';
-import { CommonTable } from '../../common';
+import { CommonTable, IntgSelect } from '../../common';
 import styles from './PersonnelPortrait.module.less';
 import useRequest from '@ahooksjs/use-request';
 import RequestUtil from '../../../utils/RequestUtil';
@@ -202,8 +202,8 @@ export default function List(): React.ReactNode {
             <CorrectSetting />
         </Modal>
         <Form form={form} layout="inline" className={styles.search} onFinish={onSearch}>
-            <Form.Item name="fuzzyMsg">
-                <Input style={{ width: '200px' }} placeholder="姓名" />
+            <Form.Item name="userId">
+                <IntgSelect style={{ width: '200px' }} placeholder="姓名" />
             </Form.Item>
             <Form.Item>
                 <Space direction="horizontal">
