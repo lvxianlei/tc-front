@@ -68,38 +68,28 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
             const result: { [key: string]: any } = await RequestUtil.get(`/tower-storage/receiveStock/${id}`)
             setSupplierId(result?.supplierId)
             const dataSourceE:any = []
-            result?.lists?Promise.all( result?.lists.map(async (item: any) => {
-                await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
-                    {
-                        materialName: item.materialName,
-                        materialStandard: item.materialStandard,
-                        structureSpec: item.structureSpec
-                    }
-                ]}).then((res:any)=>{
+            result?.lists?await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials: result?.lists}).then((res:any)=>{
+                result?.lists.map((item: any,index:number) => {
                     const postData = {
                         ...item,
-                        ...( res && res.length>0 ? res[0] : {} ),
+                        ...( res && res.length>0 ? res[index] : {} ),
                         num: item.num ? item.num : 0
                     }
                     console.log(postData)
                     dataSourceE.push(postData)
-                    })
-                return item
-            })).then((res)=>{
-                // console.log(res)
-                // console.log(dataSourceE)
-                // const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
-                //     num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
-                //     balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
-                //     totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
-                //     totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
-                // }), {})
-                // setTotal(seletTotal)
+                    return postData
+                })
+                const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                    num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+                    balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+                    totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+                    totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+                }), {})
+                setTotal(seletTotal)
                 setCargoData(dataSourceE)
                 editForm.setFieldsValue({
                     submit: dataSourceE
-                })
-            }):setCargoData(result?.lists.map((item: any) => ({
+                })}):setCargoData(result?.lists.map((item: any) => ({
                 ...item,
                 num: item.num ? item.num : 0
             })) || [])
@@ -154,41 +144,159 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 num: item.num
             }))).toFixed(5), 0)
         const dataSourceE:any = []
-        Promise.all( modalRef.current?.dataSource.map(async (item: any) => {
-            const weight = calcObj.weight({
-                length: item.length,
-                width: item.width,
-                weightAlgorithm: item.weightAlgorithm,
-                proportion: item.proportion
-            })
+        // Promise.all( modalRef.current?.dataSource.map(async (item: any) => {
+        //     const weight = calcObj.weight({
+        //         length: item.length,
+        //         width: item.width,
+        //         weightAlgorithm: item.weightAlgorithm,
+        //         proportion: item.proportion
+        //     })
 
-            // 结算重量
-            const balanceTotalWeight = calcObj.balanceTotalWeight(
-                meteringMode,
-                weight,
-                item.num,
-                totalPonderationWeight,
-                allTotalWeight) || '0'
-            // 含税金额
-            const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight) || '0'
-            // 不含税金额
-            const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material) || '0'
-            // 含税运费
-            const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight) || '0'
-            // 不含税运费
-            const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport) || '0'
-            // 含税装卸费
-            const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight) || '0'
-            // 不含税装卸费
-            const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload) || '0'
-            console.log(item)
-            await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
-                {
-                    materialName: item.materialName,
-                    materialStandard: item.materialStandard,
-                    structureSpec: item.structureSpec
-                }
-            ]}).then((res:any)=>{
+        //     // 结算重量
+        //     const balanceTotalWeight = calcObj.balanceTotalWeight(
+        //         meteringMode,
+        //         weight,
+        //         item.num,
+        //         totalPonderationWeight,
+        //         allTotalWeight) || '0'
+        //     // 含税金额
+        //     const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight) || '0'
+        //     // 不含税金额
+        //     const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material) || '0'
+        //     // 含税运费
+        //     const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight) || '0'
+        //     // 不含税运费
+        //     const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport) || '0'
+        //     // 含税装卸费
+        //     const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight) || '0'
+        //     // 不含税装卸费
+        //     const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload) || '0'
+        //     console.log(item)
+        //     await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
+        //         {
+        //             materialName: item.materialName,
+        //             materialStandard: item.materialStandard,
+        //             structureSpec: item.structureSpec
+        //         }
+        //     ]}).then((res:any)=>{
+        //         const limbWidth = [];
+        //         const thickness = [];
+        //         const caliber = [];
+        //         const measureHeight= [];
+        //         const gageLength = [];
+        //         if( res && res.length > 0 ){
+        //             let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
+        //             let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
+        //             let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
+        //             let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
+        //             let len = item.length
+        //             for(var i = 1;i<=3; i++){
+        //                 console.log(Number(limb)+Number(res[0]?.limbWidthMin))
+        //                 res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+        //                 res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+        //                 res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+        //                 res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+        //                 res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+        //             }
+        //             console.log(limbWidth,thickness,caliber,measureHeight)
+        //         }else{
+        //             limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
+        //             thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
+        //             caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
+        //             measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
+        //             gageLength.push(item.length)
+        //             console.log(limbWidth,thickness,caliber,measureHeight)
+        //         }
+        //         const postData = {
+        //             ...item,
+        //             ...( res && res.length>0 ? res[0] : {} ),
+        //             limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
+        //             thickness: thickness[0]===null?'':thickness.join(','),
+        //             caliber: caliber[0]===null?'':caliber.join(','),
+        //             measureHeight: measureHeight[0]===null?'':measureHeight.join(','),
+        //             gageLength: gageLength[0]===null?'':gageLength.join(','),
+        //             materialContractDetailId: item.id,
+        //             materialName: item.materialName,
+        //             materialStandard: item.materialStandard,
+        //             // materialStandardName: item.materialStandardName,
+        //             num: item.num,
+        //             contractUnitPrice: item.taxPrice,
+        //             taxPrice: item.taxPrice,
+        //             /** 不含税单价 */
+        //             unTaxPrice: item.price,
+        //             /** 理算重量 */
+        //             weight: calcObj.weight({
+        //                 length: item.length,
+        //                 width: item.width,
+        //                 weightAlgorithm: item.weightAlgorithm,
+        //                 proportion: item.proportion,
+        //             }),
+        //             /** 理算总重量 */
+        //             totalWeight: calcObj.totalWeight({
+        //                 length: item.length,
+        //                 width: item.width,
+        //                 weightAlgorithm: item.weightAlgorithm,
+        //                 proportion: item.proportion,
+        //                 num: item.num
+        //             }),
+        //             balanceTotalWeight,
+        //             totalTaxPrice,
+        //             totalUnTaxPrice,
+        //             appearance: item.appearance || 1,
+        //             totalTransportTaxPrice,
+        //             totalTransportPrice,
+        //             totalUnloadTaxPrice,
+        //             totalUnloadPrice
+        //         }
+        //         console.log(postData)
+        //         delete postData.id
+        //         dataSourceE.push(postData)
+        //         })
+        //     return item
+        // })).then((res)=>{
+        //     console.log(res)
+        //     console.log(dataSourceE)
+        //     const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+        //         num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
+        //         balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
+        //         totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
+        //         totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
+        //     }), {})
+        //     setTotal(seletTotal)
+        //     setCargoData(dataSourceE)
+        //     editForm.setFieldsValue({
+        //         submit: dataSourceE
+        //     })
+        //     setVisible(false);
+        // })
+        await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:modalRef.current?.dataSource}).then((res:any)=>{
+            modalRef.current?.dataSource.map((item:any,index:number)=>{
+                const weight = calcObj.weight({
+                    length: item.length,
+                    width: item.width,
+                    weightAlgorithm: item.weightAlgorithm,
+                    proportion: item.proportion
+                })
+
+                // 结算重量
+                const balanceTotalWeight = calcObj.balanceTotalWeight(
+                    meteringMode,
+                    weight,
+                    item.num,
+                    totalPonderationWeight,
+                    allTotalWeight) || '0'
+                // 含税金额
+                const totalTaxPrice = calcObj.totalTaxPrice(item.taxPrice, balanceTotalWeight) || '0'
+                // 不含税金额
+                const totalUnTaxPrice = calcObj.totalUnTaxPrice(totalTaxPrice, taxData?.material) || '0'
+                // 含税运费
+                const totalTransportTaxPrice = calcObj.totalTransportTaxPrice(item.transportTaxPrice, balanceTotalWeight) || '0'
+                // 不含税运费
+                const totalTransportPrice = calcObj.totalTransportPrice(totalTransportTaxPrice, taxData?.transport) || '0'
+                // 含税装卸费
+                const totalUnloadTaxPrice = calcObj.totalUnloadTaxPrice(item.unloadTaxPrice, balanceTotalWeight) || '0'
+                // 不含税装卸费
+                const totalUnloadPrice = calcObj.totalUnloadPrice(totalUnloadTaxPrice, taxData?.unload) || '0'
                 const limbWidth = [];
                 const thickness = [];
                 const caliber = [];
@@ -201,12 +309,12 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
                     let len = item.length
                     for(var i = 1;i<=3; i++){
-                        console.log(Number(limb)+Number(res[0]?.limbWidthMin))
-                        res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
-                        res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
-                        res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
-                        res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
-                        res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
+                        console.log(Number(limb)+Number(res[index]?.limbWidthMin))
+                        res[index]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[index]?.limbWidthMin),Number(limb)+Number(res[index]?.limbWidthMax)))
+                        res[index]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[index]?.thicknessMin),Number(thick)+Number(res[index]?.thicknessMax)))
+                        res[index]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[index]?.caliberMin),Number(cali)+Number(res[index]?.caliberMax)))
+                        res[index]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[index]?.measureHeightMin),Number(hei)+Number(res[index]?.measureHeightMax)))
+                        res[index]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[index]?.gageLengthMin),Number(len)+Number(res[index]?.gageLengthMax)))
                     }
                     console.log(limbWidth,thickness,caliber,measureHeight)
                 }else{
@@ -219,7 +327,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 }
                 const postData = {
                     ...item,
-                    ...( res && res.length>0 ? res[0] : {} ),
+                    ...( res && res.length>0 ? res[index] : {} ),
                     limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
                     thickness: thickness[0]===null?'':thickness.join(','),
                     caliber: caliber[0]===null?'':caliber.join(','),
@@ -261,11 +369,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 console.log(postData)
                 delete postData.id
                 dataSourceE.push(postData)
-                })
-            return item
-        })).then((res)=>{
-            console.log(res)
-            console.log(dataSourceE)
+                return postData
+            })
             const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
                 num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
                 balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
@@ -278,7 +383,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 submit: dataSourceE
             })
             setVisible(false);
-        })
+        }) 
     }
 
     const onSubmit = () => new Promise(async (resole, reject) => {
@@ -397,7 +502,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
     }
 
-    const handleEditableChange = (data: any) => {
+    const handleEditableChange = async (data: any) => {
         const changeIndex = data.submit.length - 1
         const changeFiled = data.submit[changeIndex]
         if (changeFiled.balanceTotalWeight) {
@@ -522,69 +627,67 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
         }
         if (changeFiled.materialStandard){
             const dataSource: any[] = editForm.getFieldsValue(true).submit
-            const dataSourceE:any = []
-            Promise.all( dataSource.map(async (item: any) => {
-                await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[
-                    {
-                        materialName: item.materialName,
-                        materialStandard: item.materialStandard,
-                        structureSpec: item.structureSpec
+            console.log(dataSource,changeIndex)
+            await RequestUtil.post(`/tower-storage/receiveStock/material/standard`,{materials:[dataSource[changeIndex]]}).then((res:any)=>{
+                // dataSource.map((item:any,index:number)=>{
+                const item = dataSource[changeIndex];
+                const limbWidth = [];
+                const thickness = [];
+                const caliber = [];
+                const measureHeight= [];
+                const gageLength = [];
+                if( res && res.length > 0 ){
+                    let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
+                    let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
+                    let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
+                    let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
+                    let len = item.length
+                    for(var i = 1;i<=3; i++){
+                        console.log(Number(limb)+Number(res[0]?.limbWidthMin))
+                        res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
+                        res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
+                        res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
+                        res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
+                        res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
                     }
-                ]}).then((res:any)=>{
-                    const limbWidth = [];
-                    const thickness = [];
-                    const caliber = [];
-                    const measureHeight= [];
-                    const gageLength = [];
-                    if( res && res.length > 0 ){
-                        let limb = calcObj.calculateWidth(item.materialName,item.structureSpec,item.width)
-                        let thick = calcObj.calculateThickness(item.materialName,item.structureSpec)
-                        let cali = calcObj.calculatePipeDiameter(item.materialName,item.structureSpec)
-                        let hei = calcObj.calculateHeight(item.materialName,item.structureSpec)
-                        let len = item.length
-                        for(var i = 1;i<=3; i++){
-                            console.log(Number(limb)+Number(res[0]?.limbWidthMin))
-                            res[0]?.limbWidthMin===null?limbWidth.push(null):limbWidth.push(random(Number(limb)+Number(res[0]?.limbWidthMin),Number(limb)+Number(res[0]?.limbWidthMax)))
-                            res[0]?.thicknessMin===null?thickness.push(null):thickness.push(random(Number(thick)+Number(res[0]?.thicknessMin),Number(thick)+Number(res[0]?.thicknessMax)))
-                            res[0]?.caliberMin===null?caliber.push(null):caliber.push(random(Number(cali)+Number(res[0]?.caliberMin),Number(cali)+Number(res[0]?.caliberMax)))
-                            res[0]?.measureHeightMin===null?measureHeight.push(null):measureHeight.push(random(Number(hei)+Number(res[0]?.measureHeightMin),Number(hei)+Number(res[0]?.measureHeightMax)))
-                            res[0]?.gageLengthMin===null?gageLength.push(null):gageLength.push(random(Number(len)+Number(res[0]?.gageLengthMin),Number(len)+Number(res[0]?.gageLengthMax)))
-                        }
-                        console.log(limbWidth,thickness,caliber,measureHeight)
-                    }else{
-                        limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
-                        thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
-                        caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
-                        measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
-                        gageLength.push(item.length)
-                        console.log(limbWidth,thickness,caliber,measureHeight)
-                    }
-                    const postData = {
-                        ...item,
-                        ...( res && res.length>0 ? res[0] : {} ),
-                        limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
-                        thickness: thickness[0]===null?'':thickness.join(','),
-                        caliber: caliber[0]===null?'':caliber.join(','),
-                        measureHeight: measureHeight[0]===null?'':measureHeight.join(','),
-                        gageLength: gageLength[0]===null?'':gageLength.join(','),
-                    }
-                    console.log(postData)
-                    delete postData.id
-                    dataSourceE.push(postData)
-                    })
-                return item
-            })).then((res)=>{
-                const seletTotal = dataSourceE.reduce((total: TotalState, current: any) => ({
+                    console.log(limbWidth,thickness,caliber,measureHeight)
+                }else{
+                    limbWidth.push(calcObj.calculateWidth(item.materialName,item.structureSpec,item.width))
+                    thickness.push(calcObj.calculateThickness(item.materialName,item.structureSpec))
+                    caliber.push(calcObj.calculatePipeDiameter(item.materialName,item.structureSpec))
+                    measureHeight.push(calcObj.calculateHeight(item.materialName,item.structureSpec))
+                    gageLength.push(item.length)
+                    console.log(limbWidth,thickness,caliber,measureHeight)
+                }
+                const postData = {
+                    ...item,
+                    ...( res && res.length>0 ? res[0] : {} ),
+                    limbWidth: limbWidth[0]===null?'':limbWidth.join(','),
+                    thickness: thickness[0]===null?'':thickness.join(','),
+                    caliber: caliber[0]===null?'':caliber.join(','),
+                    measureHeight: measureHeight[0]===null?'':measureHeight.join(','),
+                    gageLength: gageLength[0]===null?'':gageLength.join(','),
+                }
+                console.log(postData)
+                delete postData.id
+                //     return postData
+                // })
+                dataSource.splice(changeIndex,1,postData)
+                console.log(dataSource.splice(changeIndex,1,postData))
+                console.log(dataSource)
+                const seletTotal = dataSource.reduce((total: TotalState, current: any) => ({
                     num: parseFloat(total.num || "0") + parseFloat(current.num || '0'),
                     balanceTotalWeight: (parseFloat(total.balanceTotalWeight || "0") + parseFloat(current.balanceTotalWeight || '0')).toFixed(5),
                     totalTaxPrice: (parseFloat(total.totalTaxPrice || "0") + parseFloat(current.totalTaxPrice || '0')).toFixed(2),
                     totalUnTaxPrice: (parseFloat(total.totalUnTaxPrice || "0") + parseFloat(current.totalUnTaxPrice || '0')).toFixed(2)
                 }), {})
                 setTotal(seletTotal)
-                // setCargoData(dataSourceE)
+                setCargoData(dataSource)
                 editForm.setFieldsValue({
-                    submit: dataSourceE
+                    submit: dataSource
                 })
+                
+                
             })
         }
     }
