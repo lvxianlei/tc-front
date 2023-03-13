@@ -5,7 +5,7 @@
  */
 
 import React, { useImperativeHandle, forwardRef, useState } from "react";
-import { Spin, Form, Input, Button, Row, Col, Space } from 'antd';
+import { Spin, Form, Input, Button, Row, Col, Space, Modal } from 'antd';
 import { CommonTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
@@ -80,11 +80,25 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
     const onSubmit = () => new Promise(async (resolve, reject) => {
         try {
             getLoading(true)
-            await submitRun({
-                segmentIdList: selectedPartKeys?.length > 0 ? [] : selectedKeys,
-                structureIdList: selectedPartKeys
+            Modal.confirm({
+                title: "提示",
+                content: `是否复制塔型： ${selectedPartRows?.length > 0 ? selectedPartRows?.map(res => '构件' + res?.code).join(',') : selectedRows?.map(res => '段' + res?.segmentName)}`,
+                onOk: () => new Promise(async (resove, reject) => {
+                    try {
+                        await submitRun({
+                            segmentIdList: selectedPartKeys?.length > 0 ? [] : selectedKeys,
+                            structureIdList: selectedPartKeys
+                        })
+                        resolve(true);
+                    } catch (error) {
+                        reject(error)
+                    }
+                }),
+                onCancel: () => {
+                    getLoading(false)
+                }
             })
-            resolve(true);
+
         } catch (error) {
             reject(false)
         }
