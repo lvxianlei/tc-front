@@ -17,6 +17,7 @@ import { downloadTemplate } from '../setOut/downloadTemplate';
 import AuthUtil from '../../../utils/AuthUtil';
 import { boltTypeOptions } from '../../../configuration/DictionaryOptions';
 import AbstractMngtComponentStyles from '../../../components/AbstractMngtComponent.module.less';
+import useRequest from '@ahooksjs/use-request';
 
 interface IData {
     readonly unbuckleLength?: number
@@ -36,6 +37,15 @@ export default function BoltList(): React.ReactNode {
     const [url, setUrl] = useState<string>('');
     const [form] = Form.useForm();
     const userId = AuthUtil.getUserInfo().user_id;
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.boltId}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const columns = [
         {
@@ -280,8 +290,9 @@ export default function BoltList(): React.ReactNode {
                             })}
                             okText="确认"
                             cancelText="取消"
+                            disabled={params.status !== '2' || !isShow}
                         >
-                            <Button type="link" hidden={params.status === '2' && params.boltLeader === userId ? false : true}>删除</Button>
+                            <Button type="link" disabled={params.status !== '2' || !isShow}>删除</Button>
                         </Popconfirm>
                     </Space>
                 )
@@ -322,7 +333,7 @@ export default function BoltList(): React.ReactNode {
                 <Button type="primary" onClick={() => downloadTemplate('/tower-science/boltRecord/exportTemplate', '螺栓导入模板')} ghost>模板下载</Button>
             </Space>
             <Space direction="horizontal" size="small" className={`${styles.topbtn} ${styles.btnRight}`}>
-                <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost onClick={() => {
+                <Button type="primary" disabled={params.status !== '2' || !isShow} ghost onClick={() => {
                     if (editorLock === '编辑') {
                         setColumns(columns);
                         setEditorLock('锁定');
@@ -394,10 +405,11 @@ export default function BoltList(): React.ReactNode {
                             }
                         }
                     }}
+                    disabled={params.status !== '2' || !isShow}
                 >
-                    <Button type="primary" hidden={params.status === '2' && params.boltLeader === userId ? false : true} ghost>导入</Button>
+                    <Button type="primary" disabled={params.status !== '2' || !isShow} ghost>导入</Button>
                 </Upload>
-                {params.status === '2' && params.boltLeader === userId ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
+                {params.status === '2' || isShow ? editorLock === '锁定' ? <Button type="primary" disabled ghost>添加</Button> : <BoltNewModal id={params.boltId} basicHeightId={params.id} updataList={() => { getDataSource() }} /> : null}
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>
             <Form form={form}>

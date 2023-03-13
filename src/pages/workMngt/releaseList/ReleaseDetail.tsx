@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Button, Col, Form, Input, message, Modal, Radio, Row, Select, Space } from 'antd';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 import { FixedType } from 'rc-table/lib/interface';
-import   SearchTable  from '../SearchTable';
+import SearchTable from '../SearchTable';
 import RequestUtil, { jsonStringifyReplace } from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { useForm } from 'antd/lib/form/Form';
 import { columns } from './releaseList.json'
 import styles from './release.module.less';
 import { stringify } from 'query-string';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function ReleaseList(): React.ReactNode {
     const [filterValue, setFilterValue] = useState({});
@@ -23,6 +24,16 @@ export default function ReleaseList(): React.ReactNode {
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
     const location = useLocation<{ state: {} }>();
+    const userId = AuthUtil.getUserInfo().user_id;
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.productCategoryId}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const { loading } = useRequest(() => new Promise(async (resole, reject) => {
         // const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -559,16 +570,20 @@ export default function ReleaseList(): React.ReactNode {
                     setVisible(true);
                     printerRun();
                 }} ghost>打印PDF-不分页</Button>
-                <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
-                    message.success('更新成功！')
-                    history.go(0)
-                }} >更新下达明细</Button>
-                <Button type='primary' ghost onClick={async () => {
-                    await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
-                    message.success('刷新成功！')
-                    history.go(0)
-                }} >刷新件号数据</Button>
+                <Button type='primary' ghost
+                    disabled={!isShow}
+                    onClick={async () => {
+                        await RequestUtil.post(`/tower-science/loftingBatch/downloadBatch/${params.id}`);
+                        message.success('更新成功！')
+                        history.go(0)
+                    }} >更新下达明细</Button>
+                <Button type='primary' ghost
+                    disabled={!isShow}
+                    onClick={async () => {
+                        await RequestUtil.post(`/tower-science/loftingBatch/refreshBatchDetailed/${params.id}`);
+                        message.success('刷新成功！')
+                        history.go(0)
+                    }} >刷新件号数据</Button>
                 <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
             </Space>}
             searchFormItems={[

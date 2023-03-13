@@ -6,6 +6,7 @@ import { IntgSelect, Page, SearchTable } from '../../common';
 import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { materialStandardOptions, productTypeOptions, voltageGradeOptions } from '../../../configuration/DictionaryOptions';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function ReleaseList(): React.ReactNode {
     const history = useHistory();
@@ -13,14 +14,15 @@ export default function ReleaseList(): React.ReactNode {
     const [aFilterValue, setAFilterValue] = useState({});
     const [form] = Form.useForm();
     const [count, setCount] = useState<any>({});
+    const userId = AuthUtil.getUserInfo().user_id;
+
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/employee?size=1000`);
         resole(data?.records);
     }), {})
 
-
     const { run: getCount } = useRequest<any>((filter: any) => new Promise(async (resole, reject) => {
-        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`, {...filter});
+        const data: any = await RequestUtil.get(`/tower-science/loftingBatch/count`, { ...filter });
         setCount(data)
         resole(data);
     }), {})
@@ -402,15 +404,20 @@ export default function ReleaseList(): React.ReactNode {
                                 </Form>,
                                 onOk: () => new Promise(async (resolve, reject) => {
                                     try {
-                                        const value = await form.validateFields()
-                                        await cancelRun({
-                                            id: record?.id,
-                                            ...value
-                                        });
-                                        resolve(true)
-                                        form.resetFields()
-                                        message.success("取消成功！")
-                                        history.go(0)
+                                        let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.id}`);
+                                        if (result.indexOf(userId) === -1) {
+                                            message.warning('当前登录人无取消下达权限！')
+                                        } else {
+                                            const value = await form.validateFields()
+                                            await cancelRun({
+                                                id: record?.id,
+                                                ...value
+                                            });
+                                            resolve(true)
+                                            form.resetFields()
+                                            message.success("取消成功！")
+                                            history.go(0)
+                                        }
                                     } catch (error) {
                                         console.log(error)
                                         reject(false)

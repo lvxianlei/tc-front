@@ -3,6 +3,7 @@
  * @description 工作管理-螺栓列表-螺栓清单
  */
 
+import useRequest from '@ahooksjs/use-request';
 import { Button, Col, Input, message, Modal, Popconfirm, Row, Select } from 'antd';
 import React, { useState } from 'react';
 import { useHistory, useParams, } from 'react-router-dom';
@@ -47,7 +48,7 @@ export default function BoltCheck(): React.ReactNode {
             dataIndex: 'description',
             width: 120,
             render: (_: string, record: any): React.ReactNode => (
-                <span title={_}>{_&&_.length>50?_.slice(0,30)+'...':_}</span>
+                <span title={_}>{_ && _.length > 50 ? _.slice(0, 30) + '...' : _}</span>
             )
         },
         {
@@ -68,13 +69,13 @@ export default function BoltCheck(): React.ReactNode {
                             cancelText="否"
                         >
                             <span
-                                hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                                hidden={params.status !== '2' || !isShow}
                                 style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
                             >删除</span>
                         </Popconfirm>
                         <span
                             style={{ color: '#FF8C00', marginRight: 10, cursor: 'pointer' }}
-                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                            hidden={params.status !== '2' || !isShow}
                             onClick={() => {
                                 setId(item.id)
                                 setbasicHeight(item.basicHeight)
@@ -172,6 +173,16 @@ export default function BoltCheck(): React.ReactNode {
         setdescription('')
         setbasicHeight('')
     }
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     return (
         <div>
             <Page
@@ -186,14 +197,14 @@ export default function BoltCheck(): React.ReactNode {
                             ghost
                             onClick={() => { successCheck() }}
                             style={{ marginLeft: 10, }}
-                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                            hidden={params.status !== '2' || !isShow}
                         >完成</Button>
                         <Button
                             type="primary"
                             ghost
                             onClick={() => { setVisible(true); getBoltlist() }}
                             style={{ marginLeft: 10, }}
-                            hidden={params.status === '2' && params.boltLeader === userId ? false : true}
+                            hidden={params.status !== '2' || !isShow}
                         >添加</Button>
                         <Button type="ghost" onClick={() => { history.go(-1) }} style={{ marginLeft: 10, }}>返回</Button>
                     </div>

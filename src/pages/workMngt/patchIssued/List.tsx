@@ -13,8 +13,11 @@ import RequestUtil from '../../../utils/RequestUtil';
 import useRequest from '@ahooksjs/use-request';
 import { patchEntryColumns } from "./patchIssued.json"
 import { SearchTable } from '../../common';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function List(): React.ReactNode {
+    const userId = AuthUtil.getUserInfo().user_id;
+
     const columns = [
         {
             key: 'index',
@@ -160,11 +163,16 @@ export default function List(): React.ReactNode {
                 <Space direction="horizontal" size="small">
                     <Popconfirm
                         title="确认取消下达?"
-                        onConfirm={() => {
-                            RequestUtil.delete(`/tower-science/supplyBatch/deleteBatch?id=${record.id}`).then(res => {
-                                message.success('取消下达成功');
-                                history.go(0);
-                            });
+                        onConfirm={async () => {
+                            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.id}`);
+                            if (result.indexOf(userId) === -1) {
+                                message.warning('当前登录人无取消下达权限！')
+                            } else {
+                                RequestUtil.delete(`/tower-science/supplyBatch/deleteBatch?id=${record.id}`).then(res => {
+                                    message.success('取消下达成功');
+                                    history.go(0);
+                                });
+                            }
                         }}
                         okText="确认"
                         cancelText="取消"
@@ -332,15 +340,15 @@ export default function List(): React.ReactNode {
                             <Radio.Button value={2} key="2">补件条目</Radio.Button>
                         </Radio.Group>
                     </Col>
-                            <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
-                            <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
-                            <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
-                            <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
-                            <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
-                            <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
-                            <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
-                            <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
-                    
+                    <Col>总件号数：<span style={{ color: '#FF8C00' }}>{count?.totalPieceNumber || 0}</span></Col>
+                    <Col>总件数：<span style={{ color: '#FF8C00' }}>{count?.totalNumber || 0}</span></Col>
+                    <Col>总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.totalWeight || 0}</span></Col>
+                    <Col>角钢总重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.angleTotalWeight || 0}</span></Col>
+                    <Col>角钢冲孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.apertureWeight || 0}</span></Col>
+                    <Col>角钢钻孔重量（kg）：<span style={{ color: '#FF8C00' }}>{count?.perforateWeight || 0}</span></Col>
+                    <Col>剪板重量（厚度&le;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.cutPlateWeight || 0}</span></Col>
+                    <Col>火割板重量（厚度&gt;12）（kg）：<span style={{ color: '#FF8C00' }}>{count?.firePlateWeight || 0}</span></Col>
+
                 </Row>
             }
         />

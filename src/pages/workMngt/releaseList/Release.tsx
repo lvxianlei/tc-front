@@ -7,6 +7,7 @@ import useRequest from '@ahooksjs/use-request';
 import Checkbox from 'antd/lib/checkbox/Checkbox';
 import { PlusOutlined } from "@ant-design/icons"
 import styles from './release.module.less';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function Release(): React.ReactNode {
     const history = useHistory();
@@ -23,6 +24,16 @@ export default function Release(): React.ReactNode {
     const [visible, setVisible] = useState<boolean>(false);
     const [releaseData, setReleaseData] = useState<any | undefined>({});
     const [saveLoading, setSaveLoading] = useState<boolean>(false);
+    const userId = AuthUtil.getUserInfo().user_id;
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const [formTable] = Form.useForm()
     const columnsCommon: any[] = [
@@ -196,7 +207,7 @@ export default function Release(): React.ReactNode {
             <DetailContent operation={[
                 <Space>
                     <Button key="goback" onClick={() => history.goBack()}>返回</Button>
-                    <Button type='primary' loading={saveLoading} onClick={async () => {
+                    <Button type='primary' loading={saveLoading} disabled={!isShow} onClick={async () => {
                         setSaveLoading(true)
                         form.validateFields().then(res => {
                             const value = form.getFieldsValue(true)

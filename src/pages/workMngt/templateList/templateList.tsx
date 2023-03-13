@@ -100,7 +100,7 @@ export default function TemplateList() {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: '100px',
+            width: 250,
             align: 'left',
             render: (text: string, record: Record<string, any>): React.ReactNode => {
                 return (

@@ -78,15 +78,15 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         })}
                         okText="删除"
                         cancelText="取消"
-                        disabled={params.weldingLeader.split(',').indexOf(userId) === -1}
+                        disabled={!isShow}
                     >
-                        <Button type="link" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>删除</Button>
+                        <Button type="link" disabled={!isShow}>删除</Button>
                     </Popconfirm>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/edit/${record.id}`}>
-                        <Button type='link' disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>编辑</Button>
+                        <Button type='link' disabled={!isShow}>编辑</Button>
                     </Link>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/apply/${record.id}`}>
-                        <Button type='link' disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>套用</Button>
+                        <Button type='link' disabled={!isShow}>套用</Button>
                     </Link>
                     {/* <Button type="link" onClick={() => { setVisible(true); setName('编辑'); setRecord(record) }}>编辑</Button> */}
                 </Space>
@@ -169,7 +169,16 @@ export default function AssemblyWeldingListing(): React.ReactNode {
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
- 
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
+
     const SelectChange = (selectedRowKeys: React.Key[], selectedRows: any[]): void => {
         setSelectedKeys(selectedRowKeys);
         setSelectedRows(selectedRows)
@@ -229,9 +238,9 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                 <Space direction="horizontal" size="small" className={styles.bottomBtn}>
                     <Button type="primary" onClick={() => downloadTemplate(`/tower-science/welding/downloadSummary?productCategoryId=${params.productCategoryId}`, '组焊清单')} ghost>导出</Button>
                     <Button type="primary" onClick={() => downloadTemplate('/tower-science/welding/exportTemplate', '组焊模板')} ghost>模板下载</Button>
-                    <Button type="primary" disabled={location.state?.status === 3 || params.weldingLeader.split(',').indexOf(userId) === -1} onClick={handleOk} loading={confirmLoading}>完成组焊清单</Button>
+                    <Button type="primary" disabled={location.state?.status === 3 || !isShow} onClick={handleOk} loading={confirmLoading}>完成组焊清单</Button>
                     <Link to={`/workMngt/assemblyWeldingList/assemblyWeldingListing/${params.id}/${params.productCategoryId}/${params.weldingLeader}/new`}>
-                        <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1}>添加组焊</Button>
+                        <Button type="primary" disabled={!isShow}>添加组焊</Button>
                     </Link>
                     <Upload
                         action={() => {
@@ -261,8 +270,9 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                                 }
                             }
                         }}
+                        disabled={!isShow}
                     >
-                        <Button type="primary" disabled={params.weldingLeader.split(',').indexOf(userId) === -1} ghost>导入</Button>
+                        <Button type="primary" disabled={!isShow} ghost>导入</Button>
                     </Upload>
                     <Button type='primary' onClick={async () => {
                         await RequestUtil.delete(`/tower-science/welding/deleteList`, {
@@ -270,7 +280,7 @@ export default function AssemblyWeldingListing(): React.ReactNode {
                         })
                         await message.success('删除成功！')
                         history.go(0)
-                    }} disabled={selectedKeys?.length <= 0} ghost>批量删除</Button>
+                    }} disabled={selectedKeys?.length <= 0 || !isShow} ghost>批量删除</Button>
                     <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 </Space>
                 <CommonTable
