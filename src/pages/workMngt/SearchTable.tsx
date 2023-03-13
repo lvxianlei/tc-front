@@ -244,7 +244,8 @@ export default function SearchTable({
             fileName={exportFileName}
             serchObj={{
                 ...JSON.parse(JSON.stringify(filterValue || {})),
-                ...JSON.parse(JSON.stringify(exportObject || {}))
+                ...JSON.parse(JSON.stringify(exportObject || {})),
+                ...JSON.parse(JSON.stringify(props?.requestData || {}))
             }}
             closeExportList={() => {
                 setIsExport(false)
