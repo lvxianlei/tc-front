@@ -164,7 +164,7 @@ export default function List(): React.ReactNode {
                     <Popconfirm
                         title="确认取消下达?"
                         onConfirm={async () => {
-                            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.id}`);
+                            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.supplyProductCategoryId}`);
                             if (result.indexOf(userId) === -1) {
                                 message.warning('当前登录人无取消下达权限！')
                             } else {
