@@ -71,7 +71,7 @@ export default function SearchTable({
     tableProps,
     pagination,
     paginationProps,
-    pageSize = 10,
+    pageSize = 20,
     modal = false,
     exportPath,
     exportObject = {},
