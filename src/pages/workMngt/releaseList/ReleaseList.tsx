@@ -404,7 +404,7 @@ export default function ReleaseList(): React.ReactNode {
                                 </Form>,
                                 onOk: () => new Promise(async (resolve, reject) => {
                                     try {
-                                        let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.id}`);
+                                        let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.supplyProductCategoryId}`);
                                         if (result.indexOf(userId) === -1) {
                                             message.warning('当前登录人无取消下达权限！')
                                         } else {
