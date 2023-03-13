@@ -112,7 +112,7 @@ export default function PoleInformation(): React.ReactNode {
             title: '操作',
             dataIndex: 'operation',
             fixed: 'right' as FixedType,
-            width: 250,
+            width: 300,
             render: (_: undefined, record: Record<string, any>): React.ReactNode => (
                 <Space direction="horizontal" size="small" className={styles.operationBtn}>
                     {
@@ -121,9 +121,11 @@ export default function PoleInformation(): React.ReactNode {
                             : <Button type="link" disabled>配段</Button>
                     }
                     <Link to={`/workMngt/setOutList/poleInformation/${params.id}/poleLoftingDetails/${record.id}`}>杆塔放样明细</Link>
-                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.packageStatus } }}><Button type="link">包装清单</Button></Link>
+                    <Link to={{ pathname: `/workMngt/setOutList/poleInformation/${params.id}/packingList/${record.id}`, state: { status: record?.packageStatus } }}>
+                        <Button type="link" disabled={!isShow}>包装清单</Button>
+                    </Link>
                     {
-                        record?.loftingUser === userId ?
+                        isShow ?
                             <Button type="link" onClick={async () => {
                                 setLoftingStatus(record.loftingStatus)
                                 let result: IAllot = await RequestUtil.get(`/tower-science/productStructure/getAllocation/${record.id}`);
@@ -283,9 +285,15 @@ export default function PoleInformation(): React.ReactNode {
             requestData={{ productCategoryId: params.id }}
             refresh={refresh}
             extraOperation={<Space direction="horizontal" size="small">
-                <Button type='primary' onClick={packagingBatch} ghost>批量打包完成</Button>
-                <Button type='primary' onClick={() => setVisible(true)} ghost>电焊件验证</Button>
-                <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
+                <Button type='primary' onClick={packagingBatch} disabled={!isShow} ghost>批量打包完成</Button>
+                <Button type='primary' onClick={() => setVisible(true)} disabled={!isShow} ghost>电焊件验证</Button>
+                {
+                    isShow ?
+                        <WithSectionModal type="batch" productCategoryId={params.id} updateList={() => setRefresh(!refresh)} />
+                        :
+                        <Button type="link" disabled>批量配段</Button>
+                }
+
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
             </Space>}
             searchFormItems={[

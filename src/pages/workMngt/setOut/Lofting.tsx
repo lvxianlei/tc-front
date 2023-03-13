@@ -661,6 +661,7 @@ export default function Lofting(): React.ReactNode {
                         })}
                         okText="确认"
                         cancelText="取消"
+                        disabled={!isShow}
                     >
                         <Button type="link" disabled={!isShow}>删除</Button>
                     </Popconfirm>
@@ -963,7 +964,7 @@ export default function Lofting(): React.ReactNode {
                 >
                     <Button type="primary" ghost disabled={!isShow}>删除</Button>
                 </Popconfirm>
-                <Button type="primary" ghost
+                <Button type="primary" ghost disabled={!isShow}
                     onClick={() => {
                         setCopyVisible(true)
                     }}
@@ -983,6 +984,7 @@ export default function Lofting(): React.ReactNode {
                     data={{ productCategoryId: params.id }}
                     showUploadList={false}
                     onChange={(info) => uploadChange(info)}
+                    disabled={!isShow}
                 >
                     <Button type="primary" ghost disabled={!isShow}>导入</Button>
                 </Upload>
