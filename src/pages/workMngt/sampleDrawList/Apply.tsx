@@ -14,9 +14,10 @@ import { useForm } from "antd/lib/form/Form";
 
 interface ApplyProps {
     getLoading: (loading: boolean) => void
+    id: string
 }
 
-export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
+export default forwardRef(function Apply({ getLoading, id }: ApplyProps, ref) {
     const [searchForm] = useForm();
     const [productCategoryId, setProductCategoryId] = useState<string>();
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
@@ -35,7 +36,7 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: true, refreshDeps: [getLoading] })
+    }), { manual: true, refreshDeps: [getLoading, id] })
 
     const { data: detailData, run: detailRun } = useRequest<any>((id: string) => new Promise(async (resole, reject) => {
         try {
@@ -45,7 +46,7 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: true, refreshDeps: [getLoading] })
+    }), { manual: true, refreshDeps: [getLoading, id] })
 
     const { data: partData, run: partRun } = useRequest<any>((id: string, segmentId: string) => new Promise(async (resole, reject) => {
         try {
@@ -57,12 +58,12 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
         } catch (error) {
             reject(error)
         }
-    }), { manual: true, refreshDeps: [getLoading] })
+    }), { manual: true, refreshDeps: [getLoading, id] })
 
     const { run: submitRun } = useRequest((postData: any) => new Promise(async (resole, reject) => {
         try {
             RequestUtil.post(`/tower-science/smallSample/reuse`, {
-                productCategoryId: productCategoryId,
+                productCategoryId: id,
                 ...postData
             }).then(res => {
                 getLoading(false)
@@ -249,6 +250,9 @@ export default forwardRef(function Apply({ getLoading }: ApplyProps, ref) {
                     columns={columns}
                     dataSource={data || []}
                     pagination={false}
+                    onRow={(record: any) => ({
+                        className: productCategoryId === record?.id ? styles.selected: undefined 
+                    })}
                 />
             </Col>
             <Col span={6}>
