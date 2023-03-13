@@ -159,20 +159,17 @@
         },
         {
             "title": "车辆牌照",
-            "dataIndex": "carNumber",
-            "required": true
+            "dataIndex": "carNumber"
         },
         {
             "title": "卸车方式",
             "dataIndex": "unloadMode",
             "type": "select",
-            "enum": [],
-            "required": true
+            "enum": []
         },
         {
             "title": "卸车人员",
             "dataIndex": "unloadUsersName",
-            "required": true,
             "type": "popTable",
             "width": 1101,
             "readOnly": true,
