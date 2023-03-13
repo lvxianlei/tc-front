@@ -82,7 +82,7 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                 },
                 unloadUsersName: {
                     value: result.unloadUsersName,
-                    records: result.unloadUsers.split(",").map((userId: any) => ({ userId }))
+                    records: result.unloadUsers?.split(",").map((userId: any) => ({ userId }))
                 }
             })
         } catch (error) {
@@ -161,8 +161,8 @@ export default forwardRef(function Edit({ id, type }: EditProps, ref): JSX.Eleme
                     id: item.uuId || null
                 })),
                 num: baseFormData.num,
-                unloadUsersName: baseFormData.unloadUsersName.value,
-                unloadUsers: baseFormData.unloadUsersName.records.map((item: any) => item.userId).join(","),
+                unloadUsersName: baseFormData.unloadUsersName?.value,
+                unloadUsers: baseFormData.unloadUsersName?.records.map((item: any) => item.userId).join(","),
             }
             await saveRun(result)
             resole(true)
