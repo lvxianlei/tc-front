@@ -274,7 +274,6 @@ export default function RawMaterialWarehousing(): React.ReactNode {
                         render: (_: undefined, record: any): React.ReactNode => (
                             // 0待出库 2 已出库  1缺料中 3待回库  4已回库
                             <>
-                                
                                 <Button className='btn-operation-link' type='link'  disabled={record.outStockItemStatus === 4 || params.lock==='1'} onClick={async () => {
                                     const result = [ record.id ]
                                     await backSingleRun(result);

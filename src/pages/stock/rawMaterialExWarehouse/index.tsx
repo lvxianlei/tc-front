@@ -133,7 +133,7 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         updateTimeEnd: "",
         departmentId: "",
         applyStaffId: "",
-        outStockItemStatus: 2,
+        // outStockItemStatus: 2,
         materialType: 1,
         ...history.location.state as object
     });
@@ -201,6 +201,12 @@ export default function RawMaterialWarehousing(): React.ReactNode {
         }else{
             value.applyStaffId = ''
         }
+        if (value.outStockType==='2'||value.outStockType==='7') {
+            value.outStockItemStatus = 4
+        }else{
+            value.outStockItemStatus = 2
+        }
+        console.log(value)
         // setFilterValue({ ...filterValue, ...value })
         run({...filterValue, ...value})
         return value
