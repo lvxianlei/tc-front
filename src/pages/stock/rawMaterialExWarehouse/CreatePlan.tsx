@@ -70,6 +70,7 @@ export default function CreatePlan(props: any): JSX.Element {
             return ({
                 ...item,
                 rawStockId: item.rawStockId?item.rawStockId:item.ids?item.ids:item.id,
+                outStockItemStatus: item?.outStockItemStatus||0,
                 furnaceBatch: item.furnaceBatchNumber,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
@@ -863,6 +864,7 @@ export default function CreatePlan(props: any): JSX.Element {
                         setMaterialList(fields.map((item: any) => ({
                             ...item,
                             rawStockId: item.rawStockId?item.rawStockId:item.ids?item.ids:item.id,
+                            outStockItemStatus: item?.outStockItemStatus||0,
                             maxNum: item.num,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
