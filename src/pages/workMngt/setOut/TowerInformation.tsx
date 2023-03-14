@@ -5,7 +5,7 @@
 */
 
 import React, { useRef, useState } from 'react';
-import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu } from 'antd';
+import { Space, DatePicker, Select, Button, Popconfirm, message, Form, Modal, Input, InputNumber, Dropdown, Menu, Spin } from 'antd';
 import { IntgSelect, Page, SearchTable } from '../../common';
 import { FixedType } from 'rc-table/lib/interface';
 import styles from './SetOut.module.less';
@@ -28,10 +28,9 @@ interface Column extends ColumnType<object> {
 
 export default function TowerInformation(): React.ReactNode {
     const [optionalList, setOptionalList] = useState<any>();
-    const [loftingUser, setLoftingUser] = useState<string>();
     const [editVisible, setEditVisible] = useState<boolean>(false)
 
-    const { data: detail } = useRequest<any>(() => new Promise(async (resole, reject) => {
+    const { loading, data: detail } = useRequest<any>(() => new Promise(async (resole, reject) => {
         try {
             let result = await RequestUtil.get<any>(`/tower-science/productCategory/detail/${params.id}`);
             loftingQuotaRun(result?.productType)
@@ -71,7 +70,6 @@ export default function TowerInformation(): React.ReactNode {
             let loftingUserList: any[] = [];
             let loftingMutualReviewList: any[] = [];
             let programmingLeaderList: any[] = [];
-            setLoftingUser(user?.loftingLeader)
             result?.records?.forEach((res: any) => {
                 if (user?.loftingUser?.split(',').indexOf(res.userId) > -1) {
                     loftingUserList.push(res)
@@ -354,92 +352,6 @@ export default function TowerInformation(): React.ReactNode {
             title: '最新状态变更时间',
             width: 150,
             dataIndex: 'updateStatusTime'
-        },
-        {
-            key: 'operation',
-            title: '操作',
-            dataIndex: 'operation',
-            fixed: 'right' as FixedType,
-            width: 300,
-            render: (_: undefined, record: Record<string, any>): React.ReactNode => (
-                <Space direction="horizontal" size="small" className={styles.operationBtn}>
-                    {
-                        detail?.loftingStatus === 1 ?
-                            <Button type="link" disabled>放样</Button>
-                            :
-                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}><Button type="link" disabled={!isShow}>放样</Button></Link>
-                    }
-                    {
-                        record.status > 1 ?
-                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}><Button type="link" disabled={!isShow}>校核</Button></Link>
-                            : <Button type="link" disabled>校核</Button>
-                    }
-                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerLoftingDetails/${record.id}`}>明细</Link>
-                    <Popconfirm
-                        title="确认删除?"
-                        onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?segmentId=${record.id}`).then(res => {
-                            onRefresh();
-                        })}
-                        okText="确认"
-                        cancelText="取消"
-                        disabled={!isShow}
-                    >
-                        <Button type="link" disabled={!isShow}>删除</Button>
-                    </Popconfirm>
-                    <Popconfirm
-                        title="确认完成放样?"
-                        disabled={record.status !== 1 || !isShow}
-                        onConfirm={() => {
-                            RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
-                                if (res) {
-                                    RequestUtil.post(`/tower-science/productSegment/complete`, {
-                                        productSegmentIds: [record.id]
-                                    }).then(res => {
-                                        onRefresh();
-                                        message.success('放样完成！')
-                                    })
-                                } else {
-                                    Modal.confirm({
-                                        title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
-                                        onOk: async () => new Promise(async (resove, reject) => {
-                                            try {
-                                                RequestUtil.post(`/tower-science/productSegment/complete`, {
-                                                    productSegmentIds: [record.id]
-                                                }).then(res => {
-                                                    message.success('放样完成！');
-                                                    onRefresh();
-                                                })
-                                                resove(true)
-                                            } catch (error) {
-                                                reject(error)
-                                            }
-                                        })
-                                    })
-                                }
-                            })
-                        }
-                        }
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="link" disabled={record.status !== 1 || !isShow}>完成放样</Button>
-                    </Popconfirm>
-                    <Popconfirm
-                        title="确认完成校核?"
-                        disabled={record.status !== 2 || !isShow}
-                        onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`, {
-                            productSegmentIds: [record.id]
-                        }).then(res => {
-                            onRefresh();
-                            message.success('校核成功！')
-                        })}
-                        okText="确认"
-                        cancelText="取消"
-                    >
-                        <Button type="link" disabled={record.status !== 2 || !isShow}>完成校核</Button>
-                    </Popconfirm>
-                </Space>
-            )
         }
     ]
 
@@ -463,7 +375,6 @@ export default function TowerInformation(): React.ReactNode {
                         const tip: boolean[] = []
                         changeValues.forEach((res: any) => {
                             if (!!(res.cadDrawingType)) {
-                                console.log('kkk')
                                 if (!!(res.drawPageNum)) {
                                     tip.push(true)
                                 } else {
@@ -625,7 +536,7 @@ export default function TowerInformation(): React.ReactNode {
         }
     })
 
-    return <>
+    return <Spin spinning={loading}>
         <Modal
             destroyOnClose
             key='BatchEdit'
@@ -698,7 +609,87 @@ export default function TowerInformation(): React.ReactNode {
         <Form form={editForm} className={styles.descripForm}>
             <SearchTable
                 path={`/tower-science/productSegment`}
-                columns={tableColumns}
+                columns={[...tableColumns, {
+                    key: 'operation',
+                    title: '操作',
+                    dataIndex: 'operation',
+                    fixed: 'right' as FixedType,
+                    width: 300,
+                    render: (_: undefined, record: Record<string, any>): React.ReactNode => (
+                        <Space direction="horizontal" size="small" className={styles.operationBtn}>
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/lofting/${record.id}`}><Button type="link" disabled={detail?.loftingStatus === 1 || !isShow}>放样</Button></Link>
+                            {
+                                record.status > 1 ?
+                                    <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerCheck/${record.id}`}><Button type="link" disabled={!isShow}>校核</Button></Link>
+                                    : <Button type="link" disabled>校核</Button>
+                            }
+                            <Link to={`/workMngt/setOutList/towerInformation/${params.id}/towerLoftingDetails/${record.id}`}>明细</Link>
+                            <Popconfirm
+                                title="确认删除?"
+                                onConfirm={() => RequestUtil.delete(`/tower-science/productSegment?segmentId=${record.id}`).then(res => {
+                                    onRefresh();
+                                })}
+                                okText="确认"
+                                cancelText="取消"
+                                disabled={!isShow}
+                            >
+                                <Button type="link" disabled={!isShow}>删除</Button>
+                            </Popconfirm>
+                            <Popconfirm
+                                title="确认完成放样?"
+                                disabled={record.status !== 1 || !isShow}
+                                onConfirm={() => {
+                                    RequestUtil.get(`/tower-science/productSegment/submit/check?productSegmentId=${record.id}`).then(res => {
+                                        if (res) {
+                                            RequestUtil.post(`/tower-science/productSegment/complete`, {
+                                                productSegmentIds: [record.id]
+                                            }).then(res => {
+                                                onRefresh();
+                                                message.success('放样完成！')
+                                            })
+                                        } else {
+                                            Modal.confirm({
+                                                title: "当前存在未上传的大样图或工艺卡，是否完成放样？",
+                                                onOk: async () => new Promise(async (resove, reject) => {
+                                                    try {
+                                                        RequestUtil.post(`/tower-science/productSegment/complete`, {
+                                                            productSegmentIds: [record.id]
+                                                        }).then(res => {
+                                                            message.success('放样完成！');
+                                                            onRefresh();
+                                                        })
+                                                        resove(true)
+                                                    } catch (error) {
+                                                        reject(error)
+                                                    }
+                                                })
+                                            })
+                                        }
+                                    })
+                                }
+                                }
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" disabled={record.status !== 1 || !isShow}>完成放样</Button>
+                            </Popconfirm>
+                            <Popconfirm
+                                title="确认完成校核?"
+                                disabled={record.status !== 2 || !isShow}
+                                onConfirm={() => RequestUtil.post(`/tower-science/productSegment/completed/check`, {
+                                    productSegmentIds: [record.id]
+                                }).then(res => {
+                                    onRefresh();
+                                    message.success('校核成功！')
+                                })}
+                                okText="确认"
+                                cancelText="取消"
+                            >
+                                <Button type="link" disabled={record.status !== 2 || !isShow}>完成校核</Button>
+                            </Popconfirm>
+                        </Space>
+                    )
+                }]}
                 headTabs={[]}
                 refresh={refresh}
                 exportPath={`/tower-science/productSegment`}
@@ -777,5 +768,5 @@ export default function TowerInformation(): React.ReactNode {
                 }}
             />
         </Form>
-    </>
+    </Spin>
 }
