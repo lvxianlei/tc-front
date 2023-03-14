@@ -135,7 +135,7 @@ export default function CreatePlan(props: any): JSX.Element {
                 ...item,
                 reservoirName: item?.outStockItemStatus===4?item.reservoirName:index===0?'':'0',
                 locatorName: item?.outStockItemStatus===4?item.locatorName:index===0?'':'0',
-                outStockItemStatus: item?.outStockItemStatus||0,
+                outStockItemStatus: item?.outStockItemStatus===4?4:0,
                 weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(5)
                     : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(5)
                         : (Number(item?.proportion || 1) / 1000).toFixed(5),
@@ -921,7 +921,7 @@ export default function CreatePlan(props: any): JSX.Element {
                             num:1,
                             reservoirName: item?.outStockItemStatus===4?item.reservoirName:'',
                             locatorName: item?.outStockItemStatus===4?item.locatorName:'',
-                            outStockItemStatus: item?.outStockItemStatus||0,
+                            outStockItemStatus: item?.outStockItemStatus===4?4:0,
                             weight: item?.weightAlgorithm === 1 ? ((Number(item?.proportion || 1) * Number(item.length || 1)) / 1000 / 1000).toFixed(3)
                                 : item?.weightAlgorithm === 2 ? (Number(item?.proportion || 1) * Number(item.length || 1) * Number(item.width || 0) / 1000 / 1000 / 1000).toFixed(3)
                                     : (Number(item?.proportion || 1) / 1000).toFixed(3),
