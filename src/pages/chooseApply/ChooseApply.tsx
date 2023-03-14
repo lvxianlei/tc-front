@@ -40,19 +40,22 @@ export default function ChooseApply(): JSX.Element {
                                                     herf = res.path
                                             }
                                             if (res.appName === "MC") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mes").skipUrl}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mes").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
                                             }
                                             if (res.appName === "CRM") {
                                                 herf = process.env.CRM_BREACK_URL
+                                            }
+                                            if (res.appName === "APS") {
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("aps").skipUrl}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
                                             }
                                             if (res.appName === "QMS") {
                                                 herf = `${ThirdPartyUtil.getMesBaseInfo("qms").skipUrl}`;
                                             }
                                             if (res.appName === "MDM") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mdm").skipUrl}`;
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("mdm").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`;
                                             }
                                             if (res.appName === "SALARY") {
-                                                herf = `${ThirdPartyUtil.getMesBaseInfo("salary").skipUrl}`;
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("salary").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`;
                                             }
                                             window.location.href = herf
                                             return
