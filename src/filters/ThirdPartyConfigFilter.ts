@@ -22,6 +22,7 @@ export default class ThirdPartyConfigFilter implements IFilter {
                 ThirdPartyUtil.setMesBaseInfo("mes");
                 ThirdPartyUtil.setMesBaseInfo("qms");
                 ThirdPartyUtil.setMesBaseInfo("mdm");
+                ThirdPartyUtil.setMesBaseInfo("aps");
                 ThirdPartyUtil.setMesBaseInfo("salary");
             }
         }
