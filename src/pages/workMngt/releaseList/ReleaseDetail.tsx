@@ -20,7 +20,6 @@ export default function ReleaseList(): React.ReactNode {
     const [pageForm] = useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
-    const [searchVisible, setSearchVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
     const location = useLocation<{ state: {} }>();
@@ -350,7 +349,6 @@ export default function ReleaseList(): React.ReactNode {
                         title: "查找",
                         width: '40%',
                         icon: null,
-                        visible: searchVisible,
                         content: <Form form={formTable} className={styles.searchForm} labelAlign="right" labelCol={{ span: 6 }} layout="inline">
                             <Row gutter={12}>
                                 <Col span={12}>
