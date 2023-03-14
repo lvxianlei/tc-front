@@ -25,7 +25,8 @@
         "iconFont": "icon-jihuazhongxin2", // iconfont
         "color": "#FCCD06", // iconfont的颜色
         "path": "/planProd/planScheduleMngt",
-        "appName": "PC"
+        "corsWeb": true,
+        "appName": "APS"
     },
     {
         "authority": "tc_erp_rd",

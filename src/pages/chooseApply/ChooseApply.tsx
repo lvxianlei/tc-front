@@ -42,6 +42,9 @@ export default function ChooseApply(): JSX.Element {
                                             if (res.appName === "MC") {
                                                 herf = `${ThirdPartyUtil.getMesBaseInfo("mes").skipUrl}${res.path}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
                                             }
+                                            if (res.appName === "APS") {
+                                                herf = `${ThirdPartyUtil.getMesBaseInfo("aps").skipUrl}?saasid=${AuthUtil.getUserInfo().user_id}&tenantid=${AuthUtil.getTenantId()}`
+                                            }
                                             if (res.appName === "CRM") {
                                                 herf = process.env.CRM_BREACK_URL
                                             }
