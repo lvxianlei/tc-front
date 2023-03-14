@@ -35,12 +35,12 @@ export default forwardRef(({ id, initChooseList }: ChooseModalProps, ref) => {
                 id: item.id,
                 materialContractDetailId: item.id
             })).filter((item: any) => item.num))
-            setChooseList(initChooseList.length>0?initChooseList.map((item: any) => ({
-                ...item, 
-                price: item.unTaxPrice,
-                id: item.materialContractDetailId,
-                key: `${item.id}-${Math.random()}-${new Date().getTime()}`
-            })):[])
+            // setChooseList(initChooseList.length>0?initChooseList.map((item: any) => ({
+            //     ...item, 
+            //     price: item.unTaxPrice,
+            //     id: item.materialContractDetailId,
+            //     key: `${item.id}-${Math.random()}-${new Date().getTime()}`
+            // })):[])
             resole(result)
         } catch (error) {
             reject(error)
