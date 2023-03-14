@@ -32,26 +32,26 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'productNumber',
             title: '杆塔号',
-            width: 120,
+            width: 80,
             dataIndex: 'productNumber'
         },
         {
             key: 'productHeight',
             title: '呼高',
-            width: 80,
+            width: 50,
             dataIndex: 'productHeight'
         },
         {
             key: 'voltageGradeName',
             title: '电压等级',
-            width: 100,
+            width: 80,
             dataIndex: 'voltageGradeName'
         },
         {
             key: 'productCategoryName',
             title: '塔型',
             dataIndex: 'productCategoryName',
-            width: 120
+            width: 80
         },
         {
             key: 'loftingDeliverTime',
@@ -62,49 +62,49 @@ export default function PoleInformation(): React.ReactNode {
         {
             key: 'loftingUserName',
             title: '配段人',
-            width: 150,
+            width: 80,
             dataIndex: 'loftingUserName',
         },
         {
             key: 'loftingStatusName',
             title: '杆塔放样状态',
             dataIndex: 'loftingStatusName',
-            width: 150
+            width: 100
         },
         {
             key: 'loftingUpdateStatusTime',
             title: '最新状态变更时间',
-            width: 150,
+            width: 120,
             dataIndex: 'loftingUpdateStatusTime'
         },
         {
             key: 'segmentInformation',
             title: '配段信息',
-            width: 200,
+            width: 150,
             dataIndex: 'segmentInformation'
         },
         {
             key: 'legNumberA',
             title: 'A',
-            width: 120,
+            width: 100,
             dataIndex: 'legNumberA'
         },
         {
             key: 'legNumberB',
             title: 'B',
-            width: 120,
+            width: 100,
             dataIndex: 'legNumberB'
         },
         {
             key: 'legNumberC',
             title: 'C',
-            width: 120,
+            width: 100,
             dataIndex: 'legNumberC'
         },
         {
             key: 'legNumberD',
             title: 'D',
-            width: 120,
+            width: 100,
             dataIndex: 'legNumberD'
         },
         {
