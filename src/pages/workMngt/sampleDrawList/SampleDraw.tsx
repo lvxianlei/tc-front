@@ -100,6 +100,12 @@ export default function SampleDraw(): React.ReactNode {
             dataIndex: 'materialName'
         },
         {
+            key: 'smallSampleUploadUserName',
+            title: '上传人',
+            width: 100,
+            dataIndex: 'smallSampleUploadUserName'
+        },
+        {
             key: 'uploadTime',
             title: '上传时间',
             width: 200,

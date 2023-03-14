@@ -11,7 +11,6 @@ import SearchTable from '../SearchTable';
 import { stringify } from 'query-string';
 
 export default function IssuedDetail(): React.ReactNode {
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [filterValue, setFilterValue] = useState({});
     const params = useParams<{ id: string, productCategoryId: string }>()
     const history = useHistory();
@@ -22,6 +21,7 @@ export default function IssuedDetail(): React.ReactNode {
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
     const location = useLocation<{ state: {} }>();
+    const [searchVisible, setSearchVisible] = useState<boolean>(false);
 
     const { loading, data } = useRequest<any[]>(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-system/material?current=1&size=1000`);
@@ -277,6 +277,209 @@ export default function IssuedDetail(): React.ReactNode {
                 </Form.Item>
             </Form>
         </Modal>
+        <Modal
+            visible={searchVisible}
+            title="查找"
+            width='40%'
+            onOk={() => new Promise(async (resolve, reject) => {
+                try {
+                    const formValue = await formTable.getFieldsValue(true)
+                    // setFilterValue({
+                    //     ...value
+                    // })
+                    const formObj: { [key: string]: any } = {}
+                    Object.keys(formValue).forEach((item: string) => {
+                        if (formValue[item] instanceof Array) {
+                            formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
+                        } else if (typeof formValue[item] === "number") {
+                            formObj[item] = `n_${formValue[item]}`
+                        } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
+                            formObj[item] = `o_${stringify(formValue[item])}`
+                        } else {
+                            formObj[item] = formValue[item]
+                        }
+                    })
+                    history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
+                    formTable.resetFields()
+                    setSearchVisible(false)
+                    resolve(true)
+                } catch (error) {
+                    reject(false)
+                }
+            })}
+            onCancel={() => {
+                formTable.resetFields()
+                setSearchVisible(false)
+            }}
+        >
+            <Form form={formTable} className={styles.searchForm} labelAlign="right" labelCol={{ span: 6 }} layout="inline">
+                <Row gutter={12}>
+                    <Col span={12}>
+                        <Form.Item label='段名' name='loftingMoreScreenDTO.segmentName'>
+                            <Input placeholder="请输入" maxLength={200} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='部件号' name='loftingMoreScreenDTO.code'>
+                            <Input placeholder="请输入" maxLength={200} />
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='材料' name='loftingMoreScreenDTO.materialName'>
+                            <Select placeholder="请选择材料名称" allowClear>
+                                {materialDatas && materialDatas?.map((item, index) => {
+                                    return <Select.Option key={index} value={item}>
+                                        {item}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='材质' name='loftingMoreScreenDTO.structureTexture'>
+                            <Select placeholder="请选择材质" mode='multiple' allowClear>
+                                {textureDatas && textureDatas?.map((item, index) => {
+                                    return <Select.Option key={index} value={item}>
+                                        {item}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='规格从' name='loftingMoreScreenDTO.structureSpecTop'>
+                            <Select placeholder="请选择规格" allowClear defaultValue={''} >
+                                {specDatas && specDatas?.map((item, index) => {
+                                    return <Select.Option key={index} value={item}>
+                                        {item}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='规格至' name='loftingMoreScreenDTO.structureSpecAfter'>
+                            <Select placeholder="请选择规格" allowClear defaultValue={''} >
+                                {specDatas && specDatas?.map((item, index) => {
+                                    return <Select.Option key={index} value={item}>
+                                        {item}
+                                    </Select.Option>
+                                })}
+                            </Select>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='电焊' name='loftingMoreScreenDTO.electricWelding'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='特殊件号' name='loftingMoreScreenDTO.specialCode'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='切角' name='loftingMoreScreenDTO.chamfer'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='火曲' name='loftingMoreScreenDTO.bend'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='铲背' name='loftingMoreScreenDTO.shovelBack'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='清根' name='loftingMoreScreenDTO.rootClear'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='开合角' name='loftingMoreScreenDTO.openCloseAngle'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='打扁' name='loftingMoreScreenDTO.squash'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='钻孔' name='loftingMoreScreenDTO.perforate'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='坡口' name='loftingMoreScreenDTO.groove'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='冲孔' name='punching'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='扩孔' name='loftingMoreScreenDTO.withReaming'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item label='气割孔' name='loftingMoreScreenDTO.gasCutting'>
+                            <Radio.Group>
+                                <Radio value={1}>是</Radio>
+                                <Radio value={0}>否</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                    </Col>
+                    <Col span={12}>
+                        <Form.Item>
+                            <Button htmlType='reset'>重置</Button>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            </Form>
+        </Modal>
         <SearchTable
             path="/tower-science/supplyBatch/batchDetail"
             columns={[
@@ -303,7 +506,6 @@ export default function IssuedDetail(): React.ReactNode {
             ]}
             onFilterSubmit={onFilterSubmit}
             filterValue={filterValue}
-            refresh={refresh}
             requestData={{ id: params.productCategoryId }}
             exportPath="/tower-science/supplyBatch/batchDetail"
             extraOperation={<Space>
@@ -317,208 +519,12 @@ export default function IssuedDetail(): React.ReactNode {
                     message.success('刷新成功！')
                     history.go(0)
                 }} >刷新件号数据</Button> */}
-                <Button type='primary' onClick={() => {
-                    Modal.confirm({
-                        title: "查找",
-                        width: '40%',
-                        icon: null,
-                        content: <Form form={formTable} className={styles.searchForm} labelAlign="right" labelCol={{ span: 6 }} layout="inline">
-                            <Row gutter={12}>
-                                <Col span={12}>
-                                    <Form.Item label='段名' name='loftingMoreScreenDTO.segmentName'>
-                                        <Input placeholder="请输入" maxLength={200} />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='部件号' name='loftingMoreScreenDTO.code'>
-                                        <Input placeholder="请输入" maxLength={200} />
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='材料' name='loftingMoreScreenDTO.materialName'>
-                                        <Select placeholder="请选择材料名称" allowClear>
-                                            {materialDatas && materialDatas.map((item, index) => {
-                                                return <Select.Option key={index} value={item}>
-                                                    {item}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='材质' name='loftingMoreScreenDTO.structureTexture'>
-                                        <Select placeholder="请选择材质" mode='multiple' allowClear>
-                                            {textureDatas && textureDatas.map((item, index) => {
-                                                return <Select.Option key={index} value={item}>
-                                                    {item}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='规格从' name='loftingMoreScreenDTO.structureSpecTop'>
-                                        <Select placeholder="请选择规格" allowClear defaultValue={''} >
-                                            {specDatas && specDatas.map((item, index) => {
-                                                return <Select.Option key={index} value={item}>
-                                                    {item}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='规格至' name='loftingMoreScreenDTO.structureSpecAfter'>
-                                        <Select placeholder="请选择规格" allowClear defaultValue={''} >
-                                            {specDatas && specDatas.map((item, index) => {
-                                                return <Select.Option key={index} value={item}>
-                                                    {item}
-                                                </Select.Option>
-                                            })}
-                                        </Select>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='电焊' name='loftingMoreScreenDTO.electricWelding'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='特殊件号' name='loftingMoreScreenDTO.specialCode'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='切角' name='loftingMoreScreenDTO.chamfer'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='火曲' name='loftingMoreScreenDTO.bend'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='铲背' name='loftingMoreScreenDTO.shovelBack'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='清根' name='loftingMoreScreenDTO.rootClear'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='开合角' name='loftingMoreScreenDTO.openCloseAngle'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='打扁' name='loftingMoreScreenDTO.squash'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='钻孔' name='loftingMoreScreenDTO.perforate'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='坡口' name='loftingMoreScreenDTO.groove'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='冲孔' name='punching'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='扩孔' name='loftingMoreScreenDTO.withReaming'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item label='气割孔' name='loftingMoreScreenDTO.gasCutting'>
-                                        <Radio.Group>
-                                            <Radio value={1}>是</Radio>
-                                            <Radio value={0}>否</Radio>
-                                        </Radio.Group>
-                                    </Form.Item>
-                                </Col>
-                                <Col span={12}>
-                                    <Form.Item>
-                                        <Button htmlType='reset'>重置</Button>
-                                    </Form.Item>
-                                </Col>
-                            </Row>
-                        </Form>,
-                        onOk: () => new Promise(async (resolve, reject) => {
-                            try {
-                                const formValue = await formTable.getFieldsValue(true)
-                                // setFilterValue({
-                                //     ...value
-                                // })
-                                const formObj: { [key: string]: any } = {}
-                                Object.keys(formValue).forEach((item: string) => {
-                                    if (formValue[item] instanceof Array) {
-                                        formObj[item] = formValue[item].map((item: any) => item.format ? item.format("YYYY-MM-DD HH:mm:ss") : item)
-                                    } else if (typeof formValue[item] === "number") {
-                                        formObj[item] = `n_${formValue[item]}`
-                                    } else if (Object.prototype.toString.call(formValue[item]) === '[object Object]') {
-                                        formObj[item] = `o_${stringify(formValue[item])}`
-                                    } else {
-                                        formObj[item] = formValue[item]
-                                    }
-                                })
-                                history.replace(`${location.pathname}?${stringify(formObj, { skipNull: false })}`)
-                                formTable.resetFields()
-                                resolve(true)
-                            } catch (error) {
-                                reject(false)
-                            }
-                        }),
-                        onCancel() {
-                            formTable.resetFields()
-                        }
-
-                    })
+                <Button type='primary' onClick={async () => {
+                    await specRun();
+                    await craftRun();
+                    await textureRun();
+                    await materialRun();
+                    setSearchVisible(true)
                 }} ghost>高级查找</Button>
                 <Button type="primary" onClick={() => {
                     specRun();

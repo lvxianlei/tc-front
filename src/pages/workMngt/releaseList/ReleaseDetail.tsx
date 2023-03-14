@@ -20,11 +20,11 @@ export default function ReleaseList(): React.ReactNode {
     const [pageForm] = useForm();
     const [visible, setVisible] = useState<boolean>(false);
     const [pageVisible, setPageVisible] = useState<boolean>(false);
-    const [searchVisible, setSearchVisible] = useState<boolean>(false);
     const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
     const [formTable] = useForm();
     const location = useLocation<{ state: {} }>();
     const userId = AuthUtil.getUserInfo().user_id;
+    const height = document.documentElement.clientHeight - 260;
 
     const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
         try {
@@ -349,7 +349,6 @@ export default function ReleaseList(): React.ReactNode {
                         title: "查找",
                         width: '40%',
                         icon: null,
-                        visible: searchVisible,
                         content: <Form form={formTable} className={styles.searchForm} labelAlign="right" labelCol={{ span: 6 }} layout="inline">
                             <Row gutter={12}>
                                 <Col span={12}>
@@ -586,6 +585,7 @@ export default function ReleaseList(): React.ReactNode {
                     }} >刷新件号数据</Button>
                 <Button type='primary' ghost onClick={() => history.goBack()} >返回上一级</Button>
             </Space>}
+            style={{ maxHeight: height, overflowY: "auto" }}
             searchFormItems={[
                 {
                     name: 'materialName',
