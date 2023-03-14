@@ -100,6 +100,12 @@ export default function ConfirmTaskMngt(): React.ReactNode {
             dataIndex: 'confirmName'
         },
         {
+            key: 'description',
+            title: '备注',
+            width: 200,
+            dataIndex: 'description'
+        },
+        {
             key: 'productCategoryName',
             title: '塔型名称',
             width: 200,

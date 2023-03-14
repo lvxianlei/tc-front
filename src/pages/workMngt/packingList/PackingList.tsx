@@ -13,11 +13,13 @@ import { CommonTable, IntgSelect, SearchTable } from '../../common';
 import useRequest from '@ahooksjs/use-request';
 import { FixedType } from 'rc-table/lib/interface';
 import { Link, useHistory } from 'react-router-dom';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function List(): React.ReactNode {
     const [detailData, setDetailData] = useState<any>();
     const [filterValue, setFilterValue] = useState<any>({});
     const history = useHistory();
+    const userId = AuthUtil.getUserInfo().user_id;
 
     const columns = [
         {
@@ -91,11 +93,16 @@ export default function List(): React.ReactNode {
                     <Popconfirm
                         title="确认完成打包?"
                         onConfirm={async () => {
-                            await RequestUtil.post(`/tower-science/packageStructure/submit/all/${record?.id}`).then(() => {
-                                message.success('完成打包成功！')
-                            }).then(() => {
-                                history.go(0)
-                            })
+                            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${record.id}`);
+                            if (result.indexOf(userId) === -1) {
+                                message.warning('当前登录人无打包权限！')
+                            } else {
+                                await RequestUtil.post(`/tower-science/packageStructure/submit/all/${record?.id}`).then(() => {
+                                    message.success('完成打包成功！')
+                                }).then(() => {
+                                    history.go(0)
+                                })
+                            }
                         }}
                         okText="确认"
                         cancelText="取消"

@@ -89,7 +89,7 @@ export default function SearchTable({
                 params.size = uriSearch.pageSize || pageSize
             }
             const search = onFilterSubmit ? onFilterSubmit({ ...formatURISearch(uriSearch) }) : uriSearch
-            const paramsOptions = stringify({ ...filterValue, ...props.requestData })
+            const paramsOptions = stringify({ ...filterValue, ...props.requestData, ...params, ...search })
             const fetchPath = path.includes("?") ? `${path}&${paramsOptions || ''}` : `${path}?${paramsOptions || ''}`
             const result: any = await RequestUtil.get(fetchPath)
             resole({

@@ -9,13 +9,15 @@ import styles from './sample.module.less';
 import { FileProps } from '../../common/Attachment';
 import { useForm } from 'antd/lib/form/Form';
 import { FixedType } from 'rc-table/lib/interface';
-import { RightOutlined, LeftOutlined, FileUnknownOutlined } from '@ant-design/icons';
+import { FileUnknownOutlined } from '@ant-design/icons';
+import { modalProps } from '../patchIssued/PatchIssued';
+import Apply from './Apply';
+import AuthUtil from '@utils/AuthUtil';
 
 export default function SampleDraw(): React.ReactNode {
     const params = useParams<{ id: string, status: string }>()
     const history = useHistory();
     const [filterValue, setFilterValue] = useState({});
-    const [refresh, setRefresh] = useState<boolean>(false);
     const [url, setUrl] = useState<any>();
     const [form] = Form.useForm();
     const [searchForm] = useForm();
@@ -29,6 +31,19 @@ export default function SampleDraw(): React.ReactNode {
     });
     const [selectedKeys, setSelectedKeys] = useState<React.Key[]>([]);
     const [selectedRows, setSelectedRows] = useState<any[]>([]);
+    const [applyVisible, setApplyVisible] = useState<boolean>(false);
+    const editRef = useRef<modalProps>();
+    const [confirmLoading, setConfirmLoading] = useState<boolean>(false);
+    const userId = AuthUtil.getUserInfo().user_id;
+
+    const { data: isShow } = useRequest<boolean>(() => new Promise(async (resole, reject) => {
+        try {
+            let result = await RequestUtil.get<any>(`/tower-science/productCategory/assign/user/list/${params.id}`);
+            result.indexOf(userId) === -1 ? resole(false) : resole(true)
+        } catch (error) {
+            reject(error)
+        }
+    }), {})
 
     const { loading, data } = useRequest(() => new Promise(async (resole, reject) => {
         const data: any = await RequestUtil.get(`/tower-science/smallSample/sampleStat/${params.id}`);
@@ -83,6 +98,12 @@ export default function SampleDraw(): React.ReactNode {
             title: '材料名称',
             width: 100,
             dataIndex: 'materialName'
+        },
+        {
+            key: 'smallSampleUploadUserName',
+            title: '上传人',
+            width: 100,
+            dataIndex: 'smallSampleUploadUserName'
         },
         {
             key: 'uploadTime',
@@ -202,8 +223,34 @@ export default function SampleDraw(): React.ReactNode {
         }
     ]
 
+    const handleApplyOk = () => new Promise(async (resove, reject) => {
+        try {
+            await editRef.current?.onSubmit();
+            message.success('套用小样图成功！');
+            setApplyVisible(false);
+            history.go(0);
+            resove(true);
+            editRef.current?.resetFields();
+        } catch (error) {
+            reject(false)
+        }
+    })
+
     return (
         <div onKeyUp={onKeyUp} id="SampleDraw">
+            <Modal
+                destroyOnClose
+                visible={applyVisible}
+                title="套用小样图"
+                onOk={handleApplyOk}
+                confirmLoading={confirmLoading}
+                width="80%"
+                onCancel={() => {
+                    setApplyVisible(false);
+                    editRef.current?.resetFields();
+                }}>
+                <Apply id={params?.id} getLoading={(loading: boolean) => setConfirmLoading(loading)} ref={editRef} />
+            </Modal>
             <Form form={searchForm} layout="inline" className={styles.search} onFinish={onFilterSubmit}>
                 {
                     searchFormItems?.map((res: any) => {
@@ -224,7 +271,22 @@ export default function SampleDraw(): React.ReactNode {
                 <Button type="primary" onClick={() => {
                     downloadTemplate(`/tower-science/smallSample/download/${params.id}`, '小样图', {}, true)
                 }} ghost>导出</Button>
-                <Button type='primary' onClick={del} disabled={selectedKeys?.length === 0} ghost>批量删除</Button>
+                <Button type="primary" onClick={() => {
+                    setApplyVisible(true)
+                }} disabled={!isShow} ghost>套用小样图</Button>
+                <Popconfirm
+                    title="确认删除全部小样图?"
+                    onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/all/sampleDelete/${params.id}`).then(() => {
+                        message.success('删除成功！');
+                        history?.go(0)
+                    })}
+                    okText="确认"
+                    cancelText="取消"
+                    disabled={!isShow}
+                >
+                    <Button type="primary" disabled={!isShow}>删除全部</Button>
+                </Popconfirm>
+                <Button type='primary' onClick={del} disabled={selectedKeys?.length === 0 || !isShow} ghost>批量删除</Button>
                 {params.status === '1' ? <Popconfirm
                     title="确认完成小样图?"
                     onConfirm={async () => await RequestUtil.put(`/tower-science/smallSample/sampleComplete?productCategoryId=${params.id}`).then(() => {
@@ -234,8 +296,9 @@ export default function SampleDraw(): React.ReactNode {
                     })}
                     okText="确认"
                     cancelText="取消"
+                    disabled={!isShow}
                 >
-                    <Button type="primary">完成小样图</Button>
+                    <Button type="primary" disabled={!isShow}>完成小样图</Button>
                 </Popconfirm> : null}
                 <Attachment multiple ref={attachRef} isTable={false} dataSource={[]} onDoneChange={(dataInfo: FileProps[]) => {
                     const data = dataInfo.map(res => {
@@ -255,22 +318,11 @@ export default function SampleDraw(): React.ReactNode {
                         }, 1500)
                     })
                 }}>
-                    <Button type="primary" ghost>导入</Button>
+                    <Button type="primary" ghost disabled={!isShow}>导入</Button>
                 </Attachment>
                 <Button type="primary" onClick={() => {
                     history.push(`/workMngt/sampleDrawList/sampleDraw/${params.id}/${params.status}/downLoad`)
                 }} ghost>下载样图</Button>
-                <Popconfirm
-                    title="确认删除全部小样图?"
-                    onConfirm={async () => await RequestUtil.delete(`/tower-science/smallSample/all/sampleDelete/${params.id}`).then(() => {
-                        message.success('删除成功！');
-                        history?.go(0)
-                    })}
-                    okText="确认"
-                    cancelText="取消"
-                >
-                    <Button type="primary">删除全部</Button>
-                </Popconfirm>
                 <Button type="ghost" onClick={() => history.goBack()}>返回</Button>
                 <span>小样图数：<span style={{ color: '#FF8C00' }}>{headerName?.uploadSmallSampleCount}/{headerName?.uploadSmallSampleCount + headerName?.noSmallSampleCount}</span></span>
             </Space>
@@ -300,9 +352,9 @@ export default function SampleDraw(): React.ReactNode {
                                                 setHeaderName(data);
                                                 history.go(0);
                                             })}
-                                            disabled={!record.smallSample}
+                                            disabled={!isShow}
                                         >
-                                            <Button type="link" disabled={!record.smallSample}>
+                                            <Button type="link" disabled={!isShow}>
                                                 删除
                                             </Button>
                                         </Popconfirm>
@@ -311,7 +363,6 @@ export default function SampleDraw(): React.ReactNode {
                             }]
                             : columns
                         }
-                        refresh={refresh}
                         filterValue={{ ...filterValue, productCategoryId: params.id }}
                         style={{ height: '600px' }}
                         tableProps={{
@@ -324,7 +375,6 @@ export default function SampleDraw(): React.ReactNode {
                         pageSize={1000}
                         searchFormItems={[]}
                         getDataSource={(data: any) => {
-                            console.log(data?.records[0])
                             data?.records[0] && setRowId(data?.records[0]?.id)
                             data?.records[0] && show(data?.records[0]?.id)
                             data?.records[0] && setCodeList(data?.records?.map((res: any) => res?.code))
