@@ -187,7 +187,7 @@ export default function ReleaseList(): React.ReactNode {
         {
             key: 'projectName',
             title: '工程名称',
-            width: 100,
+            width: 50,
             dataIndex: 'projectName'
         },
         {
