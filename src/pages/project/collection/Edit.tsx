@@ -84,7 +84,7 @@ export default function Edit() {
         contractInfosForm.setFieldsValue({
             submit: [
                 ...contractInfos.submit,
-                ...popContent.map((item:any)=>{return item.records}),
+                ...popContent.map((item: any) => { return item.records }),
             ]
         })
         setVisible(false)
@@ -93,11 +93,11 @@ export default function Edit() {
     const handleCancel = () => setVisible(false)
 
     const handleChange = (event: any) => {
-        const value = event.map((item:any)=>{
+        const value = event.map((item: any) => {
             return {
                 id: item?.id,
-                value: item[contract.value || "name" || "id"], 
-                records: {...item, key: item?.id}
+                value: item[contract.value || "name" || "id"],
+                records: { ...item, key: item?.id }
             }
         })
         setPopContent(value)
@@ -173,16 +173,16 @@ export default function Edit() {
                                 dependencies: ["paymentPlanId"],
                                 rules: [
                                     ...item.rules,
-                                    {
-                                        validator: (_: any, value: number, fieldKey: number) => new Promise((resove, reject) => {
-                                            const records = contractInfosForm.getFieldsValue().submit?.[fieldKey]
-                                            if (value > parseFloat(records?.noPaymentReceived)) {
-                                                reject("’回款金额‘必须小于或等于’未回款金额‘...")
-                                            } else {
-                                                resove(value)
-                                            }
-                                        })
-                                    }
+                                    // {
+                                    //     validator: (_: any, value: number, fieldKey: number) => new Promise((resove, reject) => {
+                                    //         const records = contractInfosForm.getFieldsValue().submit?.[fieldKey]
+                                    //         if (value > parseFloat(records?.noPaymentReceived)) {
+                                    //             reject("’回款金额‘必须小于或等于’未回款金额‘...")
+                                    //         } else {
+                                    //             resove(value)
+                                    //         }
+                                    //     })
+                                    // }
                                 ]
                             })
                         }
